@@ -1,0 +1,235 @@
+       <div class="myTabs">      
+                <!-- Nav tabs -->
+              <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" [ngClass]="{'active': currentPosition == 'SUMMARY'}" style="display:inline">
+                    <a data-target="#summary" aria-controls="summary" role="tab" data-toggle="tab"   (click)="showTab('SUMMARY')" >Research Summary</a>
+                </li>  
+                <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'AWARD'}">
+                    <a data-target="#award" aria-controls="award" role="tab" data-toggle="tab" (click)="showTab('AWARD')" >Award</a>
+                </li>
+                <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'PROPOSAL'}">
+                    <a data-target="#proposal" aria-controls="proposal" role="tab" data-toggle="tab" (click)="showTab('PROPOSAL')" >Proposal</a>
+                </li>
+                <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'IRB'}">
+                    <a data-target="#IRB" aria-controls="IRB" role="tab" data-toggle="tab" (click)="showTab('IRB')">IRB</a>
+                </li>
+                <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'IACUC'}">
+                    <a data-target="#IACUC" aria-controls="IACUC" role="tab" data-toggle="tab" (click)="showTab('IACUC')">IACUC</a>
+                </li>
+                  <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'DISCLOSURE'}">
+                      <a data-target="#disclosure" aria-controls="disclosure" role="tab" data-toggle="tab" (click)="showTab('DISCLOSURE')">Disclosures</a>
+                </li>
+              </ul>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" *ngIf="currentPosition == 'SUMMARY'">
+                <h3>SUMMARY</h3>
+            </div>
+            <div class="table-responsive">
+                <table class="table myTable table-hover" *ngIf="currentPosition == 'AWARD'">
+                    <thead>
+                        <tr>
+                            <th>Award#
+                               <span  title="sort" class="sortorder cursor" (click)="sortResult('awardNumber',currentPosition)"></span>
+                            </th>
+                            <th>Account#
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('accountNumber',currentPosition)"></span>
+                            </th>
+                            <th width="40%">Title
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('title',currentPosition)"></span>
+                            </th>
+                            <th>Sponsor
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('sponsor',currentPosition)"></span>
+                            </th>
+                            <th>PI
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('pi',currentPosition)"></span>
+                            </th>
+                            <th>Department
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('unitName',currentPosition)"></span>
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngIf="pagedItems == null">
+                            <td colspan=6 > No Requests Found !</td>
+                         </tr>
+                         <tr *ngFor="let awardDetails of pagedItems">
+                                    <td>{{awardDetails.AWARD_NUMBER}}</td>
+                                    <td>{{awardDetails.ACCOUNT_NUMBER}}</td>
+                                    <td>{{awardDetails.TITLE}}</td>
+                                    <td>{{awardDetails.SPONSOR}}</td>
+                                    <td>{{awardDetails.PI}}</td>
+                                    <td>{{awardDetails.UNIT_NAME}}</td>
+                                    <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
+                        </tr>                         
+                    </tbody>
+                </table>
+                <table class="table myTable table-hover" *ngIf="currentPosition == 'PROPOSAL'">
+                    <thead>
+                        <tr>
+                            <th>Proposal# 
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('proposalNumber',currentPosition)"></span>
+                            </th>
+                            <th width="40%">Title
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('title',currentPosition)"></span>
+                            </th>
+                            <th>Lead Unit
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('leadUnit',currentPosition)"></span>
+                            </th>
+                            <th >Sponsor
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('sponsor',currentPosition)"></span>
+                            </th>
+                            <th >Deadline
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('deadLinedate',currentPosition)" ></span>
+                            </th>
+                            <th >Status
+                                <span  title="sort" class="sortorder cursor" (click)="sortResult('status',currentPosition)"></span>
+                            </th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr tr *ngIf="pagedItems == null" >
+                             <td colspan=6 > No Requests Found !</td>
+                        </tr>
+                        <tr *ngFor="let proposalDetails of pagedItems">
+                                    <td>{{proposalDetails.PROPOSAL_NUMBER}}</td>
+                                    <td>{{proposalDetails.TITLE}}</td>
+                                    <td>{{proposalDetails.LEAD_UNIT}}</td>
+                                    <td>{{proposalDetails.SPONSOR}}</td>
+                                    <td>{{proposalDetails.DEADLINE_DATE}}</td>
+                                    <td>{{proposalDetails.STATUS}}</td>
+                                    <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
+                            </tr>                   
+                    </tbody>
+                </table>    
+                <table class="table myTable table-hover" *ngIf="currentPosition == 'IRB'">
+                    <thead>
+                            <tr>
+                                <th >Protocol#
+                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('protocolNumber',currentPosition)" ></span>
+                                </th>
+                                <th  width="40%">Title
+                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('title',currentPosition)" ></span>
+                                </th>
+                                <th >Lead Unit
+                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('leadUnit',currentPosition)" ></span>
+                                </th>
+                                <th >Protocol Type
+                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('protocolType',currentPosition)" ></span>
+                                </th>                         
+                                <th>Status
+                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('status',currentPosition)" ></span>
+                                </th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr *ngIf="pagedItems == null">
+                                     <td colspan=6 > No Requests Found !</td>
+                                </tr>
+                                <tr *ngFor="let IRBDetails of pagedItems" >
+                                            <td>{{IRBDetails.PROTOCOL_NUMBER}}</td>
+                                            <td>{{IRBDetails.TITLE}}</td>
+                                            <td>{{IRBDetails.LEAD_UNIT}}</td>
+                                            <td>{{IRBDetails.PROTOCOL_TYPE}}</td>
+                                            <td>{{IRBDetails.STATUS}}</td>
+                                            <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
+                                    </tr>                   
+                            </tbody>
+                    </table>
+                    <table class="table myTable table-hover" *ngIf="currentPosition == 'IACUC'">
+                            <thead>
+                                    <tr>
+                                        <th>Protocol#
+                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('protocolNumber',currentPosition)"></span>
+                                        </th>
+                                        <th width="40%">Title
+                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('title',currentPosition)"></span>
+                                        </th>
+                                        <th>Lead Unit
+                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('leadUnit',currentPosition)"></span>
+                                        </th>
+                                        <th>Protocol Type
+                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('protocolType',currentPosition)"></span>
+                                        </th>                         
+                                        <th >Status
+                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('status',currentPosition)"></span>
+                                        </th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                        <tr *ngIf="pagedItems == null">
+                                             <td colspan=6 > No Requests Found !</td>
+                                        </tr>
+                                        <tr *ngFor="let IACUCDetails of pagedItems" >
+                                            <td>{{IACUCDetails.PROTOCOL_NUMBER}}</td>
+                                            <td>{{IACUCDetails.TITLE}}</td>
+                                            <td>{{IACUCDetails.LEAD_UNIT}}</td>
+                                            <td>{{IACUCDetails.PROTOCOL_TYPE}}</td>
+                                            <td>{{IACUCDetails.STATUS}}</td>
+                                            <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
+                                    </tr>                 
+                                    </tbody>
+                            </table>
+                            <table class="table myTable table-hover" *ngIf="currentPosition == 'DISCLOSURE'">
+                                    <thead>
+                                            <tr>
+                                                <th >Disclosure#
+                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('coiDisclosureNumber',currentPosition)"></span>
+                                                </th>
+                                                <th width="40%">Name
+                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('fullName',currentPosition)"></span>
+                                                </th>
+                                                <th>Disclosure Disposition
+                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('disclosureDisposition',currentPosition)"></span>
+                                                </th>
+                                                <th>Disclosure Status
+                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('moduleItemKey',currentPosition)"></span>
+                                                </th>                         
+                                                <th>Module item key
+                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('status',currentPosition)"></span>
+                                                </th>
+                                                <th>Expiration Date
+                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('expirationDate',currentPosition)"></span>
+                                                </th>
+                                                <th>Action</th>
+                                            </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr *ngIf="pagedItems == null">
+                                                    <td colspan=7> No Requests Found !</td>
+                                            </tr>
+                                            <tr *ngFor="let DisclosureDetails of pagedItems" >
+                                                    <td>{{DisclosureDetails.COI_DISCLOSURE_NUMBER}}</td>
+                                                    <td>{{DisclosureDetails.FULL_NAME}}</td>
+                                                    <td>{{DisclosureDetails.DISCLOSURE_DISPOSITION}}</td>
+                                                    <td>{{DisclosureDetails.DISCLOSURE_STATUS}}</td>
+                                                    <td>{{DisclosureDetails.MODULE_ITEM_KEY}}</td>
+                                                    <td>{{DisclosureDetails.EXPIRATION_DATE}}</td>
+                                                    <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
+                                            </tr>                      
+                                    </tbody>
+                            </table>
+                                    <div>
+                                        <!-- pager -->
+            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
+                    <li [ngClass]="{disabled:pager.currentPage === 1}">
+                        <a (click)="setPage(1)">First</a>
+                    </li>
+                    <li [ngClass]="{disabled:pager.currentPage === 1}">
+                        <a (click)="setPage(pager.currentPage - 1)">Previous</a>
+                    </li>
+                    <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
+                        <a (click)="setPage(page)">{{page}}</a>
+                    </li>
+                    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                        <a (click)="setPage(pager.currentPage + 1)">Next</a>
+                    </li>
+                    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
+                        <a (click)="setPage(pager.totalPages)">Last</a>
+                    </li>
+                </ul>
+                                    </div>
+                </div>

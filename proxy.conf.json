@@ -1,0 +1,10 @@
+{	
+	"/login" :{
+					 "target" : "http://192.168.1.72:8080/fibicomp",
+					 "secure" : false
+	},
+	"/fibiDashBoard" :{
+					"target" : "http://192.168.1.72:8080/fibicomp",
+					"secure" : false
+	}
+}

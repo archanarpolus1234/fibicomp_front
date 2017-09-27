@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FibiComp</title>
+<link rel="shortcut icon" href="images/favicon.ico">
+</head>
+<body class="loginbg">   
+<div class="container-fluid header loginH">
+        <div class="">
+            <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center">
+                <a href="#" class="img-responsive"><img src="images/PolusUniversityLogo.png" width="40" /></a>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 ">
+                <h3 class="title">Research University</h3>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="container-fluid"> 
+        <div class="row">
+            <div class="col-lg-7 col-md-6 col-sm-12 hidden-sm col-xs-12 hidden-xs">
+                <img src="images/sidrabanner.jpg" class="" width="96%"/>
+            </div>
+            <div class="col-lg-5 col-md-6 col-sm-12 col-xs-12 text-center">
+                <div class="col-lg-7 col-lg-offset-2 col-md-8 col-md-offset-2  col-sm-6 col-sm-offset-3  col-xs-10 col-xs-offset-1">
+                    <div class="loginForm"></div>
+                        <div class="formTitle">Fibi Login</div>
+                        <div class="loginContent">
+                            <div id="login-failure" style="font-size:.8em;color: red;" *ngIf="loginFail">Invalid Username or Password</div>
+                            <input id="login_uname" placeholder="username" name='username' value='' type="text" autofocus="autofocus" [(ngModel)]="credentials.username">
+                            <input id="login_pwd" name='password' type="password" value='' placeholder="password" [(ngModel)]="credentials.password">
+                            <button class="loginBtn button first btnApp" value="Login" id="LOGIN-BTN" (click)="login(credentials)" >Login</button>
+                        </div>
+                </div>
+                    <div>ERA Solution From <img src="images/PolusSolutionLogoMini.png" width=""/> </div>
+                    <br>
+                </div>
+            </div>
+        </div>
+    
+<footer id="Uif-ApplicationFooter-Wrapper" class="footer">
+    <div id="Uif-GlobalApplicationFooter" class="kc-applicationFooter" data-parent="DummyLoginView">
+        ERA Solution From <img id="u16tucxs" src="images/PolusSolutionLogoMiniWhite.png" alt="Fibi Logo" class="uif-boxLayoutHorizontalItem" width="40" />
+    </div>
+</footer>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="js/jquery/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="js/bootstrap.min.js"></script>
+
+  <script src="js/design.js"></script>
+  <script src="js/attrchange.js"></script>
+  <script src="js/attrchange_ext.js"></script>
+</body>
+</html>
