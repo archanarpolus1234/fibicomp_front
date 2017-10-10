@@ -9,17 +9,20 @@ import 'rxjs/add/observable/throw';
 @Injectable()
     export class LoginService{
        
-        url ="/login";
+        url ='/login';
+        //url ='http://demo.fibiweb.com/fibi-comp/login';
         private authUrl: string = 'http://reqres.in/api/login';
         private loggedIn: boolean = false;
         
-        constructor( private http : Http){}
+        constructor( private http : Http){
+            
+        }
 
-        login(userName:string,password:string): Observable<string>{
+        login(userName:string,password:string): Observable<JSON>{
 
         console.log(userName, password);
         return this.http.post(this.url,{userName,password})
-                                .map(res => res.text()
+                                .map(res => res.json()
                                 )
                                 .catch(error=>{
                                     console.error(error.message || error);

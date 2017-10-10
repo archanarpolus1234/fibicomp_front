@@ -1,10 +1,18 @@
 {	
 	"/login" :{
-					 "target" : "http://192.168.1.72:8080/fibicomp",
+					 "target" : "http://192.168.1.72:8080/fibi-comp",
 					 "secure" : false
 	},
 	"/fibiDashBoard" :{
-					"target" : "http://192.168.1.72:8080/fibicomp",
+					"target" : "http://192.168.1.72:8080/fibi-comp",
 					"secure" : false
+	},
+	"/getResearchSummaryData" :{
+					 "target" : "http://192.168.1.72:8080/fibi-comp",
+					 "secure" : false
+	},
+	"/logout" : {
+				     "target" : "http://192.168.1.72:8080/fibi-comp",
+				     "secure" : false
 	}
 }

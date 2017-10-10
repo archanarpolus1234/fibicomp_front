@@ -1,235 +1,774 @@
-       <div class="myTabs">      
-                <!-- Nav tabs -->
-              <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" [ngClass]="{'active': currentPosition == 'SUMMARY'}" style="display:inline">
-                    <a data-target="#summary" aria-controls="summary" role="tab" data-toggle="tab"   (click)="showTab('SUMMARY')" >Research Summary</a>
-                </li>  
-                <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'AWARD'}">
-                    <a data-target="#award" aria-controls="award" role="tab" data-toggle="tab" (click)="showTab('AWARD')" >Award</a>
-                </li>
-                <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'PROPOSAL'}">
-                    <a data-target="#proposal" aria-controls="proposal" role="tab" data-toggle="tab" (click)="showTab('PROPOSAL')" >Proposal</a>
-                </li>
-                <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'IRB'}">
-                    <a data-target="#IRB" aria-controls="IRB" role="tab" data-toggle="tab" (click)="showTab('IRB')">IRB</a>
-                </li>
-                <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'IACUC'}">
-                    <a data-target="#IACUC" aria-controls="IACUC" role="tab" data-toggle="tab" (click)="showTab('IACUC')">IACUC</a>
-                </li>
-                  <li role="presentation" style="display:inline" [ngClass]="{'active': currentPosition == 'DISCLOSURE'}">
-                      <a data-target="#disclosure" aria-controls="disclosure" role="tab" data-toggle="tab" (click)="showTab('DISCLOSURE')">Disclosures</a>
-                </li>
-              </ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<style>
+	.pointer{
+		cursor: pointer;
+	}
+	</style>
+</head>
+<body class="push4slideMenu">
+	<div class="slideMenu">
+		<ul class="iconMenu">
+			<li class="active"><a href="/dashboard"><i class="fa fa-tachometer"></i><span>My Dashboard</span></a></li>
+			<li><a [href]="outputPath+'/kc-krad/landingPage?__login_user='+userName+'&kcComp=true'"><i class="fa fa-user"></i><span>My Portal</span></a></li>
+			<li><a [href]="outputPath+'/portal.do?__login_user='+userName+'&kcComp=true'"><i class="fa fa-cog"></i><span>System Admin Portal</span></a></li>
+		</ul>
+		<div class="pullBack d-md-none d-lg-none d-xl-none">
+			<i class="fa fa-arrow-left"></i>
+		</div>
+	</div>
+	<div class="container-fluid pushFixedHeaderFooter">
+		<div class="headerPush"></div>
+		<header class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<ul class="headerMenu">
+					<li><a href="#" class="logo"> <span class="logoIcon"><img
+								[src]="logo" class="" /></span> <span class="brandText">Polus
+								University</span>
+					</a></li>
+					<li><a (click)="logout()" class="pointer"><span class="userName">Dashboard of
+								{{fullName}} (PI)</span><i class="fa fa-user"></i></a></li>
+					<li class="active"><a href="#" id="showNotify"><i
+							class="fa fa-bell"></i></a>
+						<ul class="notificationBox">
+							<li>
+								<p>Your COI disclosure expires on 22-Oct-2018</p>
+								<button class="dismiss">
+									<i class="fa fa-times"></i>
+								</button>
+							</li>
+							<li>
+								<p>Your COI disclosure expires on 22-Oct-2018</p>
+								<button class="dismiss">
+									<i class="fa fa-times"></i>
+								</button>
+							</li>
+							<li>
+								<p>Your COI disclosure expires on 22-Oct-2018</p>
+								<button class="dismiss">
+									<i class="fa fa-times"></i>
+								</button>
+							</li>
+							<li><a href="#" class="showMore"> Show more </a></li>
+						</ul></li>
+					<li><a href="#"><i class="fa fa-question"></i></a></li>
+					<li class="d-md-none d-lg-none d-xl-none"><a href="#"
+						id="mobileMenu"><i class="fa fa-bars"></i></a></li>
+				</ul>
+			</div>
+		</header>
+
+		<section class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<ul class="tabs">
+					<li role="presentation"
+						[ngClass]="{'active': currentPosition == 'SUMMARY'}"><a
+						(click)="showTab('SUMMARY')">Research Summary</a></li>
+					<li [ngClass]="{'active': currentPosition == 'AWARD'}"><a
+						(click)="showTab('AWARD')">Award</a></li>
+					<li [ngClass]="{'active': currentPosition == 'PROPOSAL'}"><a
+						(click)="showTab('PROPOSAL')">Proposal</a></li>
+					<li [ngClass]="{'active': currentPosition == 'IRB'}"><a
+						(click)="showTab('IRB')">IRB</a></li>
+					<li [ngClass]="{'active': currentPosition == 'IACUC'}"><a
+						(click)="showTab('IACUC')">IACUC</a></li>
+					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
+						(click)="showTab('DISCLOSURE')">Disclosures</a></li>
+				</ul>
+			</div>
+
+
+			<!-- <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="currentPosition == 'SUMMARY'">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="row">
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<div class="searchBox">
+								<input type="text" placeholder="Quick Search" /> <a href="#"
+									class="searchButton"><i class="fa fa-search"></i></a>
+							</div>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<a href="#" id="advcanceSearch" class="linkButton"><i
+								class="fa fa-cog"></i> Advanced Search</a>
+						</div>
+					</div>
+				</div>
+				<div
+					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
+					<div class="row">
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Quick Search" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Quick Search" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Quick Search" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Quick Search" />
+						</div>
+						<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+
+							<div class="row">
+
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinPrimary">Search</button>
+								</div>
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinSecondary">Clear</button>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+               <span class="linkButtonGroup">
+                    <a href="#" id="" class=""><i class="fa fa-plus"></i> Create</a>
+                    <a href="#" id="" class=""><i class="fa fa-eye"></i> View</a>
+                    <a href="#" id="" class=""><i class="fa fa-search"></i> Search</a>
+                </span>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12" *ngIf="currentPosition == 'SUMMARY'">
-                <h3>SUMMARY</h3>
-            </div>
-            <div class="table-responsive">
-                <table class="table myTable table-hover" *ngIf="currentPosition == 'AWARD'">
-                    <thead>
-                        <tr>
-                            <th>Award#
-                               <span  title="sort" class="sortorder cursor" (click)="sortResult('awardNumber',currentPosition)"></span>
-                            </th>
-                            <th>Account#
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('accountNumber',currentPosition)"></span>
-                            </th>
-                            <th width="40%">Title
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('title',currentPosition)"></span>
-                            </th>
-                            <th>Sponsor
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('sponsor',currentPosition)"></span>
-                            </th>
-                            <th>PI
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('pi',currentPosition)"></span>
-                            </th>
-                            <th>Department
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('unitName',currentPosition)"></span>
-                            </th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngIf="pagedItems == null">
-                            <td colspan=6 > No Requests Found !</td>
-                         </tr>
-                         <tr *ngFor="let awardDetails of pagedItems">
-                                    <td>{{awardDetails.AWARD_NUMBER}}</td>
-                                    <td>{{awardDetails.ACCOUNT_NUMBER}}</td>
-                                    <td>{{awardDetails.TITLE}}</td>
-                                    <td>{{awardDetails.SPONSOR}}</td>
-                                    <td>{{awardDetails.PI}}</td>
-                                    <td>{{awardDetails.UNIT_NAME}}</td>
-                                    <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
-                        </tr>                         
-                    </tbody>
-                </table>
-                <table class="table myTable table-hover" *ngIf="currentPosition == 'PROPOSAL'">
-                    <thead>
-                        <tr>
-                            <th>Proposal# 
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('proposalNumber',currentPosition)"></span>
-                            </th>
-                            <th width="40%">Title
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('title',currentPosition)"></span>
-                            </th>
-                            <th>Lead Unit
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('leadUnit',currentPosition)"></span>
-                            </th>
-                            <th >Sponsor
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('sponsor',currentPosition)"></span>
-                            </th>
-                            <th >Deadline
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('deadLinedate',currentPosition)" ></span>
-                            </th>
-                            <th >Status
-                                <span  title="sort" class="sortorder cursor" (click)="sortResult('status',currentPosition)"></span>
-                            </th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr tr *ngIf="pagedItems == null" >
-                             <td colspan=6 > No Requests Found !</td>
-                        </tr>
-                        <tr *ngFor="let proposalDetails of pagedItems">
-                                    <td>{{proposalDetails.PROPOSAL_NUMBER}}</td>
-                                    <td>{{proposalDetails.TITLE}}</td>
-                                    <td>{{proposalDetails.LEAD_UNIT}}</td>
-                                    <td>{{proposalDetails.SPONSOR}}</td>
-                                    <td>{{proposalDetails.DEADLINE_DATE}}</td>
-                                    <td>{{proposalDetails.STATUS}}</td>
-                                    <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
-                            </tr>                   
-                    </tbody>
-                </table>    
-                <table class="table myTable table-hover" *ngIf="currentPosition == 'IRB'">
-                    <thead>
-                            <tr>
-                                <th >Protocol#
-                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('protocolNumber',currentPosition)" ></span>
-                                </th>
-                                <th  width="40%">Title
-                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('title',currentPosition)" ></span>
-                                </th>
-                                <th >Lead Unit
-                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('leadUnit',currentPosition)" ></span>
-                                </th>
-                                <th >Protocol Type
-                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('protocolType',currentPosition)" ></span>
-                                </th>                         
-                                <th>Status
-                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('status',currentPosition)" ></span>
-                                </th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                                <tr *ngIf="pagedItems == null">
-                                     <td colspan=6 > No Requests Found !</td>
-                                </tr>
-                                <tr *ngFor="let IRBDetails of pagedItems" >
-                                            <td>{{IRBDetails.PROTOCOL_NUMBER}}</td>
-                                            <td>{{IRBDetails.TITLE}}</td>
-                                            <td>{{IRBDetails.LEAD_UNIT}}</td>
-                                            <td>{{IRBDetails.PROTOCOL_TYPE}}</td>
-                                            <td>{{IRBDetails.STATUS}}</td>
-                                            <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
-                                    </tr>                   
-                            </tbody>
-                    </table>
-                    <table class="table myTable table-hover" *ngIf="currentPosition == 'IACUC'">
-                            <thead>
-                                    <tr>
-                                        <th>Protocol#
-                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('protocolNumber',currentPosition)"></span>
-                                        </th>
-                                        <th width="40%">Title
-                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('title',currentPosition)"></span>
-                                        </th>
-                                        <th>Lead Unit
-                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('leadUnit',currentPosition)"></span>
-                                        </th>
-                                        <th>Protocol Type
-                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('protocolType',currentPosition)"></span>
-                                        </th>                         
-                                        <th >Status
-                                            <span  title="sort" class="sortorder cursor" (click)="sortResult('status',currentPosition)"></span>
-                                        </th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                        <tr *ngIf="pagedItems == null">
-                                             <td colspan=6 > No Requests Found !</td>
-                                        </tr>
-                                        <tr *ngFor="let IACUCDetails of pagedItems" >
-                                            <td>{{IACUCDetails.PROTOCOL_NUMBER}}</td>
-                                            <td>{{IACUCDetails.TITLE}}</td>
-                                            <td>{{IACUCDetails.LEAD_UNIT}}</td>
-                                            <td>{{IACUCDetails.PROTOCOL_TYPE}}</td>
-                                            <td>{{IACUCDetails.STATUS}}</td>
-                                            <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
-                                    </tr>                 
-                                    </tbody>
-                            </table>
-                            <table class="table myTable table-hover" *ngIf="currentPosition == 'DISCLOSURE'">
-                                    <thead>
-                                            <tr>
-                                                <th >Disclosure#
-                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('coiDisclosureNumber',currentPosition)"></span>
-                                                </th>
-                                                <th width="40%">Name
-                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('fullName',currentPosition)"></span>
-                                                </th>
-                                                <th>Disclosure Disposition
-                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('disclosureDisposition',currentPosition)"></span>
-                                                </th>
-                                                <th>Disclosure Status
-                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('moduleItemKey',currentPosition)"></span>
-                                                </th>                         
-                                                <th>Module item key
-                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('status',currentPosition)"></span>
-                                                </th>
-                                                <th>Expiration Date
-                                                    <span  title="sort" class="sortorder cursor" (click)="sortResult('expirationDate',currentPosition)"></span>
-                                                </th>
-                                                <th>Action</th>
-                                            </tr>
-                                    </thead>
-                                    <tbody>
-                                            <tr *ngIf="pagedItems == null">
-                                                    <td colspan=7> No Requests Found !</td>
-                                            </tr>
-                                            <tr *ngFor="let DisclosureDetails of pagedItems" >
-                                                    <td>{{DisclosureDetails.COI_DISCLOSURE_NUMBER}}</td>
-                                                    <td>{{DisclosureDetails.FULL_NAME}}</td>
-                                                    <td>{{DisclosureDetails.DISCLOSURE_DISPOSITION}}</td>
-                                                    <td>{{DisclosureDetails.DISCLOSURE_STATUS}}</td>
-                                                    <td>{{DisclosureDetails.MODULE_ITEM_KEY}}</td>
-                                                    <td>{{DisclosureDetails.EXPIRATION_DATE}}</td>
-                                                    <td><a class="btn btn-primary btn-xs" title = "View award" >View</a></td>
-                                            </tr>                      
-                                    </tbody>
-                            </table>
-                                    <div>
-                                        <!-- pager -->
-            <ul *ngIf="pager.pages && pager.pages.length" class="pagination">
-                    <li [ngClass]="{disabled:pager.currentPage === 1}">
-                        <a (click)="setPage(1)">First</a>
-                    </li>
-                    <li [ngClass]="{disabled:pager.currentPage === 1}">
-                        <a (click)="setPage(pager.currentPage - 1)">Previous</a>
-                    </li>
-                    <li *ngFor="let page of pager.pages" [ngClass]="{active:pager.currentPage === page}">
-                        <a (click)="setPage(page)">{{page}}</a>
-                    </li>
-                    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                        <a (click)="setPage(pager.currentPage + 1)">Next</a>
-                    </li>
-                    <li [ngClass]="{disabled:pager.currentPage === pager.totalPages}">
-                        <a (click)="setPage(pager.totalPages)">Last</a>
-                    </li>
-                </ul>
-                                    </div>
-                </div>
+				<div class="borderBox">
+					<table class="table table-responsive tableSkin">
+						<thead>
+							<tr>
+								<th>Research Summary</th>
+								<th class="text-right">Count</th>
+								<th class="text-right">Total Amount</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Active Awards</td>
+								<td class="text-right">5</td>
+								<td class="text-right">1500</td>
+							</tr>
+							<tr>
+								<td>Active Awards</td>
+								<td class="text-right">5</td>
+								<td class="text-right">1500</td>
+							</tr>
+							<tr>
+								<td>Active Awards</td>
+								<td class="text-right">5</td>
+								<td class="text-right">1500</td>
+							</tr>
+							<tr class="separation">
+								<td>IRB Proposals</td>
+								<td class="text-right">5</td>
+								<td class="text-right">1500</td>
+							</tr>
+							<tr>
+								<td>IACUC Proposal</td>
+								<td class="text-right">5</td>
+								<td class="text-right">1500</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div class="row">
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6"></div>
+				</div>
+			</div> -->
+
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf="currentPosition == 'SUMMARY'">
+				<div class="row">
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="borderBox">
+							<h4 class="borderBoxHeading">Expenditures Volume</h4>
+							<display></display>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="borderBox">
+							<table class="table table-responsive tableSkin">
+								<thead>
+									<tr>
+										<th>Research Summary</th>
+										<th class="text-right">Count</th>
+										<th class="text-right">Total Amount</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let dashboardSummaryDetails of dashBoardResearchSummaryMap | slice:begin:end">
+									 <td>{{dashboardSummaryDetails.RESEARCH_TYPE}}</td>
+									 <td class="text-right">{{dashboardSummaryDetails.RESEARCH_COUNT}}</td>
+								      <td class="text-right">{{dashboardSummaryDetails.TOTAL_AMOUNT}}</td>
+								      </tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Award -->
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="currentPosition == 'AWARD'">
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="row">
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<div class="searchBox">
+								<input type="text" placeholder="Quick Search" /> <a href="#"
+									class="searchButton"><i class="fa fa-search"></i></a>
+							</div>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<a href="#" id="advcanceSearch" class="linkButton">
+								<i class="fa fa-cog"></i> Advanced Search
+							</a>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
+					<div class="row">
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Account " />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Sponsor" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Department" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="PI" />
+						</div>
+						<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+							<div class="row">
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinPrimary">Search</button>
+								</div>
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinSecondary">Clear</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+					<span class="linkButtonGroup"> 
+						<a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DAwardDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class="">
+							<i class="fa fa-plus"></i> Create
+						</a> 
+						<a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dsearch%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26includeCustomActionUrls%3Dtrue%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue%26projectPersons.fullName%3D'+firstName*lastName+'&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class="">
+							<i class="fa fa-eye"></i> View
+						</a>
+						<a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dstart%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue&methodToCall=start&__login_user='+userName+'&kcComp=true'">
+							<i class="fa fa-search"></i> Search
+						</a>
+					</span>
+				</div>
+				
+				<div class="borderBox">
+					<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('awardNumber',currentPosition)" class="pointer">Award <span title="sort"></span>
+							</th>
+							<th (click)="sortResult('accountNumber',currentPosition)" class="pointer">Account# <span title="sort"></span>
+							</th>
+							<th width="40%" (click)="sortResult('title',currentPosition)" class="pointer">Title <span title="sort"></span></th>
+							<th (click)="sortResult('sponsor',currentPosition)" class="pointer">Sponsor <span title="sort"></span>
+							</th>
+							<th (click)="sortResult('pi',currentPosition)" class="pointer">PI <span title="sort"></span>
+							</th>
+							<th (click)="sortResult('unitName',currentPosition)" class="pointer">Department <span title="sort"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngIf="serviceRequestList == null">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
+							<td>{{awardDetails.AWARD_NUMBER}}</td>
+							<td>{{awardDetails.ACCOUNT_NUMBER}}</td>
+							<td>{{awardDetails.TITLE}}</td>
+							<td>{{awardDetails.SPONSOR}}</td>
+							<td>{{awardDetails.PI}}</td>
+							<td>{{awardDetails.UNIT_NAME}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li>
+										<a title="Open {{awardDetails.AWARD_NUMBER}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.AWARD_ID+'%26docId%3D'+awardDetails.DOCUMENT_NUMBER+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
+									</li>
+								</ul>	
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
+
+			<!-- Proposal -->
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="currentPosition == 'PROPOSAL'">
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="row">
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<div class="searchBox">
+								<input type="text" placeholder="Quick Search" /> <a href="#"
+									class="searchButton"><i class="fa fa-search"></i></a>
+							</div>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<a href="#" id="advcanceSearch" class="linkButton"><i
+								class="fa fa-cog"></i> Advanced Search</a>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
+					<div class="row">
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Proposal Number" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Title" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Lead Unit" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Sponsor" />
+						</div>
+						<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+							<div class="row">
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinPrimary">Search</button>
+								</div>
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinSecondary">Clear</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+
+				<div
+					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+					<span class="linkButtonGroup"> <a [href]="outputPath+'/kc-pd-krad/proposalDevelopment?viewId=PropDev-InitiateView&methodToCall=docHandler&command=initiate&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-plus"></i> Create</a> <a [href]="outputPath+'/kr-krad/lookup?lookupCriteria[participant]='+userName+'&viewId=AllDevelopmentProposals-LookupViewId&methodToCall=search&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-eye"></i> View</a> <a [href]="outputPath+'/kr-krad/lookup?viewId=DevelopmentProposals-LookupViewId&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-search"></i> Search</a>
+					</span>
+				</div>
+
+				<div class="borderBox">
+					<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('proposalNumber',currentPosition)" class="pointer">Proposal# <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('title',currentPosition)" class="pointer" width="40%">Title <span title="sort"
+								class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('leadUnit',currentPosition)" class="pointer">Lead Unit <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('sponsor',currentPosition)" class="pointer">Sponsor <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('deadLinedate',currentPosition)" class="pointer">Deadline <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('status',currentPosition)" class="pointer">Status <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngIf="serviceRequestList == null">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
+							<td>{{proposalDetails.PROPOSAL_NUMBER}}</td>
+							<td>{{proposalDetails.TITLE}}</td>
+							<td>{{proposalDetails.LEAD_UNIT}}</td>
+							<td>{{proposalDetails.SPONSOR}}</td>
+							<td>{{proposalDetails.DEADLINE_DATE}}</td>
+							<td>{{proposalDetails.STATUS}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li>
+										<a title="Open {{proposalDetails.PROPOSAL_NUMBER}}" [href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails.DOCUMENT_NUMBER+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
+									</li>
+								</ul>	
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
+
+			<!-- IRB -->
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="currentPosition == 'IRB'">
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="row">
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<div class="searchBox">
+								<input type="text" placeholder="Quick Search" /> <a href="#"
+									class="searchButton"><i class="fa fa-search"></i></a>
+							</div>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<a href="#" id="advcanceSearch" class="linkButton"><i
+								class="fa fa-cog"></i> Advanced Search</a>
+						</div>
+					</div>
+				</div>
+				</div>
+				
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
+					<div class="row">
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Protocol Number" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Title" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Lead Unit" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Protocol type" />
+						</div>
+						<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+
+							<div class="row">
+
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinPrimary">Search</button>
+								</div>
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinSecondary">Clear</button>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+				</div>
+				</div>
+
+				<div
+					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+					<span class="linkButtonGroup"> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-plus"></i> Create</a> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dsearch%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue%26lookupPendingProtocol%3Dtrue%26lookupProtocolPersonId%3D'+personID+'%26investigator%3D'+firstName*lastName+'&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-eye"></i> View</a> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dstart%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888%26includeCustomActionUrls%3Dtrue%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-search"></i> Search</a>
+					</span>
+				</div>
+
+				<div class="borderBox">
+					<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('protocolNumber',currentPosition)" class="pointer">Protocol# <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('title',currentPosition)" class="pointer" width="40%">Title <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('leadUnit',currentPosition)" class="pointer">Lead Unit <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('protocolType',currentPosition)" class="pointer">Protocol Type <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('status',currentPosition)" class="pointer">Status <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngIf="serviceRequestList == null">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let IRBDetails of serviceRequestList | slice:begin:end">
+							<td>{{IRBDetails.PROTOCOL_NUMBER}}</td>
+							<td>{{IRBDetails.TITLE}}</td>
+							<td>{{IRBDetails.LEAD_UNIT}}</td>
+							<td>{{IRBDetails.PROTOCOL_TYPE}}</td>
+							<td>{{IRBDetails.STATUS}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li>
+										<a title="Open {{IRBDetails.PROTOCOL_NUMBER}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IRBDetails.DOCUMENT_NUMBER+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
+									</li>
+								</ul>	
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
+
+			<!-- IACUC -->
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="currentPosition == 'IACUC'">
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="row">
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<div class="searchBox">
+								<input type="text" placeholder="Quick Search" /> <a href="#"
+									class="searchButton"><i class="fa fa-search"></i></a>
+							</div>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<a href="#" id="advcanceSearch" class="linkButton"><i
+								class="fa fa-cog"></i> Advanced Search</a>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
+					<div class="row">
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Protocol Number" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Title" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Lead Unit" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Protocol type" />
+						</div>
+						<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+
+							<div class="row">
+
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinPrimary">Search</button>
+								</div>
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinSecondary">Clear</button>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+				</div></div>
+
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+					<span class="linkButtonGroup"> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DIacucProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-plus"></i> Create</a> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dsearch%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue%26lookupPendingProtocol%3Dtrue%26lookupProtocolPersonId%3D'+personID+'%26investigator%3D'+firstName*lastName+'&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-eye"></i> View</a> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dstart%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888%26includeCustomActionUrls%3Dtrue%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-search"></i> Search</a>
+					</span>
+				</div>
+
+				<div class="borderBox">
+					<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('protocolNumber',currentPosition)" class="pointer">Protocol# <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('title',currentPosition)" class="pointer" width="40%">Title <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('leadUnit',currentPosition)" class="pointer">Lead Unit <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('protocolType',currentPosition)" class="pointer">Protocol Type <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('status',currentPosition)" class="pointer">Status <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngIf="serviceRequestList == null">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr *ngFor="let IACUCDetails of serviceRequestList">
+							<td>{{IACUCDetails.PROTOCOL_NUMBER}}</td>
+							<td>{{IACUCDetails.TITLE}}</td>
+							<td>{{IACUCDetails.LEAD_UNIT}}</td>
+							<td>{{IACUCDetails.PROTOCOL_TYPE}}</td>
+							<td>{{IACUCDetails.STATUS}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li>
+										<a title="Open {{IACUCDetails.PROTOCOL_NUMBER}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IACUCDetails.DOCUMENT_NUMBER+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
+									</li>
+								</ul>	
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
+
+			<!-- DISCLOSURE -->
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="currentPosition == 'DISCLOSURE'">
+				<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<div class="row">
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<div class="searchBox">
+								<input type="text" placeholder="Quick Search" /> <a href="#"
+									class="searchButton"><i class="fa fa-search"></i></a>
+							</div>
+						</div>
+						<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+							<a href="#" id="advcanceSearch" class="linkButton"><i
+								class="fa fa-cog"></i> Advanced Search</a>
+						</div>
+					</div>
+				</div>
+				</div>
+				<div class="row">
+				<div
+					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
+					<div class="row">
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Disclosure Number" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Name" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Disclosure Disposition" />
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+							<input type="text" placeholder="Module item key" />
+						</div>
+						<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+							<div class="row">
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinPrimary">Search</button>
+								</div>
+								<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+									<button class="btnSkin btnSkinSecondary">Clear</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					</div>
+				</div>
+
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+					<span class="linkButtonGroup"> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DCoiDisclosureDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-plus"></i> Create</a> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dsearch%26businessObjectClassName%3Dorg.kuali.kra.coi.CoiDisclosure%26docFormKey%3D88888888%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue%26personId%3D'+personID+'%26person.userName%3D'+userName+'&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class=""><i
+							class="fa fa-eye"></i> View</a> <a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dstart%26businessObjectClassName%3Dorg.kuali.kra.coi.CoiDisclosure%26docFormKey%3D88888888%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue&methodToCall=start&__login_user='+userName+'&kcComp=true'" id="" class="">
+							<i class="fa fa-search"></i> Search</a>
+					</span>
+				</div>
+
+				<div class="borderBox">
+					<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('coiDisclosureNumber',currentPosition)" class="pointer">Disclosure# <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('fullName',currentPosition)" class="pointer" width="40%">Name <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('disclosureDisposition',currentPosition)" class="pointer">Disclosure Disposition <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('moduleItemKey',currentPosition)" class="pointer">Disclosure Status <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('status',currentPosition)" class="pointer">Module item key <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th (click)="sortResult('expirationDate',currentPosition)" class="pointer">Expiration Date <span title="sort" class="sortorder cursor"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngIf="serviceRequestList == null">
+							<td colspan=7>No Requests Found !</td>
+						</tr>
+						<tr *ngFor="let DisclosureDetails of serviceRequestList">
+							<td>{{DisclosureDetails.COI_DISCLOSURE_NUMBER}}</td>
+							<td>{{DisclosureDetails.FULL_NAME}}</td>
+							<td>{{DisclosureDetails.DISCLOSURE_DISPOSITION}}</td>
+							<td>{{DisclosureDetails.DISCLOSURE_STATUS}}</td>
+							<td>{{DisclosureDetails.MODULE_ITEM_KEY}}</td>
+							<td>{{DisclosureDetails.EXPIRATION_DATE}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li>
+										<a title="Open {{DisclosureDetails.COI_DISCLOSURE_NUMBER}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+DisclosureDetails.DOCUMENT_NUMBER+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
+									</li>
+								</ul>	
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</div>
+
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="currentPosition != 'SUMMARY'">
+				<div class="text-right">
+						<nav class="paginationSkin text-right" *ngIf="serviceRequestList != null && totalPage > 10">
+							<ul>
+								<li *ngIf="constant < constant*(count-1)">
+									<a (click)="prevPage(selectedIndexInPagination)">
+										<i class="fa fa-chevron-left"></i>
+									</a>
+								</li>
+								<li *ngIf="constant <= constant*(count-1)">
+									<a (click)="first()">1...</a>
+								</li>
+								<li [ngClass]="{active :selectedIndexInPagination == 0 && pageNumbersList[0] != null}">
+									<a (click)="showRecords(0)">{{pageNumbersList[0]}}</a>
+								</li>
+								<li [ngClass]="{active :selectedIndexInPagination == 1 &&  pageNumbersList[1] != null}">
+									<a (click)="showRecords(1)">{{pageNumbersList[1]}}</a>
+								</li>
+								<li [ngClass]="{active :selectedIndexInPagination == 2 &&  pageNumbersList[2] != null}">
+									<a (click)="showRecords(2)">{{pageNumbersList[2]}}</a>
+								</li>
+								<li *ngIf="check >= constant * (count+1)">
+									<a (click)="last(pageNumbersList)">...{{lastPage}}</a>
+								</li>
+								<li *ngIf="check >= constant * (count+1)">
+									<a (click)="nextPage(selectedIndexInPagination)">
+										<i class="fa fa-chevron-right"></i>
+									</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+					</div>
+		</section>
+
+		<div class="footerPush"></div>
+	</div>
+
+	<footer class="text-right">
+
+		ERA Solution From <a href="#"><img [src]="footerLogo" /></a>
+
+	</footer>
+
+	<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="js/jquery-3.2.1.slim.min.js"></script>
+	<script src="js/popper.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+
+	<script src="js/design.js"></script>
+</body>
+</html>
