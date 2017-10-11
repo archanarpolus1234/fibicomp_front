@@ -44,7 +44,7 @@ export class DashboardService {
         var params = {
                 userName :this.username}; 
         return this.http.post('/getResearchSummaryData',params)
-        //return this.http.get('http://demo.fibiweb.com/fibi-comp/getResearchSummaryData')
+        //return this.http.post('http://demo.fibiweb.com/fibi-comp/getResearchSummaryData',params)
                         .map(res => res.json())
                         .catch(error=>{
                             console.error(error.message || error);
@@ -57,6 +57,24 @@ export class DashboardService {
     }
     setLogindata(){
         return this.logindata;
+    }
+    
+    searchUsingAdvanceOptions(property1 : string,  property2 : string, property3 : string, property4 : string, user_Name : string, tab_Index : string) : Observable <JSON>{
+        var params = {
+                property1 : property1,
+                property2 : property2,
+                property3 : property3,
+                property4 : property4,
+                userName : user_Name,
+                tabIndex : tab_Index};
+        
+        return this.http.post('/searchByProperty',params)
+        //return this.http.get('http://demo.fibiweb.com/fibi-comp/searchByProperty')
+                        .map(res => res.json())
+                        .catch(error=>{
+                            console.error(error.message || error);
+                            return Observable.throw(error.message || error)
+                        });
     }
     
     logout() : Observable <string>{
