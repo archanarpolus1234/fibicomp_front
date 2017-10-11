@@ -9,7 +9,7 @@ export class SessionmanagementService implements CanActivate {
         if (localStorage.getItem('currentUser')) {
             return true;
         }
-        this.router.navigate(['/login']);
+        this.router.navigate(['/loginpage']);
         return false;
     }
 }

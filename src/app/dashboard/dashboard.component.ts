@@ -13,7 +13,12 @@ import { SessionmanagementService } from "../session/session.management.service"
 })
 
 export class DashboardComponent implements OnInit {
-
+    award = {
+            account:'',
+            sponsor:'',
+            department:'',
+            pi:''
+        };
      currentPosition: string='SUMMARY';
      pageNumber:number;
      sortBy: string = 'updateTimeStamp';
@@ -32,7 +37,7 @@ export class DashboardComponent implements OnInit {
      firstName: string;
      lastName: string;
      personID: string;
-     
+     displayToggle : boolean = false;
      selectedIndexInPagination: number = 0;
      currentRows: number;
      logo : string;
@@ -40,14 +45,18 @@ export class DashboardComponent implements OnInit {
      dashBoardResearchSummaryMap : any[];
      fullName: string;
      pageNumbersList: any[];
-
+     logindata : string;
+     property1 : string;
+     property2 : string;
+     property3 : string;
+     property4 : string;
+        
     constructor( private dashboardService: DashboardService , private pagerService: PagerService, private router : Router, private sessionService : SessionmanagementService ) {
         this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
-        if(!sessionService.canActivate()){
+        if (!sessionService.canActivate()) {
             this.router.navigate(['/loginpage']);
-        }
-        else{
+        } else {
             this.router.navigate(['/dashboard']);
         }
 
@@ -55,6 +64,10 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
         this.initialLoad();
+        this.property1 ='';
+        this.property2 ='';
+        this.property3 ='';
+        this.property4 ='';
         this.getResearchSummaryData();
         this.fullName = this.dashboardService.setLogindata();
         console.log(this.fullName);
@@ -82,7 +95,7 @@ export class DashboardComponent implements OnInit {
             this.sortOrder = "ASC";
         }
         this.sortBy = sortFieldBy;
-        this.currentPosition = current_Position;
+        //this.currentPosition = current_Position;
         this.initialLoad();
      }
      
@@ -94,6 +107,7 @@ export class DashboardComponent implements OnInit {
     constant:number = 30;
 
     initialLoad() {
+        this.displayToggle = false;
         console.log(this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition);
         this.dashboardService.loadDashBoard(this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition)
                              .subscribe(
@@ -248,6 +262,16 @@ export class DashboardComponent implements OnInit {
             console.log(this.result)
         });
     }
+    
+    searchUsingAdvanceOptions( ){
+        this.dashboardService.searchUsingAdvanceOptions(this.award.account,  this.award.sponsor, this.award.department, this.award.pi, this.userName, this.currentPosition)
+        .subscribe(data => 
+        {   
+            this.result = data || [];
+            console.log('search  data : ' + this.result.dashBoardDetailMap);
+        });
+    }
+    
     logout(){
         this.dashboardService.logout()
         .subscribe(data => 
@@ -258,5 +282,10 @@ export class DashboardComponent implements OnInit {
             }
             console.log('logout data : ' + data);
         });
+    }
+    advanceSearch(event: any){
+        //console.log('advance triggered');
+        event.preventDefault();
+        this.displayToggle = !this.displayToggle;
     }
 }

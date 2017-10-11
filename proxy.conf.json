@@ -14,5 +14,9 @@
 	"/logout" : {
 				     "target" : "http://192.168.1.72:8080/fibi-comp",
 				     "secure" : false
-	}
+	},
+	"/searchByProperty" : {
+				     "target" : "http://192.168.1.72:8080/fibi-comp",
+				     "secure" : false
+	}	
 }
