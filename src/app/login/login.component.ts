@@ -23,6 +23,8 @@ export class LoginComponent{
     loginFail: boolean = false;
     result: any ={};
     personDTO: any[];
+    isAdmin : boolean = false;
+    
     constructor(private loginService:LoginService , private router : Router , private dashboardService:DashboardService, private sessionService : SessionmanagementService){
         if (!this.sessionService.canActivate()) {
             this.router.navigate(['/loginpage']);
@@ -34,9 +36,12 @@ export class LoginComponent{
          this.loginService.login(this.credentials.username,this.credentials.password).subscribe(
              data => {
                         this.result=data || [];
-                        localStorage.setItem('currentUser', this.credentials.username);
+                        sessionStorage.setItem('currentUser', this.credentials.username);
                         this.fullName =this.result.fullName;
-                        localStorage.setItem('userFullname', this.result.fullName);
+                        sessionStorage.setItem('userFullname', this.result.fullName);
+                        this.isAdmin = this.result.isAdmin;
+                        console.log('is admin from login component : ' + this.result.isAdmin)
+                        sessionStorage.setItem('isAdmin', String(this.isAdmin));
                         this.dashboardService.getLogindata(this.fullName);
                         if( this.result != null) {
                             this.router.navigate( ['/dashboard'] ); 

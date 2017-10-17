@@ -1,291 +1,352 @@
 import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './dashboard.component.service';
-import { PagerService } from './dashboard.pager.service';
 import { SlicePipe } from '@angular/common';
-import { Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { SessionmanagementService } from "../session/session.management.service";
+import { SessiontimeoutService } from '../sessionTimeout/sessiontimeout.service';
+import { AwardQuickSearchComponent } from '../quick-search/award-quick-search.component';
+import { DisclosureQuickSearchComponent } from '../quick-search/disclosure-quick-search.component';
+import { IacucQuickSearchComponent } from '../quick-search/iacuc-quick-search.component';
+import { IrbQuickSearchComponent } from '../quick-search/irb-quick-search.component';
 
-@Component({
+
+
+@Component( {
     selector: 'dashboard-tpl',
     templateUrl: 'dashboard.component.html',
-    providers : [SessionmanagementService],
+    providers: [SessionmanagementService, SessiontimeoutService],
     styleUrls: ['../css/bootstrap.min.css', '../css/font-awesome.min.css', '../../assets/css/style.css']
-})
+} )
 
 export class DashboardComponent implements OnInit {
-    award = {
-            account:'',
-            sponsor:'',
-            department:'',
-            pi:''
-        };
-     currentPosition: string='SUMMARY';
-     pageNumber:number;
-     sortBy: string = 'updateTimeStamp';
-     sortOrder: string = "DESC";
-     result: any = {};
-     serviceRequestList: any[];
-     tableLength: number;
-     pager: any = {};
-     pagedItems: any[];
-     
-     propertyName: string;
-     reverse: boolean = true;
+    advanceSearchCriteria = {
+        property1: '',
+        property2: '',
+        property3: '',
+        property4: ''
+    };
+    currentPosition: string = 'SUMMARY';
+    pageNumber: number;
+    sortBy: string = 'updateTimeStamp';
+    sortOrder: string = "DESC";
+    result: any = {};
+    serviceRequestList: any[];
+    pagedItems: any[];
+    morethanThreeNotification: boolean = false;
+    propertyName: string;
+    reverse: boolean = true;
     // outputPath:string = 'http://192.168.1.242:8080/kc-dev';
-     outputPath:string = 'http://demo.fibiweb.com/kc-dev';
-     userName :string;
-     firstName: string;
-     lastName: string;
-     personID: string;
-     displayToggle : boolean = false;
-     selectedIndexInPagination: number = 0;
-     currentRows: number;
-     logo : string;
-     footerLogo : string;
-     dashBoardResearchSummaryMap : any[];
-     fullName: string;
-     pageNumbersList: any[];
-     logindata : string;
-     property1 : string;
-     property2 : string;
-     property3 : string;
-     property4 : string;
-        
-    constructor( private dashboardService: DashboardService , private pagerService: PagerService, private router : Router, private sessionService : SessionmanagementService ) {
+    //outputPath:string = 'http://demo.fibiweb.com/kc-dev';
+    outputPath: string = 'http://192.168.1.76:8080/kc-dev';
+    userName: string;
+    firstName: string;
+    lastName: string;
+    personID: string;
+    displayToggle: boolean = false;
+    currentRows: number;
+    logo: string;
+    footerLogo: string;
+    dashBoardResearchSummaryMap: any[];
+    fullName: string;
+    placeholder1: string;
+    placeholder2: string;
+    placeholder3: string;
+    placeholder4: string;
+    notificationList: any[];
+    first3notificationList: any[] = [];
+    showmoreClicked: boolean = false;
+    showmoreNeeded: boolean = true;
+    advanceToggle: boolean = false;
+    currentPage: number = 1;
+    adminAdvanceSearch: boolean = false;
+    isAdmin: boolean = false;
+    adminStatus: string;
+    selectedValue: JSON;
+    resultObject: JSON;
+    awardNo: string;
+    accountNo: string;
+    title: string;
+    sponsorName: string;
+    piName: string;
+    departmentName: string;
+    resultAward: boolean = false;
+    protocolNo: string;
+    protocolId: string;
+    unitNumber: string;
+    status: string;
+    protocolType: string;
+    disclosureNo: string;
+    disposition: string;
+
+    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService, private sessiontimeout: SessiontimeoutService ) {
         this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
-        if (!sessionService.canActivate()) {
-            this.router.navigate(['/loginpage']);
+        if ( !sessionService.canActivate() ) {
+            this.router.navigate( ['/loginpage'] );
         } else {
-            this.router.navigate(['/dashboard']);
+            this.router.navigate( ['/dashboard'] );
         }
-
     }
 
     ngOnInit() {
-        this.initialLoad();
-        this.property1 ='';
-        this.property2 ='';
-        this.property3 ='';
-        this.property4 ='';
+        this.showmoreClicked = false;
+        this.showmoreNeeded = true;
+        this.initialLoad( this.currentPage );
         this.getResearchSummaryData();
         this.fullName = this.dashboardService.setLogindata();
-        console.log(this.fullName);
     }
-    showTab(currentTabPosition) {
-         this.pageNumber = 30;
-         this.propertyName = '';
-         this.count = 1;
-         this.currentPosition = currentTabPosition;
-         this.pagedItems = null;
-         this.sortBy = 'updateTimeStamp';
-         this.initialLoad();
-         this.selectedIndexInPagination = 0;
-         this.showRecords(0);
-         if(currentTabPosition ==='SUMMARY') {
-             this.getResearchSummaryData();
-         }
+
+    currentNumberOfRecords: number;
+    totalPage: number = 0;
+
+    initialLoad( currentPage ) {
+        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
+            .subscribe(
+            data => {
+                this.result = data || [];
+                //console.log( this.result );
+                this.totalPage = this.result.totalServiceRequest;
+                if ( this.currentPosition == "AWARD" ) {
+                    this.serviceRequestList = this.result.awardViews;
+                }
+                if ( this.currentPosition == "PROPOSAL" ) {
+                    this.serviceRequestList = this.result.proposalViews;
+                }
+                if ( this.currentPosition == "IRB" ) {
+                    this.serviceRequestList = this.result.protocolViews;
+                }
+                if ( this.currentPosition == "IACUC" ) {
+                    this.serviceRequestList = this.result.iacucViews;
+                }
+                if ( this.currentPosition == "DISCLOSURE" ) {
+                    this.serviceRequestList = this.result.disclosureViews;
+                }
+                //this.serviceRequestList = this.result.dashBoardDetailMap;
+                //this.currentNumberOfRecords = this.result.serviceRequestCount;
+                this.userName = sessionStorage.getItem( 'currentUser' );
+                this.fullName = sessionStorage.getItem( 'userFullname' );
+            } );
     }
-         
-    sortResult(sortFieldBy, current_Position) {
-        this.reverse = (this.sortBy === sortFieldBy) ? !this.reverse : false;
-        if(this.reverse){
+
+    showTab( currentTabPosition ) {
+        this.result = null;
+        this.resultAward = false;
+        this.serviceRequestList = [];
+        this.currentPage = 1;
+        this.displayToggle = false;
+        this.adminAdvanceSearch = false;
+        this.adminStatus = sessionStorage.getItem( 'isAdmin' );
+        if ( this.adminStatus == 'true' ) {
+            this.isAdmin = true;
+        }
+        this.advanceSearchCriteria.property1 = '';
+        this.advanceSearchCriteria.property2 = '';
+        this.advanceSearchCriteria.property3 = '';
+        this.advanceSearchCriteria.property4 = '';
+        this.pageNumber = 20;
+        this.propertyName = '';
+        this.currentPosition = currentTabPosition;
+        this.pagedItems = null;
+        this.sortBy = 'updateTimeStamp';
+        //this.initialLoad(this.currentPage);
+        if ( currentTabPosition === 'SUMMARY' ) {
+            this.getResearchSummaryData();
+        } else {
+            this.initialLoad( this.currentPage );
+        }
+    }
+
+    sortResult( sortFieldBy, current_Position ) {
+        this.reverse = ( this.sortBy === sortFieldBy ) ? !this.reverse : false;
+        if ( this.reverse ) {
             this.sortOrder = "DESC";
         } else {
             this.sortOrder = "ASC";
         }
         this.sortBy = sortFieldBy;
-        //this.currentPosition = current_Position;
-        this.initialLoad();
-     }
-     
-    currentNumberOfRecords: number;
-    totalPage: number = 0;
-    lastPage: number = 0;
-    check: number = 0;
-    isLastClicked: boolean = false;
-    constant:number = 30;
-
-    initialLoad() {
-        this.displayToggle = false;
-        console.log(this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition);
-        this.dashboardService.loadDashBoard(this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition)
-                             .subscribe(
-                                 data =>
-                                 {  
-                                    this.result = data || [];
-                                    this.serviceRequestList = this.result.dashBoardDetailMap;
-                                    if(this.pageNumbersList != null){
-                                        this.pageNumbersList = this.result.pageNumbers;
-                                    } else {
-                                        this.pageNumbersList = [];
-                                    }
-                                    this.currentNumberOfRecords = this.result.serviceRequestCount;
-                                    this.firstName = this.result.personDTO.firstName;
-                                    this.lastName = this.result.personDTO.lastName;
-                                    this.personID = this.result.personDTO.personID;
-                                    this.userName = localStorage.getItem('currentUser');
-                                    this.fullName = localStorage.getItem('userFullname');
-
-                                    if (this.pageNumber == 30) {
-                                        this.totalPage = this.result.totalServiceRequest;
-                                        this.lastPage = Math.floor(this.totalPage/10);
-                                        if ((this.totalPage % 10) > 0) {
-                                            this.lastPage = this.lastPage + 1;
-                                        }
-                                        if ((this.lastPage * 10) % 30 > 0 ) {
-                                            this.check = (Math.floor((this.lastPage * 10) / 30)+1) * 30;
-                                        } else {
-                                            this.check = this.lastPage * 10;
-                                        }
-                                    }
-                                    if (this.pageNumbersList != null) {
-                                    if (this.isLastClicked) {
-                                        if (this.pageNumbersList.length == 3) {
-                                            this.selectedIndexInPagination = 2;
-                                            this.showRecords(2);
-                                        } else if (this.pageNumbersList.length == 2) {
-                                            this.selectedIndexInPagination = 1;
-                                            this.showRecords(1);
-                                        }else if (this.pageNumbersList.length == 1) {
-                                            this.selectedIndexInPagination = 0;
-                                            this.showRecords(0);
-                                        }
-                                    }
-                                    } else {
-                                        if (this.serviceRequestList != null) {
-                                            this.selectedIndexInPagination = 0;
-                                            this.showRecords(0);
-                                        }
-                                    }
-                                    this.isLastClicked = false;
-                                });
+        this.initialLoad( this.currentPage );
     }
-    
-    count:number = 1;
-    nextPage(selectedIndexInPagination) {
-        if(selectedIndexInPagination == 0) {
-            this.selectedIndexInPagination = 1;
-            this.showRecords(1);
-        } else if(selectedIndexInPagination == 1) {
-            this.selectedIndexInPagination = 2;
-            this.showRecords(2);
-        } else if(selectedIndexInPagination == 2){
-            if ( this.check >= 30 * (this.count+1)) {
-                this.count = this.count + 1;
-                this.pageNumber = 30 * this.count;
-                this.initialLoad();
-                this.selectedIndexInPagination = 0;
-                this.showRecords(0);
-            }
-        }
-    };
-    prevPage(selectedIndexInPagination) {
-        if(selectedIndexInPagination == 0) {
-            if (this.pageNumber > 30){
-                this.count = this.count-1;
-                this.pageNumber = 30 * this.count;
-                this.initialLoad();
-            }
-            this.selectedIndexInPagination = 2;
-            this.showRecords(2);
-        } else if (selectedIndexInPagination == 1) {
-            this.selectedIndexInPagination = 0;
-            this.showRecords(0);
-        } else if (selectedIndexInPagination == 2) {
-            this.selectedIndexInPagination = 1;
-            this.showRecords(1);
-        }
-    };
 
-    begin : number = 0;
-    end  :number = 10;
-    //this.selectedIndexInPagination = 0;
-    pagekey = 0;
-    showRecords(key) {
-        this.selectedIndexInPagination = key;
-        if (key == 0) {
-            this.begin = 0;
-            this.end = 10;
-        }
-        if (key == 1) {
-            this.begin = 10;
-            this.end = 2 * 10;
-        }
-        if (key == 2) {
-            this.begin = 2 * 10;
-            this.end = 3 * 10;
-        }
-        this.currentRows = this.end - this.begin;
-        this.pagekey = key;
-    };
-    first() {
-        this.pageNumber = 30;
-        this.count = 1;
-        this.initialLoad();
-        this.selectedIndexInPagination = 0;
-        this.showRecords(0);
-    };
-    last(list) {
-        this.pageNumber = this.check;
-        this.count = Math.floor(this.pageNumber/30);
-        this.isLastClicked = true;
-        this.initialLoad();    
-    };
-    setPage(page: number) {
-        if (page % 4 === 0) {
-            this.pageNumber = ((page/4)+1)*30;
-            this.dashboardService.loadDashBoard(this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition)
-            .subscribe(
-                data =>
-                {  
-                   this.result = data || [];
-                   //this.dashBoardDetailMap = this.result.dashBoardDetailMap;
-                   //this.totalServiceRequestCount = this.result.totalServiceRequest;
-                   //this.setPage(1);
-               });
-       }
-        // this.pager = this.pagerService.getPager(this.totalServiceRequestCount, page);
-        // if (page < 1 || page > this.pager.totalPages) {
-        //     return;
-        // }
-        // this.pagedItems = this.dashBoardDetailMap.slice(this.pager.startIndex, this.pager.endIndex + 1);
-        // this.tableLength = this.pagedItems.length;
-    }
+
+
     getResearchSummaryData() {
         this.dashboardService.getResearchSummaryData()
-        .subscribe(data =>
-        {  
-            this.result = data || [];
-            this.dashBoardResearchSummaryMap=this.result.dashBoardResearchSummaryMap;
-            console.log("getResearchSummaryData");
-            console.log(this.result)
-        });
+            .subscribe( data => {
+                this.result = data || [];
+                this.dashBoardResearchSummaryMap = this.result.summaryViews;
+            } );
     }
-    
-    searchUsingAdvanceOptions( ){
-        this.dashboardService.searchUsingAdvanceOptions(this.award.account,  this.award.sponsor, this.award.department, this.award.pi, this.userName, this.currentPosition)
-        .subscribe(data => 
-        {   
-            this.result = data || [];
-            console.log('search  data : ' + this.result.dashBoardDetailMap);
-        });
+
+    searchUsingAdvanceOptions( currentPage ) {
+        if ( this.resultAward === true ) {
+            this.resultAward = false;
+        }
+        if ( sessionStorage.getItem( 'isAdmin' ) ) {
+            this.adminAdvanceSearch = true;
+        }
+        //this.dashboardService.searchUsingAdvanceOptions(this.advanceSearchCriteria.property1,  this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.userName, this.currentPosition)
+        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
+            .subscribe( data => {
+                this.result = data || [];
+                if ( this.currentPosition == "AWARD" ) {
+                    this.serviceRequestList = this.result.awardViews;
+                }
+                if ( this.currentPosition == "PROPOSAL" ) {
+                    this.serviceRequestList = this.result.proposalViews;
+                }
+                if ( this.currentPosition == "IRB" ) {
+                    this.serviceRequestList = this.result.protocolViews;
+                }
+                if ( this.currentPosition == "IACUC" ) {
+                    this.serviceRequestList = this.result.iacucViews;
+                }
+                if ( this.currentPosition == "DISCLOSURE" ) {
+                    this.serviceRequestList = this.result.disclosureViews;
+                }
+                //this.serviceRequestList = this.result.dashBoardDetailMap;
+                //console.log(this.result.dashBoardDetailMap);
+            } );
     }
-    
-    logout(){
-        this.dashboardService.logout()
-        .subscribe(data => 
-        {   if(data =='SUCCESS'){
-                localStorage.removeItem('currentUser');
-                localStorage.removeItem('userFullname');
-                this.router.navigate(['/loginpage']);
-            }
-            console.log('logout data : ' + data);
-        });
+
+    clear() {
+        this.advanceSearchCriteria.property1 = '';
+        this.advanceSearchCriteria.property2 = '';
+        this.advanceSearchCriteria.property3 = '';
+        this.advanceSearchCriteria.property4 = '';
+        if ( sessionStorage.getItem( 'isAdmin' ) ) {
+            this.adminAdvanceSearch = true;
+        }
+        this.initialLoad( this.currentPage );
     }
-    advanceSearch(event: any){
-        //console.log('advance triggered');
+
+    logout() {
+        this.dashboardService.logout().subscribe(
+            data => {
+                if ( data == 'SUCCESS' ) {
+                    sessionStorage.removeItem( 'currentUser' );
+                    sessionStorage.removeItem( 'userFullname' );
+                    sessionStorage.removeItem( 'isAdmin' );
+                    this.router.navigate( ['/loginpage'] );
+                }
+            } );
+    }
+
+    userNotification( e: any ) {
+        e.preventDefault();
+        this.showmoreClicked = false;
+        this.showmoreNeeded = true;
+        this.first3notificationList = [];
+        this.dashboardService.userNotification( this.userName )
+            .subscribe( data => {
+                this.result = data || [];
+                this.notificationList = this.result;
+                if ( this.notificationList.length > 3 ) {
+                    this.morethanThreeNotification = true;
+                    for ( let i = 0; i < 3; i++ ) {
+                        this.first3notificationList.push( this.notificationList[i] );
+                    }
+                }
+            } );
+    }
+
+    advanceSearch( event: any ) {
         event.preventDefault();
         this.displayToggle = !this.displayToggle;
+        this.advanceSearchCriteria.property1 = '';
+        this.advanceSearchCriteria.property2 = '';
+        this.advanceSearchCriteria.property3 = '';
+        this.advanceSearchCriteria.property4 = '';
+        if ( this.currentPosition === 'AWARD' ) {
+            this.placeholder1 = 'Account';
+            this.placeholder2 = 'Sponsor';
+            this.placeholder3 = 'Department';
+            this.placeholder4 = 'PI';
+        }
+        if ( this.currentPosition === 'PROPOSAL' ) {
+            this.placeholder1 = 'Proposal Number';
+            this.placeholder2 = 'Title';
+            this.placeholder3 = 'Lead Unit';
+            this.placeholder4 = 'Sponsor';
+        }
+        if ( this.currentPosition === 'IRB' ) {
+            this.placeholder1 = 'Protocol Number';
+            this.placeholder2 = 'Title';
+            this.placeholder3 = 'Lead Unit';
+            this.placeholder4 = 'Protocol type';
+        }
+        if ( this.currentPosition === 'DISCLOSURE' ) {
+            this.placeholder1 = 'Disclosure Number';
+            this.placeholder2 = 'Name';
+            this.placeholder3 = 'Disclosure Disposition';
+            this.placeholder4 = 'Module item key';
+        }
+        if ( this.currentPosition === 'IACUC' ) {
+            this.placeholder1 = 'Protocol Number';
+            this.placeholder2 = 'Title';
+            this.placeholder3 = 'Lead Unit';
+            this.placeholder4 = 'Protocol type';
+        }
     }
+
+    showMore( event: any ) {
+        this.showmoreClicked = true;
+        event.preventDefault();
+        this.showmoreNeeded = false;
+    }
+
+    pageChange( currentPage ) {
+        this.initialLoad( currentPage );
+    }
+
+    autocompleteAwardChanged(value) {
+        this.resultAward = true;
+        this.resultObject = value.obj;
+        this.awardNo = value.obj.account_number;
+        this.accountNo = value.obj.award_number;
+        this.title = value.obj.title;
+        this.piName = value.obj.pi_name;
+        this.departmentName = value.obj.lead_unit_name;
+    }
+    
+    autocompleteIrbChanged(value) {
+        this.resultAward = true;
+        this.resultObject = value.obj;
+        this.protocolNo = value.obj.protocol_number;
+        this.protocolId = value.obj.protocol_id;
+        this.title = value.obj.title;
+        this.unitNumber = value.obj.unit_number;
+        this.departmentName = value.obj.lead_unit;
+        this.status = value.obj.status;
+    }
+    
+    autocompleteIacucChanged(value) {
+        this.resultAward = true;
+        this.resultObject = value.obj;
+        this.protocolNo = value.obj.protocol_number;
+        this.protocolId = value.obj.protocol_id;
+        this.title = value.obj.title;
+        this.status = value.obj.status;
+        this.protocolType = value.obj.protocol_type;
+        this.departmentName = value.obj.lead_unit_number;
+    }
+    
+    autocompleteDisclosureChanged(value) {
+        this.resultAward = true;
+        this.resultObject = value.obj;
+        this.disclosureNo = value.obj.coi_disclosure_number;
+        this.fullName = value.obj.full_name;
+        this.disposition = value.obj.disclosure_dispositin;
+        this.status = value.obj.disclosure_status;
+    }
+    
+    foundItemsChanged(items) {
+        console.log( 'Value Detected: ' + items );
+    }
+
+    closeResultTab() {
+        if ( this.resultAward === true ) {
+            this.resultAward = false;
+        }
+    }
+
 }

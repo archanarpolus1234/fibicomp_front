@@ -6,7 +6,7 @@ export class SessionmanagementService implements CanActivate {
 
   constructor(private router: Router) { }
     canActivate() {
-        if (localStorage.getItem('currentUser')) {
+        if (sessionStorage.getItem('currentUser')) {
             return true;
         }
         this.router.navigate(['/loginpage']);
