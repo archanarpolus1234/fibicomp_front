@@ -2,7 +2,8 @@ import { Component, OnInit} from '@angular/core';
 import { GoogleChartService } from '../research_summary/google-chart.service';
 @Component({
   selector: 'display',
-  template: `<div id="chart_divEvolution" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" (window:resize)="onResize($event)"></div>`,
+  template: `<div id="chart_divEvolution" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" (window:resize)="onResize($event)"></div>
+  <div id="Pichart_divEvolution" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" (window:resize)="onResize($event)"></div>`,
   providers: [GoogleChartService],
 })
 export class GoogleChartComponent extends GoogleChartService {
@@ -31,6 +32,7 @@ export class GoogleChartComponent extends GoogleChartService {
       };
 
       this.chart = this.createAreaChart(document.getElementById('chart_divEvolution'));
+    //  this.chart = this.createPiChart(document.getElementById('Pichart_divEvolution'));
       this.chart.draw(this.data, this.options);
     }
     onResize(event) {

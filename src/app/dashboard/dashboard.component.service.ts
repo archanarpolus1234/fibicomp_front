@@ -9,83 +9,87 @@ import { SessionmanagementService } from "../session/session.management.service"
 @Injectable()
 export class DashboardService {
     results;
-    username : string;
-    url = '/fibiDashBoard';
-    //url = 'http://demo.fibiweb.com/fibi-comp/fibiDashBoard';
-    params = JSON.stringify({
-    pageNumber:30,
-    sortBy:null,
-    reverse:null,
-    tabIndex: 'AWARD'}); 
-    logindata : string;
+    username: string;
+    logindata: string;
 
-    constructor( private http:Http, private sessionService : SessionmanagementService ) {
-        this.username = localStorage.getItem('currentUser');
-        console.log('username inside constructor : ' +this.username);
+    constructor( private http: Http, private sessionService: SessionmanagementService ) {
+        this.username = sessionStorage.getItem( 'currentUser' );
     }
-    loadDashBoard(pageNumber: number,sortBy: string,reverse: string,tabIndex: string) : Observable<JSON> {
-        console.log(pageNumber);
+
+    loadDashBoard( propery1: string, propery2: string, propery3: string, propery4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number ): Observable<JSON> {
         var params = {
-            pageNumber:pageNumber,
-            sortBy:sortBy,
-            reverse:reverse,
-            tabIndex:tabIndex,
-            userName :this.username}; 
-        console.log(params);
-        return this.http.post(this.url,params)
-                        .map(res => res.json()
-                                )
-                        .catch(error=>{
-                            console.error(error.message || error);
-                            return Observable.throw(error.message || error)
-                        });
-     }
-    getResearchSummaryData() : Observable<JSON> {
-        var params = {
-                userName :this.username}; 
-        return this.http.post('/getResearchSummaryData',params)
-        //return this.http.post('http://demo.fibiweb.com/fibi-comp/getResearchSummaryData',params)
-                        .map(res => res.json())
-                        .catch(error=>{
-                            console.error(error.message || error);
-                            return Observable.throw(error.message || error)
-                        });
-        
+            property1: propery1,
+            property2: propery2,
+            property3: propery3,
+            property4: propery4,
+            pageNumber: pageNumber,
+            sortBy: sortBy,
+            reverse: reverse,
+            tabIndex: tabIndex,
+            userName: this.username,
+            currentPage: currentPage
+        };
+        var dashboardUrl = "/fibiDashBoard";
+        //var dashboardUrl = "http://demo.fibiweb.com/fibi-comp/fibiDashBoard";
+        //var dashboardUrl = "http://192.168.1.76:8080/fibi-comp/fibiDashBoard";
+        return this.http.post( dashboardUrl, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
     }
-    getLogindata(fullName: string){
+
+    getResearchSummaryData(): Observable<JSON> {
+        var params = { userName: this.username };
+        var summaryUrl = '/getResearchSummaryData';
+        //var summaryUrl = 'http://192.168.1.76:8080/fibi-comp/getResearchSummaryData';
+        // var summaryUrl = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
+        //this.url = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
+        return this.http.post( summaryUrl, params )
+            .map( res => res.json() )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    getLogindata( fullName: string ) {
         this.logindata = fullName;
     }
-    setLogindata(){
+
+    setLogindata() {
         return this.logindata;
     }
-    
-    searchUsingAdvanceOptions(property1 : string,  property2 : string, property3 : string, property4 : string, user_Name : string, tab_Index : string) : Observable <JSON>{
+
+    userNotification( userName: string ): Observable<JSON> {
         var params = {
-                property1 : property1,
-                property2 : property2,
-                property3 : property3,
-                property4 : property4,
-                userName : user_Name,
-                tabIndex : tab_Index};
-        
-        return this.http.post('/searchByProperty',params)
-        //return this.http.get('http://demo.fibiweb.com/fibi-comp/searchByProperty')
-                        .map(res => res.json())
-                        .catch(error=>{
-                            console.error(error.message || error);
-                            return Observable.throw(error.message || error)
-                        });
+            userName: userName
+        };
+        var notificationUrl = "/getUserNotification";
+        //var notificationUrl = "http://demo.fibiweb.com/fibi-comp/getUserNotification/getUserNotification";
+        //var notificationUrl = "http://192.168.1.76:8080/fibi-comp/getUserNotification";
+        return this.http.post( notificationUrl, params )
+            .map( res => res.json() )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+
     }
-    
-    logout() : Observable <string>{
-        return this.http.get('/logout ')
-        //return this.http.get('http://demo.fibiweb.com/fibi-comp/logout ')
-        .map(res => res.text())
-        .catch(error => {
-            console.error(error.message || error);
-            return Observable.throw(error.message || error);
-        });
-        
+
+    logout(): Observable<string> {
+       var logoutUrl = "/logout";
+        //var logoutUrl = "http://demo.fibiweb.com/fibi-comp/logout";
+       //var logoutUrl = "http://192.168.1.76:8080/fibi-comp/logout";
+
+        return this.http.get( logoutUrl )
+            .map( res => res.text() )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error );
+            } );
     }
-    
+
 }

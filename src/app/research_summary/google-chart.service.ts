@@ -33,4 +33,7 @@ export class GoogleChartService implements OnInit{
     createDataTable(array:any[]):any {
         return google.visualization.arrayToDataTable(array);
     }
+    createPiChart(element:any):any {
+        return new google.visualization.PieChart(element);
+    }
 }
