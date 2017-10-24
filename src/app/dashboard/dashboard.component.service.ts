@@ -1,27 +1,29 @@
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+
 import { Injectable } from '@angular/core';
 import { Http, HttpModule } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/toPromise';
+
 import { SessionmanagementService } from "../session/session.management.service";
 
 @Injectable()
 export class DashboardService {
-    results;
     username: string;
-    logindata: string;
+    personId: string;
 
     constructor( private http: Http, private sessionService: SessionmanagementService ) {
         this.username = sessionStorage.getItem( 'currentUser' );
+        this.personId = sessionStorage.getItem( 'personId' );
     }
 
-    loadDashBoard( propery1: string, propery2: string, propery3: string, propery4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number ): Observable<JSON> {
+    loadDashBoard( property1: string, property2: string, property3: string, property4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number ): Observable <JSON> {
         var params = {
-            property1: propery1,
-            property2: propery2,
-            property3: propery3,
-            property4: propery4,
+            property1: property1,
+            property2: property2,
+            property3: property3,
+            property4: property4,
             pageNumber: pageNumber,
             sortBy: sortBy,
             reverse: reverse,
@@ -41,12 +43,12 @@ export class DashboardService {
             } );
     }
 
-    getResearchSummaryData(): Observable<JSON> {
-        var params = { userName: this.username };
+    getResearchSummaryData(): Observable <JSON> {
+        this.personId = sessionStorage.getItem( 'personId' );
+        var params = { personId: this.personId };
         var summaryUrl = '/getResearchSummaryData';
         //var summaryUrl = 'http://192.168.1.76:8080/fibi-comp/getResearchSummaryData';
-        // var summaryUrl = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
-        //this.url = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
+       // var summaryUrl = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
         return this.http.post( summaryUrl, params )
             .map( res => res.json() )
             .catch( error => {
@@ -55,20 +57,12 @@ export class DashboardService {
             } );
     }
 
-    getLogindata( fullName: string ) {
-        this.logindata = fullName;
-    }
-
-    setLogindata() {
-        return this.logindata;
-    }
-
-    userNotification( userName: string ): Observable<JSON> {
+    userNotification( personId: string ): Observable <JSON> {
         var params = {
-            userName: userName
+                personId: personId
         };
         var notificationUrl = "/getUserNotification";
-        //var notificationUrl = "http://demo.fibiweb.com/fibi-comp/getUserNotification/getUserNotification";
+       // var notificationUrl = "http://demo.fibiweb.com/fibi-comp/getUserNotification";
         //var notificationUrl = "http://192.168.1.76:8080/fibi-comp/getUserNotification";
         return this.http.post( notificationUrl, params )
             .map( res => res.json() )
@@ -76,12 +70,11 @@ export class DashboardService {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
             } );
+        }
 
-    }
-
-    logout(): Observable<string> {
+    logout(): Observable <string> {
        var logoutUrl = "/logout";
-        //var logoutUrl = "http://demo.fibiweb.com/fibi-comp/logout";
+       //var logoutUrl = "http://demo.fibiweb.com/fibi-comp/logout";
        //var logoutUrl = "http://192.168.1.76:8080/fibi-comp/logout";
 
         return this.http.get( logoutUrl )
@@ -89,7 +82,6 @@ export class DashboardService {
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error );
-            } );
+            });
     }
-
 }

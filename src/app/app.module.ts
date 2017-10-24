@@ -12,26 +12,27 @@ import { Ng2PageScrollModule } from 'ng2-page-scroll';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { FooterComponent } from './footer.component';
-import { HeaderComponent } from './header';
 import { DashboardService } from './dashboard/dashboard.component.service';
 import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.component.service';
 import { ViewComponent } from './view.component';
-import { GoogleChartComponent } from './research_summary/googlechartcomponent';
+import { GoogleAreachartComponent } from './research_summary/googleareachart.component';
 import { GooglePiChartComponent } from './research_summary/google.pichart.component';
-import { GoogleChartService } from './research_summary/google-chart.service';
+import { GoogleChartService } from './research_summary/google.chart.service';
 import { SessionmanagementService } from './session/session.management.service';
-import { SessiontimeoutService } from './sessionTimeout/sessiontimeout.service';
-import { AwardQuickSearchComponent } from './quick-search/award-quick-search.component';
-import { DisclosureQuickSearchComponent } from './quick-search/disclosure-quick-search.component';
-import { IacucQuickSearchComponent } from './quick-search/iacuc-quick-search.component';
-import { IrbQuickSearchComponent } from './quick-search/irb-quick-search.component';
-import { AwardelasticsearchService } from './elasticSearch/awardelasticsearch.service';
-import { DisclosureelasticsearchService } from './elasticSearch/disclosureelasticsearch.service';
-import { IacucelasticsearchService } from './elasticSearch/iacucelasticsearch.service';
-import { IrbelasticsearchService } from './elasticSearch/irbelasticsearch.service';
-
+import { AwardElasticSearchComponent } from './elasticSearch/award.elasticsearch.component';
+import { DisclosureElasticSearchComponent } from './elasticSearch/disclosure.elasticsearch.component';
+import { IacucElasticSearchComponent } from './elasticSearch/iacuc.elasticsearch.component';
+import { IrbElasticSearchComponent } from './elasticSearch/irb.elasticsearch.component';
+import { AwardElasticsearchService } from './elasticSearch/award.elasticsearch.service';
+import { DisclosureElasticsearchService } from './elasticSearch/disclosure.elasticsearch.service';
+import { IacucElasticsearchService } from './elasticSearch/iacuc.elasticsearch.service';
+import { IrbElasticsearchService } from './elasticSearch/irb.elasticsearch.service';
+import { ProposalElasticSearchComponent } from "./elasticSearch/proposal.elasticsearch.component";
+import { ProposalElasticsearchService } from "./elasticSearch/proposal.elasticsearch.service";
+import { WarningModalComponent } from './session/warningModal.component';
+import { TimeoutModalComponent } from './session/timeoutmodal.component';
+import { SessiontimeoutComponent } from './session/sessiontimeout.component';
 
 let appRoutes = [
   { path: '', component: LoginComponent },
@@ -45,16 +46,18 @@ let appRoutes = [
   declarations: [
     AppComponent,
     DashboardComponent,
-    FooterComponent,
     LoginComponent,
-    HeaderComponent,
     ViewComponent,
-    GoogleChartComponent,
+    GoogleAreachartComponent,
     GooglePiChartComponent,
-    AwardQuickSearchComponent,
-    DisclosureQuickSearchComponent,
-    IacucQuickSearchComponent,
-    IrbQuickSearchComponent
+    AwardElasticSearchComponent,
+    DisclosureElasticSearchComponent,
+    IacucElasticSearchComponent,
+    IrbElasticSearchComponent,
+    ProposalElasticSearchComponent,
+    WarningModalComponent,
+    TimeoutModalComponent,
+    SessiontimeoutComponent
   ],
   imports: [
     BrowserModule,
@@ -67,9 +70,10 @@ let appRoutes = [
     NgbModule.forRoot(),
     Ng2PageScrollModule
   ],
-  providers: [DashboardService, LoginService, GoogleChartService, SessionmanagementService, { provide: LocationStrategy, useClass: HashLocationStrategy },
-              SessiontimeoutService, AwardelasticsearchService, DisclosureelasticsearchService, IacucelasticsearchService,
-              IrbelasticsearchService ],
+  providers: [DashboardService, LoginService, GoogleChartService, SessionmanagementService,
+              { provide: LocationStrategy, useClass: HashLocationStrategy },
+               AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
+              IrbElasticsearchService, ProposalElasticsearchService ],
   bootstrap: [ViewComponent]
 })
 export class AppModule { }

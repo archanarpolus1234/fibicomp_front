@@ -1,34 +1,38 @@
 import {Component, ChangeDetectionStrategy, AfterViewInit, EventEmitter, OnChanges, Output, NgZone} from '@angular/core';
 import {Subject, Observable} from 'rxjs';
-import {IrbelasticsearchService} from '../elasticSearch/irbelasticsearch.service';
-import {
-    FormGroup,
-    FormControl,
-    FormControlName
-} from '@angular/forms';
+import {IacucElasticsearchService} from '../elasticSearch/iacuc.elasticsearch.service';
+import {FormGroup, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
-  selector: 'app-irb-quick-search',
-  templateUrl: './quick-search.component.html',
+  selector: 'app-iacuc-elastic-search',
+   templateUrl: './elasticsearch.component.html',
   styleUrls: ['../../assets/css/bootstrap.min.css',
               '../../assets/css/font-awesome.min.css',
               '../../assets/css/style.css',
               '../../assets/css/search.css'],
-  providers: [IrbelasticsearchService],
+  providers: [IacucElasticsearchService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IrbQuickSearchComponent implements AfterViewInit  {
+
+export class IacucElasticSearchComponent implements AfterViewInit  {
 
   @Output()
   found: EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
+  
   @Output()
   selected: EventEmitter<any> = new EventEmitter<any>();
+  
+  @Output() messageEvent = new EventEmitter<boolean>();
+  
   seachTextModel: string;
   active = false;
   message = '';
+  resultCardView: boolean = false;
+  iconClass: string = 'fa fa-search';
   _results: Subject<Array<any>> = new Subject<Array<any>>();
   seachText: FormControl = new FormControl('');
-  constructor(private es: IrbelasticsearchService, private _ngZone: NgZone) {
+  
+  constructor(private es: IacucElasticsearchService, private _ngZone: NgZone) {
    this._results.subscribe((res) => {
             this.found.emit(res);
         });
@@ -55,13 +59,12 @@ export class IrbQuickSearchComponent implements AfterViewInit  {
                                          .map((hit) => hit.highlight);
                                     const hits_out: Array<any> = [];
                                     let results: Array<any> = [];
-                                  //debugger;
                                     hits_source.forEach((elmnt, j) => {
                                       let protocol_id: string = hits_source[j].protocol_id;
                                       let protocol_number: string = hits_source[j].protocol_number;
                                       let title: string = hits_source[j].title;
                                       let lead_unit: string = hits_source[j].lead_unit;
-                                      let unit_number: string = hits_source[j].unit_number;
+                                      let lead_unit_number: string = hits_source[j].lead_unit_number;
                                       let protocol_type: string = hits_source[j].protocol_type;
                                       let status: string = hits_source[j].status;
                                       let test = hits_source[j];
@@ -78,8 +81,8 @@ export class IrbQuickSearchComponent implements AfterViewInit  {
                                       if (typeof(hits_highlight[j].lead_unit) !== 'undefined') {
                                         lead_unit = hits_highlight[j].lead_unit;
                                       }
-                                      if (typeof(hits_highlight[j].unit_number) !== 'undefined') {
-                                        unit_number = hits_highlight[j].unit_number;
+                                      if (typeof(hits_highlight[j].lead_unit_number) !== 'undefined') {
+                                        lead_unit_number = hits_highlight[j].lead_unit_number;
                                       }
                                       if (typeof(hits_highlight[j].protocol_type) !== 'undefined') {
                                         protocol_type = hits_highlight[j].protocol_type;
@@ -91,7 +94,7 @@ export class IrbQuickSearchComponent implements AfterViewInit  {
                                         label: protocol_id + '  :  ' + protocol_number
                                         + '  |  ' + title
                                         + '  |  ' + lead_unit + '  |  '
-                                        + unit_number + '  |  '
+                                        + lead_unit_number + '  |  '
                                         + protocol_type + '  |  '
                                         + status,
                                         obj: test });
@@ -121,14 +124,45 @@ export class IrbQuickSearchComponent implements AfterViewInit  {
     }
 
 
-    resutSelected(result) {
-        this.selected.next(result);
-        this.active = !this.active;
-    }
-
-    handleError(): any {
-        this.message = 'something went wrong';
-    }
+      resutSelected(result) {
+          this.selected.next(result);
+          this.active = !this.active;
+          this.seachTextModel = result.obj.protocol_number;
+          this.showResultDiv();
+      }
+    
+      handleError(): any {
+          this.message = 'something went wrong';
+      }
+    
+      onSearchValueChange() {
+        this.iconClass = this.seachTextModel ? 'fa fa-times' : 'fa fa-search';
+        if (this.seachTextModel === '' && this.resultCardView === true) {
+          this.hideResultDiv();
+         }
+      }
+    
+      clearsearchBox( e: any) {
+        e.preventDefault();
+        this.seachTextModel = '';
+         if (this.resultCardView) {
+          this.hideResultDiv();
+         }
+      }
+    
+      sendMessage() {
+        this.messageEvent.emit(this.resultCardView);
+      }
+    
+      hideResultDiv() {
+        this.resultCardView = false;
+        this.sendMessage();
+      }
+    
+      showResultDiv() {
+        this.resultCardView = true;
+        this.sendMessage();
+      }
 
 }
 

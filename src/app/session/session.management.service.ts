@@ -6,10 +6,11 @@ export class SessionmanagementService implements CanActivate {
 
   constructor(private router: Router) { }
     canActivate() {
-        if (sessionStorage.getItem('currentUser')) {
+        if (sessionStorage.getItem( 'currentUser' )) {
+            console.log('checking : '+ sessionStorage.getItem('currentUser'));
             return true;
         }
-        this.router.navigate(['/loginpage']);
+        this.router.navigate( ['/loginpage'] );
         return false;
     }
 }

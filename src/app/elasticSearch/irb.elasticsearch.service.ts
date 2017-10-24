@@ -1,9 +1,9 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Client, SearchResponse} from 'elasticsearch';
 
 @Injectable()
-export class AwardelasticsearchService {
+export class IrbElasticsearchService {
   private _client: Client;
   constructor() {
     if (!this._client) {
@@ -21,16 +21,16 @@ export class AwardelasticsearchService {
     if (value) {
       console.log(value);
       return this._client.search({
-        index: 'mitaward',
+        index: 'irbfibi',
         size: 20 ,
-        type: 'award',
+        type: 'irb',
         body: {
                         query: {
                           bool: {
                             should: [
                               {
                                 match: {
-                                  award_number: {
+                                  protocol_id: {
                                     query: value,
                                     operator: 'or'
                                   }
@@ -38,33 +38,7 @@ export class AwardelasticsearchService {
                               },
                               {
                                 match: {
-                                  pi_name: {
-                                    query: value,
-                                    operator: 'or'
-                                  }
-                                }
-                              },
-                              {
-                                match: {
-                                  account_number: {
-                                    query: value,
-                                    operator: 'or'
-                                  }
-                                }
-                              }
-                              ,
-                              {
-                                match: {
-                                  lead_unit_number: {
-                                    query: value,
-                                    operator: 'or'
-                                  }
-                                }
-                              }
-                              ,
-                              {
-                                match: {
-                                  lead_unit_name: {
+                                  protocol_number: {
                                     query: value,
                                     operator: 'or'
                                   }
@@ -73,6 +47,40 @@ export class AwardelasticsearchService {
                               {
                                 match: {
                                   title: {
+                                    query: value,
+                                    operator: 'or'
+                                  }
+                                }
+                              }
+                              ,
+                              {
+                                match: {
+                                  lead_unit: {
+                                    query: value,
+                                    operator: 'or'
+                                  }
+                                }
+                              }
+                              ,
+                              {
+                                match: {
+                                  unit_number: {
+                                    query: value,
+                                    operator: 'or'
+                                  }
+                                }
+                              },
+                              {
+                                match: {
+                                  protocol_type: {
+                                    query: value,
+                                    operator: 'or'
+                                  }
+                                }
+                              },
+                              {
+                                match: {
+                                  status: {
                                     query: value,
                                     operator: 'or'
                                   }
@@ -89,12 +97,13 @@ export class AwardelasticsearchService {
                           pre_tags: ['<b>'],
                           post_tags: ['</b>'],
                           fields: {
-                            award_number: {},
-                            pi_name: {},
-                            account_number: {},
-                            lead_unit_number: {},
-                            lead_unit_name: {},
-                            title: {}
+                            protocol_id: {},
+                            protocol_number: {},
+                            title: {},
+                            lead_unit: {},
+                            unit_number: {},
+                            protocol_type: {},
+                            status: {}
                           }
                         } }
         });
@@ -113,5 +122,4 @@ export class AwardelasticsearchService {
       hello: 'elasticsearch!'
     });
   }
-
 }

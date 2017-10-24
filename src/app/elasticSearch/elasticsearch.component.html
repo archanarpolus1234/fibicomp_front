@@ -1,0 +1,10 @@
+<div class="searchBox">
+			<input class="sb-search-input" type="text" placeholder="Quick Search"  (blur)="active = false" (focus)="active = true" [(ngModel)]="seachTextModel" [formControl]="seachText" (ngModelChange)="onSearchValueChange()" /> 
+			<a href="#" class="searchButton" (click)="clearsearchBox($event)"><i [ngClass]="iconClass"></i></a>
+		
+		<div class="sb-seachresults" *ngIf="active">
+			<ul class="sb-results-dropdown-menu" >      
+				<li   *ngFor="let result of _results | async" (mousedown)="resutSelected(result)"><span [innerHTML]="result.label"></span></li>
+			 </ul> 
+		</div>  
+</div>

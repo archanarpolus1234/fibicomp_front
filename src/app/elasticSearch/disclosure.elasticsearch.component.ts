@@ -1,34 +1,38 @@
 import {Component, ChangeDetectionStrategy, AfterViewInit, EventEmitter, OnChanges, Output, NgZone} from '@angular/core';
 import {Subject, Observable} from 'rxjs';
-import {IacucelasticsearchService} from '../elasticSearch/iacucelasticsearch.service';
-import {
-    FormGroup,
-    FormControl,
-    FormControlName
-} from '@angular/forms';
+import { FormGroup, FormControl,FormControlName } from '@angular/forms';
+
+import {DisclosureElasticsearchService} from '../elasticSearch/disclosure.elasticsearch.service';
 
 @Component({
-  selector: 'app-iacuc-quick-search',
-   templateUrl: './quick-search.component.html',
+  selector: 'app-disclosure-elastic-search',
+  templateUrl: './elasticsearch.component.html',
   styleUrls: ['../../assets/css/bootstrap.min.css',
               '../../assets/css/font-awesome.min.css',
               '../../assets/css/style.css',
               '../../assets/css/search.css'],
-  providers: [IacucelasticsearchService],
+  providers: [DisclosureElasticsearchService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class IacucQuickSearchComponent implements AfterViewInit  {
+export class DisclosureElasticSearchComponent implements AfterViewInit  {
 
   @Output()
   found: EventEmitter<Array<any>> = new EventEmitter<Array<any>>();
+  
   @Output()
   selected: EventEmitter<any> = new EventEmitter<any>();
+  
+  @Output() messageEvent = new EventEmitter<boolean>();
+  
+  iconClass: string = 'fa fa-search';
+  resultCardView: boolean = false;
   seachTextModel: string;
   active = false;
   message = '';
   _results: Subject<Array<any>> = new Subject<Array<any>>();
   seachText: FormControl = new FormControl('');
-  constructor(private es: IacucelasticsearchService, private _ngZone: NgZone) {
+  
+  constructor(private es: DisclosureElasticsearchService, private _ngZone: NgZone) {
    this._results.subscribe((res) => {
             this.found.emit(res);
         });
@@ -56,43 +60,35 @@ export class IacucQuickSearchComponent implements AfterViewInit  {
                                     const hits_out: Array<any> = [];
                                     let results: Array<any> = [];
                                     hits_source.forEach((elmnt, j) => {
-                                      let protocol_id: string = hits_source[j].protocol_id;
-                                      let protocol_number: string = hits_source[j].protocol_number;
-                                      let title: string = hits_source[j].title;
-                                      let lead_unit: string = hits_source[j].lead_unit;
-                                      let lead_unit_number: string = hits_source[j].lead_unit_number;
-                                      let protocol_type: string = hits_source[j].protocol_type;
-                                      let status: string = hits_source[j].status;
+                                      let coi_disclosure_id: string = hits_source[j].coi_disclosure_id;
+                                      let full_name: string = hits_source[j].full_name;
+                                      let disclosure_disposition: string = hits_source[j].disclosure_disposition;
+                                      let disclosure_status: string = hits_source[j].disclosure_status;
+                                      let module_item_key: string = hits_source[j].module_item_key;
                                       let test = hits_source[j];
                                       let all ;
-                                      if (typeof(hits_highlight[j].protocol_id) !== 'undefined') {
-                                        protocol_id = hits_highlight[j].protocol_id;
+                                      if (typeof(hits_highlight[j].coi_disclosure_id) !== 'undefined') {
+                                        coi_disclosure_id = hits_highlight[j].coi_disclosure_id;
                                       }
-                                      if (typeof(hits_highlight[j].protocol_number) !== 'undefined') {
-                                        protocol_number = hits_highlight[j].protocol_number;
+                                      if (typeof(hits_highlight[j].full_name) !== 'undefined') {
+                                        full_name = hits_highlight[j].full_name;
                                       }
-                                      if (typeof(hits_highlight[j].title) !== 'undefined') {
-                                        title = hits_highlight[j].title;
+                                      if (typeof(hits_highlight[j].disclosure_disposition) !== 'undefined') {
+                                        disclosure_disposition = hits_highlight[j].disclosure_disposition;
                                       }
-                                      if (typeof(hits_highlight[j].lead_unit) !== 'undefined') {
-                                        lead_unit = hits_highlight[j].lead_unit;
+                                      if (typeof(hits_highlight[j].disclosure_status) !== 'undefined') {
+                                        disclosure_status = hits_highlight[j].disclosure_status;
                                       }
-                                      if (typeof(hits_highlight[j].lead_unit_number) !== 'undefined') {
-                                        lead_unit_number = hits_highlight[j].lead_unit_number;
+                                      if (typeof(hits_highlight[j].module_item_key) !== 'undefined') {
+                                        module_item_key = hits_highlight[j].module_item_key;
                                       }
-                                      if (typeof(hits_highlight[j].protocol_type) !== 'undefined') {
-                                        protocol_type = hits_highlight[j].protocol_type;
-                                      }
-                                      if (typeof(hits_highlight[j].status) !== 'undefined') {
-                                        status = hits_highlight[j].status;
-                                      }
+                                      
                                       results.push({
-                                        label: protocol_id + '  :  ' + protocol_number
-                                        + '  |  ' + title
-                                        + '  |  ' + lead_unit + '  |  '
-                                        + lead_unit_number + '  |  '
-                                        + protocol_type + '  |  '
-                                        + status,
+                                        label: coi_disclosure_id + '  :  '
+                                        + '  |  ' + full_name
+                                        + '  |  ' + disclosure_disposition + '  |  '
+                                        + disclosure_status + '  |  '
+                                        + module_item_key, 
                                         obj: test });
                                     });
                                     if (results.length > 0) {
@@ -119,15 +115,45 @@ export class IacucQuickSearchComponent implements AfterViewInit  {
             .subscribe(this._results);
     }
 
-
-    resutSelected(result) {
-        this.selected.next(result);
-        this.active = !this.active;
-    }
-
-    handleError(): any {
-        this.message = 'something went wrong';
-    }
+      resutSelected(result) {
+          this.selected.next(result);
+          this.active = !this.active;
+          this.seachTextModel = result.obj.coi_disclosure_number;
+          this.showResultDiv();
+      }
+    
+      handleError(): any {
+          this.message = 'something went wrong';
+      }
+    
+      onSearchValueChange() {
+        this.iconClass = this.seachTextModel ? 'fa fa-times' : 'fa fa-search';
+        if (this.seachTextModel === '' && this.resultCardView === true) {
+          this.hideResultDiv();
+         }
+      }
+    
+      clearsearchBox( e: any) {
+        e.preventDefault();
+        this.seachTextModel = '';
+         if (this.resultCardView) {
+          this.hideResultDiv();
+         }
+      }
+    
+      sendMessage() {
+        this.messageEvent.emit(this.resultCardView);
+      }
+    
+      hideResultDiv() {
+        this.resultCardView = false;
+        this.sendMessage();
+      }
+    
+      showResultDiv() {
+        this.resultCardView = true;
+        this.sendMessage();
+      }
 
 }
 
