@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {Client, SearchResponse} from 'elasticsearch';
 
 @Injectable()
-export class IacucelasticsearchService {
+export class IacucElasticsearchService {
   private _client: Client;
   constructor() {
     if (!this._client) {
@@ -17,6 +17,7 @@ export class IacucelasticsearchService {
       log: 'trace'
     });
   }
+  
   search(value): any { //debugger;
     if (value) {
       console.log(value);

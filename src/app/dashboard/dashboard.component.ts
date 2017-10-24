@@ -2,23 +2,23 @@ import { Component, OnInit } from '@angular/core';
 import { DashboardService } from './dashboard.component.service';
 import { SlicePipe } from '@angular/common';
 import { Router } from '@angular/router';
+
 import { SessionmanagementService } from "../session/session.management.service";
-import { SessiontimeoutService } from '../sessionTimeout/sessiontimeout.service';
-import { AwardQuickSearchComponent } from '../quick-search/award-quick-search.component';
-import { DisclosureQuickSearchComponent } from '../quick-search/disclosure-quick-search.component';
-import { IacucQuickSearchComponent } from '../quick-search/iacuc-quick-search.component';
-import { IrbQuickSearchComponent } from '../quick-search/irb-quick-search.component';
-
-
+import { AwardElasticSearchComponent } from '../elasticSearch/award.elasticsearch.component';
+import { DisclosureElasticSearchComponent } from '../elasticSearch/disclosure.elasticsearch.component';
+import { IacucElasticSearchComponent } from '../elasticSearch/iacuc.elasticsearch.component';
+import { IrbElasticSearchComponent } from '../elasticSearch/irb.elasticsearch.component';
+import { SessiontimeoutComponent } from '../session/sessiontimeout.component';
 
 @Component( {
     selector: 'dashboard-tpl',
     templateUrl: 'dashboard.component.html',
-    providers: [SessionmanagementService, SessiontimeoutService],
-    styleUrls: ['../css/bootstrap.min.css', '../css/font-awesome.min.css', '../../assets/css/style.css']
+    providers: [SessionmanagementService],
+    styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css']
 } )
 
 export class DashboardComponent implements OnInit {
+
     advanceSearchCriteria = {
         property1: '',
         property2: '',
@@ -35,13 +35,13 @@ export class DashboardComponent implements OnInit {
     morethanThreeNotification: boolean = false;
     propertyName: string;
     reverse: boolean = true;
-    // outputPath:string = 'http://192.168.1.242:8080/kc-dev';
-    //outputPath:string = 'http://demo.fibiweb.com/kc-dev';
-    outputPath: string = 'http://192.168.1.76:8080/kc-dev';
+    //outputPath:string = 'http://192.168.1.242:8080/kc-dev';
+    outputPath:string = 'http://demo.fibiweb.com/kc-dev';
+    /*outputPath: string = 'http://192.168.1.76:8080/kc-dev';*/
+    //outputPath: string = 'http://192.168.1.72:8080/kc-dev';
     userName: string;
     firstName: string;
     lastName: string;
-    personID: string;
     displayToggle: boolean = false;
     currentRows: number;
     logo: string;
@@ -77,8 +77,21 @@ export class DashboardComponent implements OnInit {
     protocolType: string;
     disclosureNo: string;
     disposition: string;
-
-    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService, private sessiontimeout: SessiontimeoutService ) {
+    personId : string;
+    toggleBox : boolean = false;
+    currentNumberOfRecords: number;
+    totalPage: number = 0; 
+    awardId: string;
+    documentNo: string;
+    type: string;
+    leadUnit: string;
+    summaryViews : any[];
+    person_name: string;
+    sponsor: string;
+    proposalNo: string;
+    departmentNo: string;
+    
+    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService) {
         this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
         if ( !sessionService.canActivate() ) {
@@ -89,22 +102,20 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.showmoreClicked = false;
-        this.showmoreNeeded = true;
-        this.initialLoad( this.currentPage );
+        this.adminStatus = sessionStorage.getItem( 'isAdmin' );
+        this.userName = sessionStorage.getItem( 'currentUser' );
+        this.fullName = sessionStorage.getItem( 'userFullname' );
+        if ( this.adminStatus == 'true' ) {
+            this.isAdmin = true;
+        }
         this.getResearchSummaryData();
-        this.fullName = this.dashboardService.setLogindata();
     }
-
-    currentNumberOfRecords: number;
-    totalPage: number = 0;
 
     initialLoad( currentPage ) {
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
             .subscribe(
             data => {
                 this.result = data || [];
-                //console.log( this.result );
                 this.totalPage = this.result.totalServiceRequest;
                 if ( this.currentPosition == "AWARD" ) {
                     this.serviceRequestList = this.result.awardViews;
@@ -121,24 +132,21 @@ export class DashboardComponent implements OnInit {
                 if ( this.currentPosition == "DISCLOSURE" ) {
                     this.serviceRequestList = this.result.disclosureViews;
                 }
-                //this.serviceRequestList = this.result.dashBoardDetailMap;
-                //this.currentNumberOfRecords = this.result.serviceRequestCount;
                 this.userName = sessionStorage.getItem( 'currentUser' );
                 this.fullName = sessionStorage.getItem( 'userFullname' );
+                this.firstName = sessionStorage.getItem( 'firstName' );
+                this.lastName = sessionStorage.getItem( 'lastName' );
             } );
     }
 
     showTab( currentTabPosition ) {
+        this.personId = sessionStorage.getItem( 'personId' );
         this.result = null;
         this.resultAward = false;
         this.serviceRequestList = [];
         this.currentPage = 1;
         this.displayToggle = false;
         this.adminAdvanceSearch = false;
-        this.adminStatus = sessionStorage.getItem( 'isAdmin' );
-        if ( this.adminStatus == 'true' ) {
-            this.isAdmin = true;
-        }
         this.advanceSearchCriteria.property1 = '';
         this.advanceSearchCriteria.property2 = '';
         this.advanceSearchCriteria.property3 = '';
@@ -148,7 +156,6 @@ export class DashboardComponent implements OnInit {
         this.currentPosition = currentTabPosition;
         this.pagedItems = null;
         this.sortBy = 'updateTimeStamp';
-        //this.initialLoad(this.currentPage);
         if ( currentTabPosition === 'SUMMARY' ) {
             this.getResearchSummaryData();
         } else {
@@ -166,14 +173,13 @@ export class DashboardComponent implements OnInit {
         this.sortBy = sortFieldBy;
         this.initialLoad( this.currentPage );
     }
-
-
-
+    
     getResearchSummaryData() {
         this.dashboardService.getResearchSummaryData()
             .subscribe( data => {
                 this.result = data || [];
                 this.dashBoardResearchSummaryMap = this.result.summaryViews;
+                this.summaryViews = this.result.summaryViews;
             } );
     }
 
@@ -184,10 +190,10 @@ export class DashboardComponent implements OnInit {
         if ( sessionStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
-        //this.dashboardService.searchUsingAdvanceOptions(this.advanceSearchCriteria.property1,  this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.userName, this.currentPosition)
-        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
+        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage)
             .subscribe( data => {
                 this.result = data || [];
+                this.totalPage = this.result.totalServiceRequest;
                 if ( this.currentPosition == "AWARD" ) {
                     this.serviceRequestList = this.result.awardViews;
                 }
@@ -203,8 +209,6 @@ export class DashboardComponent implements OnInit {
                 if ( this.currentPosition == "DISCLOSURE" ) {
                     this.serviceRequestList = this.result.disclosureViews;
                 }
-                //this.serviceRequestList = this.result.dashBoardDetailMap;
-                //console.log(this.result.dashBoardDetailMap);
             } );
     }
 
@@ -224,6 +228,7 @@ export class DashboardComponent implements OnInit {
             data => {
                 if ( data == 'SUCCESS' ) {
                     sessionStorage.removeItem( 'currentUser' );
+                    sessionStorage.removeItem( 'personId' );
                     sessionStorage.removeItem( 'userFullname' );
                     sessionStorage.removeItem( 'isAdmin' );
                     this.router.navigate( ['/loginpage'] );
@@ -233,10 +238,13 @@ export class DashboardComponent implements OnInit {
 
     userNotification( e: any ) {
         e.preventDefault();
+        this.toggleBox = !this.toggleBox;
         this.showmoreClicked = false;
         this.showmoreNeeded = true;
         this.first3notificationList = [];
-        this.dashboardService.userNotification( this.userName )
+        this.personId = sessionStorage.getItem( 'personId' );
+        if ( this.toggleBox == true ){
+            this.dashboardService.userNotification( this.personId )
             .subscribe( data => {
                 this.result = data || [];
                 this.notificationList = this.result;
@@ -246,7 +254,8 @@ export class DashboardComponent implements OnInit {
                         this.first3notificationList.push( this.notificationList[i] );
                     }
                 }
-            } );
+            } );  
+        }
     }
 
     advanceSearch( event: any ) {
@@ -258,8 +267,8 @@ export class DashboardComponent implements OnInit {
         this.advanceSearchCriteria.property4 = '';
         if ( this.currentPosition === 'AWARD' ) {
             this.placeholder1 = 'Account';
-            this.placeholder2 = 'Sponsor';
-            this.placeholder3 = 'Department';
+            this.placeholder2 = 'Lead Unit';
+            this.placeholder3 = 'Sponsor';
             this.placeholder4 = 'PI';
         }
         if ( this.currentPosition === 'PROPOSAL' ) {
@@ -298,7 +307,7 @@ export class DashboardComponent implements OnInit {
         this.initialLoad( currentPage );
     }
 
-    autocompleteAwardChanged(value) {
+    autocompleteAwardChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
         this.awardNo = value.obj.account_number;
@@ -306,9 +315,23 @@ export class DashboardComponent implements OnInit {
         this.title = value.obj.title;
         this.piName = value.obj.pi_name;
         this.departmentName = value.obj.lead_unit_name;
+        this.awardId = value.obj.award_number;
+        this.documentNo = value.obj.document_id;
     }
     
-    autocompleteIrbChanged(value) {
+    autocompleteProposalChanged(value) {
+        this.resultAward = true;
+        this.resultObject = value.obj;
+        this.documentNo = value.obj.document_number;
+        this.proposalNo = value.obj.proposal_number;
+        this.title = value.obj.title;
+        this.departmentName = value.obj.lead_unit_name;
+        this.sponsor = value.obj.sponsor;
+        this.person_name = value.obj.person_name;
+        this.departmentNo = value.obj.lead_unit_number;
+    }
+    
+    autocompleteIrbChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
         this.protocolNo = value.obj.protocol_number;
@@ -317,9 +340,11 @@ export class DashboardComponent implements OnInit {
         this.unitNumber = value.obj.unit_number;
         this.departmentName = value.obj.lead_unit;
         this.status = value.obj.status;
+        this.type = value.obj.protocol_type;
+        this.leadUnit = value.obj.lead_unit;
     }
     
-    autocompleteIacucChanged(value) {
+    autocompleteIacucChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
         this.protocolNo = value.obj.protocol_number;
@@ -328,19 +353,22 @@ export class DashboardComponent implements OnInit {
         this.status = value.obj.status;
         this.protocolType = value.obj.protocol_type;
         this.departmentName = value.obj.lead_unit_number;
+        this.type = value.obj.protocol_type;
+        this.leadUnit = value.obj.lead_unit_number;
     }
     
-    autocompleteDisclosureChanged(value) {
+    autocompleteDisclosureChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
         this.disclosureNo = value.obj.coi_disclosure_number;
         this.fullName = value.obj.full_name;
         this.disposition = value.obj.disclosure_dispositin;
         this.status = value.obj.disclosure_status;
+        this.documentNo = value.obj.coi_disclosure_id;
     }
     
-    foundItemsChanged(items) {
-        console.log( 'Value Detected: ' + items );
+    foundItemsChanged( items ) {
+        // To Do Something
     }
 
     closeResultTab() {
@@ -349,4 +377,12 @@ export class DashboardComponent implements OnInit {
         }
     }
 
+    receiveResultCard($event) {
+      this.resultAward = $event;
+    }
+    
+    myDashboard( event: any ){
+        event.preventDefault();
+        this.router.navigate( ['/dashboard'] );
+    }
 }

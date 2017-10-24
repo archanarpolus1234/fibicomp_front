@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Client, SearchResponse} from 'elasticsearch';
 
 @Injectable()
-export class IrbelasticsearchService {
+export class AwardElasticsearchService {
   private _client: Client;
+
   constructor() {
     if (!this._client) {
       this._connect();
@@ -17,20 +18,21 @@ export class IrbelasticsearchService {
       log: 'trace'
     });
   }
-  search(value): any { //debugger;
+  
+  search(value): any { 
     if (value) {
       console.log(value);
       return this._client.search({
-        index: 'irbfibi',
+        index: 'mitaward',
         size: 20 ,
-        type: 'irb',
+        type: 'award',
         body: {
                         query: {
                           bool: {
                             should: [
                               {
                                 match: {
-                                  protocol_id: {
+                                  award_number: {
                                     query: value,
                                     operator: 'or'
                                   }
@@ -38,7 +40,33 @@ export class IrbelasticsearchService {
                               },
                               {
                                 match: {
-                                  protocol_number: {
+                                  pi_name: {
+                                    query: value,
+                                    operator: 'or'
+                                  }
+                                }
+                              },
+                              {
+                                match: {
+                                  account_number: {
+                                    query: value,
+                                    operator: 'or'
+                                  }
+                                }
+                              }
+                              ,
+                              {
+                                match: {
+                                  lead_unit_number: {
+                                    query: value,
+                                    operator: 'or'
+                                  }
+                                }
+                              }
+                              ,
+                              {
+                                match: {
+                                  lead_unit_name: {
                                     query: value,
                                     operator: 'or'
                                   }
@@ -47,40 +75,6 @@ export class IrbelasticsearchService {
                               {
                                 match: {
                                   title: {
-                                    query: value,
-                                    operator: 'or'
-                                  }
-                                }
-                              }
-                              ,
-                              {
-                                match: {
-                                  lead_unit: {
-                                    query: value,
-                                    operator: 'or'
-                                  }
-                                }
-                              }
-                              ,
-                              {
-                                match: {
-                                  unit_number: {
-                                    query: value,
-                                    operator: 'or'
-                                  }
-                                }
-                              },
-                              {
-                                match: {
-                                  protocol_type: {
-                                    query: value,
-                                    operator: 'or'
-                                  }
-                                }
-                              },
-                              {
-                                match: {
-                                  status: {
                                     query: value,
                                     operator: 'or'
                                   }
@@ -97,13 +91,12 @@ export class IrbelasticsearchService {
                           pre_tags: ['<b>'],
                           post_tags: ['</b>'],
                           fields: {
-                            protocol_id: {},
-                            protocol_number: {},
-                            title: {},
-                            lead_unit: {},
-                            unit_number: {},
-                            protocol_type: {},
-                            status: {}
+                            award_number: {},
+                            pi_name: {},
+                            account_number: {},
+                            lead_unit_number: {},
+                            lead_unit_name: {},
+                            title: {}
                           }
                         } }
         });

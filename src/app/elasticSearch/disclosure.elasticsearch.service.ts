@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {Client, SearchResponse} from 'elasticsearch';
 
 @Injectable()
-export class DisclosureelasticsearchService {
+export class DisclosureElasticsearchService {
   private _client: Client;
   constructor() {
     if (!this._client) {

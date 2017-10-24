@@ -1,18 +1,19 @@
 import { Component, OnInit} from '@angular/core';
-import { GoogleChartService } from '../research_summary/google-chart.service';
+
+import { GoogleChartService } from '../research_summary/google.chart.service';
 @Component({
   selector: 'display',
   template: `<div id="chart_divEvolution" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" (window:resize)="onResize($event)"></div>
   <div id="Pichart_divEvolution" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" (window:resize)="onResize($event)"></div>`,
   providers: [GoogleChartService],
 })
-export class GoogleChartComponent extends GoogleChartService {
+
+export class GoogleAreachartComponent extends GoogleChartService {
     private options;
     private data;
     private chart;
 
-    drawGraph(){
-      //console.log('DrawGraph Evolution...');
+    drawGraph() {
       this.data = this.createDataTable([
                                         ['Year', 'Direct', 'FA', 'Sub-Award'],
                                         ['2014',  1170, 460, 120],
@@ -22,8 +23,6 @@ export class GoogleChartComponent extends GoogleChartService {
                                     ]);
 
       this.options = {
-       /* title: 'Expenditure Volume',*/
-        
         hAxis: {
           title: 'Year',
           minValue: 0
@@ -32,9 +31,9 @@ export class GoogleChartComponent extends GoogleChartService {
       };
 
       this.chart = this.createAreaChart(document.getElementById('chart_divEvolution'));
-    //  this.chart = this.createPiChart(document.getElementById('Pichart_divEvolution'));
       this.chart.draw(this.data, this.options);
     }
+    
     onResize(event) {
         this.drawGraph();
     }
