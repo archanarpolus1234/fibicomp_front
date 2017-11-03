@@ -9,11 +9,12 @@ import { DisclosureElasticSearchComponent } from '../elasticSearch/disclosure.el
 import { IacucElasticSearchComponent } from '../elasticSearch/iacuc.elasticsearch.component';
 import { IrbElasticSearchComponent } from '../elasticSearch/irb.elasticsearch.component';
 import { SessiontimeoutComponent } from '../session/sessiontimeout.component';
+import { Constants } from '../constants/constants.service';
 
 @Component( {
     selector: 'dashboard-tpl',
     templateUrl: 'dashboard.component.html',
-    providers: [SessionmanagementService],
+    providers: [SessionmanagementService, Constants],
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css']
 } )
 
@@ -35,10 +36,8 @@ export class DashboardComponent implements OnInit {
     morethanThreeNotification: boolean = false;
     propertyName: string;
     reverse: boolean = true;
-    //outputPath:string = 'http://192.168.1.242:8080/kc-dev';
-    outputPath:string = 'http://demo.fibiweb.com/kc-dev';
-    /*outputPath: string = 'http://192.168.1.76:8080/kc-dev';*/
-    //outputPath: string = 'http://192.168.1.72:8080/kc-dev';
+    outputPath:string;
+    polusWebsite : string ='http://polussolutions.com/';
     userName: string;
     firstName: string;
     lastName: string;
@@ -63,35 +62,36 @@ export class DashboardComponent implements OnInit {
     adminStatus: string;
     selectedValue: JSON;
     resultObject: JSON;
-    awardNo: string;
+    resultAward: boolean = false;
+    
     accountNo: string;
+    awardNo: string;
     title: string;
-    sponsorName: string;
+    sponsor: string;
     piName: string;
     departmentName: string;
-    resultAward: boolean = false;
-    protocolNo: string;
-    protocolId: string;
-    unitNumber: string;
+    proposalNo: string;
     status: string;
-    protocolType: string;
+    protocolNo: string;
+    type: string;
+    leadUnit: string;
     disclosureNo: string;
+    disFullName: string;
     disposition: string;
+    protocolType: string;
     personId : string;
+    
     toggleBox : boolean = false;
     currentNumberOfRecords: number;
     totalPage: number = 0; 
     awardId: string;
     documentNo: string;
-    type: string;
-    leadUnit: string;
     summaryViews : any[];
-    person_name: string;
-    sponsor: string;
-    proposalNo: string;
-    departmentNo: string;
+    adminClear: boolean = true;
+    constval : string;
     
-    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService) {
+    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService, private constant: Constants) {
+        this.outputPath = this.constant.outputPath;
         this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
         if ( !sessionService.canActivate() ) {
@@ -102,9 +102,9 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.adminStatus = sessionStorage.getItem( 'isAdmin' );
-        this.userName = sessionStorage.getItem( 'currentUser' );
-        this.fullName = sessionStorage.getItem( 'userFullname' );
+        this.adminStatus = localStorage.getItem( 'isAdmin' );
+        this.userName = localStorage.getItem( 'currentUser' );
+        this.fullName = localStorage.getItem( 'userFullname' );
         if ( this.adminStatus == 'true' ) {
             this.isAdmin = true;
         }
@@ -112,6 +112,7 @@ export class DashboardComponent implements OnInit {
     }
 
     initialLoad( currentPage ) {
+        this.constval = this.constant.index_url;
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
             .subscribe(
             data => {
@@ -132,15 +133,15 @@ export class DashboardComponent implements OnInit {
                 if ( this.currentPosition == "DISCLOSURE" ) {
                     this.serviceRequestList = this.result.disclosureViews;
                 }
-                this.userName = sessionStorage.getItem( 'currentUser' );
-                this.fullName = sessionStorage.getItem( 'userFullname' );
-                this.firstName = sessionStorage.getItem( 'firstName' );
-                this.lastName = sessionStorage.getItem( 'lastName' );
+                this.userName = localStorage.getItem( 'currentUser' );
+                this.fullName = localStorage.getItem( 'userFullname' );
+                this.firstName = localStorage.getItem( 'firstName' );
+                this.lastName = localStorage.getItem( 'lastName' );
             } );
     }
 
     showTab( currentTabPosition ) {
-        this.personId = sessionStorage.getItem( 'personId' );
+        this.personId = localStorage.getItem( 'personId' );
         this.result = null;
         this.resultAward = false;
         this.serviceRequestList = [];
@@ -156,10 +157,33 @@ export class DashboardComponent implements OnInit {
         this.currentPosition = currentTabPosition;
         this.pagedItems = null;
         this.sortBy = 'updateTimeStamp';
+        this.adminStatus = localStorage.getItem( 'isAdmin' );
+        this.accountNo = ' ';
+        this.awardNo = ' ';
+        this.title = ' ';
+        this.sponsor = ' ';
+        this.piName = ' ';
+        this.departmentName = ' ';
+        
+        this.proposalNo = ' ';
+        this.status = ' ';
+        
+        this.protocolNo = ' ';
+        this.type = ' ';
+        this.leadUnit = ' ';
+        
+        this.disclosureNo = ' ';
+        this.disFullName = ' ';
+        this.disposition = ' ';
+        
+        this.awardId = ' ';
+        this.documentNo = ' ';
+        
         if ( currentTabPosition === 'SUMMARY' ) {
             this.getResearchSummaryData();
-        } else {
+        } else if ( this.adminStatus != 'true' ){
             this.initialLoad( this.currentPage );
+            this.adminClear = false;
         }
     }
 
@@ -184,10 +208,11 @@ export class DashboardComponent implements OnInit {
     }
 
     searchUsingAdvanceOptions( currentPage ) {
+        this.adminClear = false;
         if ( this.resultAward === true ) {
             this.resultAward = false;
         }
-        if ( sessionStorage.getItem( 'isAdmin' ) ) {
+        if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage)
@@ -217,20 +242,24 @@ export class DashboardComponent implements OnInit {
         this.advanceSearchCriteria.property2 = '';
         this.advanceSearchCriteria.property3 = '';
         this.advanceSearchCriteria.property4 = '';
-        if ( sessionStorage.getItem( 'isAdmin' ) ) {
+        this.adminClear = true;
+        if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
-        this.initialLoad( this.currentPage );
+        if ( this.adminStatus != 'true' ){
+            this.adminClear = false;
+            this.initialLoad( this.currentPage );
+        }
     }
 
     logout() {
         this.dashboardService.logout().subscribe(
             data => {
                 if ( data == 'SUCCESS' ) {
-                    sessionStorage.removeItem( 'currentUser' );
-                    sessionStorage.removeItem( 'personId' );
-                    sessionStorage.removeItem( 'userFullname' );
-                    sessionStorage.removeItem( 'isAdmin' );
+                    localStorage.removeItem( 'currentUser' );
+                    localStorage.removeItem( 'personId' );
+                    localStorage.removeItem( 'userFullname' );
+                    localStorage.removeItem( 'isAdmin' );
                     this.router.navigate( ['/loginpage'] );
                 }
             } );
@@ -242,7 +271,7 @@ export class DashboardComponent implements OnInit {
         this.showmoreClicked = false;
         this.showmoreNeeded = true;
         this.first3notificationList = [];
-        this.personId = sessionStorage.getItem( 'personId' );
+        this.personId = localStorage.getItem( 'personId' );
         if ( this.toggleBox == true ){
             this.dashboardService.userNotification( this.personId )
             .subscribe( data => {
@@ -310,61 +339,61 @@ export class DashboardComponent implements OnInit {
     autocompleteAwardChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
-        this.awardNo = value.obj.account_number;
-        this.accountNo = value.obj.award_number;
+        this.awardNo = value.obj.award_number;
+        this.accountNo = value.obj.account_number;
         this.title = value.obj.title;
         this.piName = value.obj.pi_name;
         this.departmentName = value.obj.lead_unit_name;
-        this.awardId = value.obj.award_number;
-        this.documentNo = value.obj.document_id;
+        this.awardId = value.obj.award_id;
+        this.documentNo = value.obj.document_number;
+        this.sponsor = value.obj.sponsor;
     }
     
     autocompleteProposalChanged(value) {
         this.resultAward = true;
         this.resultObject = value.obj;
-        this.documentNo = value.obj.document_number;
         this.proposalNo = value.obj.proposal_number;
+        this.piName = value.obj.person_name;
         this.title = value.obj.title;
         this.departmentName = value.obj.lead_unit_name;
         this.sponsor = value.obj.sponsor;
-        this.person_name = value.obj.person_name;
-        this.departmentNo = value.obj.lead_unit_number;
+        this.documentNo = value.obj.document_number;
+        this.status = value.obj.status;
     }
     
     autocompleteIrbChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
         this.protocolNo = value.obj.protocol_number;
-        this.protocolId = value.obj.protocol_id;
         this.title = value.obj.title;
-        this.unitNumber = value.obj.unit_number;
+        this.piName = value.obj.person_name;
         this.departmentName = value.obj.lead_unit;
         this.status = value.obj.status;
         this.type = value.obj.protocol_type;
-        this.leadUnit = value.obj.lead_unit;
+        this.leadUnit = value.obj.lead_unit_name;
+        this.documentNo = value.obj.document_number;
     }
     
     autocompleteIacucChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
         this.protocolNo = value.obj.protocol_number;
-        this.protocolId = value.obj.protocol_id;
         this.title = value.obj.title;
         this.status = value.obj.status;
-        this.protocolType = value.obj.protocol_type;
-        this.departmentName = value.obj.lead_unit_number;
         this.type = value.obj.protocol_type;
-        this.leadUnit = value.obj.lead_unit_number;
+        this.piName = value.obj.person_name;
+        this.leadUnit = value.obj.lead_unit_name;
+        this.documentNo = value.obj.document_number;
     }
     
     autocompleteDisclosureChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
         this.disclosureNo = value.obj.coi_disclosure_number;
-        this.fullName = value.obj.full_name;
-        this.disposition = value.obj.disclosure_dispositin;
+        this.disFullName = value.obj.full_name;
+        this.disposition = value.obj.disclosure_disposition;
         this.status = value.obj.disclosure_status;
-        this.documentNo = value.obj.coi_disclosure_id;
+        this.documentNo = value.obj.document_number;
     }
     
     foundItemsChanged( items ) {

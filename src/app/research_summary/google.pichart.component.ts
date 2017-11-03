@@ -35,7 +35,6 @@ export class GooglePiChartComponent extends GoogleChartService {
     drawGraph(){
       this.dashboardService.getResearchSummaryData()
       .subscribe(data => {
-          
           this.result = data || [];
           if ( this.result != null ){
               this.awardList = this.result.summaryAwardPieChart;
@@ -51,7 +50,11 @@ export class GooglePiChartComponent extends GoogleChartService {
               this.awardOptions = {
                       title: 'Award by sponsor types',
                       is3D: true,
-                      legend: 'right'
+                      legend: 'right',
+                      colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',
+                               '#7BCFFF', '#2AB6F4', '#25C8D9', '#24A095', '#68B96A',
+                               '#9CCC66', '#E5F37A', '#FFF15A', '#FDD154', '#FFA827',
+                               '#FF7143', '#8C6E63', '#BDBDBD', '#78909C']
               };
               this.awardChart = this.createPiChart(document.getElementById('pichart_award'));
               this.awardChart.draw(this.awardData, this.awardOptions);
@@ -61,8 +64,11 @@ export class GooglePiChartComponent extends GoogleChartService {
               this.proposalData =  google.visualization.arrayToDataTable(this.proposalStateList);
               this.proposalOptions = {
                       title: 'Proposal by sponsor types',
-                      is3D: true
-                     /* legend: { position: 'none'}*/
+                      is3D: true,
+                      colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',
+                               '#7BCFFF', '#2AB6F4', '#25C8D9', '#24A095', '#68B96A',
+                               '#9CCC66', '#E5F37A', '#FFF15A', '#FDD154', '#FFA827',
+                               '#FF7143', '#8C6E63', '#BDBDBD', '#78909C']
               };
               this.propsalChart = this.createPiChart(document.getElementById('pichart_divEvolution'));
               this.propsalChart.draw(this.proposalData, this.proposalOptions);
@@ -72,6 +78,7 @@ export class GooglePiChartComponent extends GoogleChartService {
     }
     
     onResize(event) {
-        this.drawGraph();
+        this.awardChart.draw(this.awardData, this.awardOptions);
+        this.propsalChart.draw(this.proposalData, this.proposalOptions);
     }
 }

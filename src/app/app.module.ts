@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DashboardService } from './dashboard/dashboard.component.service';
 import { LoginComponent } from './login/login.component';
+import { LogoutComponent } from './login/logout.component';
 import { LoginService } from './login/login.component.service';
 import { ViewComponent } from './view.component';
 import { GoogleAreachartComponent } from './research_summary/googleareachart.component';
@@ -24,6 +25,7 @@ import { AwardElasticSearchComponent } from './elasticSearch/award.elasticsearch
 import { DisclosureElasticSearchComponent } from './elasticSearch/disclosure.elasticsearch.component';
 import { IacucElasticSearchComponent } from './elasticSearch/iacuc.elasticsearch.component';
 import { IrbElasticSearchComponent } from './elasticSearch/irb.elasticsearch.component';
+
 import { AwardElasticsearchService } from './elasticSearch/award.elasticsearch.service';
 import { DisclosureElasticsearchService } from './elasticSearch/disclosure.elasticsearch.service';
 import { IacucElasticsearchService } from './elasticSearch/iacuc.elasticsearch.service';
@@ -33,47 +35,51 @@ import { ProposalElasticsearchService } from "./elasticSearch/proposal.elasticse
 import { WarningModalComponent } from './session/warningModal.component';
 import { TimeoutModalComponent } from './session/timeoutmodal.component';
 import { SessiontimeoutComponent } from './session/sessiontimeout.component';
+import { Constants } from './constants/constants.service';
 
 let appRoutes = [
-  { path: '', component: LoginComponent },
+	{ path: '', component: LoginComponent },
 
-  { path: 'dashboard', component: AppComponent },
-  
-  { path : 'loginpage', component : LoginComponent }
+	{ path: 'dashboard', component: AppComponent },
+
+	{ path : 'loginpage', component : LoginComponent },
+
+	{ path : 'logout', component : LogoutComponent }
 ];
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    DashboardComponent,
-    LoginComponent,
-    ViewComponent,
-    GoogleAreachartComponent,
-    GooglePiChartComponent,
-    AwardElasticSearchComponent,
-    DisclosureElasticSearchComponent,
-    IacucElasticSearchComponent,
-    IrbElasticSearchComponent,
-    ProposalElasticSearchComponent,
-    WarningModalComponent,
-    TimeoutModalComponent,
-    SessiontimeoutComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpModule,
-    ChartsModule,
-    ReactiveFormsModule,
-    RouterModule.forRoot(appRoutes),
-    NgIdleKeepaliveModule.forRoot(),
-    NgbModule.forRoot(),
-    Ng2PageScrollModule
-  ],
-  providers: [DashboardService, LoginService, GoogleChartService, SessionmanagementService,
+	declarations: [
+		AppComponent,
+		DashboardComponent,
+		LoginComponent,
+		ViewComponent,
+		GoogleAreachartComponent,
+		GooglePiChartComponent,
+		AwardElasticSearchComponent,
+		DisclosureElasticSearchComponent,
+		IacucElasticSearchComponent,
+		IrbElasticSearchComponent,
+		ProposalElasticSearchComponent,
+		WarningModalComponent,
+		TimeoutModalComponent,
+		SessiontimeoutComponent,
+		LogoutComponent
+	],
+	imports: [
+		BrowserModule,
+		FormsModule,
+		HttpModule,
+		ChartsModule,
+		ReactiveFormsModule,
+		RouterModule.forRoot(appRoutes),
+		NgIdleKeepaliveModule.forRoot(),
+		NgbModule.forRoot(),
+		Ng2PageScrollModule
+	],
+	providers: [DashboardService, LoginService, GoogleChartService, SessionmanagementService,
               { provide: LocationStrategy, useClass: HashLocationStrategy },
                AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
-              IrbElasticsearchService, ProposalElasticsearchService ],
+              IrbElasticsearchService, ProposalElasticsearchService, Constants ],
   bootstrap: [ViewComponent]
 })
 export class AppModule { }

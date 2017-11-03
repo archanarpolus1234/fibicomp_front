@@ -8,7 +8,7 @@
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4);"
 		(continueEvent)="receiveContinueMessage($event)"
-		(logoutEvent)="reRoute($event)"  [timeToExitinMin]="exitTimeInMin" [timeToExitinSec]="exitTimeInSec"></app-display-dialog>
+		(logoutEvent)="reRoute($event)"  [timeToExitinMin]="exitTimeInMin" [timeToExitinSec]="exitTimeInSec" [timeToExit]="timerTime"></app-display-dialog>
 </div>
 <div *ngIf="timeoutModal">
 	<app-timeoutmodal style="display: block; 
@@ -19,6 +19,6 @@
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4);"
-		(logoutEvent)="reRoute($event)" [timeToExit]="timerTime"></app-timeoutmodal>
+		(logoutEvent)="reRoute($event)" [loggedOutTime]="timeToLogout"></app-timeoutmodal>
 </div>
 

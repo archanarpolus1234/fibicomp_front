@@ -5,13 +5,15 @@ import { Component, Input, Output, EventEmitter} from '@angular/core';
   templateUrl: './timeoutModal.component.html',
   styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/style.css']
 })
+
 export class TimeoutModalComponent {
   @Output() logoutEvent = new EventEmitter<boolean>();
-  @Input() timeToExit: number;
+  @Input() loggedOutTime: number;
   message: boolean = false;
   
   constructor() { }
+  
   sendLogoutMessage() { 
       this.logoutEvent.emit(this.message);
-      }
+  }
 }

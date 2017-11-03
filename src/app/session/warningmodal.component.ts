@@ -10,15 +10,18 @@ import {Router} from '@angular/router';
 export class WarningModalComponent {
   @Output() continueEvent = new EventEmitter<boolean>();
   @Output() logoutEvent = new EventEmitter<boolean>();
+  @Input() timeToExit: number;
   @Input() timeToExitinMin: number;
   @Input() timeToExitinSec: number;
   message: boolean = false;
   
-  constructor() { }
+  constructor() {}
+  
   sendContinueMessage() { 
       this.continueEvent.emit(this.message);
    }
+  
   sendLogoutMessage() { 
       this.logoutEvent.emit(this.message);
-      }
+   }
 }
