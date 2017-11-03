@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-  <!-- Required meta tags -->
- <meta charset="utf-8">
- <meta name="viewport"
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
- <title>FibiComp</title>
- </head>
- <body class="loginPage">
+<title>FibiComp</title>
+</head>
+<body class="loginPage">
 	<div class="container-fluid">
 		<div class="row">
 			<div
@@ -21,12 +21,13 @@
 						class="col-8 m-auto col-sm-8 m-sm-auto col-md-6 m-md-auto col-lg-6 m-lg-auto col-xl-6 m-xl-auto loginArea">
 						<ul>
 							<li><h3>Fibi Login</h3></li>
-							<li><input type="text" placeholder="Username"
-								id="login_uname" name='username' value='' autofocus="autofocus"
-								[(ngModel)]="credentials.username" /></li>
-							<li><input type="password" placeholder="Password"
-								id="login_pwd" name='password' value=''
-								[(ngModel)]="credentials.password" /></li>
+							<li><input #input type="text" placeholder="Username"
+								id="login_username" name='username' value=''
+								 [(ngModel)]="credentials.username"
+								(keyup.enter)="login()" /></li>
+							<li><input type="password" placeholder=" Password"
+								id="login_password" name='password' value=''
+								[(ngModel)]="credentials.password" (keyup.enter)="login()" /></li>
 							<li><button class="btnSkin btnSkinPrimary" value="Login"
 									id="LOGIN-BTN" (click)="login()">Login</button></li>
 							<li id="login-failure" style="color: red;" *ngIf="loginFail"><p>Login
@@ -42,5 +43,5 @@
 	<script src="js/popper.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/design.js"></script>
-  </body>
+</body>
 </html>

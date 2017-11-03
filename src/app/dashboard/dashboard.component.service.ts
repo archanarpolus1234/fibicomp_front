@@ -7,18 +7,21 @@ import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { SessionmanagementService } from "../session/session.management.service";
+import { Constants } from '../constants/constants.service';
 
 @Injectable()
 export class DashboardService {
+    
     username: string;
     personId: string;
 
-    constructor( private http: Http, private sessionService: SessionmanagementService ) {
-        this.username = sessionStorage.getItem( 'currentUser' );
-        this.personId = sessionStorage.getItem( 'personId' );
+    constructor( private http: Http, private sessionService: SessionmanagementService, private constant: Constants ) {
+        this.username = localStorage.getItem( 'currentUser' );
+        this.personId = localStorage.getItem( 'personId' );
     }
 
     loadDashBoard( property1: string, property2: string, property3: string, property4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number ): Observable <JSON> {
+        this.personId = localStorage.getItem( 'personId' );
         var params = {
             property1: property1,
             property2: property2,
@@ -29,11 +32,10 @@ export class DashboardService {
             reverse: reverse,
             tabIndex: tabIndex,
             userName: this.username,
+            personId: this.personId,
             currentPage: currentPage
         };
-        var dashboardUrl = "/fibiDashBoard";
-        //var dashboardUrl = "http://demo.fibiweb.com/fibi-comp/fibiDashBoard";
-        //var dashboardUrl = "http://192.168.1.76:8080/fibi-comp/fibiDashBoard";
+        var dashboardUrl = this.constant.dashboardUrl;
         return this.http.post( dashboardUrl, params )
             .map( res => res.json()
             )
@@ -44,11 +46,9 @@ export class DashboardService {
     }
 
     getResearchSummaryData(): Observable <JSON> {
-        this.personId = sessionStorage.getItem( 'personId' );
+        this.personId = localStorage.getItem( 'personId' );
         var params = { personId: this.personId };
-        var summaryUrl = '/getResearchSummaryData';
-        //var summaryUrl = 'http://192.168.1.76:8080/fibi-comp/getResearchSummaryData';
-       // var summaryUrl = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
+        var summaryUrl = this.constant.summaryUrl;
         return this.http.post( summaryUrl, params )
             .map( res => res.json() )
             .catch( error => {
@@ -61,9 +61,7 @@ export class DashboardService {
         var params = {
                 personId: personId
         };
-        var notificationUrl = "/getUserNotification";
-       // var notificationUrl = "http://demo.fibiweb.com/fibi-comp/getUserNotification";
-        //var notificationUrl = "http://192.168.1.76:8080/fibi-comp/getUserNotification";
+        var notificationUrl = this.constant.notificationUrl;
         return this.http.post( notificationUrl, params )
             .map( res => res.json() )
             .catch( error => {
@@ -73,9 +71,7 @@ export class DashboardService {
         }
 
     logout(): Observable <string> {
-       var logoutUrl = "/logout";
-       //var logoutUrl = "http://demo.fibiweb.com/fibi-comp/logout";
-       //var logoutUrl = "http://192.168.1.76:8080/fibi-comp/logout";
+       var logoutUrl = this.constant.logoutUrl;
 
         return this.http.get( logoutUrl )
             .map( res => res.text() )

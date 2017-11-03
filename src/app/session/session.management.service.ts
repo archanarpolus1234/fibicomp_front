@@ -5,9 +5,9 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 export class SessionmanagementService implements CanActivate {
 
   constructor(private router: Router) { }
+  
     canActivate() {
-        if (sessionStorage.getItem( 'currentUser' )) {
-            console.log('checking : '+ sessionStorage.getItem('currentUser'));
+        if (localStorage.getItem( 'currentUser' )) {
             return true;
         }
         this.router.navigate( ['/loginpage'] );
