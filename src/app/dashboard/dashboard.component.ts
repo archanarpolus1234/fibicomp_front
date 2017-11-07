@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DashboardService } from './dashboard.component.service';
 import { SlicePipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -10,12 +10,13 @@ import { IacucElasticSearchComponent } from '../elasticSearch/iacuc.elasticsearc
 import { IrbElasticSearchComponent } from '../elasticSearch/irb.elasticsearch.component';
 import { SessiontimeoutComponent } from '../session/sessiontimeout.component';
 import { Constants } from '../constants/constants.service';
+import { DataService } from '../research_summary/dataservice';
 
 @Component( {
     selector: 'dashboard-tpl',
     templateUrl: 'dashboard.component.html',
     providers: [SessionmanagementService, Constants],
-    styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css']
+    styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
 } )
 
 export class DashboardComponent implements OnInit {
@@ -37,6 +38,7 @@ export class DashboardComponent implements OnInit {
     propertyName: string;
     reverse: boolean = true;
     outputPath:string;
+    docId: string;
     polusWebsite : string ='http://polussolutions.com/';
     userName: string;
     firstName: string;
@@ -63,7 +65,7 @@ export class DashboardComponent implements OnInit {
     selectedValue: JSON;
     resultObject: JSON;
     resultAward: boolean = false;
-    
+
     accountNo: string;
     awardNo: string;
     title: string;
@@ -80,7 +82,7 @@ export class DashboardComponent implements OnInit {
     disposition: string;
     protocolType: string;
     personId : string;
-    
+
     toggleBox : boolean = false;
     currentNumberOfRecords: number;
     totalPage: number = 0; 
@@ -89,8 +91,9 @@ export class DashboardComponent implements OnInit {
     summaryViews : any[];
     adminClear: boolean = true;
     constval : string;
-    
-    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService, private constant: Constants) {
+
+    @ViewChild('notificationBar') notificationBar: ElementRef;
+    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService, private constant: Constants, public dataservice: DataService) {
         this.outputPath = this.constant.outputPath;
         this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
@@ -98,6 +101,14 @@ export class DashboardComponent implements OnInit {
             this.router.navigate( ['/loginpage'] );
         } else {
             this.router.navigate( ['/dashboard'] );
+        }
+        document.addEventListener('mouseup', this.offClickHandler.bind(this));
+        this.dataservice.researchSummaryIndex = null;
+    }
+
+    offClickHandler(event:any) {
+        if (!this.notificationBar.nativeElement.contains(event.target)) { 
+                this.toggleBox = false;
         }
     }
 
@@ -178,10 +189,10 @@ export class DashboardComponent implements OnInit {
         
         this.awardId = ' ';
         this.documentNo = ' ';
-        
+
         if ( currentTabPosition === 'SUMMARY' ) {
             this.getResearchSummaryData();
-        } else if ( this.adminStatus != 'true' ){
+        } else if ( this.adminStatus != 'true' ) {
             this.initialLoad( this.currentPage );
             this.adminClear = false;
         }
@@ -197,7 +208,7 @@ export class DashboardComponent implements OnInit {
         this.sortBy = sortFieldBy;
         this.initialLoad( this.currentPage );
     }
-    
+
     getResearchSummaryData() {
         this.dashboardService.getResearchSummaryData()
             .subscribe( data => {
@@ -246,7 +257,7 @@ export class DashboardComponent implements OnInit {
         if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
-        if ( this.adminStatus != 'true' ){
+        if ( this.adminStatus != 'true' ) {
             this.adminClear = false;
             this.initialLoad( this.currentPage );
         }
@@ -272,11 +283,13 @@ export class DashboardComponent implements OnInit {
         this.showmoreNeeded = true;
         this.first3notificationList = [];
         this.personId = localStorage.getItem( 'personId' );
-        if ( this.toggleBox == true ){
+        if ( this.toggleBox == true ) {
             this.dashboardService.userNotification( this.personId )
             .subscribe( data => {
                 this.result = data || [];
                 this.notificationList = this.result;
+                console.log(this.result);
+                this.docId = this.result.documentId;
                 if ( this.notificationList.length > 3 ) {
                     this.morethanThreeNotification = true;
                     for ( let i = 0; i < 3; i++ ) {
@@ -348,7 +361,7 @@ export class DashboardComponent implements OnInit {
         this.documentNo = value.obj.document_number;
         this.sponsor = value.obj.sponsor;
     }
-    
+
     autocompleteProposalChanged(value) {
         this.resultAward = true;
         this.resultObject = value.obj;
@@ -360,7 +373,7 @@ export class DashboardComponent implements OnInit {
         this.documentNo = value.obj.document_number;
         this.status = value.obj.status;
     }
-    
+
     autocompleteIrbChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
@@ -373,7 +386,7 @@ export class DashboardComponent implements OnInit {
         this.leadUnit = value.obj.lead_unit_name;
         this.documentNo = value.obj.document_number;
     }
-    
+
     autocompleteIacucChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
@@ -385,7 +398,7 @@ export class DashboardComponent implements OnInit {
         this.leadUnit = value.obj.lead_unit_name;
         this.documentNo = value.obj.document_number;
     }
-    
+
     autocompleteDisclosureChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
@@ -395,7 +408,7 @@ export class DashboardComponent implements OnInit {
         this.status = value.obj.disclosure_status;
         this.documentNo = value.obj.document_number;
     }
-    
+
     foundItemsChanged( items ) {
         // To Do Something
     }
@@ -409,9 +422,23 @@ export class DashboardComponent implements OnInit {
     receiveResultCard($event) {
       this.resultAward = $event;
     }
-    
-    myDashboard( event: any ){
+
+    myDashboard( event: any ) {
         event.preventDefault();
         this.router.navigate( ['/dashboard'] );
+    }
+
+    expandedView(summaryView) {
+        if ( summaryView == 'Submitted Proposal') {
+            this.dataservice.researchSummaryIndex = "PROPOSALSSUBMITTED"; 
+        }
+        if ( summaryView == 'Inprogress Proposal') {
+            this.dataservice.researchSummaryIndex = "PROPOSALSINPROGRESS";
+        }
+        if ( summaryView == 'Active Award') {
+            this.dataservice.researchSummaryIndex = "AWARDSACTIVE";
+        }
+        this.dataservice.personId = localStorage.getItem( 'personId' );
+        this.router.navigate(['/expandedview']);
     }
 }
