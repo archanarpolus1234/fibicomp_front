@@ -41,7 +41,7 @@
 		
 		<!-- Header section of dashboard-->
 		
-		<header class = "row">
+		<header  class = "row">
 			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<ul class = "headerMenu" >
 					<li> <a href = "#" class = "logo"> <span class = "logoIcon"><img
@@ -60,18 +60,18 @@
 							<i style="cursor: pointer;" class = "fa fa-user" (click) = "logout()" title = "logout"></i>
 						</a>
 					</li>
-					<li class = "active" title = "notification">
+					<li class = "active" title = "notification" #notificationBar>
 						<a href = "#" id="showNotify" (click) = "userNotification($event)">
 							<i class = "fa fa-bell"></i>
 						</a>
-						<ul class = "notificationBox" *ngIf = "toggleBox" [ngClass] = "{'notificationBoxHeight':showmoreClicked == true}">
+						<ul  class = "notificationBox" *ngIf = "toggleBox" [ngClass] = "{'notificationBoxHeight':showmoreClicked == true}" (clickOutside)="onClickOutside($event)">
 							<ng-container *ngIf = "morethanThreeNotification==true && (showmoreClicked==false)">
 							<li  *ngFor = "let notification of first3notificationList">
 								<p *ngIf = "notification.actionRequestCd == 'C'"><u>COMPLETE</u></p>
 								<p *ngIf = "notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
 								<p *ngIf = "notification.actionRequestCd == 'F'"><u>FYI</u></p>
 								<p *ngIf = "notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<p>{{notification.docTitle}}</p>
+								<a [href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'">{{notification.docTitle}}</a>
 							</li>
 							</ng-container>
 							<ng-container *ngIf = "morethanThreeNotification == false">
@@ -80,7 +80,7 @@
 								<p *ngIf = "notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
 								<p *ngIf = "notification.actionRequestCd == 'F'"><u>FYI</u></p>
 								<p *ngIf = "notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<p>{{notification.docTitle}}</p>
+								<a [href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'">{{notification.docTitle}}</a>
 							</li>
 							</ng-container>
 							<ng-container *ngIf = "morethanThreeNotification==true && (showmoreClicked==true)">
@@ -89,7 +89,7 @@
 								<p *ngIf = "notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
 								<p *ngIf = "notification.actionRequestCd == 'F'"><u>FYI</u></p>
 								<p *ngIf = "notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<p>{{notification.docTitle}}</p>
+								<a [href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'">{{notification.docTitle}}</a>
 							</li>
 							</ng-container>
 							<li  *ngIf = "morethanThreeNotification == true && (showmoreNeeded == true)"><a href = "#" (click) = "showMore($event)" class = "showMore"> Show more  </a> </li>
@@ -424,7 +424,7 @@
 								<tbody>
 									<tr
 										*ngFor = "let summaryView of summaryViews">
-										<td> {{summaryView[0]}} </td> 
+										<td (click)="expandedView(summaryView[0])" ><span class="demo-class">{{summaryView[0]}}</span></td> 
 										<td class = "text-right"> {{summaryView[1]}} </td> 
 										<td class = "text-right" *ngIf="summaryView[2] != null">  {{summaryView[2]  | currency:'USD':true}} </td> 
 										<td class = "text-right" *ngIf="summaryView[2] == null"> $ 0 </td>
@@ -502,7 +502,7 @@
 								<td> 
 									<ul class = "actionButtonGroup">
 										<li> <a title = "Open {{awardDetails.awardNumber}}"
-											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href = '+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
 												class = "fa fa-eye"></i> </a> </li>
 									</ul>
 								 </td> 
@@ -635,7 +635,7 @@
 								<td> 
 									<ul class = "actionButtonGroup">
 										<li> <a title = "Open {{IRBDetails.protocolNumber}}"
-											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href = '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IRBDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IRBDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
 												class = "fa fa-eye"></i> </a> </li>
 									</ul>
 								 </td> 
@@ -698,7 +698,7 @@
 								<td> 
 									<ul class = "actionButtonGroup">
 										<li> <a title = "Open {{IACUCDetails.protocolNumber}}"
-											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href = '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IACUCDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IACUCDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
 												class = "fa fa-eye"></i> </a> </li>
 									</ul>
 								 </td> 
@@ -770,7 +770,7 @@
 								<td> 
 									<ul class = "actionButtonGroup">
 										<li> <a title = "Open {{DisclosureDetails.coiDisclosureNumber}}"
-											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href = '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+DisclosureDetails.documentNumber+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+DisclosureDetails.documentNumber+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
 												class = "fa fa-eye"></i> </a> </li>
 									</ul>
 								 </td> 

@@ -36,6 +36,9 @@ import { WarningModalComponent } from './session/warningModal.component';
 import { TimeoutModalComponent } from './session/timeoutmodal.component';
 import { SessiontimeoutComponent } from './session/sessiontimeout.component';
 import { Constants } from './constants/constants.service';
+import { ExpandedviewComponent } from './research_summary/expandedview.component';
+import { DataService } from './research_summary/dataservice';
+import { ExpandedviewService } from "./research_summary/expandedview.service";
 
 let appRoutes = [
 	{ path: '', component: LoginComponent },
@@ -44,7 +47,9 @@ let appRoutes = [
 
 	{ path : 'loginpage', component : LoginComponent },
 
-	{ path : 'logout', component : LogoutComponent }
+	{ path : 'logout', component : LogoutComponent },
+	
+	{ path : 'expandedview', component : ExpandedviewComponent }
 ];
 
 @NgModule({
@@ -63,7 +68,8 @@ let appRoutes = [
 		WarningModalComponent,
 		TimeoutModalComponent,
 		SessiontimeoutComponent,
-		LogoutComponent
+		LogoutComponent,
+		ExpandedviewComponent
 	],
 	imports: [
 		BrowserModule,
@@ -79,7 +85,7 @@ let appRoutes = [
 	providers: [DashboardService, LoginService, GoogleChartService, SessionmanagementService,
               { provide: LocationStrategy, useClass: HashLocationStrategy },
                AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
-              IrbElasticsearchService, ProposalElasticsearchService, Constants ],
+              IrbElasticsearchService, ProposalElasticsearchService, Constants, DataService, ExpandedviewService ],
   bootstrap: [ViewComponent]
 })
 export class AppModule { }

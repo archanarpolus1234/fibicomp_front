@@ -58,7 +58,7 @@ export class LoginComponent implements AfterViewInit{
                         localStorage.setItem( 'firstName' , this.result.firstName);
                         localStorage.setItem( 'lastName' , this.result.lastName);
                         localStorage.setItem( 'isAdmin' , String(this.isAdmin));
-                        this.router.navigate( ['/dashboard'] );  debugger;
+                        this.router.navigate( ['/dashboard'] ); 
                         } else {
                             this.loginFail = true;
                             this.credentials.username = '';

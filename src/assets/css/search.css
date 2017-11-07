@@ -153,4 +153,11 @@ ul.sb-results-dropdown-menu > li:last-child {
     text-decoration: none;
     cursor: pointer;
 }
+.demo-class {
+	cursor: pointer;
+}
+
+.demo-class:hover {
+	color: #26A69A !important;	
+}
 
