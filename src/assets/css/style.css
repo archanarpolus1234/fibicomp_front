@@ -695,6 +695,14 @@ transition: display .25s}
 .mySkinDialog b {
     font-size: 1.1em;
 }
+.pageHeader {
+    font-size: .9em;
+    text-transform: uppercase;
+    margin: 14px 0 12px 0;
+    color: #424242;
+}
+
+
 
 /*responsive*/
 /*/ Extra small devices (portrait phones, less than 576px)

@@ -23,8 +23,7 @@
 							<li><h3>Fibi Login</h3></li>
 							<li><input #input type="text" placeholder="Username"
 								id="login_username" name='username' value=''
-								 [(ngModel)]="credentials.username"
-								(keyup.enter)="login()" /></li>
+								[(ngModel)]="credentials.username" (keyup.enter)="login()" /></li>
 							<li><input type="password" placeholder=" Password"
 								id="login_password" name='password' value=''
 								[(ngModel)]="credentials.password" (keyup.enter)="login()" /></li>
@@ -38,10 +37,5 @@
 			</div>
 		</div>
 	</div>
-
-	<script src="js/jquery-3.2.1.slim.min.js"></script>
-	<script src="js/popper.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/design.js"></script>
 </body>
 </html>

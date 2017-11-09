@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { SessionmanagementService } from "../session/session.management.service";
@@ -35,8 +35,13 @@ export class ExpandedviewComponent implements OnInit{
     result: any = {};
     serviceRequestList: any[];
     polusWebsite : string ='http://polussolutions.com/';
+    sortBy: string = 'updateTimeStamp';
+    sortOrder: string = "DESC";
+    reverse: boolean = true;
 
-	constructor(private router: Router, private sessionService: SessionmanagementService, private constant: Constants, private dashboardService: DashboardService, private route: ActivatedRoute, private expandedViewService: ExpandedviewService,  public dataservice: DataService ) {
+    @ViewChild('notificationBar') notificationBar: ElementRef;
+    
+	constructor(private router: Router, private sessionService: SessionmanagementService, private constant: Constants, private dashboardService: DashboardService, private route: ActivatedRoute, private expandedViewService: ExpandedviewService,  public dataservice: DataService ) {debugger;
 	    this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
         this.outputPath = this.constant.outputPath;
@@ -45,9 +50,18 @@ export class ExpandedviewComponent implements OnInit{
         } else {
             this.router.navigate( ['/expandedview'] );
         }
+        document.addEventListener('mouseup', this.offClickHandler.bind(this));
+        console.log("data"+this.dataservice.piechartIndex);
 	}
 	
-	 ngOnInit() {
+	offClickHandler(event:any) {
+        if (!this.notificationBar.nativeElement.contains(event.target)) { 
+                this.toggleBox = false;
+        }
+    }
+	
+	 ngOnInit() {debugger;
+	     console.log("servicedata"+this.dataservice.piechartIndex);
 	        this.adminStatus = localStorage.getItem( 'isAdmin' );
 	        this.userName = localStorage.getItem( 'currentUser' );
 	        this.fullName = localStorage.getItem( 'userFullname' );
@@ -134,5 +148,15 @@ export class ExpandedviewComponent implements OnInit{
         this.showmoreClicked = true;
         event.preventDefault();
         this.showmoreNeeded = false;
+    }
+
+    sortResult( sortFieldBy, current_Position ) {
+        this.reverse = ( this.sortBy === sortFieldBy ) ? !this.reverse : false;
+        if ( this.reverse ) {
+            this.sortOrder = "DESC";
+        } else {
+            this.sortOrder = "ASC";
+        }
+        this.sortBy = sortFieldBy;
     }
 }

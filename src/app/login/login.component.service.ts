@@ -14,7 +14,7 @@ export class LoginService {
     private authUrl: string = 'http://reqres.in/api/login';
     private loggedIn: boolean = false;
 
-    constructor( private http: Http, private constant: Constants ) {}
+    constructor( private http: Http, private constant: Constants ) { }
 
     login( userName: string, password: string ): Observable<JSON> {
         var loginUrl = this.constant.loginUrl;
@@ -35,3 +35,4 @@ export class LoginService {
             } );
     }
 }
+

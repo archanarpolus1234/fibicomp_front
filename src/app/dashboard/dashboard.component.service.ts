@@ -6,12 +6,12 @@ import { Http, HttpModule } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 
-import { SessionmanagementService } from "../session/session.management.service";
+import { SessionmanagementService } from '../session/session.management.service';
 import { Constants } from '../constants/constants.service';
 
 @Injectable()
 export class DashboardService {
-    
+
     username: string;
     personId: string;
 
@@ -20,7 +20,7 @@ export class DashboardService {
         this.personId = localStorage.getItem( 'personId' );
     }
 
-    loadDashBoard( property1: string, property2: string, property3: string, property4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number ): Observable <JSON> {
+    loadDashBoard( property1: string, property2: string, property3: string, property4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number ): Observable<JSON> {
         this.personId = localStorage.getItem( 'personId' );
         var params = {
             property1: property1,
@@ -45,9 +45,11 @@ export class DashboardService {
             } );
     }
 
-    getResearchSummaryData(): Observable <JSON> {
+    getResearchSummaryData(): Observable<JSON> {
         this.personId = localStorage.getItem( 'personId' );
-        var params = { personId: this.personId };
+        var params = { 
+                personId: this.personId 
+        };
         var summaryUrl = this.constant.summaryUrl;
         return this.http.post( summaryUrl, params )
             .map( res => res.json() )
@@ -57,9 +59,9 @@ export class DashboardService {
             } );
     }
 
-    userNotification( personId: string ): Observable <JSON> {
+    userNotification( personId: string ): Observable<JSON> {
         var params = {
-                personId: personId
+            personId: personId
         };
         var notificationUrl = this.constant.notificationUrl;
         return this.http.post( notificationUrl, params )
@@ -68,16 +70,17 @@ export class DashboardService {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
             } );
-        }
+    }
 
-    logout(): Observable <string> {
-       var logoutUrl = this.constant.logoutUrl;
+    logout(): Observable<string> {
+        var logoutUrl = this.constant.logoutUrl;
 
         return this.http.get( logoutUrl )
             .map( res => res.text() )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error );
-            });
+            } );
     }
 }
+

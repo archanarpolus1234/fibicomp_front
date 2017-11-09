@@ -4,7 +4,7 @@ import { GoogleChartService } from '../research_summary/google.chart.service';
 import { DashboardService } from '../dashboard/dashboard.component.service';
 
 @Component({
-  selector: 'display',
+  selector: 'areachart',
   template: `<div id="chart_divEvolution" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" (window:resize)="onResize($event)"></div>`,
   providers: [GoogleChartService],
 })

@@ -20,11 +20,11 @@
 				     "secure" : false
 	},
 	"/getPieChartDataByType" : {
-					"target" : "http://192.168.1.114:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
     "/getDetailedResearchSummary" : {
-					"target" : "http://192.168.1.114:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	}
 }
