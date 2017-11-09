@@ -3,7 +3,7 @@ import { DashboardService } from './dashboard.component.service';
 import { SlicePipe } from '@angular/common';
 import { Router } from '@angular/router';
 
-import { SessionmanagementService } from "../session/session.management.service";
+import { SessionmanagementService } from '../session/session.management.service';
 import { AwardElasticSearchComponent } from '../elasticSearch/award.elasticsearch.component';
 import { DisclosureElasticSearchComponent } from '../elasticSearch/disclosure.elasticsearch.component';
 import { IacucElasticSearchComponent } from '../elasticSearch/iacuc.elasticsearch.component';
@@ -37,9 +37,9 @@ export class DashboardComponent implements OnInit {
     morethanThreeNotification: boolean = false;
     propertyName: string;
     reverse: boolean = true;
-    outputPath:string;
+    outputPath: string;
     docId: string;
-    polusWebsite : string ='http://polussolutions.com/';
+    polusWebsite: string = 'http://polussolutions.com/';
     userName: string;
     firstName: string;
     lastName: string;
@@ -81,19 +81,20 @@ export class DashboardComponent implements OnInit {
     disFullName: string;
     disposition: string;
     protocolType: string;
-    personId : string;
+    personId: string;
 
-    toggleBox : boolean = false;
+    toggleBox: boolean = false;
     currentNumberOfRecords: number;
-    totalPage: number = 0; 
+    totalPage: number = 0;
     awardId: string;
     documentNo: string;
-    summaryViews : any[];
+    summaryViews: any[];
     adminClear: boolean = true;
-    constval : string;
+    constval: string;
 
-    @ViewChild('notificationBar') notificationBar: ElementRef;
-    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService, private constant: Constants, public dataservice: DataService) {
+    @ViewChild( 'notificationBar' ) notificationBar: ElementRef;
+
+    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionmanagementService, private constant: Constants, public dataservice: DataService ) {
         this.outputPath = this.constant.outputPath;
         this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
@@ -102,13 +103,13 @@ export class DashboardComponent implements OnInit {
         } else {
             this.router.navigate( ['/dashboard'] );
         }
-        document.addEventListener('mouseup', this.offClickHandler.bind(this));
+        document.addEventListener( 'mouseup', this.offClickHandler.bind( this ) );
         this.dataservice.researchSummaryIndex = null;
     }
 
-    offClickHandler(event:any) {
-        if (!this.notificationBar.nativeElement.contains(event.target)) { 
-                this.toggleBox = false;
+    offClickHandler( event: any ) {
+        if ( !this.notificationBar.nativeElement.contains( event.target ) ) {
+            this.toggleBox = false;
         }
     }
 
@@ -133,6 +134,7 @@ export class DashboardComponent implements OnInit {
                     this.serviceRequestList = this.result.awardViews;
                 }
                 if ( this.currentPosition == "PROPOSAL" ) {
+                    console.log( "Proposal List : " + JSON.stringify( this.result.proposalViews ) );
                     this.serviceRequestList = this.result.proposalViews;
                 }
                 if ( this.currentPosition == "IRB" ) {
@@ -175,18 +177,18 @@ export class DashboardComponent implements OnInit {
         this.sponsor = ' ';
         this.piName = ' ';
         this.departmentName = ' ';
-        
+
         this.proposalNo = ' ';
         this.status = ' ';
-        
+
         this.protocolNo = ' ';
         this.type = ' ';
         this.leadUnit = ' ';
-        
+
         this.disclosureNo = ' ';
         this.disFullName = ' ';
         this.disposition = ' ';
-        
+
         this.awardId = ' ';
         this.documentNo = ' ';
 
@@ -226,7 +228,7 @@ export class DashboardComponent implements OnInit {
         if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
-        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage)
+        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
             .subscribe( data => {
                 this.result = data || [];
                 this.totalPage = this.result.totalServiceRequest;
@@ -276,8 +278,8 @@ export class DashboardComponent implements OnInit {
             } );
     }
 
-    userNotification( e: any ) {
-        e.preventDefault();
+    userNotification( event: any ) {
+        event.preventDefault();
         this.toggleBox = !this.toggleBox;
         this.showmoreClicked = false;
         this.showmoreNeeded = true;
@@ -285,18 +287,18 @@ export class DashboardComponent implements OnInit {
         this.personId = localStorage.getItem( 'personId' );
         if ( this.toggleBox == true ) {
             this.dashboardService.userNotification( this.personId )
-            .subscribe( data => {
-                this.result = data || [];
-                this.notificationList = this.result;
-                console.log(this.result);
-                this.docId = this.result.documentId;
-                if ( this.notificationList.length > 3 ) {
-                    this.morethanThreeNotification = true;
-                    for ( let i = 0; i < 3; i++ ) {
-                        this.first3notificationList.push( this.notificationList[i] );
+                .subscribe( data => {
+                    this.result = data || [];
+                    this.notificationList = this.result;
+                    console.log( this.result );
+                    this.docId = this.result.documentId;
+                    if ( this.notificationList.length > 3 ) {
+                        this.morethanThreeNotification = true;
+                        for ( let i = 0; i < 3; i++ ) {
+                            this.first3notificationList.push( this.notificationList[i] );
+                        }
                     }
-                }
-            } );  
+                } );
         }
     }
 
@@ -362,7 +364,7 @@ export class DashboardComponent implements OnInit {
         this.sponsor = value.obj.sponsor;
     }
 
-    autocompleteProposalChanged(value) {
+    autocompleteProposalChanged( value ) {
         this.resultAward = true;
         this.resultObject = value.obj;
         this.proposalNo = value.obj.proposal_number;
@@ -419,8 +421,8 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    receiveResultCard($event) {
-      this.resultAward = $event;
+    receiveResultCard( $event ) {
+        this.resultAward = $event;
     }
 
     myDashboard( event: any ) {
@@ -428,17 +430,21 @@ export class DashboardComponent implements OnInit {
         this.router.navigate( ['/dashboard'] );
     }
 
-    expandedView(summaryView) {
-        if ( summaryView == 'Submitted Proposal') {
-            this.dataservice.researchSummaryIndex = "PROPOSALSSUBMITTED"; 
+    expandedView( summaryView ) {
+        if ( summaryView == 'Submitted Proposal' ) {
+            this.dataservice.researchSummaryIndex = "PROPOSALSSUBMITTED";
+            this.dataservice.expandedViewHeading = summaryView;
         }
-        if ( summaryView == 'Inprogress Proposal') {
+        if ( summaryView == 'Inprogress Proposal' ) {
             this.dataservice.researchSummaryIndex = "PROPOSALSINPROGRESS";
+            this.dataservice.expandedViewHeading = summaryView;
         }
-        if ( summaryView == 'Active Award') {
+        if ( summaryView == 'Active Award' ) {
             this.dataservice.researchSummaryIndex = "AWARDSACTIVE";
+            this.dataservice.expandedViewHeading = summaryView;
         }
         this.dataservice.personId = localStorage.getItem( 'personId' );
-        this.router.navigate(['/expandedview']);
+        this.router.navigate( ['/expandedview'] );
     }
 }
+

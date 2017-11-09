@@ -161,3 +161,10 @@ ul.sb-results-dropdown-menu > li:last-child {
 	color: #26A69A !important;	
 }
 
+#pichart_award{
+	cursor:pointer;
+}
+#pichart_divEvolution{
+	cursor:pointer;
+}
+

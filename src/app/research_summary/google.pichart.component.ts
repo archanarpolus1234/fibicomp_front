@@ -78,6 +78,7 @@ export class GooglePiChartComponent extends GoogleChartService {
                               for ( let j = 0; j < this.statuscode.length; j++ ) {
                                   if ( this.sponsorType === this.statuscode[j][1] ) {
                                       this.dataservice.sponsorCode = this.statuscode[j][0];
+                                      this.dataservice.exapandedViewAwardHeading = "Awards by " + this.sponsorType;
                                   } 
                               }
                           }
@@ -99,7 +100,7 @@ export class GooglePiChartComponent extends GoogleChartService {
               };
               this.propsalChart = this.createPiChart(document.getElementById('pichart_divEvolution'));
               this.propsalChart.draw(this.proposalData, this.proposalOptions);
-              google.visualization.events.addListener( this.propsalChart, 'select', ( event ) => {debugger;
+              google.visualization.events.addListener( this.propsalChart, 'select', ( event ) => {
                   this.dataservice.piechartIndex = 'PROPOSAL';
                   var selection = this.propsalChart.getSelection();
                   for ( var i = 0; i < selection.length; i++ ) {
@@ -112,6 +113,7 @@ export class GooglePiChartComponent extends GoogleChartService {
                               console.log( 'Proposal Type is  :' + this.proposalType );
                               if ( this.proposalType === this.proposalstatuscode[j][1] ) {
                                   this.dataservice.sponsorCode = this.proposalstatuscode[j][0];
+                                  this.dataservice.exapandedViewProposalHeading = "Proposals by " + this.proposalType;
                               }
                           }
                       }

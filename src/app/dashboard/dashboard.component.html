@@ -6,152 +6,193 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
-<body class = "push4slideMenu" id="scrollToTop">
- 
-	<!-- slideMenu -->   
-	
-	<div class = "slideMenu">
-		<ul class = "iconMenu">
-			<li class = "active">
-				<a href = "#" (click) = "myDashboard($event)">
-					<i class = "fa fa-tachometer"></i>
-					<span>My Dashboard</span>
-				</a>
-			</li>
-			<li>
-				<a [href] = "outputPath+'/kc-krad/landingPage?__login_user='+userName+'&kcComp=true'">
-					<i class = "fa fa-user"></i>
-					<span>My Portal</span>
-				</a>
-			</li>
-			<li>
-				<a [href] = "outputPath+'/portal.do?__login_user='+userName+'&kcComp=true'">
-					<i class = "fa fa-cog"></i>
-					<span>System Admin Portal</span>
-				</a>
-			</li>
+<body class="push4slideMenu" id="scrollToTop">
+
+	<!-- slideMenu -->
+
+	<div class="slideMenu">
+		<ul class="iconMenu">
+			<li class="active"><a href="#" (click)="myDashboard($event)">
+					<i class="fa fa-tachometer"></i> <span>My Dashboard</span>
+			</a></li>
+			<li><a
+				[href]="outputPath+'/kc-krad/landingPage?__login_user='+userName+'&kcComp=true'">
+					<i class="fa fa-user"></i> <span>My Portal</span>
+			</a></li>
+			<li><a
+				[href]="outputPath+'/portal.do?__login_user='+userName+'&kcComp=true'">
+					<i class="fa fa-cog"></i> <span>System Admin Portal</span>
+			</a></li>
 		</ul>
-		<div class = "pullBack d-md-none d-lg-none d-xl-none">
-			<i class = "fa fa-arrow-left"></i>
+		<div class="pullBack d-md-none d-lg-none d-xl-none">
+			<i class="fa fa-arrow-left"></i>
 		</div>
 	</div>
-	
-	<div class = "container-fluid pushFixedHeaderFooter">
-		<div class = "headerPush"></div>
-		
+
+	<div class="container-fluid pushFixedHeaderFooter">
+		<div class="headerPush"></div>
+
 		<!-- Header section of dashboard-->
-		
-		<header  class = "row">
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<ul class = "headerMenu" >
-					<li> <a href = "#" class = "logo"> <span class = "logoIcon"><img
-								[src] = "logo" class = "" /></span> <span class = "brandText">Polus
+
+		<header class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<ul class="headerMenu">
+					<li><a href="#" class="logo"> <span class="logoIcon"><img
+								[src]="logo" class="" /></span> <span class="brandText">Polus
 								University</span>
-					 </a> </li>
-					<li *ngIf = "isAdmin == false">
-						<a>
-							<span class = "userName">Dashboard of {{fullName}} (PI)</span>
-							<i style="cursor: pointer;" class = "fa fa-user" (click) = "logout()" title = "logout"></i>
-						</a>
-					</li>
-					<li *ngIf = "isAdmin">
-						<a>
-							<span class = "userName">Dashboard of {{fullName}} (Admin)</span>
-							<i style="cursor: pointer;" class = "fa fa-user" (click) = "logout()" title = "logout"></i>
-						</a>
-					</li>
-					<li class = "active" title = "notification" #notificationBar>
-						<a href = "#" id="showNotify" (click) = "userNotification($event)">
-							<i class = "fa fa-bell"></i>
-						</a>
-						<ul  class = "notificationBox" *ngIf = "toggleBox" [ngClass] = "{'notificationBoxHeight':showmoreClicked == true}" (clickOutside)="onClickOutside($event)">
-							<ng-container *ngIf = "morethanThreeNotification==true && (showmoreClicked==false)">
-							<li  *ngFor = "let notification of first3notificationList">
-								<p *ngIf = "notification.actionRequestCd == 'C'"><u>COMPLETE</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'F'"><u>FYI</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<a [href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'">{{notification.docTitle}}</a>
+					</a></li>
+					<li *ngIf="isAdmin == false"><a> <span class="userName">Dashboard
+								of {{fullName}} (PI)</span> <i style="cursor: pointer;"
+							class="fa fa-user" (click)="logout()" title="logout"></i>
+					</a></li>
+					<li *ngIf="isAdmin"><a> <span class="userName">Dashboard
+								of {{fullName}} (Admin) </span> <i style="cursor: pointer;"
+							class="fa fa-user" (click)="logout()" title="logout"></i>
+					</a></li>
+					<li class="active" title="notification" #notificationBar><a
+						href="#" id="showNotify" (click)="userNotification($event)"> <i
+							class="fa fa-bell"></i>
+					</a>
+						<ul class="notificationBox" *ngIf="toggleBox"
+							[ngClass]="{'notificationBoxHeight':showmoreClicked == true}"
+							(clickOutside)="onClickOutside($event)">
+							<ng-container
+								*ngIf="morethanThreeNotification==true && (showmoreClicked==false)">
+							<li *ngFor="let notification of first3notificationList">
+								<p *ngIf="notification.actionRequestCd == 'C'">
+									<u>COMPLETE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'A'">
+									<u>APPROVE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'F'">
+									<u>FYI</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'K'">
+									<u>ACKOWLEDGEMENT</u>
+								</p> <a
+								[href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'+'&__login_user='+userName+'&kcComp=true'">{{notification.docTitle}}</a>
 							</li>
 							</ng-container>
-							<ng-container *ngIf = "morethanThreeNotification == false">
-							<li *ngFor = "let notification of notificationList">
-								<p *ngIf = "notification.actionRequestCd == 'C'"><u>COMPLETE</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'F'"><u>FYI</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<a [href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'">{{notification.docTitle}}</a>
+							<ng-container *ngIf="morethanThreeNotification == false">
+							<li *ngFor="let notification of notificationList">
+								<p *ngIf="notification.actionRequestCd == 'C'">
+									<u>COMPLETE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'A'">
+									<u>APPROVE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'F'">
+									<u>FYI</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'K'">
+									<u>ACKOWLEDGEMENT</u>
+								</p> <a
+								[href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'+'&__login_user='+userName+'&kcComp=true'">{{notification.docTitle}}</a>
 							</li>
 							</ng-container>
-							<ng-container *ngIf = "morethanThreeNotification==true && (showmoreClicked==true)">
-							<li *ngFor = "let notification of notificationList">
-								<p *ngIf = "notification.actionRequestCd == 'C'"><u>COMPLETE</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'F'"><u>FYI</u></p>
-								<p *ngIf = "notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<a [href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'">{{notification.docTitle}}</a>
+							<ng-container
+								*ngIf="morethanThreeNotification==true && (showmoreClicked==true)">
+							<li *ngFor="let notification of notificationList">
+								<p *ngIf="notification.actionRequestCd == 'C'">
+									<u>COMPLETE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'A'">
+									<u>APPROVE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'F'">
+									<u>FYI</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'K'">
+									<u>ACKOWLEDGEMENT</u>
+								</p> <a
+								[href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'+'&__login_user='+userName+'&kcComp=true'">{{notification.docTitle}}</a>
 							</li>
 							</ng-container>
-							<li  *ngIf = "morethanThreeNotification == true && (showmoreNeeded == true)"><a href = "#" (click) = "showMore($event)" class = "showMore"> Show more  </a> </li>
-						</ul>
-						</li>
-					<li> <a href = "#" title = "help"><i class = "fa fa-question"></i> </a> </li>
-					<li class = "d-md-none d-lg-none d-xl-none"><a href = "#" id="mobileMenu"><i class = "fa fa-bars"></i> </a> </li>
+							<li
+								*ngIf="morethanThreeNotification == true && (showmoreNeeded == true)"><a
+								href="#" (click)="showMore($event)" class="showMore"> Show
+									more </a></li>
+						</ul></li>
+					<li><a href="#" title="help"><i class="fa fa-question"></i>
+					</a></li>
+					<li class="d-md-none d-lg-none d-xl-none"><a href="#"
+						id="mobileMenu"><i class="fa fa-bars"></i> </a></li>
 				</ul>
 			</div>
 		</header>
-		
+
 		<!-- Session handling component -->
-        <app-sessiontimeout>    
-        </app-sessiontimeout>
-        
-		<section class = "row">
-		
+		<app-sessiontimeout> </app-sessiontimeout>
+
+		<section class="row">
+
 			<!-- tabs of fibi 3.0 dashboard-->
-			
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<ul class = "tabs">
+
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<ul class="tabs">
 					<li role="presentation"
-						[ngClass] = "{'active': currentPosition == 'SUMMARY'}"><a
-						(click) = "showTab('SUMMARY')"> Research Summary  </a> </li>
-					<li [ngClass] = "{'active': currentPosition == 'AWARD'}"><a
-						(click) = "showTab('AWARD')"> Award  </a> </li>
-					<li [ngClass] = "{'active': currentPosition == 'PROPOSAL'}"><a
-						(click) = "showTab('PROPOSAL')"> Proposal  </a> </li>
-					<li [ngClass] = "{'active': currentPosition == 'IRB'}"><a
-						(click) = "showTab('IRB')"> IRB  </a> </li>
-					<li [ngClass] = "{'active': currentPosition == 'IACUC'}"><a
-						(click) = "showTab('IACUC')"> IACUC  </a> </li>
-					<li [ngClass] = "{'active': currentPosition == 'DISCLOSURE'}"><a
-						(click) = "showTab('DISCLOSURE')"> Disclosures  </a> </li>
+						[ngClass]="{'active': currentPosition == 'SUMMARY'}"><a
+						(click)="showTab('SUMMARY')"> Research Summary </a></li>
+					<li [ngClass]="{'active': currentPosition == 'AWARD'}"><a
+						(click)="showTab('AWARD')"> Award </a></li>
+					<li [ngClass]="{'active': currentPosition == 'PROPOSAL'}"><a
+						(click)="showTab('PROPOSAL')"> Proposal </a></li>
+					<li [ngClass]="{'active': currentPosition == 'IRB'}"><a
+						(click)="showTab('IRB')"> IRB </a></li>
+					<li [ngClass]="{'active': currentPosition == 'IACUC'}"><a
+						(click)="showTab('IACUC')"> IACUC </a></li>
+					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
+						(click)="showTab('DISCLOSURE')"> Disclosures </a></li>
 				</ul>
 			</div>
 
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf = "currentPosition != 'SUMMARY'">
-				<div class = "row">
-					<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-					
-					 <!-- elastic search components -->
-					 
-						<div class = "row">
-							<div class = "col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8" *ngIf = "currentPosition == 'AWARD'">
-								<app-award-elastic-search (selected) = "autocompleteAwardChanged($event)" (found) = "foundItemsChanged($event)" (messageEvent)="receiveResultCard($event)"></app-award-elastic-search>
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="currentPosition != 'SUMMARY'">
+				<div class="row">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+
+						<!-- elastic search components -->
+
+						<div class="row">
+							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+								*ngIf="currentPosition == 'AWARD'">
+								<app-award-elastic-search
+									(selected)="autocompleteAwardChanged($event)"
+									(found)="foundItemsChanged($event)"
+									(messageEvent)="receiveResultCard($event)"></app-award-elastic-search>
 							</div>
-							<div class = "col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8" *ngIf = "currentPosition == 'PROPOSAL'">
-								<app-proposal-elastic-search (selected) = "autocompleteProposalChanged($event)" (found) = "foundItemsChanged($event)" (messageEvent)="receiveResultCard($event)"></app-proposal-elastic-search>
+							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+								*ngIf="currentPosition == 'PROPOSAL'">
+								<app-proposal-elastic-search
+									(selected)="autocompleteProposalChanged($event)"
+									(found)="foundItemsChanged($event)"
+									(messageEvent)="receiveResultCard($event)"></app-proposal-elastic-search>
 							</div>
-							<div class = "col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8" *ngIf = "currentPosition == 'IRB'">
-								<app-irb-elastic-search (selected) = "autocompleteIrbChanged($event)" (found) = "foundItemsChanged($event)" (messageEvent)="receiveResultCard($event)"></app-irb-elastic-search>
+							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+								*ngIf="currentPosition == 'IRB'">
+								<app-irb-elastic-search
+									(selected)="autocompleteIrbChanged($event)"
+									(found)="foundItemsChanged($event)"
+									(messageEvent)="receiveResultCard($event)"></app-irb-elastic-search>
 							</div>
-							<div class = "col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8" *ngIf = "currentPosition == 'IACUC'">
-								<app-iacuc-elastic-search (selected) = "autocompleteIacucChanged($event)" (found) = "foundItemsChanged($event)" (messageEvent)="receiveResultCard($event)"></app-iacuc-elastic-search>
+							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+								*ngIf="currentPosition == 'IACUC'">
+								<app-iacuc-elastic-search
+									(selected)="autocompleteIacucChanged($event)"
+									(found)="foundItemsChanged($event)"
+									(messageEvent)="receiveResultCard($event)"></app-iacuc-elastic-search>
 							</div>
-							<div class = "col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8" *ngIf = "currentPosition == 'DISCLOSURE'">
-								<app-disclosure-elastic-search (selected) = "autocompleteDisclosureChanged($event)" (found) = "foundItemsChanged($event)" (messageEvent)="receiveResultCard($event)"></app-disclosure-elastic-search>
+							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+								*ngIf="currentPosition == 'DISCLOSURE'">
+								<app-disclosure-elastic-search
+									(selected)="autocompleteDisclosureChanged($event)"
+									(found)="foundItemsChanged($event)"
+									(messageEvent)="receiveResultCard($event)"></app-disclosure-elastic-search>
 							</div>
-							<div class = "col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-								<a id="advcanceSearch" href = "#" class = "linkButton"
-									(click) = "advanceSearch($event)"> <i class = "fa fa-cog"></i>
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+								<a id="advcanceSearch" href="#" class="linkButton"
+									(click)="advanceSearch($event)"> <i class="fa fa-cog"></i>
 									Advanced Search
 								</a>
 							</div>
@@ -159,353 +200,369 @@
 						
 					</div>
 				</div>
-				
-				<div class = "row">
-					<div *ngIf = "displayToggle" class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
-						
+
+				<div class="row">
+					<div *ngIf="displayToggle"
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
+
 						<!-- advance search options -->
-						
-						<div class = "row">
-							<div class = "col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type = "text" placeholder = "{{placeholder1}}"
-									[(ngModel)] = "advanceSearchCriteria.property1" />
+
+						<div class="row">
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+								<input type="text" placeholder="{{placeholder1}}"
+									[(ngModel)]="advanceSearchCriteria.property1" />
 							</div>
-							<div class = "col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type = "text" placeholder = "{{placeholder2}}"
-									[(ngModel)] = "advanceSearchCriteria.property2" />
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+								<input type="text" placeholder="{{placeholder2}}"
+									[(ngModel)]="advanceSearchCriteria.property2" />
 							</div>
-							<div class = "col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type = "text" placeholder = "{{placeholder3}}"
-									[(ngModel)] = "advanceSearchCriteria.property3" />
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+								<input type="text" placeholder="{{placeholder3}}"
+									[(ngModel)]="advanceSearchCriteria.property3" />
 							</div>
-							<div class = "col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type = "text" placeholder = "{{placeholder4}}" [(ngModel)] = "advanceSearchCriteria.property4" />
+							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
+								<input type="text" placeholder="{{placeholder4}}"
+									[(ngModel)]="advanceSearchCriteria.property4" />
 							</div>
-							<div class = "col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-								<div class = "row">
-									<div class = "col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
-										<button class = "btnSkin btnSkinPrimary"
-											(click) = "searchUsingAdvanceOptions(currentPage)">Search</button>
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+								<div class="row">
+									<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+										<button class="btnSkin btnSkinPrimary"
+											(click)="searchUsingAdvanceOptions(currentPage)">Search</button>
 										<!--  (click) = "searchUsingAdvanceOptions()" -->
 									</div>
-									<div class = "col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
-										<button class = "btnSkin btnSkinSecondary" (click) = "clear()">Clear</button>
+									<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
+										<button class="btnSkin btnSkinSecondary" (click)="clear()">Clear</button>
 									</div>
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
-				
-				<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard" *ngIf = "(resultAward==true)">
-	               	<button class = "closeResultCard" (click) = "closeResultTab()"><i class = "fa fa-times"></i></button>
-	               	
-	               	<!-- award elastic search  results-->
-	               	
-	                <div class = "row" *ngIf = "currentPosition == 'AWARD'">
-	                    <div class = "col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Account# </label> 
-	                        <span>
-	                        	<a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ accountNo }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> Award# </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ awardNo }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
-	                        <label> Title </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ title }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
-	                        <label> Sponsor </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ sponsor }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> PI </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ piName }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> Lead Unit </label> 
-	                       <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ departmentName }}</a>
-                        	</span>
-	                    </div>
-	                </div> 
-	                
-	                <!-- proposal elastic search  results-->
-	                
-	                  <div class = "row" *ngIf = "currentPosition == 'PROPOSAL'">
-	                    <div class = "col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Proposal# </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ proposalNo }}</a>
-	                        </span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> PI Name </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ piName }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
-	                        <label> Title </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ title }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
-	                        <label> Lead Unit </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ departmentName }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Sponsor </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ sponsor }}</a>
-	                        </span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> Status </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ status }}</a>
-	                        </span>
-	                    </div>
-	                </div>
-	                
-	                <!-- IRB elastic search  results-->
-	                
-	                <div class = "row" *ngIf = "currentPosition == 'IRB'">
-	                    <div class = "col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Protocol# </label> 
-	                        <span>
-	                        	<a [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ protocolNo }}</a>
-                       		</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> Protocol Type </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ type }}</a>
-                       		</span>
-	                    </div>
-	                    <div class = "col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
-	                        <label> Title </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ title }}</a>
-                       		</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
-	                        <label> Lead Unit </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ leadUnit }}</a>
-                       	    </span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Status </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ status }}</a>
-                       	    </span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> PI Name </label>
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ piName }}</a>
-                       		</span>
-	                    </div> 
-	                </div>
-	                
-	                <!-- IACUC elastic search  results-->
-	                
-	                <div class = "row" *ngIf = "currentPosition == 'IACUC'">
-	                    <div class = "col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Protocol# </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ protocolNo }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> Protocol Type </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ type }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
-	                        <label> Title </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ title }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
-	                        <label> Lead Unit </label> 
-	                       <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ leadUnit }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Status </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ status }}</a>
-                        	</span>
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> PI Name </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{ piName }}</a>
-                        	</span>
-	                    </div>
-	                </div>
-	                
-	                <!-- DISCLOSURE elastic search  results-->
-	                
-	                <div class = "row" *ngIf = "currentPosition == 'DISCLOSURE'">
-	                  <div class = "col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Disclosure # </label> 
-	                       <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+documentNo+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ disclosureNo }}</a>
-                        	</span>
 
-	                    </div>
-	                    <div class = "col-xl-4 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> Name </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+documentNo+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ disFullName }}</a>
-                        	</span>
+				<div
+					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard"
+					*ngIf="(resultAward==true)">
+					<button class="closeResultCard" (click)="closeResultTab()">
+						<i class="fa fa-times"></i>
+					</button>
 
-	                    </div>
-	                    <div class = "col-xl-4 col-lg-2 col-md-8 col-sm-8 col-8">
-	                        <label> Disposition </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+documentNo+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ disposition }}</a>
-                        	</span>
+					<!-- award elastic search  results-->
 
-	                    </div>
-	                    <div class = "col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
-	                        <label> Status </label> 
-	                        <span>
-	                        	<a [href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+documentNo+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'">{{ status }}</a>
-                        	</span>
-                        	
-	                    </div>
-	                </div>
-            	</div>
-			</div>
-
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" *ngIf = "currentPosition == 'SUMMARY'">
-				
-				<!-- Research Summary -->
-				
-				<div class = "row">
-					<div class = "col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
-						<div class = "borderBox">
-							<h4 class = "borderBoxHeading">Expenditures Volume</h4>
-							<display></display>
+					<div class="row" *ngIf="currentPosition == 'AWARD'">
+						<div class="col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Account# </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									accountNo }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> Award# </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									awardNo }}</a>
+							</span>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
+							<label> Title </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									title }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
+							<label> Sponsor </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									sponsor }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> PI </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									piName }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> Lead Unit </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									departmentName }}</a>
+							</span>
 						</div>
 					</div>
-					<div class = "col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
-						<div class = "borderBox">
-							<table class = "table table-responsive tableSkin">
+
+					<!-- proposal elastic search  results-->
+
+					<div class="row" *ngIf="currentPosition == 'PROPOSAL'">
+						<div class="col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Proposal# </label> <span> <a
+								[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									proposalNo }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> PI Name </label> <span> <a
+								[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									piName }}</a>
+							</span>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
+							<label> Title </label> <span> <a
+								[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									title }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
+							<label> Lead Unit </label> <span> <a
+								[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									departmentName }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Sponsor </label> <span> <a
+								[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									sponsor }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> Status </label> <span> <a
+								[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+documentNo+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									status }}</a>
+							</span>
+						</div>
+					</div>
+
+					<!-- IRB elastic search  results-->
+
+					<div class="row" *ngIf="currentPosition == 'IRB'">
+						<div class="col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Protocol# </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									protocolNo }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> Protocol Type </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									type }}</a>
+							</span>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
+							<label> Title </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									title }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
+							<label> Lead Unit </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									leadUnit }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Status </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									status }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> PI Name </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									piName }}</a>
+							</span>
+						</div>
+					</div>
+
+					<!-- IACUC elastic search  results-->
+
+					<div class="row" *ngIf="currentPosition == 'IACUC'">
+						<div class="col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Protocol# </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									protocolNo }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> Protocol Type </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									type }}</a>
+							</span>
+						</div>
+						<div class="col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
+							<label> Title </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									title }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
+							<label> Lead Unit </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									leadUnit }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Status </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									status }}</a>
+							</span>
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> PI Name </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
+									piName }}</a>
+							</span>
+						</div>
+					</div>
+
+					<!-- DISCLOSURE elastic search  results-->
+
+					<div class="row" *ngIf="currentPosition == 'DISCLOSURE'">
+						<div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Disclosure # </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+documentNo+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									disclosureNo }}</a>
+							</span>
+
+						</div>
+						<div class="col-xl-4 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> Name </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+documentNo+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									disFullName }}</a>
+							</span>
+
+						</div>
+						<div class="col-xl-4 col-lg-2 col-md-8 col-sm-8 col-8">
+							<label> Disposition </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+documentNo+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									disposition }}</a>
+							</span>
+
+						</div>
+						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
+							<label> Status </label> <span> <a
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href= '+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+documentNo+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'">{{
+									status }}</a>
+							</span>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12"
+				*ngIf="currentPosition == 'SUMMARY'">
+
+				<!-- Research Summary -->
+
+				<div class="row">
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="borderBox">
+							<h4 class="borderBoxHeading">Expenditures Volume</h4>
+							<areachart></areachart>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="borderBox">
+							<table class="table table-responsive tableSkin">
 								<thead>
 									<tr>
-										<th> Research Summary </th> 
-										<th class = "text-right">Count </th> 
-										<th class = "text-right">Total Amount </th> 
+										<th>Research Summary</th>
+										<th class="text-right">Count</th>
+										<th class="text-right">Total Amount</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr
-										*ngFor = "let summaryView of summaryViews">
-										<td (click)="expandedView(summaryView[0])" ><span class="demo-class">{{summaryView[0]}}</span></td> 
-										<td class = "text-right"> {{summaryView[1]}} </td> 
-										<td class = "text-right" *ngIf="summaryView[2] != null">  {{summaryView[2]  | currency:'USD':true}} </td> 
-										<td class = "text-right" *ngIf="summaryView[2] == null"> $ 0 </td>
+									<tr *ngFor="let summaryView of summaryViews">
+										<td *ngIf="summaryView[1] != 0" class="demo-class"
+											(click)="expandedView(summaryView[0])"><span>{{summaryView[0]}}</span></td>
+										<td *ngIf="summaryView[1] == 0"><span>{{summaryView[0]}}</span></td>
+										<td class="text-right">{{summaryView[1]}}</td>
+										<td class="text-right" *ngIf="summaryView[2] != null">
+											{{summaryView[2] | currency:'USD':true}}</td>
+										<td class="text-right" *ngIf="summaryView[2] == null">$ 0
+										</td>
 									</tr>
 								</tbody>
 							</table>
 						</div>
-						<div class = "borderBox">
+						<div class="borderBox">
 							<pichart></pichart>
-				    	 </div>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			<!-- Award -->
 
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf = "(currentPosition == 'AWARD')">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition == 'AWARD')">
 				<div class="row">
-			 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-					<span class="linkButtonGroup"> <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DAwardDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'">
-							<i class="fa fa-plus"></i> Create Award
-					</a> <!-- <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dsearch%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26includeCustomActionUrls%3Dtrue%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue%26projectPersons.fullName%3D'+firstName+'*'+lastName+'&methodToCall=start&__login_user='+userName+'&kcComp=true'">
-							<i class="fa fa-eye"></i> View
-					</a> <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dstart%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue&methodToCall=start&__login_user='+userName+'&kcComp=true'">
-							<i class="fa fa-search"></i> Search
-					</a> -->
-					</span>
-				  </div>
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> 
+						  <a
+							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DAwardDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'">
+								<i class="fa fa-plus"></i> Create Award
+						  </a>
+						</span>
+					</div>
 				</div>
 
-				<div class = "borderBox" *ngIf = "((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class = "table table-responsive tableSkin">
+				<div class="borderBox"
+					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click) = "sortResult('awardNumber',currentPosition)"
-									title = "Click to sort by Award">Award <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span> </th> 
-								<th (click) = "sortResult('accountNumber',currentPosition)"
-									title = "Click to sort by Account">Account <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span> </th> 
-								<th (click) = "sortResult('title',currentPosition)"
-									title = "Click to sort by Title">Title <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'title')}"></span> </th> 
-								<th (click) = "sortResult('unitName',currentPosition)"
-									title = "Click to sort by Lead Unit">Lead Unit <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span> </th> 
-								<th (click) = "sortResult('sponsor',currentPosition)"
-									title = "Click to sort by Sponsor">Sponsor <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span> </th> 
-								<th (click) = "sortResult('pi',currentPosition)"
-									title = "Click to sort by PI">PI <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'pi')}"></span> </th> 
-								<th> Action </th> 
+								<th (click)="sortResult('awardNumber',currentPosition)"
+									title="Click to sort by Award">Award <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
+								</th>
+								<th (click)="sortResult('accountNumber',currentPosition)"
+									title="Click to sort by Account">Account <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
+								</th>
+								<th (click)="sortResult('title',currentPosition)"
+									title="Click to sort by Title">Title <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+								</th>
+								<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Lead Unit <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+								</th>
+								<th (click)="sortResult('sponsor',currentPosition)"
+									title="Click to sort by Sponsor">Sponsor <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span>
+								</th>
+								<th (click)="sortResult('pi',currentPosition)"
+									title="Click to sort by PI">PI <span class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'pi')}"></span>
+								</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf = "(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found ! </td> 
+							<tr
+								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr *ngFor = "let awardDetails of serviceRequestList | slice:begin:end">
-								<td width="8%">{{awardDetails.awardNumber}} </td> 
-								<td> {{awardDetails.accountNumber}} </td> 
-								<td> {{awardDetails.title}} </td> 
-								<td> {{awardDetails.unitName}} </td> 
-								<td> {{awardDetails.sponsor}} </td> 
-								<td> {{awardDetails.fullName}} </td> 
-								<td> 
-									<ul class = "actionButtonGroup">
-										<li> <a title = "Open {{awardDetails.awardNumber}}"
-											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
-												class = "fa fa-eye"></i> </a> </li>
+							<tr
+								*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
+								<td width="8%">{{awardDetails.awardNumber}}</td>
+								<td>{{awardDetails.accountNumber}}</td>
+								<td>{{awardDetails.title}}</td>
+								<td>{{awardDetails.unitName}}</td>
+								<td>{{awardDetails.sponsor}}</td>
+								<td>{{awardDetails.fullName}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a title="Open {{awardDetails.awardNumber}}"
+											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+												class="fa fa-eye"></i> </a></li>
 									</ul>
-								 </td> 
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -513,68 +570,78 @@
 			</div>
 
 			<!-- Proposal -->
-			
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf = "(currentPosition == 'PROPOSAL')">
+
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition == 'PROPOSAL')">
 				<div class="row">
-			 	<div
-					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-					<span class="linkButtonGroup"> <a
-						[href]="outputPath+'/kc-pd-krad/proposalDevelopment?viewId=PropDev-InitiateView&methodToCall=docHandler&command=initiate&__login_user='+userName+'&kcComp=true'">
-							<i class="fa fa-plus"></i> Create Proposal
-					</a><!--  <a
-						[href]="outputPath+'/kr-krad/lookup?lookupCriteria[participant]='+userName+'&viewId=AllDevelopmentProposals-LookupViewId&methodToCall=search&__login_user='+userName+'&kcComp=true'">
-							<i class="fa fa-eye"></i> View
-					</a> <a
-						[href]="outputPath+'/kr-krad/lookup?viewId=DevelopmentProposals-LookupViewId&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-search"></i> Search</a> -->
-					</span>
-				  </div>
-                </div>
-				<div class = "borderBox" *ngIf = "((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class = "table table-responsive tableSkin">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> 
+						  <a
+							[href]="outputPath+'/kc-pd-krad/proposalDevelopment?viewId=PropDev-InitiateView&methodToCall=docHandler&command=initiate&__login_user='+userName+'&kcComp=true'">
+								<i class="fa fa-plus"></i> Create Proposal
+						  </a>
+						</span>
+					</div>
+				</div>
+				<div class="borderBox"
+					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click) = "sortResult('proposalNumber',currentPosition)"
-									title = "Click to sort by Proposal">Proposal <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span> </th> 
-								<th (click) = "sortResult('title',currentPosition)"
-									title = "Click to sort by Title" width="40%">Title <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'title')}"></span> </th> 
-								<th (click) = "sortResult('leadUnit',currentPosition)"
-									title = "Click to sort by Lead Unit">Lead Unit <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span> </th> 
-								<th (click) = "sortResult('sponsor',currentPosition)"
-									title = "Click to sort by Sponsor">Sponsor <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span> </th> 
-								<th (click) = "sortResult('deadLinedate',currentPosition)"
-									title = "Click to sort by Deadline">Deadline <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span> </th> 
-								<th (click) = "sortResult('status',currentPosition)"
-									title = "Click to sort by Status">Status <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'status')}"></span> </th> 
-								<th> Action </th> 
+								<th (click)="sortResult('proposalNumber',currentPosition)"
+									title="Click to sort by Proposal">Proposal <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span>
+								</th>
+								<th (click)="sortResult('title',currentPosition)"
+									title="Click to sort by Title" width="40%">Title <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+								</th>
+								<th (click)="sortResult('leadUnit',currentPosition)"
+									title="Click to sort by Lead Unit">Lead Unit <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span>
+								</th>
+								<th (click)="sortResult('sponsor',currentPosition)"
+									title="Click to sort by Sponsor">Sponsor <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span>
+								</th>
+								<th (click)="sortResult('deadLinedate',currentPosition)"
+									title="Click to sort by Deadline">Deadline <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span>
+								</th>
+								<th (click)="sortResult('status',currentPosition)"
+									title="Click to sort by Status">Status <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
+								</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf = "(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found ! </td> 
+							<tr
+								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+								<td colspan=6>No Requests Found !</td>
 							</tr>
 							<tr
-								*ngFor = "let proposalDetails of serviceRequestList | slice:begin:end">
-								<td> {{proposalDetails.proposalNumber}} </td> 
-								<td> {{proposalDetails.title}} </td> 
-								<td> {{proposalDetails.leadUnit}} </td> 
-								<td> {{proposalDetails.sponsor}} </td> 
-								<td> {{proposalDetails.deadLinedate}} </td> 
-								<td> {{proposalDetails.status}} </td> 
-								<td> 
-									<ul class = "actionButtonGroup">
-										<li> <a title = "Open {{proposalDetails.proposalNumber}}"
-											[href] = "outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails.documentNumber+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
-												class = "fa fa-eye"></i> </a> </li>
+								*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
+								<td>{{proposalDetails.proposalNumber}}</td>
+								<td>{{proposalDetails.title}}</td>
+								<td>{{proposalDetails.leadUnit}}</td>
+								<td>{{proposalDetails.sponsor}}</td>
+								<td>{{proposalDetails.deadLinedate}}</td>
+								<td>{{proposalDetails.status}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a title="Open {{proposalDetails.proposalNumber}}"
+											[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails.documentNumber+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+												class="fa fa-eye"></i> </a></li>
 									</ul>
-								 </td> 
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -582,63 +649,73 @@
 			</div>
 
 			<!-- IRB -->
-			
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf = "(currentPosition == 'IRB')">
-				<div class="row">
-			 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-					<span class="linkButtonGroup"> <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-plus"></i> Create IRB Protocol</a> <!-- <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dsearch%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue%26lookupPendingProtocol%3Dtrue%26lookupProtocolPersonId%3D'+personID+'%26investigator%3D'+firstName+'*'+lastName+'&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-eye"></i> View</a> <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dstart%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888%26includeCustomActionUrls%3Dtrue%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-search"></i> Search</a> -->
-					</span>
-				</div>
-               </div>
 
-				<div class = "borderBox" *ngIf = "((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class = "table table-responsive tableSkin">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition == 'IRB')">
+				<div class="row">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> 
+						  <a
+							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
+								class="fa fa-plus"></i> Create IRB Protocol
+						  </a>
+						</span>
+					</div>
+				</div>
+
+				<div class="borderBox"
+					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click) = "sortResult('protocolNumber',currentPosition)"
-									title = "Click to sort by Protocol">Protocol <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'protocolNumber')}"></span> </th> 
-								<th (click) = "sortResult('title',currentPosition)"
-									title = "Click to sort by Title" width="40%">Title <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'title')}"></span> </th> 
-								<th (click) = "sortResult('leadUnit',currentPosition)"
-									title = "Click to sort by Lead Unit">Lead Unit <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span> </th> 
-								<th (click) = "sortResult('protocolType',currentPosition)"
-									title = "Click to sort by Protocol Type">Protocol Type <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'protocolType')}"></span> </th> 
-								<th (click) = "sortResult('status',currentPosition)"
-									title = "Click to sort by Status">Status <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'status')}"></span> </th> 
-								<th> Action </th> 
+								<th (click)="sortResult('protocolNumber',currentPosition)"
+									title="Click to sort by Protocol">Protocol <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolNumber')}"></span>
+								</th>
+								<th (click)="sortResult('title',currentPosition)"
+									title="Click to sort by Title" width="40%">Title <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+								</th>
+								<th (click)="sortResult('leadUnit',currentPosition)"
+									title="Click to sort by Lead Unit">Lead Unit <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span>
+								</th>
+								<th (click)="sortResult('protocolType',currentPosition)"
+									title="Click to sort by Protocol Type">Protocol Type <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolType')}"></span>
+								</th>
+								<th (click)="sortResult('status',currentPosition)"
+									title="Click to sort by Status">Status <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
+								</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf = "(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found ! </td> 
+							<tr
+								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+								<td colspan=6>No Requests Found !</td>
 							</tr>
 							<tr
-								*ngFor = "let IRBDetails of serviceRequestList | slice:begin:end">
-								<td> {{IRBDetails.protocolNumber}} </td> 
-								<td> {{IRBDetails.title}} </td> 
-								<td> {{IRBDetails.leadUnit}} </td> 
-								<td> {{IRBDetails.protocolType}} </td> 
-								<td> {{IRBDetails.status}} </td> 
-								<td> 
-									<ul class = "actionButtonGroup">
-										<li> <a title = "Open {{IRBDetails.protocolNumber}}"
-											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IRBDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
-												class = "fa fa-eye"></i> </a> </li>
+								*ngFor="let IRBDetails of serviceRequestList | slice:begin:end">
+								<td>{{IRBDetails.protocolNumber}}</td>
+								<td>{{IRBDetails.title}}</td>
+								<td>{{IRBDetails.leadUnit}}</td>
+								<td>{{IRBDetails.protocolType}}</td>
+								<td>{{IRBDetails.status}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a title="Open {{IRBDetails.protocolNumber}}"
+											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IRBDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+												class="fa fa-eye"></i> </a></li>
 									</ul>
-								 </td> 
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -646,62 +723,71 @@
 			</div>
 
 			<!-- IACUC -->
-			
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf = "(currentPosition == 'IACUC')">
-				 <div class="row">
-			 	<div
-					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-					<span class="linkButtonGroup"> <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DIacucProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-plus"></i> Create IACUC Protocol</a> <!-- <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dsearch%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue%26lookupPendingProtocol%3Dtrue%26lookupProtocolPersonId%3D'+personID+'%26investigator%3D'+firstName+'*'+lastName+'&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-eye"></i> View</a> <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dstart%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888%26includeCustomActionUrls%3Dtrue%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-search"></i> Search</a> -->
-					</span>
+
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition == 'IACUC')">
+				<div class="row">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> 
+						  <a
+							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DIacucProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
+								class="fa fa-plus"></i> Create IACUC Protocol
+						  </a>
+						</span>
+					</div>
 				</div>
-               </div>
-				<div class = "borderBox" *ngIf = "((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class = "table table-responsive tableSkin">
+				<div class="borderBox"
+					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click) = "sortResult('protocolNumber',currentPosition)"
-									title = "Click to sort by Protocol">Protocol <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'protocolNumber')}"></span> </th> 
-								<th (click) = "sortResult('title',currentPosition)"
-									title = "Click to sort by Title" width="40%">Title <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'title')}"></span> </th> 
-								<th (click) = "sortResult('leadUnit',currentPosition)"
-									title = "Click to sort by Lead Unit">Lead Unit <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span> </th> 
-								<th (click) = "sortResult('protocolType',currentPosition)"
-									title = "Click to sort by Protocol Type">Protocol Type <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'protocolType')}"></span> </th> 
-								<th (click) = "sortResult('status',currentPosition)"
-									title = "Click to sort by Status">Status <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'status')}"></span> </th> 
-								<th> Action </th> 
+								<th (click)="sortResult('protocolNumber',currentPosition)"
+									title="Click to sort by Protocol">Protocol <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolNumber')}"></span>
+								</th>
+								<th (click)="sortResult('title',currentPosition)"
+									title="Click to sort by Title" width="40%">Title <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+								</th>
+								<th (click)="sortResult('leadUnit',currentPosition)"
+									title="Click to sort by Lead Unit">Lead Unit <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span>
+								</th>
+								<th (click)="sortResult('protocolType',currentPosition)"
+									title="Click to sort by Protocol Type">Protocol Type <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolType')}"></span>
+								</th>
+								<th (click)="sortResult('status',currentPosition)"
+									title="Click to sort by Status">Status <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
+								</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf = "(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found ! </td> 
+							<tr
+								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr *ngFor = "let IACUCDetails of serviceRequestList">
-								<td> {{IACUCDetails.protocolNumber}} </td> 
-								<td> {{IACUCDetails.title}} </td> 
-								<td> {{IACUCDetails.leadUnit}} </td> 
-								<td> {{IACUCDetails.protocolType}} </td> 
-								<td> {{IACUCDetails.status}} </td> 
-								<td> 
-									<ul class = "actionButtonGroup">
-										<li> <a title = "Open {{IACUCDetails.protocolNumber}}"
-											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IACUCDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
-												class = "fa fa-eye"></i> </a> </li>
+							<tr *ngFor="let IACUCDetails of serviceRequestList">
+								<td>{{IACUCDetails.protocolNumber}}</td>
+								<td>{{IACUCDetails.title}}</td>
+								<td>{{IACUCDetails.leadUnit}}</td>
+								<td>{{IACUCDetails.protocolType}}</td>
+								<td>{{IACUCDetails.status}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a title="Open {{IACUCDetails.protocolNumber}}"
+											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IACUCDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.iacuc.IacucProtocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+												class="fa fa-eye"></i> </a></li>
 									</ul>
-								 </td> 
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -709,98 +795,110 @@
 			</div>
 
 			<!-- DISCLOSURE -->
-			
-			<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf = "(currentPosition == 'DISCLOSURE')">
+
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition == 'DISCLOSURE')">
 				<div class="row">
-			  	<div
-					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-					<span class="linkButtonGroup"> <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DCoiDisclosureDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-plus"></i> Create Disclosure</a><!--  <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dsearch%26businessObjectClassName%3Dorg.kuali.kra.coi.CoiDisclosure%26docFormKey%3D88888888%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue%26personId%3D'+personID+'%26person.userName%3D'+userName+'&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-							class="fa fa-eye"></i> View</a> <a
-						[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2Fkr%2Flookup.do%3FmethodToCall%3Dstart%26businessObjectClassName%3Dorg.kuali.kra.coi.CoiDisclosure%26docFormKey%3D88888888%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView%26hideReturnLink%3Dtrue&methodToCall=start&__login_user='+userName+'&kcComp=true'">
-							<i class="fa fa-search"></i> Search 
-					</a>-->
-					</span>
-				  </div>
-                </div>
-				<div class = "borderBox" *ngIf = "((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class = "table table-responsive tableSkin">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> 
+						  <a
+							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DCoiDisclosureDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
+								class="fa fa-plus"></i> Create Disclosure
+						  </a>
+						</span>
+					</div>
+				</div>
+				<div class="borderBox"
+					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click) = "sortResult('coiDisclosureNumber',currentPosition)" 
-									title = "Click to sort by Disclosure">Disclosure <span class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'coiDisclosureNumber')}"></span> </th> 
-								<th (click) = "sortResult('fullName',currentPosition)"
-									title = "Click to sort by Name" width="40%">Name <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'fullName')}"></span> </th> 
+								<th (click)="sortResult('coiDisclosureNumber',currentPosition)"
+									title="Click to sort by Disclosure">Disclosure <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'coiDisclosureNumber')}"></span>
+								</th>
+								<th (click)="sortResult('fullName',currentPosition)"
+									title="Click to sort by Name" width="40%">Name <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'fullName')}"></span>
+								</th>
 								<th
-									(click) = "sortResult('disclosureDisposition',currentPosition)"
-									title = "Click to sort by Disclosure Disposition">Disclosure Disposition <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'disclosureDisposition')}"></span> </th> 
-								<th (click) = "sortResult('moduleItemKey',currentPosition)"
-									title = "Click to sort by Disclosure Status">Disclosure Status <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'moduleItemKey')}"></span> </th> 
-								<th (click) = "sortResult('status',currentPosition)"
-									title = "Click to sort by Module item key">Module item key <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'status')}"></span> </th> 
-								<th (click) = "sortResult('expirationDate',currentPosition)"
-									title = "Click to sort by Expiration Date">Expiration Date <span
-									class = "sortorder"
-									[ngClass] = "{reverse:reverse, sortorder: (sortBy == 'expirationDate')}"></span> </th> 
-								<th> Action </th> 
+									(click)="sortResult('disclosureDisposition',currentPosition)"
+									title="Click to sort by Disclosure Disposition">Disclosure
+									Disposition <span class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'disclosureDisposition')}"></span>
+								</th>
+								<th (click)="sortResult('moduleItemKey',currentPosition)"
+									title="Click to sort by Disclosure Status">Disclosure
+									Status <span class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'moduleItemKey')}"></span>
+								</th>
+								<th (click)="sortResult('status',currentPosition)"
+									title="Click to sort by Module item key">Module item key <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
+								</th>
+								<th (click)="sortResult('expirationDate',currentPosition)"
+									title="Click to sort by Expiration Date">Expiration Date <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'expirationDate')}"></span>
+								</th>
+								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf = "(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=7>No Requests Found ! </td> 
+							<tr
+								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+								<td colspan=7>No Requests Found !</td>
 							</tr>
-							<tr *ngFor = "let DisclosureDetails of serviceRequestList">
-								<td> {{DisclosureDetails.coiDisclosureNumber}} </td> 
-								<td> {{DisclosureDetails.fullName}} </td> 
-								<td> {{DisclosureDetails.disclosureDisposition}} </td> 
-								<td> {{DisclosureDetails.disclosureStatus}} </td> 
-								<td> {{DisclosureDetails.moduleItemKey}} </td> 
-								<td> {{DisclosureDetails.expirationDate}} </td> 
-								<td> 
-									<ul class = "actionButtonGroup">
-										<li> <a title = "Open {{DisclosureDetails.coiDisclosureNumber}}"
-											[href] = "outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+DisclosureDetails.documentNumber+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
-												class = "fa fa-eye"></i> </a> </li>
+							<tr *ngFor="let DisclosureDetails of serviceRequestList">
+								<td>{{DisclosureDetails.coiDisclosureNumber}}</td>
+								<td>{{DisclosureDetails.fullName}}</td>
+								<td>{{DisclosureDetails.disclosureDisposition}}</td>
+								<td>{{DisclosureDetails.disclosureStatus}}</td>
+								<td>{{DisclosureDetails.moduleItemKey}}</td>
+								<td>{{DisclosureDetails.expirationDate}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a
+											title="Open {{DisclosureDetails.coiDisclosureNumber}}"
+											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FdocId%3D'+DisclosureDetails.documentNumber+'%26docTypeName%3DCoiDisclosureDocument%26methodToCall%3DdocHandler%26command%3DdisplayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+												class="fa fa-eye"></i> </a></li>
 									</ul>
-								 </td> 
+								</td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
-			
-		<!-- Pagination -->
-			
-		<div class = "col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf = "(currentPosition != 'SUMMARY') && ((isAdmin==false) || (adminAdvanceSearch == true)) && ((serviceRequestList != null) && (serviceRequestList?.length != 0)) && (adminClear==false)">
-			<div class = "text-right pagiSkin">
-			<nav class = "paginationSkin text-right" href = "#scrollToTop" pageScroll [pageScrollSpeed] = "400">
-				<ngb-pagination [boundaryLinks] = "true" [collectionSize] = "totalPage" [(page)] = "currentPage" currentPage = page
-					[pageSize] = "pageNumber" [maxSize] = "3" [rotate] = "true" (pageChange) = "pageChange(currentPage)" >
-				</ngb-pagination>
-			</nav>
+
+			<!-- Pagination -->
+
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition != 'SUMMARY') && ((isAdmin==false) || (adminAdvanceSearch == true)) && ((serviceRequestList != null) && (serviceRequestList?.length != 0)) && (adminClear==false)">
+				<div class="text-right pagiSkin">
+					<nav class="paginationSkin text-right" href="#scrollToTop"
+						pageScroll [pageScrollSpeed]="400">
+						<ngb-pagination [boundaryLinks]="true"
+							[collectionSize]="totalPage" [(page)]="currentPage"
+							currentPage=page [pageSize]="pageNumber" [maxSize]="3"
+							[rotate]="true" (pageChange)="pageChange(currentPage)">
+						</ngb-pagination>
+					</nav>
+				</div>
 			</div>
-		 </div>
-			 
-		   </section>
-		<div class = "footerPush"></div>
+
+		</section>
+		<div class="footerPush"></div>
 	</div>
-	
+
 	<!-- footer -->
-	
-	<footer class = "text-right" >
-		ERA Solution From <a [href] = "polusWebsite"><img [src] = "footerLogo" /></a>
+
+	<footer class="text-right">
+		ERA Solution From <a [href]="polusWebsite"><img [src]="footerLogo" /></a>
 	</footer>
-	
-	</body>
+
+</body>
 </html>

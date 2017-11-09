@@ -7,75 +7,70 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body class="push4slideMenu" id="scrollToTop">
- 
-	<!-- slideMenu -->   
-	
+
+	<!-- slideMenu -->
+
 	<div class="slideMenu">
 		<ul class="iconMenu">
-			<li class="active">
-				<a href="#" (click) = "myDashboard($event)">
-					<i class="fa fa-tachometer"></i>
-					<span>My Dashboard</span>
-				</a>
-			</li>
-			<li>
-				<a [href]="outputPath+'/kc-krad/landingPage?__login_user='+userName+'&kcComp=true'">
-					<i class="fa fa-user"></i>
-					<span>My Portal</span>
-				</a>
-			</li>
-			<li>
-				<a [href]="outputPath+'/portal.do?__login_user='+userName+'&kcComp=true'">
-					<i class="fa fa-cog"></i>
-					<span>System Admin Portal</span>
-				</a>
-			</li>
+			<li class="active"><a href="#" (click)="myDashboard($event)">
+					<i class="fa fa-tachometer"></i> <span>My Dashboard</span>
+			</a></li>
+			<li><a
+				[href]="outputPath+'/kc-krad/landingPage?__login_user='+userName+'&kcComp=true'">
+					<i class="fa fa-user"></i> <span>My Portal</span>
+			</a></li>
+			<li><a
+				[href]="outputPath+'/portal.do?__login_user='+userName+'&kcComp=true'">
+					<i class="fa fa-cog"></i> <span>System Admin Portal</span>
+			</a></li>
 		</ul>
 		<div class="pullBack d-md-none d-lg-none d-xl-none">
 			<i class="fa fa-arrow-left"></i>
 		</div>
 	</div>
-	
+
 	<div class="container-fluid pushFixedHeaderFooter">
 		<div class="headerPush"></div>
-		
+
 		<!-- Header section of dashboard-->
-		
+
 		<header class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<ul class="headerMenu" >
-					<li>
-						<a href="#" class="logo">
-							<span class="logoIcon">
+				<ul class="headerMenu">
+					<li><a href="#" class="logo"> <span class="logoIcon">
 								<img [src]="logo" class="" />
-							</span>
-							<span class="brandText">Polus University</span>
-						</a>
-					</li>
-					<li *ngIf="isAdmin == false">
-						<a>
-							<span class="userName">Dashboard of {{fullName}} (PI)</span>
-							<i style="cursor: pointer;" class="fa fa-user" (click)="logout()" title="logout"></i>
-						</a>
-					</li>
-					<li *ngIf="isAdmin">
-						<a>
-							<span class="userName">Dashboard of {{fullName}} (Admin)</span>
-							<i style="cursor: pointer;" class="fa fa-user" (click)="logout()" title="logout"></i>
-						</a>
-					</li>
-					<li class="active" title="notification">
-						<a href="#" id="showNotify" (click)="userNotification($event)">
-							<i class="fa fa-bell"></i>
-						</a>
-						<ul class="notificationBox" *ngIf="toggleBox" [ngClass]="{'notificationBoxHeight':showmoreClicked == true}">
-							<ng-container *ngIf="morethanThreeNotification==true && (showmoreClicked==false)">
-							<li  *ngFor="let notification of first3notificationList">
-								<p *ngIf="notification.actionRequestCd == 'C'"><u>COMPLETE</u></p>
-								<p *ngIf="notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
-								<p *ngIf="notification.actionRequestCd == 'F'"><u>FYI</u></p>
-								<p *ngIf="notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<p>{{notification.docTitle}}</p>
+						</span> <span class="brandText">Polus University</span>
+					</a></li>
+					<li *ngIf="isAdmin == false"><a> <span class="userName">Dashboard
+								of {{fullName}} (PI)</span> <i style="cursor: pointer;"
+							class="fa fa-user" (click)="logout()" title="logout"></i>
+					</a></li>
+					<li *ngIf="isAdmin"><a> <span class="userName">Dashboard
+								of {{fullName}} (Admin)</span> <i style="cursor: pointer;"
+							class="fa fa-user" (click)="logout()" title="logout"></i>
+					</a></li>
+					<li class="active" title="notification" #notificationBar><a
+						href="#" id="showNotify" (click)="userNotification($event)"> <i
+							class="fa fa-bell"></i>
+					</a>
+						<ul class="notificationBox" *ngIf="toggleBox"
+							[ngClass]="{'notificationBoxHeight':showmoreClicked == true}">
+							<ng-container
+								*ngIf="morethanThreeNotification==true && (showmoreClicked==false)">
+							<li *ngFor="let notification of first3notificationList">
+								<p *ngIf="notification.actionRequestCd == 'C'">
+									<u>COMPLETE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'A'">
+									<u>APPROVE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'F'">
+									<u>FYI</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'K'">
+									<u>ACKOWLEDGEMENT</u>
+								</p> <a
+								[href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'+'&__login_user='+userName+'&kcComp=true'">{{notification.docTitle}}</a>
 								<!-- <button class="dismiss">
 									<i class="fa fa-times"></i>
 								</button> -->
@@ -83,231 +78,353 @@
 							</ng-container>
 							<ng-container *ngIf="morethanThreeNotification == false">
 							<li *ngFor="let notification of notificationList">
-								<p *ngIf="notification.actionRequestCd == 'C'"><u>COMPLETE</u></p>
-								<p *ngIf="notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
-								<p *ngIf="notification.actionRequestCd == 'F'"><u>FYI</u></p>
-								<p *ngIf="notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<p>{{notification.docTitle}}</p>
-							<!-- 	<button class="dismiss">
+								<p *ngIf="notification.actionRequestCd == 'C'">
+									<u>COMPLETE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'A'">
+									<u>APPROVE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'F'">
+									<u>FYI</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'K'">
+									<u>ACKOWLEDGEMENT</u>
+								</p> <a
+								[href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'+'&__login_user='+userName+'&kcComp=true'">{{notification.docTitle}}</a>
+								<!-- 	<button class="dismiss">
 									<i class="fa fa-times"></i>
 								</button> -->
 							</li>
 							</ng-container>
-							<ng-container *ngIf="morethanThreeNotification==true && (showmoreClicked==true)">
+							<ng-container
+								*ngIf="morethanThreeNotification==true && (showmoreClicked==true)">
 							<li *ngFor="let notification of notificationList">
-								<p *ngIf="notification.actionRequestCd == 'C'"><u>COMPLETE</u></p>
-								<p *ngIf="notification.actionRequestCd == 'A'"><u>APPROVE</u></p>
-								<p *ngIf="notification.actionRequestCd == 'F'"><u>FYI</u></p>
-								<p *ngIf="notification.actionRequestCd == 'K'"><u>ACKOWLEDGEMENT</u></p>
-								<p>{{notification.docTitle}}</p>
+								<p *ngIf="notification.actionRequestCd == 'C'">
+									<u>COMPLETE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'A'">
+									<u>APPROVE</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'F'">
+									<u>FYI</u>
+								</p>
+								<p *ngIf="notification.actionRequestCd == 'K'">
+									<u>ACKOWLEDGEMENT</u>
+								</p> <a
+								[href]="outputPath+'/kew/DocHandler.do?docId='+notification.documentId+'&command=displayActionListView'+'&__login_user='+userName+'&kcComp=true'">{{notification.docTitle}}</a>
 								<!-- <button class="dismiss">
 									<i class="fa fa-times"></i>
 								</button> -->
 							</li>
 							</ng-container>
-							<li  *ngIf="morethanThreeNotification == true && (showmoreNeeded == true)"><a href="#" (click)="showMore($event)" class="showMore"> Show more </a></li>
-						</ul>
-						</li>
+							<li
+								*ngIf="morethanThreeNotification == true && (showmoreNeeded == true)"><a
+								href="#" (click)="showMore($event)" class="showMore"> Show
+									more </a></li>
+						</ul></li>
 					<li><a href="#" title="help"><i class="fa fa-question"></i></a></li>
 					<li class="d-md-none d-lg-none d-xl-none"><a href="#"
 						id="mobileMenu"><i class="fa fa-bars"></i></a></li>
 				</ul>
 			</div>
-		</header>		
+		</header>
 		<!-- Session handling component -->
-        <app-sessiontimeout>    
-        </app-sessiontimeout>
-        <div class = "borderBox" *ngIf="this.dataservice.piechartIndex=='AWARD'">
-        	<table class="table table-responsive tableSkin">
-						<thead>
-							<tr>
-								<th (click)="sortResult('awardNumber',currentPosition)"
-									title="Click to sort by Award">Award <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span></th>
-								<th (click)="sortResult('accountNumber',currentPosition)"
-									title="Click to sort by Account">Account <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span></th>
-								<th (click)="sortResult('title',currentPosition)"
-									title="Click to sort by Title">Title <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
-								<th (click)="sortResult('sponsor',currentPosition)"
-									title="Click to sort by Sponsor">Sponsor <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
-								<th (click)="sortResult('pi',currentPosition)"
-									title="Click to sort by PI">PI <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'pi')}"></span></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
-							<tr *ngFor="let awardDetails of serviceRequestList | slice:begin:end">
-								<td width="8%">{{awardDetails[0]}}</td>
-								<td>{{awardDetails[1]}}</td>
-								<td>{{awardDetails[2]}}</td>
-								<td>{{awardDetails[3]}}</td>
-								<td>{{awardDetails[4]}}</td>
-							</tr>
-						</tbody>
-					</table>
-        </div>
-        <div class="borderBox"  *ngIf="this.dataservice.piechartIndex=='PROPOSAL'">
-					<table class="table table-responsive tableSkin">
-						<thead>
-							<tr>
-								<th (click)="sortResult('proposalNumber',currentPosition)"
-									title="Click to sort by Proposal">Proposal <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
-								<th (click)="sortResult('title',currentPosition)"
-									title="Click to sort by Title" width="40%">Title <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
-								<th (click)="sortResult('leadUnit',currentPosition)"
-									title="Click to sort by Lead Unit"> Sponsor <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
-								<th (click)="sortResult('sponsor',currentPosition)"
-									title="Click to sort by Sponsor"> Proposal Type <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
-								<th (click)="sortResult('deadLinedate',currentPosition)"
-									title="Click to sort by Deadline">PI <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
-							<tr
-								*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
-								<td>{{proposalDetails[0]}}</td>
-								<td>{{proposalDetails[1]}}</td>
-								<td>{{proposalDetails[2]}}</td>
-								<td>{{proposalDetails[3]}}</td>
-								<td>{{proposalDetails[4]}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="borderBox"  *ngIf="this.dataservice.researchSummaryIndex=='PROPOSALSSUBMITTED'">
-					<table class="table table-responsive tableSkin">
-						<thead>
-							<tr>
-								<th (click)="sortResult('proposalNumber',currentPosition)"
-									title="Click to sort by Proposal">Proposal <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
-								<th (click)="sortResult('title',currentPosition)"
-									title="Click to sort by Title" width="40%">Title <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
-								<th (click)="sortResult('leadUnit',currentPosition)"
-									title="Click to sort by Lead Unit"> Sponsor <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
-								<th (click)="sortResult('sponsor',currentPosition)"
-									title="Click to sort by Sponsor"> Budget(Total Cost) <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
-								<th (click)="sortResult('deadLinedate',currentPosition)"
-									title="Click to sort by Deadline">PI <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
-							<tr
-								*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
-								<td>{{proposalDetails[0]}}</td>
-								<td>{{proposalDetails[1]}}</td>
-								<td>{{proposalDetails[2]}}</td>
-								<td>{{proposalDetails[3]}}</td>
-								<td>{{proposalDetails[4]}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="borderBox"  *ngIf="this.dataservice.researchSummaryIndex=='PROPOSALSINPROGRESS'">
-					<table class="table table-responsive tableSkin">
-						<thead>
-							<tr>
-								<th (click)="sortResult('proposalNumber',currentPosition)"
-									title="Click to sort by Proposal">Proposal <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
-								<th (click)="sortResult('title',currentPosition)"
-									title="Click to sort by Title" width="40%">Title <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
-								<th (click)="sortResult('leadUnit',currentPosition)"
-									title="Click to sort by Lead Unit"> Sponsor <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
-								<th (click)="sortResult('sponsor',currentPosition)"
-									title="Click to sort by Sponsor"> Budget(Total Cost) <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
-								<th (click)="sortResult('deadLinedate',currentPosition)"
-									title="Click to sort by Deadline">PI <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
-							<tr
-								*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
-								<td>{{proposalDetails[0]}}</td>
-								<td>{{proposalDetails[1]}}</td>
-								<td>{{proposalDetails[2]}}</td>
-								<td>{{proposalDetails[3]}}</td>
-								<td>{{proposalDetails[4]}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				<div class="borderBox"  *ngIf="this.dataservice.researchSummaryIndex=='AWARDSACTIVE'">
-					<table class="table table-responsive tableSkin">
-						<thead>
-							<tr>
-								<th (click)="sortResult('proposalNumber',currentPosition)"
-									title="Click to sort by Proposal">Award <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
-								<th (click)="sortResult('title',currentPosition)"
-									title="Click to sort by Title" width="40%">Account <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
-								<th (click)="sortResult('leadUnit',currentPosition)"
-									title="Click to sort by Lead Unit"> Sponsor <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
-								<th (click)="sortResult('deadLinedate',currentPosition)"
-									title="Click to sort by Deadline">PI <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
-							    <th (click)="sortResult('sponsor',currentPosition)"
-									title="Click to sort by Sponsor"> Budget(Total Cost) <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr *ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
-							<tr
-								*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
-								<td>{{proposalDetails[0]}}</td>
-								<td>{{proposalDetails[1]}}</td>
-								<td>{{proposalDetails[2]}}</td>
-								<td>{{proposalDetails[3]}}</td>
-								<td>{{proposalDetails[4]}}</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+		<app-sessiontimeout> </app-sessiontimeout>
+
+		<!-- Expanded view for awards from pichart -->
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+			*ngIf="this.dataservice.piechartIndex=='AWARD'">
+			<h5 class="pageHeader">{{this.dataservice.exapandedViewAwardHeading
+				}}</h5>
+			<div class="borderBox"
+				*ngIf="this.dataservice.piechartIndex=='AWARD'">
+				<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('awardNumber',currentPosition)"
+								title="Click to sort by Award">Award <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span></th>
+							<th (click)="sortResult('accountNumber',currentPosition)"
+								title="Click to sort by Account">Account <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span></th>
+							<th (click)="sortResult('title',currentPosition)"
+								title="Click to sort by Title">Title <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
+							<th (click)="sortResult('sponsor',currentPosition)"
+								title="Click to sort by Sponsor">Sponsor <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
+							<th (click)="sortResult('pi',currentPosition)"
+								title="Click to sort by PI">PI <span class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'pi')}"></span></th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
+							<td>{{awardDetails[2]}}</td>
+							<td>{{awardDetails[3]}}</td>
+							<td>{{awardDetails[4]}}</td>
+							<td>{{awardDetails[5]}}</td>
+                            <td width="8%">{{awardDetails[6]}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li><a title="Open {{awardDetails[0]}}"
+										[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails[0]+'%26docId%3D'+awardDetails[1]+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+											class="fa fa-eye"></i> </a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Expanded view for propsals from pichart -->
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+			*ngIf="this.dataservice.piechartIndex=='PROPOSAL'">
+			<h5 class="pageHeader">{{this.dataservice.exapandedViewProposalHeading}}</h5>
+			<div class="borderBox"
+				*ngIf="this.dataservice.piechartIndex=='PROPOSAL'">
+				<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('proposalNumber',currentPosition)"
+								title="Click to sort by Proposal">Proposal <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
+							<th (click)="sortResult('title',currentPosition)"
+								title="Click to sort by Title" width="40%">Title <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
+							<th (click)="sortResult('leadUnit',currentPosition)"
+								title="Click to sort by Lead Unit">Sponsor <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
+							<th (click)="sortResult('sponsor',currentPosition)"
+								title="Click to sort by Sponsor">Proposal Type <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
+							<th (click)="sortResult('deadLinedate',currentPosition)"
+								title="Click to sort by Deadline">PI <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
+							<td>{{proposalDetails[1]}}</td>
+							<td>{{proposalDetails[2]}}</td>
+							<td>{{proposalDetails[3]}}</td>
+							<td>{{proposalDetails[4]}}</td>
+							<td>{{proposalDetails[5]}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li><a title="Open {{proposalDetails[0]}}"
+										[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails[0]+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+											class="fa fa-eye"></i> </a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<!-- Expanded view for submitted proposals -->
+
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+			*ngIf="this.dataservice.researchSummaryIndex=='PROPOSALSSUBMITTED'">
+			<h5 class="pageHeader">{{this.dataservice.expandedViewHeading }}</h5>
+			<div class="borderBox">
+				<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('proposalNumber',currentPosition)"
+								title="Click to sort by Proposal">Proposal <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
+							<th (click)="sortResult('title',currentPosition)"
+								title="Click to sort by Title" width="40%">Title <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
+							<th (click)="sortResult('leadUnit',currentPosition)"
+								title="Click to sort by Lead Unit">Sponsor <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
+							<th (click)="sortResult('sponsor',currentPosition)"
+								title="Click to sort by Sponsor">Budget <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
+							<th (click)="sortResult('deadLinedate',currentPosition)"
+								title="Click to sort by Deadline">PI <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
+							<td>{{proposalDetails[1]}}</td>
+							<td>{{proposalDetails[2]}}</td>
+							<td>{{proposalDetails[3]}}</td>
+							<td>{{proposalDetails[4]}}</td>
+							<td>{{proposalDetails[5]}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li><a title="Open {{proposalDetails[0]}}"
+										[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails[0]+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+											class="fa fa-eye"></i> </a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Expanded view for inprogress proposals -->
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+			*ngIf="this.dataservice.researchSummaryIndex=='PROPOSALSINPROGRESS'">
+			<h5 class="pageHeader">{{this.dataservice.expandedViewHeading }}</h5>
+			<div class="borderBox">
+				<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('proposalNumber',currentPosition)"
+								title="Click to sort by Proposal">Proposal <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
+							<th (click)="sortResult('title',currentPosition)"
+								title="Click to sort by Title" width="40%">Title <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
+							<th (click)="sortResult('leadUnit',currentPosition)"
+								title="Click to sort by Lead Unit">Sponsor <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
+							<th (click)="sortResult('sponsor',currentPosition)"
+								title="Click to sort by Sponsor">Budget <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
+							<th (click)="sortResult('deadLinedate',currentPosition)"
+								title="Click to sort by Deadline">PI <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
+							<td>{{proposalDetails[1]}}</td>
+							<td>{{proposalDetails[2]}}</td>
+							<td>{{proposalDetails[3]}}</td>
+							<td>{{proposalDetails[4]}}</td>
+							<td>{{proposalDetails[5]}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li><a title="Open {{proposalDetails[0]}}"
+										[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails[0]+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+											class="fa fa-eye"></i> </a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<!-- Expanded view for active awards -->
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+			*ngIf="this.dataservice.researchSummaryIndex=='AWARDSACTIVE'">
+			<h5 class="pageHeader">{{this.dataservice.expandedViewHeading }}</h5>
+			<div class="borderBox">
+				<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('awardNumber',currentPosition)"
+								title="Click to sort by Award">Award <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
+							</th>
+							<th (click)="sortResult('accountNumber',currentPosition)"
+								title="Click to sort by Account">Account <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
+							</th>
+							<th (click)="sortResult('pi',currentPosition)"
+								title="Click to sort by PI"> Title <span class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'pi')}"></span>
+							</th>
+							<th (click)="sortResult('unitName',currentPosition)"
+								title="Click to sort by Lead Unit">Sponsor <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+							</th>
+							<th (click)="sortResult('sponsor',currentPosition)"
+								title="Click to sort by Sponsor">PI <span class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span>
+							</th>
+							<th (click)="sortResult('pi',currentPosition)"
+								title="Click to sort by PI">Budget <span class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'pi')}"></span>
+							</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
+							<td width="8%">{{awardDetails[2]}}</td>
+							<td>{{awardDetails[3]}}</td>
+							<td>{{awardDetails[4]}}</td>
+							<td>{{awardDetails[5]}}</td>
+							<td>{{awardDetails[6]}}</td>
+							<td>{{awardDetails[7]}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li><a title="Open {{awardDetails[0]}}"
+										[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails[0]+'%26docId%3D'+awardDetails[1]+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+											class="fa fa-eye"></i> </a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
 		<div class="footerPush"></div>
 	</div>
-	<footer class="text-right" >
+	<footer class="text-right">
 		ERA Solution From <a [href]="polusWebsite"><img [src]="footerLogo" /></a>
 	</footer>
-	</body>
+</body>
 </html>
