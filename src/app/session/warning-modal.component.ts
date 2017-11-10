@@ -2,8 +2,8 @@ import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-display-dialog',
-  templateUrl: 'warningmodal.component.html',
+  selector: 'session-warning-modal',
+  templateUrl: 'warning-modal.component.html',
   styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/style.css']
 })
 
@@ -13,15 +13,15 @@ export class WarningModalComponent {
   @Input() timeToExit: number;
   @Input() timeToExitinMin: number;
   @Input() timeToExitinSec: number;
-  message: boolean = false;
-  
+  message = false;
+
   constructor() {}
-  
-  sendContinueMessage() { 
-      this.continueEvent.emit(this.message);
-   }
-  
-  sendLogoutMessage() { 
-      this.logoutEvent.emit(this.message);
-   }
+
+  sendContinueMessage() {
+    this.continueEvent.emit(this.message);
+  }
+
+  sendLogoutMessage() {
+    this.logoutEvent.emit(this.message);
+  }
 }

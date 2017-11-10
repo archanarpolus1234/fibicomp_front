@@ -1,0 +1,27 @@
+<div *ngIf="warningModal">
+	<session-warning-modal
+		style="display: block; 
+	    position: fixed;z-index: 1; left: 0;
+	    top: 0;
+	    width: 100%; /* Full width */
+	    height: 100%; /* Full height */
+	    overflow: auto; /* Enable scroll if needed */ 
+	    background-color: rgb(0,0,0); /* Fallback color */
+	    background-color: rgba(0,0,0,0.4);"
+		(continueEvent)="receiveContinueMessage($event)"
+		(logoutEvent)="reRoute($event)" [timeToExitinMin]="exitTimeInMin"
+		[timeToExitinSec]="exitTimeInSec" [timeToExit]="timerTime"></session-warning-modal>
+</div>
+<div *ngIf="timeoutModal">
+	<session-timeout-modal
+		style="display: block; 
+	    position: fixed;z-index: 1; left: 0;
+	    top: 0;
+	    width: 100%; /* Full width */
+	    height: 100%; /* Full height */
+	    overflow: auto; /* Enable scroll if needed */
+	    background-color: rgb(0,0,0); /* Fallback color */
+	    background-color: rgba(0,0,0,0.4);"
+		(logoutEvent)="reRoute($event)" [loggedOutTime]="timeToLogout"></session-timeout-modal>
+</div>
+
