@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { GoogleChartService } from '../research_summary/google.chart.service';
 import { DashboardService } from '../dashboard/dashboard.component.service';
+import { DashboardData } from '../dashboard/dashboard-data';
 import { ExpandedviewService } from '../research_summary/expandedview.service';
 import { DataService } from './dataservice';
 
@@ -20,10 +21,10 @@ export class GooglePiChartComponent extends GoogleChartService {
     private proposalOptions;
     private awardOptions;
     private proposalData;
-    private propsalChart;
+    private proposalChart;
     private awardChart;
     private awardData;
-    private result : any ={};
+    private resultPie : any ={};
     private awardList : any[];
     private proposalList : any[];
     private awardStateList : any[]=[];
@@ -35,20 +36,19 @@ export class GooglePiChartComponent extends GoogleChartService {
     private sponsorType: string;
     private proposalType: string;
     
-    constructor(private dashboardService : DashboardService, private router: Router,public dataservice: DataService){
+    constructor(private dashboardService : DashboardService, private router: Router,public dataservice: DataService, public dashboardData: DashboardData){
         super();
     }
     
     drawGraph(){
-      this.dataservice.piechartIndex=null;
-      this.dashboardService.getResearchSummaryData()
-      .subscribe(data => {
-          this.result = data || [];
-          if ( this.result != null ){
-              this.awardList = this.result.summaryAwardPieChart;
+      setTimeout(() => {
+      localStorage.setItem('piechartIndex', null);
+          this.resultPie = this.dashboardData.getDashboardPieChartData(); 
+          if ( this.resultPie != null ){
+              this.awardList = this.resultPie.summaryAwardPieChart;
               this.awardStateList.push( [ 'Task', 'Hours per Day' ] );
               this.awardLength = this.awardList.length;
-              this.proposalList = this.result.summaryProposalPieChart;
+              this.proposalList = this.resultPie.summaryProposalPieChart;
               this.proposalStateList.push( [ 'Task', 'Hours per Day' ] );
               this.proposalLength = this.proposalList.length;
               for (let i = 0; i < this.awardLength; i++){
@@ -68,23 +68,32 @@ export class GooglePiChartComponent extends GoogleChartService {
               this.awardChart = this.createPiChart(document.getElementById('pichart_award'));
               this.awardChart.draw(this.awardData, this.awardOptions);
               google.visualization.events.addListener( this.awardChart, 'select', ( event ) => {
-                  this.dataservice.piechartIndex = 'AWARD';
+                 /* this.dataservice.piechartIndex = 'AWARD';*/
+                  localStorage.setItem('piechartIndex', 'AWARD');
                       var selection = this.awardChart.getSelection();
                       for ( var i = 0; i < selection.length; i++ ) {
                           var item = selection[i];
                           if ( item.row != null ) {
                               this.sponsorType = this.awardData.getFormattedValue( item.row, 0 );
-                              this.dataservice.personId = localStorage.getItem( 'personId' );
+                              //this.dataservice.personId = localStorage.getItem( 'personId' );
                               for ( let j = 0; j < this.statuscode.length; j++ ) {
                                   if ( this.sponsorType === this.statuscode[j][1] ) {
-                                      this.dataservice.sponsorCode = this.statuscode[j][0];
-                                      this.dataservice.exapandedViewAwardHeading = "Awards by " + this.sponsorType;
+                                      localStorage.setItem('sponsorCode', this.statuscode[j][0]);
+                                     /* this.dataservice.sponsorCode = this.statuscode[j][0];*/
+                                      localStorage.setItem('exapandedViewAwardHeading', "Awards by " + this.sponsorType);
+                                      /*this.dataservice.exapandedViewAwardHeading = "Awards by " + this.sponsorType;*/
                                   } 
                               }
                           }
                       }
                       this.router.navigate( ['/expandedview'] );
                   } );
+              google.visualization.events.addListener( this.awardChart, 'onmouseover', ( event ) => {
+                  document.getElementById( 'pichart_award' ).style.cursor = 'pointer';
+              } );
+              google.visualization.events.addListener( this.awardChart, 'onmouseout', ( event ) => {
+                  document.getElementById( 'pichart_award' ).style.cursor = '';
+              } );          
               for (let j =0; j < this.proposalLength; j++){
                   this.proposalstatuscode.push( [this.proposalList[j][0], this.proposalList[j][1]] );
                   this.proposalStateList.push([this.proposalList[j][1], this.proposalList[j][2]]);
@@ -98,35 +107,42 @@ export class GooglePiChartComponent extends GoogleChartService {
                                '#9CCC66', '#E5F37A', '#FFF15A', '#FDD154', '#FFA827',
                                '#FF7143', '#8C6E63', '#BDBDBD', '#78909C']
               };
-              this.propsalChart = this.createPiChart(document.getElementById('pichart_divEvolution'));
-              this.propsalChart.draw(this.proposalData, this.proposalOptions);
-              google.visualization.events.addListener( this.propsalChart, 'select', ( event ) => {
-                  this.dataservice.piechartIndex = 'PROPOSAL';
-                  var selection = this.propsalChart.getSelection();
+              this.proposalChart = this.createPiChart(document.getElementById('pichart_divEvolution'));
+              this.proposalChart.draw(this.proposalData, this.proposalOptions);
+              google.visualization.events.addListener( this.proposalChart, 'select', ( event ) => {
+                  //this.dataservice.piechartIndex = 'PROPOSAL';
+                  localStorage.setItem('piechartIndex', 'PROPOSAL');
+                  var selection = this.proposalChart.getSelection();
                   for ( var i = 0; i < selection.length; i++ ) {
                       var item = selection[i];
                       if ( item.row != null ) {
                           this.proposalType = this.proposalData.getFormattedValue( item.row, 0 );
-                          this.dataservice.personId = localStorage.getItem( 'personId' );
+                          //this.dataservice.personId = localStorage.getItem( 'personId' );
                           for ( let j = 0; j < this.proposalstatuscode.length; j++ ) {
-                              console.log( 'status code :' + this.proposalstatuscode[j][1] );
-                              console.log( 'Proposal Type is  :' + this.proposalType );
                               if ( this.proposalType === this.proposalstatuscode[j][1] ) {
-                                  this.dataservice.sponsorCode = this.proposalstatuscode[j][0];
-                                  this.dataservice.exapandedViewProposalHeading = "Proposals by " + this.proposalType;
+                                  localStorage.setItem('sponsorCode', this.statuscode[j][0]);
+                                  //this.dataservice.sponsorCode = this.proposalstatuscode[j][0];
+                                  localStorage.setItem('exapandedViewProposalHeading', "Proposals by " + this.proposalType);
+                                  //this.dataservice.exapandedViewProposalHeading = "Proposals by " + this.proposalType;
                               }
                           }
                       }
                   }
                   this.router.navigate( ['/expandedview'] );
               } );
+              
+              google.visualization.events.addListener( this.proposalChart, 'onmouseover', ( event ) => {
+                  document.getElementById( 'pichart_divEvolution' ).style.cursor = 'pointer';
+              } );
+              google.visualization.events.addListener( this.proposalChart, 'onmouseout', ( event ) => {
+                  document.getElementById( 'pichart_divEvolution' ).style.cursor = '';
+              } );  
           }
-         
-      });
+        }, 450)
     }
     
     onResize(event) {
         this.awardChart.draw(this.awardData, this.awardOptions);
-        this.propsalChart.draw(this.proposalData, this.proposalOptions);
+        this.proposalChart.draw(this.proposalData, this.proposalOptions);
     }
-}
+} 

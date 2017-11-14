@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { SessionmanagementService } from "../session/session.management.service";
-import { SessiontimeoutComponent } from '../session/sessiontimeout.component';
+import { SessionManagementService } from "../session/session-management.service";
+import { SessionTimeoutComponent } from '../session/session-timeout.component';
 import { Constants } from '../constants/constants.service';
 import { DashboardService } from '../dashboard/dashboard.component.service';
 import { ExpandedviewService } from "./expandedview.service";
@@ -11,11 +11,14 @@ import { DataService } from './dataservice';
 @Component({
     selector: 'expanded-view',
     templateUrl: 'expandedview.component.html',
-    providers: [SessionmanagementService, Constants, DashboardService, ExpandedviewService],
+    providers: [SessionManagementService, Constants, DashboardService, ExpandedviewService],
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css']
 })
 
 export class ExpandedviewComponent implements OnInit{
+    awardsheading: string;
+    proposalheading:string;
+    piechartIndex: string;
     summaryResult: any={};
     piechartResult: any = {};
     morethanThreeNotification: boolean = false;
@@ -38,10 +41,12 @@ export class ExpandedviewComponent implements OnInit{
     sortBy: string = 'updateTimeStamp';
     sortOrder: string = "DESC";
     reverse: boolean = true;
+    summaryIndex: string;
+    summaryheading: string;
 
     @ViewChild('notificationBar') notificationBar: ElementRef;
     
-	constructor(private router: Router, private sessionService: SessionmanagementService, private constant: Constants, private dashboardService: DashboardService, private route: ActivatedRoute, private expandedViewService: ExpandedviewService,  public dataservice: DataService ) {debugger;
+	constructor(private router: Router, private sessionService: SessionManagementService, private constant: Constants, private dashboardService: DashboardService, private route: ActivatedRoute, private expandedViewService: ExpandedviewService,  public dataservice: DataService ) {
 	    this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
         this.outputPath = this.constant.outputPath;
@@ -51,7 +56,6 @@ export class ExpandedviewComponent implements OnInit{
             this.router.navigate( ['/expandedview'] );
         }
         document.addEventListener('mouseup', this.offClickHandler.bind(this));
-        console.log("data"+this.dataservice.piechartIndex);
 	}
 	
 	offClickHandler(event:any) {
@@ -60,44 +64,44 @@ export class ExpandedviewComponent implements OnInit{
         }
     }
 	
-	 ngOnInit() {debugger;
-	     console.log("servicedata"+this.dataservice.piechartIndex);
+	 ngOnInit() {
 	        this.adminStatus = localStorage.getItem( 'isAdmin' );
 	        this.userName = localStorage.getItem( 'currentUser' );
 	        this.fullName = localStorage.getItem( 'userFullname' );
+	        this.piechartIndex = localStorage.getItem( 'piechartIndex' );
+	        this.awardsheading= localStorage.getItem('exapandedViewAwardHeading');
+	        this.proposalheading= localStorage.getItem('exapandedViewProposalHeading');
+	        this.summaryIndex = localStorage.getItem('researchSummaryIndex');
+	        this.summaryheading=localStorage.getItem('expandedViewHeading');
 	        if ( this.adminStatus == 'true' ) {
 	            this.isAdmin = true;
 	        }
 	        
-	        if( this.dataservice.piechartIndex != null){
-	        this.expandedViewService.loadExpandedView( this.dataservice.sponsorCode, this.dataservice.personId, this.dataservice.piechartIndex ).subscribe(
+	       /* if( this.dataservice.piechartIndex != null){*/
+	           if( localStorage.getItem('piechartIndex') != null){
+	        this.expandedViewService.loadExpandedView( localStorage.getItem('sponsorCode'),  localStorage.getItem('personId'), localStorage.getItem('piechartIndex') ).subscribe(
                     data => {
                         this.piechartResult = data || [];
-                        if ( this.dataservice.piechartIndex == "AWARD" ) {
+                        if ( localStorage.getItem('piechartIndex') == "AWARD" ) {
                         this.serviceRequestList = this.piechartResult.awardViews;
-                        console.log( 'Award data: '+JSON.stringify(this.serviceRequestList) );
                         }
-                        if ( this.dataservice.piechartIndex == "PROPOSAL" ) {debugger;
+                        if ( localStorage.getItem('piechartIndex') == "PROPOSAL" ) {
                             this.serviceRequestList = this.piechartResult.proposalViews;
-                            console.log( 'Proposal data: '+JSON.stringify(this.serviceRequestList) );
                         }
                     } );
 	        }
-	        if( this.dataservice.researchSummaryIndex != null ){
-	            this.expandedViewService.loadExpandedSummaryView( this.dataservice.personId, this.dataservice.researchSummaryIndex ).subscribe(
+	        if(  localStorage.getItem('researchSummaryIndex') != null ){
+	            this.expandedViewService.loadExpandedSummaryView( localStorage.getItem('personId'), localStorage.getItem('researchSummaryIndex')).subscribe(
 	                    data => {
 	                        this.summaryResult = data || [];
-	                        if ( this.dataservice.researchSummaryIndex == "PROPOSALSSUBMITTED" ) { debugger;
+	                        if ( localStorage.getItem('researchSummaryIndex') == "PROPOSALSSUBMITTED" ) { 
 	                        this.serviceRequestList = this.summaryResult.proposalViews;
-	                        console.log( 'submitted proposals: '+JSON.stringify(this.serviceRequestList) );
 	                        }
-	                        if ( this.dataservice.researchSummaryIndex == "PROPOSALSINPROGRESS" ) {
+	                        if ( localStorage.getItem('researchSummaryIndex') == "PROPOSALSINPROGRESS" ) {
 	                            this.serviceRequestList = this.summaryResult.proposalViews;
-	                            console.log( 'Proposal data: '+JSON.stringify(this.serviceRequestList) );
 	                        }
-	                        if ( this.dataservice.researchSummaryIndex == "AWARDSACTIVE" ) {
+	                        if ( localStorage.getItem('researchSummaryIndex') == "AWARDSACTIVE" ) {
                                 this.serviceRequestList = this.summaryResult.awardViews;
-                                console.log( 'Proposal data: '+JSON.stringify(this.serviceRequestList) );
                             }
 	                    } );
 	            }

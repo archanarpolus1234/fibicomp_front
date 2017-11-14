@@ -21,16 +21,11 @@ import {GoogleAreachartComponent} from './research_summary/googleareachart.compo
 import {GooglePiChartComponent} from './research_summary/google.pichart.component';
 import {GoogleChartService} from './research_summary/google.chart.service';
 import {SessionManagementService} from './session/session-management.service';
-import {AwardElasticSearchComponent} from './elasticSearch/award.elasticsearch.component';
-import {DisclosureElasticSearchComponent} from './elasticSearch/disclosure.elasticsearch.component';
-import {IacucElasticSearchComponent} from './elasticSearch/iacuc.elasticsearch.component';
-import {IrbElasticSearchComponent} from './elasticSearch/irb.elasticsearch.component';
 
 import {AwardElasticsearchService} from './elasticSearch/award.elasticsearch.service';
 import {DisclosureElasticsearchService} from './elasticSearch/disclosure.elasticsearch.service';
 import {IacucElasticsearchService} from './elasticSearch/iacuc.elasticsearch.service';
 import {IrbElasticsearchService} from './elasticSearch/irb.elasticsearch.service';
-import {ProposalElasticSearchComponent} from './elasticSearch/proposal.elasticsearch.component';
 import {ProposalElasticsearchService} from './elasticSearch/proposal.elasticsearch.service';
 import {WarningModalComponent} from './session/warning-modal.component';
 import {TimeoutModalComponent} from './session/timeout-modal.component';
@@ -39,6 +34,7 @@ import {Constants} from './constants/constants.service';
 import {ExpandedviewComponent} from './research_summary/expandedview.component';
 import {DataService} from './research_summary/dataservice';
 import {ExpandedviewService} from './research_summary/expandedview.service';
+import {ElasticSearchComponent} from './elasticSearch/elastic-search.component';
 
 let appRoutes = [
   {path: '', component: LoginComponent},
@@ -60,16 +56,12 @@ let appRoutes = [
     ViewComponent,
     GoogleAreachartComponent,
     GooglePiChartComponent,
-    AwardElasticSearchComponent,
-    DisclosureElasticSearchComponent,
-    IacucElasticSearchComponent,
-    IrbElasticSearchComponent,
-    ProposalElasticSearchComponent,
     WarningModalComponent,
     TimeoutModalComponent,
     SessionTimeoutComponent,
     LogoutComponent,
-    ExpandedviewComponent
+    ExpandedviewComponent,
+    ElasticSearchComponent
   ],
   imports: [
     BrowserModule,

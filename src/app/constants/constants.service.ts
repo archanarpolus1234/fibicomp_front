@@ -25,28 +25,29 @@ export class Constants {
         //this.dashboardUrl = 'http://192.168.1.76:8080/fibi-comp/fibiDashBoard';
 
         this.summaryUrl = '/getResearchSummaryData';
-        //this.summaryUrl = 'http://192.168.1.76:8080/fibi-comp/getResearchSummaryData';
         //this.summaryUrl = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
+        //this.summaryUrl = 'http://192.168.1.76:8080/fibi-comp/getResearchSummaryData';
 
         this.notificationUrl = '/getUserNotification';
         //this.notificationUrl = 'http://demo.fibiweb.com/fibi-comp/getUserNotification';
         //this.notificationUrl = 'http://192.168.1.76:8080/fibi-comp/getUserNotification';
 
         this.logoutUrl = '/logout';
+        //this.logoutUrl = 'http://demo.fibiweb.com/fibi-comp/logout'; 
         //this.logoutUrl = 'http://192.168.1.76:8080/fibi-comp/logout';
-        //this.logoutUrl = 'http://demo.fibiweb.com/fibi-comp/logout';
-
-        //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
-        // this.outputPath = 'http://demo.fibiweb.com/kc-dev';
-        this.outputPath = 'http://192.168.1.76:8080/kc-dev';
-        //this.outputPath = 'http://192.168.1.72:8080/kc-dev';
 
         this.expandedViewUrl = '/getPieChartDataByType';
-        //this.expandedViewUrl = 'http://192.168.1.76:8080/fibi-comp/getPieChartDataByType';
         //this.expandedViewUrl = 'http://demo.fibiweb.com/fibi-comp/getPieChartDataByType';
+        // this.expandedViewUrl = 'http://192.168.1.76:8080/fibi-comp/getPieChartDataByType';
+
 
         this.expandedSummaryViewUrl = '/getDetailedResearchSummary';
-        //this.expandedSummaryViewUrl = 'http://192.168.1.76:8080/fibi-comp/getDetailedResearchSummary';
         //this.expandedSummaryViewUrl = 'http://demo.fibiweb.com/fibi-comp/getDetailedResearchSummary';
+        //this.expandedSummaryViewUrl = 'http://192.168.1.76:8080/fibi-comp/getDetailedResearchSummary';
+
+        //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
+        //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
+        this.outputPath = 'http://192.168.1.76:8080/kc-dev';
+        //this.outputPath = 'http://192.168.1.72:8080/kc-dev';
     }
 }

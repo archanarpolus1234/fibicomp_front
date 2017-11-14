@@ -157,38 +157,42 @@
 						<div class="row">
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'AWARD'">
-								<app-award-elastic-search
+								<app-elastic-search
 									(selected)="autocompleteAwardChanged($event)"
 									(found)="foundItemsChanged($event)"
-									(messageEvent)="receiveResultCard($event)"></app-award-elastic-search>
+									(messageEvent)="receiveResultCard($event)"
+									[tabposition]="currentPosition"></app-elastic-search>
 							</div>
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'PROPOSAL'">
-								<app-proposal-elastic-search
+								<app-elastic-search
 									(selected)="autocompleteProposalChanged($event)"
 									(found)="foundItemsChanged($event)"
-									(messageEvent)="receiveResultCard($event)"></app-proposal-elastic-search>
+									(messageEvent)="receiveResultCard($event)"
+									[tabposition]="currentPosition"></app-elastic-search>
 							</div>
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'IRB'">
-								<app-irb-elastic-search
-									(selected)="autocompleteIrbChanged($event)"
+								<app-elastic-search (selected)="autocompleteIrbChanged($event)"
 									(found)="foundItemsChanged($event)"
-									(messageEvent)="receiveResultCard($event)"></app-irb-elastic-search>
+									(messageEvent)="receiveResultCard($event)"
+									[tabposition]="currentPosition"></app-elastic-search>
 							</div>
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'IACUC'">
-								<app-iacuc-elastic-search
+								<app-elastic-search
 									(selected)="autocompleteIacucChanged($event)"
 									(found)="foundItemsChanged($event)"
-									(messageEvent)="receiveResultCard($event)"></app-iacuc-elastic-search>
+									(messageEvent)="receiveResultCard($event)"
+									[tabposition]="currentPosition"></app-elastic-search>
 							</div>
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'DISCLOSURE'">
-								<app-disclosure-elastic-search
+								<app-elastic-search
 									(selected)="autocompleteDisclosureChanged($event)"
 									(found)="foundItemsChanged($event)"
-									(messageEvent)="receiveResultCard($event)"></app-disclosure-elastic-search>
+									(messageEvent)="receiveResultCard($event)"
+									[tabposition]="currentPosition"></app-elastic-search>
 							</div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
 								<a id="advcanceSearch" href="#" class="linkButton"
@@ -197,7 +201,7 @@
 								</a>
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
 
@@ -497,11 +501,10 @@
 				<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> 
-						  <a
+						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DAwardDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'">
 								<i class="fa fa-plus"></i> Create Award
-						  </a>
+						</a>
 						</span>
 					</div>
 				</div>
@@ -576,11 +579,10 @@
 				<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> 
-						  <a
+						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-pd-krad/proposalDevelopment?viewId=PropDev-InitiateView&methodToCall=docHandler&command=initiate&__login_user='+userName+'&kcComp=true'">
 								<i class="fa fa-plus"></i> Create Proposal
-						  </a>
+						</a>
 						</span>
 					</div>
 				</div>
@@ -655,11 +657,9 @@
 				<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> 
-						  <a
+						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create IRB Protocol
-						  </a>
+								class="fa fa-plus"></i> Create IRB Protocol </a>
 						</span>
 					</div>
 				</div>
@@ -729,11 +729,9 @@
 				<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> 
-						  <a
+						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DIacucProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create IACUC Protocol
-						  </a>
+								class="fa fa-plus"></i> Create IACUC Protocol </a>
 						</span>
 					</div>
 				</div>
@@ -801,11 +799,9 @@
 				<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> 
-						  <a
+						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DCoiDisclosureDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create Disclosure
-						  </a>
+								class="fa fa-plus"></i> Create Disclosure </a>
 						</span>
 					</div>
 				</div>

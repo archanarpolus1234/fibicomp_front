@@ -2,13 +2,13 @@ import { Component, Output, Input, AfterViewInit, ViewChild, ViewChildren, Rende
 import { Router } from '@angular/router';
 import { LoginService } from './login.component.service';
 import { DashboardService } from '../dashboard/dashboard.component.service';
-import { SessionmanagementService } from '../session/session.management.service';
+import { SessionManagementService } from '../session/session-management.service';
 
 @Component( {
     selector: 'login-tpl',
     templateUrl: 'login.component.html',
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css'],
-    providers: [SessionmanagementService],
+    providers: [SessionManagementService],
     outputs: ['fullName']
 } )
 
@@ -28,7 +28,7 @@ export class LoginComponent implements AfterViewInit {
     firstName: string;
     lastName: string;
 
-    constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionmanagementService, private renderer: Renderer ) {
+    constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionManagementService, private renderer: Renderer ) {
         if ( !this.sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         } else {
@@ -46,23 +46,25 @@ export class LoginComponent implements AfterViewInit {
         this.loginService.login( this.credentials.username, this.credentials.password ).subscribe(
             data => {
                 this.result = data || [];
-                if ( this.result.login == true ) {
-                    this.fullName = this.result.fullName;
-                    this.personId = this.result.personID;
-                    this.isAdmin = this.result.unitAdmin;
-                    this.firstName = this.result.firstName;
-                    this.lastName = this.result.lastName;
-                    localStorage.setItem( 'currentUser', this.result.userName );
-                    localStorage.setItem( 'personId', this.personId );
-                    localStorage.setItem( 'userFullname', this.result.fullName );
-                    localStorage.setItem( 'firstName', this.result.firstName );
-                    localStorage.setItem( 'lastName', this.result.lastName );
-                    localStorage.setItem( 'isAdmin', String( this.isAdmin ) );
-                    this.router.navigate( ['/dashboard'] );
-                } else {
-                    this.loginFail = true;
-                    this.credentials.username = '';
-                    this.renderer.invokeElementMethod( this.input.nativeElement, 'focus' );
+                if(this.result != null){
+                    if ( this.result.login == true ) {
+                        this.fullName = this.result.fullName;
+                        this.personId = this.result.personID;
+                        this.isAdmin = this.result.unitAdmin;
+                        this.firstName = this.result.firstName;
+                        this.lastName = this.result.lastName;
+                        localStorage.setItem( 'currentUser', this.result.userName );
+                        localStorage.setItem( 'personId', this.personId );
+                        localStorage.setItem( 'userFullname', this.result.fullName );
+                        localStorage.setItem( 'firstName', this.result.firstName );
+                        localStorage.setItem( 'lastName', this.result.lastName );
+                        localStorage.setItem( 'isAdmin', String( this.isAdmin ) );
+                        this.router.navigate( ['/dashboard'] );
+                    } else {
+                        this.loginFail = true;
+                        this.credentials.username = '';
+                        this.renderer.invokeElementMethod( this.input.nativeElement, 'focus' );
+                    }
                 }
             },
             error => {

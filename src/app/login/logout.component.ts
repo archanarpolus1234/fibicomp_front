@@ -2,12 +2,12 @@ import { Component, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { DashboardService } from '../dashboard/dashboard.component.service';
-import { SessionmanagementService } from '../session/session.management.service';
+import { SessionManagementService } from '../session/session-management.service';
 
 @Component( {
     selector: 'app-logout-tpl',
     template: '',
-    providers: [SessionmanagementService, DashboardService],
+    providers: [SessionManagementService, DashboardService],
 } )
 
 export class LogoutComponent {
