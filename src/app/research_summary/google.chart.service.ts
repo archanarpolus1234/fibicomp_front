@@ -18,7 +18,7 @@ export class GoogleChartService implements OnInit{
           GoogleChartService.googleLoaded = true;
         google.charts.load( 'current',  {packages: [ 'corechart', 'bar' ]} );
       }
-      google.charts.setOnLoadCallback( () => this.drawGraph() );
+      google.charts.setOnLoadCallback( () => this.drawGraph());
     }
 
     drawGraph(){ }

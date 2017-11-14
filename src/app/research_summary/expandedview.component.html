@@ -133,11 +133,9 @@
 
 		<!-- Expanded view for awards from pichart -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-			*ngIf="this.dataservice.piechartIndex=='AWARD'">
-			<h5 class="pageHeader">{{this.dataservice.exapandedViewAwardHeading
-				}}</h5>
-			<div class="borderBox"
-				*ngIf="this.dataservice.piechartIndex=='AWARD'">
+			*ngIf="this.piechartIndex=='AWARD'">
+			<h5 class="pageHeader">{{this.awardsheading}}</h5>
+			<div class="borderBox">
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
@@ -190,10 +188,9 @@
 
 		<!-- Expanded view for propsals from pichart -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-			*ngIf="this.dataservice.piechartIndex=='PROPOSAL'">
-			<h5 class="pageHeader">{{this.dataservice.exapandedViewProposalHeading}}</h5>
-			<div class="borderBox"
-				*ngIf="this.dataservice.piechartIndex=='PROPOSAL'">
+			*ngIf="this.piechartIndex=='PROPOSAL'">
+			<h5 class="pageHeader">{{ this.proposalheading}}</h5>
+			<div class="borderBox">
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
@@ -247,8 +244,8 @@
 		<!-- Expanded view for submitted proposals -->
 
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-			*ngIf="this.dataservice.researchSummaryIndex=='PROPOSALSSUBMITTED'">
-			<h5 class="pageHeader">{{this.dataservice.expandedViewHeading }}</h5>
+			*ngIf=" this.summaryIndex=='PROPOSALSSUBMITTED'">
+			<h5 class="pageHeader">{{this.summaryheading }}</h5>
 			<div class="borderBox">
 				<table class="table table-responsive tableSkin">
 					<thead>
@@ -303,8 +300,8 @@
 
 		<!-- Expanded view for inprogress proposals -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-			*ngIf="this.dataservice.researchSummaryIndex=='PROPOSALSINPROGRESS'">
-			<h5 class="pageHeader">{{this.dataservice.expandedViewHeading }}</h5>
+			*ngIf=" this.summaryIndex=='PROPOSALSINPROGRESS'">
+			<h5 class="pageHeader">{{this.summaryheading}}</h5>
 			<div class="borderBox">
 				<table class="table table-responsive tableSkin">
 					<thead>
@@ -359,8 +356,8 @@
 
 		<!-- Expanded view for active awards -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-			*ngIf="this.dataservice.researchSummaryIndex=='AWARDSACTIVE'">
-			<h5 class="pageHeader">{{this.dataservice.expandedViewHeading }}</h5>
+			*ngIf=" this.summaryIndex=='AWARDSACTIVE'">
+			<h5 class="pageHeader">{{this.summaryheading}}</h5>
 			<div class="borderBox">
 				<table class="table table-responsive tableSkin">
 					<thead>

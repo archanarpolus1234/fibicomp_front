@@ -6,7 +6,6 @@ import { Constants } from '../constants/constants.service';
 
 @Injectable()
 export class DisclosureElasticsearchService {
-
     private _client: Client;
 
     constructor( private constant: Constants ) {
@@ -75,10 +74,10 @@ export class DisclosureElasticsearchService {
                         }
                     },
                     filter: {
-                        term: { 
+                        term: {
                             person_id: personId
                         }
-                      },
+                    },
                     sort: [{
                         _score: {
                             order: 'desc'

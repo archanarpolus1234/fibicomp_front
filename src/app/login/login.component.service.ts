@@ -17,8 +17,7 @@ export class LoginService {
     constructor( private http: Http, private constant: Constants ) { }
 
     login( userName: string, password: string ): Observable<JSON> {
-        var loginUrl = this.constant.loginUrl;
-        return this.http.post( loginUrl, { userName, password } )
+        return this.http.post( this.constant.loginUrl, { userName, password } )
             .map( res => res.json() )
             .catch( error => {
                 console.error( error.message || error );

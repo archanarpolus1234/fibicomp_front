@@ -795,3 +795,8 @@ cursor: pointer;
 	height:200px;
     overflow-y: scroll;
 }
+
+.noDataOnChart {
+	font-size: 0.8em;
+	text-align: center;
+}

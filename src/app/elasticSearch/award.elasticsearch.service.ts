@@ -6,12 +6,10 @@ import { Constants } from '../constants/constants.service';
 
 @Injectable()
 export class AwardElasticsearchService {
-    
   private _client: Client;
   
-
-  constructor( private constant: Constants ) {
-    if ( !this._client ) {
+  constructor(private constant: Constants) {
+    if (!this._client) {
         this._connect();
     }
   }
@@ -22,8 +20,8 @@ export class AwardElasticsearchService {
     });
   }
   
-  search( value, personId ): any { 
-    if ( value ) {
+  search(value, personId): any { 
+    if (value) {
       return this._client.search({
             index: 'awardfibiqa',
             size: 20 ,
