@@ -22,7 +22,7 @@ export class Constants {
 
         this.dashboardUrl = '/fibiDashBoard';
         //this.dashboardUrl = 'http://demo.fibiweb.com/fibi-comp/fibiDashBoard';
-        //this.dashboardUrl = 'http://192.168.1.76:8080/fibi-comp/fibiDashBoard';
+       // this.dashboardUrl = 'http://192.168.1.76:8080/fibi-comp/fibiDashBoard';
 
         this.summaryUrl = '/getResearchSummaryData';
         //this.summaryUrl = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
@@ -38,8 +38,7 @@ export class Constants {
 
         this.expandedViewUrl = '/getPieChartDataByType';
         //this.expandedViewUrl = 'http://demo.fibiweb.com/fibi-comp/getPieChartDataByType';
-        // this.expandedViewUrl = 'http://192.168.1.76:8080/fibi-comp/getPieChartDataByType';
-
+        //this.expandedViewUrl = 'http://192.168.1.76:8080/fibi-comp/getPieChartDataByType';
 
         this.expandedSummaryViewUrl = '/getDetailedResearchSummary';
         //this.expandedSummaryViewUrl = 'http://demo.fibiweb.com/fibi-comp/getDetailedResearchSummary';

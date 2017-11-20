@@ -1,8 +1,9 @@
 import { Component, Output, Input, AfterViewInit, ViewChild, ViewChildren, Renderer, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from './login.component.service';
-import { DashboardService } from '../dashboard/dashboard.component.service';
+import { LoginService } from './login.service';
+import { DashboardService } from '../dashboard/dashboard.service';
 import { SessionManagementService } from '../session/session-management.service';
+import {LoginCheckService} from '../common/login-check.service';
 
 @Component( {
     selector: 'login-tpl',
@@ -27,8 +28,9 @@ export class LoginComponent implements AfterViewInit {
     personId: string;
     firstName: string;
     lastName: string;
+    isLoginPage: boolean= false;
 
-    constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionManagementService, private renderer: Renderer ) {
+    constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionManagementService, private renderer: Renderer, private loginCheck: LoginCheckService) {
         if ( !this.sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         } else {
@@ -59,6 +61,7 @@ export class LoginComponent implements AfterViewInit {
                         localStorage.setItem( 'firstName', this.result.firstName );
                         localStorage.setItem( 'lastName', this.result.lastName );
                         localStorage.setItem( 'isAdmin', String( this.isAdmin ) );
+                        this.loginCheck.login();
                         this.router.navigate( ['/dashboard'] );
                     } else {
                         this.loginFail = true;

@@ -3,6 +3,8 @@ import {Router} from '@angular/router';
 import {Idle, DEFAULT_INTERRUPTSOURCES} from '@ng-idle/core';
 import {Keepalive} from '@ng-idle/keepalive';
 
+import {LoginCheckService} from '../common/login-check.service';
+
 const IDLE_TIME = 1200; // Watching for an event for 1200 seconds(20 min.)
 const EXIT_TIME = 300;  // Automatically logouts after 300 seconds(5 min.)
 
@@ -22,7 +24,7 @@ export class SessionTimeoutComponent implements OnDestroy {
   timerTime: number = Math.ceil(EXIT_TIME / 60);
   timeToLogout: number = Math.ceil((IDLE_TIME + EXIT_TIME) / 60);
 
-  constructor(private idle: Idle, private router: Router) {
+  constructor(private idle: Idle, private router: Router,private loginCheckService: LoginCheckService) {
     idle.setIdle(IDLE_TIME);
     idle.setTimeout(EXIT_TIME);
     idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
@@ -55,7 +57,7 @@ export class SessionTimeoutComponent implements OnDestroy {
     this.timeoutModal = $event;
     localStorage.removeItem('currentUser');
     localStorage.removeItem('userFullname');
-    this.router.navigate(['/loginpage']);
+    this.loginCheckService.logout();
   }
 
   receiveContinueMessage($event) {
@@ -63,4 +65,3 @@ export class SessionTimeoutComponent implements OnDestroy {
     this.idle.watch();
   }
 }
-

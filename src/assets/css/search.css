@@ -44,8 +44,8 @@ ul.sb-results-dropdown-menu {
     max-height: 400px;
     overflow-y: scroll; 
     background: white;
-    border-left: 1px solid #26A69A;
-    border-right: 1px solid #26A69A;
+    border-left: 1px #26A69A solid;
+    border-right: 1px #26A69A solid;
     border-radius: 10px;
 }
 
@@ -59,7 +59,7 @@ ul.sb-results-dropdown-menu > li {
 }
 ul.sb-results-dropdown-menu > li:hover {
 	 background: #e0eaff; 
-	 color: #00bcd4;
+	 color: #26A69A;
 }
 
 ul.sb-results-dropdown-menu > li span {
@@ -167,4 +167,3 @@ ul.sb-results-dropdown-menu > li:last-child {
 #pichart_divEvolution{
 	cursor:pointer;
 }
-
