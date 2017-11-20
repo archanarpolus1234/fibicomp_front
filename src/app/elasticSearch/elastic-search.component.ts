@@ -2,15 +2,15 @@ import { Component, ChangeDetectionStrategy, AfterViewInit, EventEmitter, OnChan
 import { Subject, Observable } from 'rxjs';
 import { FormGroup, FormControl, FormControlName } from '@angular/forms';
 
-import { AwardElasticsearchService } from './award.elasticsearch.service';
-import { DisclosureElasticsearchService } from './disclosure.elasticsearch.service';
-import { IacucElasticsearchService } from './iacuc.elasticsearch.service';
-import { IrbElasticsearchService } from './irb.elasticsearch.service';
-import { ProposalElasticsearchService } from "./proposal.elasticsearch.service";
+import { AwardElasticsearchService } from './award-elastic-search.service';
+import { DisclosureElasticsearchService } from './disclosure-elastic-search.service';
+import { IacucElasticsearchService } from './iacuc-elastic-search.service';
+import { IrbElasticsearchService } from './irb-elastic-search.service';
+import { ProposalElasticsearchService } from "./proposal-elastic-search.service";
 
 @Component( {
     selector: 'app-elastic-search',
-    templateUrl: './elasticsearch.component.html',
+    templateUrl: './elastic-search.component.html',
     styleUrls: ['../../assets/css/bootstrap.min.css',
         '../../assets/css/font-awesome.min.css',
         '../../assets/css/style.css',
@@ -52,7 +52,6 @@ export class ElasticSearchComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-
 
         this.seachText
             .valueChanges
