@@ -113,6 +113,119 @@
 				</table>
 			</div>
 		</div>
+		
+		<!-- Expanded view for Awarded proposals from donut chart -->
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+			*ngIf="this.donutchartIndex=='AWARDED'">
+			<h5 class="pageHeader">{{ this.donutAwardHeading}}</h5>
+			<div class="borderBox">
+				<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('proposalNumber',currentPosition)"
+								title="Click to sort by Proposal">Proposal <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
+							<th (click)="sortResult('title',currentPosition)"
+								title="Click to sort by Title" width="40%">Title <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
+							<th (click)="sortResult('leadUnit',currentPosition)"
+								title="Click to sort by Lead Unit">Sponsor <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
+							<th (click)="sortResult('sponsor',currentPosition)"
+								title="Click to sort by Sponsor">Proposal Type <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
+							<th (click)="sortResult('deadLinedate',currentPosition)"
+								title="Click to sort by Deadline">PI <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
+							<td>{{awardDetails[1]}}</td>
+							<td>{{awardDetails[2]}}</td>
+							<td>{{awardDetails[3]}}</td>
+							<td>{{awardDetails[4]}}</td>
+							<td>{{awardDetails[5]}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li><a title="Open {{awardDetails[0]}}"
+										[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails[1]+'%26docId%3D'+awardDetails[2]+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+											class="fa fa-eye"></i> </a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<!-- Expanded view for In progress propsals from donut chart -->
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+			*ngIf="this.donutchartIndex=='INPROGRESS'">
+			<h5 class="pageHeader">{{ this.donutProposalHeading}}</h5>
+			<div class="borderBox">
+				<table class="table table-responsive tableSkin">
+					<thead>
+						<tr>
+							<th (click)="sortResult('proposalNumber',currentPosition)"
+								title="Click to sort by Proposal">Proposal <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalNumber')}"></span></th>
+							<th (click)="sortResult('title',currentPosition)"
+								title="Click to sort by Title" width="40%">Title <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
+							<th (click)="sortResult('leadUnit',currentPosition)"
+								title="Click to sort by Lead Unit">Sponsor <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
+							<th (click)="sortResult('sponsor',currentPosition)"
+								title="Click to sort by Sponsor">Proposal Type <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
+							<th (click)="sortResult('deadLinedate',currentPosition)"
+								title="Click to sort by Deadline">PI <span
+								class="sortorder"
+								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'deadLinedate')}"></span></th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<td colspan=6>No Requests Found !</td>
+						</tr>
+						<tr
+							*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
+							<td>{{proposalDetails[1]}}</td>
+							<td>{{proposalDetails[2]}}</td>
+							<td>{{proposalDetails[3]}}</td>
+							<td>{{proposalDetails[4]}}</td>
+							<td>{{proposalDetails[5]}}</td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li><a title="Open {{proposalDetails[0]}}"
+										[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails[0]+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+											class="fa fa-eye"></i> </a></li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
 		<!-- Expanded view for submitted proposals -->
 
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"

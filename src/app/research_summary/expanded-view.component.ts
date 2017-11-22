@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { SessionManagementService } from "../session/session-management.service";
@@ -15,10 +15,13 @@ import { ExpandedViewDataService } from './expanded-view-data-service';
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css']
 })
 
-export class ExpandedviewComponent implements OnInit{
+export class ExpandedviewComponent implements OnInit, OnDestroy{
     awardsheading: string;
     proposalheading:string;
+    donutAwardHeading: string;
+    donutProposalHeading: string;
     piechartIndex: string;
+    donutchartIndex: string;
     summaryResult: any={};
     piechartResult: any = {};
     morethanThreeNotification: boolean = false;
@@ -65,14 +68,18 @@ export class ExpandedviewComponent implements OnInit{
     }
 	
 	 ngOnInit() {
+	        localStorage.setItem('click','true');
 	        this.adminStatus = localStorage.getItem( 'isAdmin' );
 	        this.userName = localStorage.getItem( 'currentUser' );
 	        this.fullName = localStorage.getItem( 'userFullname' );
 	        this.piechartIndex = localStorage.getItem( 'piechartIndex' );
+	        this.donutAwardHeading = localStorage.getItem( 'exapandedDonutViewAwardHeading' );
+	        this.donutProposalHeading = localStorage.getItem( 'exapandedDonutViewProposalHeading' );
 	        this.awardsheading= localStorage.getItem('exapandedViewAwardHeading');
 	        this.proposalheading= localStorage.getItem('exapandedViewProposalHeading');
 	        this.summaryIndex = localStorage.getItem('researchSummaryIndex');
-	        this.summaryheading=localStorage.getItem('expandedViewHeading');
+	        this.summaryheading = localStorage.getItem('expandedViewHeading');
+	        this.donutchartIndex = localStorage.getItem( 'donutChartIndex' );
 	        if ( this.adminStatus == 'true' ) {
 	            this.isAdmin = true;
 	        }
@@ -90,7 +97,7 @@ export class ExpandedviewComponent implements OnInit{
 	        }
 	        if(  localStorage.getItem('researchSummaryIndex') != null ){
 	            this.expandedViewService.loadExpandedSummaryView( localStorage.getItem('personId'), localStorage.getItem('researchSummaryIndex')).subscribe(
-	                    data => {
+	                    data => { 
 	                        this.summaryResult = data || [];
 	                        if ( localStorage.getItem('researchSummaryIndex') == "PROPOSALSSUBMITTED" ) { 
 	                        this.serviceRequestList = this.summaryResult.proposalViews;
@@ -103,8 +110,20 @@ export class ExpandedviewComponent implements OnInit{
                             }
 	                    } );
 	            }
+	        if( localStorage.getItem('donutChartIndex') != null){
+	            this.expandedViewService.loadDonutExpandedView( localStorage.getItem('sponsorCode'),  localStorage.getItem('personId'), localStorage.getItem('donutChartIndex') ).subscribe(
+	                    data => {
+	                        this.piechartResult = data || [];
+	                        if ( localStorage.getItem('donutChartIndex') == "AWARDED" ) {
+	                        this.serviceRequestList = this.piechartResult.awardViews;
+	                        }
+	                        if ( localStorage.getItem('donutChartIndex') == "INPROGRESS" ) {
+	                            this.serviceRequestList = this.piechartResult.proposalViews;
+	                        }
+	                    } );
+	            }    
 	}
-	    
+
     sortResult( sortFieldBy, current_Position ) {
         this.reverse = ( this.sortBy === sortFieldBy ) ? !this.reverse : false;
         if ( this.reverse ) {
@@ -113,5 +132,8 @@ export class ExpandedviewComponent implements OnInit{
             this.sortOrder = "ASC";
         }
         this.sortBy = sortFieldBy;
+    }
+    ngOnDestroy(){
+       localStorage.setItem('click','false');
     }
 }
