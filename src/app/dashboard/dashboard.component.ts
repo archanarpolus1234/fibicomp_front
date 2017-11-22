@@ -393,7 +393,7 @@ export class DashboardComponent implements OnInit {
             localStorage.setItem( 'researchSummaryIndex', "PROPOSALSSUBMITTED" );
             localStorage.setItem( 'expandedViewHeading', summaryView );
         }
-        if ( summaryView == 'Inprogress Proposal' ) {
+		if ( summaryView == 'In Progress Proposal' ) {
             localStorage.setItem( 'researchSummaryIndex', "PROPOSALSINPROGRESS" );
             localStorage.setItem( 'expandedViewHeading', summaryView );
         }

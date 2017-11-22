@@ -14,4 +14,3 @@ export class SessionManagementService implements CanActivate {
     return false;
   }
 }
-

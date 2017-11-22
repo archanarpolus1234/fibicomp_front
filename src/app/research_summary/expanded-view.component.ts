@@ -115,7 +115,7 @@ export class ExpandedviewComponent implements OnInit, OnDestroy{
 	                    data => {
 	                        this.piechartResult = data || [];
 	                        if ( localStorage.getItem('donutChartIndex') == "AWARDED" ) {
-	                        this.serviceRequestList = this.piechartResult.awardViews;
+	                        this.serviceRequestList = this.piechartResult.proposalViews;
 	                        }
 	                        if ( localStorage.getItem('donutChartIndex') == "INPROGRESS" ) {
 	                            this.serviceRequestList = this.piechartResult.proposalViews;
