@@ -131,11 +131,11 @@
 								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
 							<th (click)="sortResult('leadUnit',currentPosition)"
-								title="Click to sort by Lead Unit">Sponsor <span
+								title="Click to sort by Lead Unit">Type <span
 								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
 							<th (click)="sortResult('sponsor',currentPosition)"
-								title="Click to sort by Sponsor">Proposal Type <span
+								title="Click to sort by Sponsor">Activity Type <span
 								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
 							<th (click)="sortResult('deadLinedate',currentPosition)"
@@ -151,16 +151,16 @@
 							<td colspan=6>No Requests Found !</td>
 						</tr>
 						<tr
-							*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
-							<td>{{awardDetails[1]}}</td>
-							<td>{{awardDetails[2]}}</td>
-							<td>{{awardDetails[3]}}</td>
-							<td>{{awardDetails[4]}}</td>
-							<td>{{awardDetails[5]}}</td>
+							*ngFor="let awardedProposalDetails of serviceRequestList | slice:begin:end">
+							<td>{{awardedProposalDetails[1]}}</td>
+							<td>{{awardedProposalDetails[2]}}</td>
+							<td>{{awardedProposalDetails[7]}}</td>
+							<td>{{awardedProposalDetails[5]}}</td>
+							<td>{{awardedProposalDetails[3]}}</td>
 							<td>
 								<ul class="actionButtonGroup">
-									<li><a title="Open {{awardDetails[0]}}"
-										[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails[1]+'%26docId%3D'+awardDetails[2]+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+									<li><a title="Open {{awardedProposalDetails[0]}}"
+										[href]="outputPath+'/institutionalProposalHome.do?viewDocument=true&docId='+awardedProposalDetails[0]+'&docTypeName=InstitutionalProposalDocument&methodToCall=docHandler&docOpenedFromIPSearch=true&command=displayDocSearchView'"><i
 											class="fa fa-eye"></i> </a></li>
 								</ul>
 							</td>
@@ -187,11 +187,11 @@
 								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span></th>
 							<th (click)="sortResult('leadUnit',currentPosition)"
-								title="Click to sort by Lead Unit">Sponsor <span
+								title="Click to sort by Lead Unit">Type <span
 								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span></th>
 							<th (click)="sortResult('sponsor',currentPosition)"
-								title="Click to sort by Sponsor">Proposal Type <span
+								title="Click to sort by Sponsor"> Budget <span
 								class="sortorder"
 								[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span></th>
 							<th (click)="sortResult('deadLinedate',currentPosition)"
@@ -210,9 +210,9 @@
 							*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
 							<td>{{proposalDetails[1]}}</td>
 							<td>{{proposalDetails[2]}}</td>
-							<td>{{proposalDetails[3]}}</td>
-							<td>{{proposalDetails[4]}}</td>
 							<td>{{proposalDetails[5]}}</td>
+							<td>{{proposalDetails[6]}}</td>
+							<td>{{proposalDetails[3]}}</td>
 							<td>
 								<ul class="actionButtonGroup">
 									<li><a title="Open {{proposalDetails[0]}}"
