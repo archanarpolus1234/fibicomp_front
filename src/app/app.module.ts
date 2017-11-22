@@ -15,6 +15,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
 import { GoogleAreachartComponent } from './research_summary/google-area-chart.component';
 import { GooglePiChartComponent } from './research_summary/google-piechart.component';
+import { GoogleDonutChartComponent } from './research_summary/google-donut-chart.component';
 import { WarningModalComponent } from './session/warning-modal.component';
 import { TimeoutModalComponent } from './session/timeout-modal.component';
 import { SessionTimeoutComponent } from './session/session-timeout.component';
@@ -55,6 +56,7 @@ let appRoutes = [
         LoginComponent,
         GoogleAreachartComponent,
         GooglePiChartComponent,
+        GoogleDonutChartComponent,
         WarningModalComponent,
         TimeoutModalComponent,
         SessionTimeoutComponent,

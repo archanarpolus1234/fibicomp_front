@@ -314,6 +314,9 @@
 							<h4 class="borderBoxHeading">Expenditures Volume</h4>
 							<areachart></areachart>
 						</div>
+						<div class="borderBox">
+							<donut-chart></donut-chart>
+						</div>
 					</div>
 					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
@@ -388,9 +391,9 @@
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span>
 								</th>
-								<th (click)="sortResult('pi',currentPosition)"
+								<th (click)="sortResult('fullName',currentPosition)"
 									title="Click to sort by PI">PI <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'pi')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'fullName')}"></span>
 								</th>
 								<th>Action</th>
 							</tr>

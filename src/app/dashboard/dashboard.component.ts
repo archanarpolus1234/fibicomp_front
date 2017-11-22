@@ -106,8 +106,10 @@ export class DashboardComponent implements OnInit {
         } else {
             this.router.navigate( ['/dashboard'] );
         }
+        if(localStorage.getItem('click')=='true'){
+            this.router.navigate( ['/expandedview'] );
+        }
         document.addEventListener( 'mouseup', this.offClickHandler.bind( this ) );
-        localStorage.setItem( 'researchSummaryIndex', null );
         this.getResearchSummaryData();
     }
 
@@ -118,6 +120,7 @@ export class DashboardComponent implements OnInit {
     }
 
     ngOnInit() {
+        localStorage.setItem( 'researchSummaryIndex', null );
         this.adminStatus = localStorage.getItem( 'isAdmin' );
         this.userName = localStorage.getItem( 'currentUser' );
         this.fullName = localStorage.getItem( 'userFullname' );
@@ -385,6 +388,7 @@ export class DashboardComponent implements OnInit {
     }
     
     expandedView( summaryView ) {
+        localStorage.setItem('click','true');
         if ( summaryView == 'Submitted Proposal' ) {
             localStorage.setItem( 'researchSummaryIndex', "PROPOSALSSUBMITTED" );
             localStorage.setItem( 'expandedViewHeading', summaryView );

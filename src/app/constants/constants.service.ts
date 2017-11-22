@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 export class Constants {
 
     expandedSummaryViewUrl: string;
+    expandedDonutViewUrl: string;
     expandedViewUrl: string;
     index_url: string;
     loginUrl: string;
@@ -43,6 +44,11 @@ export class Constants {
         this.expandedSummaryViewUrl = '/getDetailedResearchSummary';
         //this.expandedSummaryViewUrl = 'http://demo.fibiweb.com/fibi-comp/getDetailedResearchSummary';
         //this.expandedSummaryViewUrl = 'http://192.168.1.76:8080/fibi-comp/getDetailedResearchSummary';
+        
+        this.expandedDonutViewUrl = '/getDonutChartDataBySponsor';
+        //this.expandedDonutViewUrl = 'http://demo.fibiweb.com/fibi-comp/getDonutChartDataBySponsor';
+        //this.expandedDonutViewUrl = 'http://192.168.1.76:8080/fibi-comp/getDonutChartDataBySponsor';
+
 
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';

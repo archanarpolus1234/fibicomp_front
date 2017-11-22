@@ -40,4 +40,19 @@ export class ExpandedviewService {
                 return Observable.throw( error.message || error )
             } );
     }
+    loadDonutExpandedView( statusCode: string, personId: string, donutChartIndex: string ): Observable<JSON> {
+        var params = {
+            sponsorCode: statusCode,
+            personId: personId,
+            donutChartIndex: donutChartIndex
+        };
+        var expandedDonutViewUrl = this.constant.expandedDonutViewUrl;
+        return this.http.post( expandedDonutViewUrl, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
 }

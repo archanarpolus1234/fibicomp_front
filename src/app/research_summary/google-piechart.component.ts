@@ -68,6 +68,7 @@ export class GooglePiChartComponent extends GoogleChartService {
               this.awardChart = this.createPiChart(document.getElementById('pichart_award'));
               this.awardChart.draw(this.awardData, this.awardOptions);
               google.visualization.events.addListener( this.awardChart, 'select', ( event ) => {
+                 
                  /* this.expandedViewDataservice.piechartIndex = 'AWARD';*/
                   localStorage.setItem('piechartIndex', 'AWARD');
                       var selection = this.awardChart.getSelection();
@@ -98,8 +99,6 @@ export class GooglePiChartComponent extends GoogleChartService {
                   this.proposalstatuscode.push( [this.proposalList[j][0], this.proposalList[j][1]] );
                   this.proposalStateList.push([this.proposalList[j][1], this.proposalList[j][2]]);
               }
-              console.log(this.proposalstatuscode);
-              console.log(this.proposalStateList);
               this.proposalData =  google.visualization.arrayToDataTable(this.proposalStateList);
               this.proposalOptions = {
                       title: 'Proposal by sponsor types',
