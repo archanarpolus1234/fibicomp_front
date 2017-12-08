@@ -87,11 +87,7 @@ export class IacucElasticsearchService {
                       }]
                   }
                 } ,
-                filter: {
-                    term: { 
-                        person_id: personId
-                    }
-                  },
+                
               sort: [{
                   _score: {
                     order: 'desc'

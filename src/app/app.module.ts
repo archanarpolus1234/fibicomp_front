@@ -13,9 +13,9 @@ import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { LoginComponent } from './login/login.component';
-import { GoogleAreachartComponent } from './research_summary/google-area-chart.component';
-import { GooglePiChartComponent } from './research_summary/google-piechart.component';
-import { GoogleDonutChartComponent } from './research_summary/google-donut-chart.component';
+import { ExpenditureVolumeChartComponent } from './research_summary/expenditure-volume-chart.component';
+import { ProposalBySponsorPieChartComponent } from './research_summary/proposal-by-sponsor-piechart.component';
+import { AwardedProposalDonutChartComponent } from './research_summary/awarded-proposal-donut-chart.component';
 import { WarningModalComponent } from './session/warning-modal.component';
 import { TimeoutModalComponent } from './session/timeout-modal.component';
 import { SessionTimeoutComponent } from './session/session-timeout.component';
@@ -23,6 +23,10 @@ import { ExpandedviewComponent } from './research_summary/expanded-view.componen
 import { ElasticSearchComponent } from './elasticSearch/elastic-search.component';
 import { FooterComponent } from './common/footer-tpl.component';
 import { HeaderComponent } from './common/header-tpl.component';
+import { LogoutComponent } from './login/logout.component';
+import { AwardBySponsorPieChartComponent } from './research_summary/award-by-sponsor-piechart.component';
+import { InProgressProposalDonutChartComponent } from './research_summary/in-progress-proposal-donut-chart.component';
+import {AwardComponent} from './award/award.component';
 
 import { LoginService } from './login/login.service';
 import { GoogleChartService } from './research_summary/google-chart.service';
@@ -38,13 +42,22 @@ import { ExpandedViewDataService } from './research_summary/expanded-view-data-s
 import { ExpandedviewService } from './research_summary/expanded-view.service';
 import { LoginCheckService } from './common/login-check.service';
 import { AuthGuard } from './common/auth-guard.service';
+import { DashboardConfigurationService } from './common/dashboard-configuration-service';
+import { AwardReportsAndTerms } from './award/award-reports-and-tabs/award-reports-and-terms.component';
+import { AwardHomeComponent } from './award/award-home/award-home.component';
+import { AwardHierarchyComponent } from './award/award-hierarchy/award-hierarchy.component';
+
 
 let appRoutes = [
-    { path: '', component: LoginComponent },
+    { path: '', component: LoginComponent},
 
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
     { path: 'loginpage', component: LoginComponent },
+    
+    {path: 'logout', component: LogoutComponent},
+    
+    {path: 'award', component: AwardComponent},
 
     { path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard]}
 ];
@@ -54,16 +67,23 @@ let appRoutes = [
         AppComponent,
         DashboardComponent,
         LoginComponent,
-        GoogleAreachartComponent,
-        GooglePiChartComponent,
-        GoogleDonutChartComponent,
+        ExpenditureVolumeChartComponent,
+        ProposalBySponsorPieChartComponent,
+        AwardedProposalDonutChartComponent,
         WarningModalComponent,
         TimeoutModalComponent,
         SessionTimeoutComponent,
         ExpandedviewComponent,
         ElasticSearchComponent,
         FooterComponent,
-        HeaderComponent
+        HeaderComponent,
+        AwardBySponsorPieChartComponent,
+        InProgressProposalDonutChartComponent,
+        LogoutComponent,
+        AwardComponent,
+        AwardReportsAndTerms,
+        AwardHomeComponent,
+        AwardHierarchyComponent
     ],
     imports: [
         BrowserModule,
@@ -79,7 +99,7 @@ let appRoutes = [
     providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
-        IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard],
+        IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService],
     bootstrap: [AppComponent]
 } )
 

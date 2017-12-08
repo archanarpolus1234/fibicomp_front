@@ -13,7 +13,6 @@ export class LoginCheckService {
     constructor( private router: Router ) {
         if ( localStorage.getItem( 'currentUser' ) != null ) { 
             this.loggedIn.next( true );
-            this.router.navigate( ['/dashboard'] );
         } else {
             this.loggedIn.next( false );
             this.router.navigate( ['/loginpage'] );
@@ -23,7 +22,6 @@ export class LoginCheckService {
     login() {
         if ( localStorage.getItem( 'currentUser' ) != null ) {
             this.loggedIn.next( true );
-            this.router.navigate( ['/dashboard'] );
         }
     }
 

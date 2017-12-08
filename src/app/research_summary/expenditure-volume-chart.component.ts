@@ -10,7 +10,7 @@ import { DashboardData } from '../dashboard/dashboard-data.service';
   styleUrls: ['../../assets/css/style.css']
 })
 
-export class GoogleAreachartComponent extends GoogleChartService {
+export class ExpenditureVolumeChartComponent extends GoogleChartService {
     private options;
     private data;
     private chart;
@@ -45,7 +45,11 @@ export class GoogleAreachartComponent extends GoogleChartService {
                           title: 'Year',
                           minValue: 0
                         },
-                        legend: { position: 'top', alignment: 'end'}
+                        legend: { position: 'top', alignment: 'end'},
+                        colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',
+                                 '#7BCFFF', '#2AB6F4', '#25C8D9', '#24A095', '#68B96A',
+                                 '#9CCC66', '#E5F37A', '#FFF15A', '#FDD154', '#FFA827',
+                                 '#FF7143', '#8C6E63', '#BDBDBD', '#78909C']
                       };
                        if(this.noData){
                            document.getElementById('chart_divEvolution').innerHTML = 'No data';  

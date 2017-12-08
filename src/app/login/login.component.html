@@ -20,7 +20,7 @@
 								[(ngModel)]="credentials.password" (keyup.enter)="login()" /></li>
 							<li><button class="btnSkin btnSkinPrimary" value="Login"
 									id="LOGIN-BTN" (click)="login()">Login</button></li>
-							<li id="login-failure" style="color: red;" *ngIf="loginFail"><p>Login
+							<li id="login-failure" *ngIf="loginFail"><p>Login
 									Error</p></li>
 						</ul>
 					</div>

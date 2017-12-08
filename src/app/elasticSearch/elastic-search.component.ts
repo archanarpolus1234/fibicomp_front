@@ -29,7 +29,9 @@ export class ElasticSearchComponent implements AfterViewInit {
 
     @Output() messageEvent = new EventEmitter<boolean>();
 
-    @Input() tabposition: string;
+    @Input() tabPosition: string;
+    
+    @Input() placeText: string;
 
     seachTextModel: string;
     active = false;
@@ -38,14 +40,11 @@ export class ElasticSearchComponent implements AfterViewInit {
     _results: Subject<Array<any>> = new Subject<Array<any>>();
     seachText: FormControl = new FormControl( '' );
     iconClass: string = 'fa fa-search';
-    placeText: string = 'Search: Award#, Account#, Title, PI Name, Lead Unit';
-    rolePerson: string;
     personId: string = localStorage.getItem( 'personId' );
 
     constructor( private es: AwardElasticsearchService, private ps: ProposalElasticsearchService,
         private irb: IrbElasticsearchService, private iacuc: IacucElasticsearchService,
         private dis: DisclosureElasticsearchService, private _ngZone: NgZone ) {
-        this.rolePerson = localStorage.getItem( 'firstName' ) + ' ' + localStorage.getItem( 'lastName' );
         this._results.subscribe(( res ) => {
             this.found.emit( res );
         } );
@@ -94,17 +93,15 @@ export class ElasticSearchComponent implements AfterViewInit {
 
                         /*ELASTIC SEARCH FOR AWARDS*/
 
-                        if ( this.tabposition == 'AWARD' ) {
+                        if ( this.tabPosition == 'AWARD' ) {
                             this.es.search( searchString, this.personId )
                                 .then(( searchResult ) => {
                                     this._ngZone.run(() => {
-
                                         hits_source = ( ( searchResult.hits || {} ).hits || [] )
                                             .map(( hit ) => hit._source );
                                         hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
                                             .map(( hit ) => hit.highlight );
                                         hits_source.forEach(( elmnt, j ) => {
-                                            if ( hits_source[j].pi_name === this.rolePerson ) {
                                                 awardNumber = hits_source[j].award_number;
                                                 title = hits_source[j].title;
                                                 account_number = hits_source[j].account_number;
@@ -140,7 +137,6 @@ export class ElasticSearchComponent implements AfterViewInit {
                                                     + lead_unit_name,
                                                     obj: test
                                                 } );
-                                            }
 
                                         } );
 
@@ -165,7 +161,7 @@ export class ElasticSearchComponent implements AfterViewInit {
 
                         /*ELASTIC SEARCH FOR PROPOSALS*/
 
-                        if ( this.tabposition == 'PROPOSAL' ) {
+                        if ( this.tabPosition == 'PROPOSAL' ) {
                             this.ps.search( searchString, this.personId )
                                 .then(( searchResult ) => {
                                     this._ngZone.run(() => {
@@ -239,7 +235,7 @@ export class ElasticSearchComponent implements AfterViewInit {
 
                         /*ELASTIC SEARCH FOR IRB*/
 
-                        if ( this.tabposition == 'IRB' ) {
+                        if ( this.tabPosition == 'IRB' ) {
                             this.irb.search( searchString, this.personId )
                                 .then(( searchResult ) => {
                                     this._ngZone.run(() => {
@@ -303,7 +299,7 @@ export class ElasticSearchComponent implements AfterViewInit {
 
                         /*ELASTIC SEARCH FOR IACUC*/
 
-                        if ( this.tabposition == 'IACUC' ) {
+                        if ( this.tabPosition == 'IACUC' ) {
                             this.iacuc.search( searchString, this.personId )
                                 .then(( searchResult ) => {
                                     this._ngZone.run(() => {
@@ -367,7 +363,7 @@ export class ElasticSearchComponent implements AfterViewInit {
 
                         /*ELASTIC SEARCH FOR DISCLOSURE*/
 
-                        if ( this.tabposition == 'IACUC' ) {
+                        if ( this.tabPosition == 'IACUC' ) {
                             this.dis.search( searchString, this.personId )
                                 .then(( searchResult ) => {
                                     this._ngZone.run(() => {

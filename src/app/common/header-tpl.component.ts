@@ -5,6 +5,8 @@ import {Observable} from 'rxjs/Observable';
 import {LoginCheckService} from '../common/login-check.service';
 import { DashboardService } from '../dashboard/dashboard.service';
 import { Constants } from '../constants/constants.service';
+import { DashboardConfigurationService } from './dashboard-configuration-service';
+import {DashboardComponent} from '../dashboard/dashboard.component';
 
 @Component({
     selector:'header-tpl',
@@ -29,17 +31,35 @@ export class HeaderComponent implements OnInit{
     isAdmin: boolean = false;
     outputPath: string;
     logo: string;
-    
+    showConfiguringOption: boolean = false;
+
+    expenditureVolumWidget : boolean = true; 
+    researchSummaryWidget : boolean = true; 
+    awardedProposalBySponsorWidget : boolean = true; 
+    awardBysponsorTypesWidget : boolean = true;
+    proposalBySponsorTypesWidget: boolean = true;
+    inProgressproposalBySponsorWidget : boolean = true;
+    message : string;
+
     @ViewChild('notificationBar') notificationBar: ElementRef;
-    constructor(private loginCheckService: LoginCheckService, private dashboardService: DashboardService, private router: Router, private constant: Constants) {
-        document.addEventListener( 'mouseup', this.offClickHandler.bind(this) );
+    @ViewChild('configurationBar') configurationBar: ElementRef;
+    
+    constructor(private loginCheckService: LoginCheckService, private dashboardService: DashboardService, private router: Router, private constant: Constants, private dashboardConfigurationService: DashboardConfigurationService) {
+        document.addEventListener( 'mouseup', this.offClickHandler.bind(this));
+        document.addEventListener( 'mouseup', this.offClickHandlerDashboardConf.bind(this));
         this.outputPath = this.constant.outputPath;
         this.logo = './assets/images/logo.png';
     }
     
-    offClickHandler(event: any) {
+    offClickHandler(event: any) { 
         if (!this.notificationBar.nativeElement.contains(event.target) ) {
             this.toggleBox = false;
+        }
+    }
+    
+    offClickHandlerDashboardConf(event: any) {
+        if (!this.configurationBar.nativeElement.contains(event.target) ) {
+            this.showConfiguringOption = false;
         }
     }
     
@@ -50,7 +70,25 @@ export class HeaderComponent implements OnInit{
        this.fullName = localStorage.getItem('userFullname');
        if (this.adminStatus == 'true') {
            this.isAdmin = true;
-       }
+       }  
+       this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.subscribe(status=>{
+           this.expenditureVolumWidget = status;
+       });
+       this.dashboardConfigurationService.currentdashboardResearchSummaryWidget.subscribe(status=>{
+           this.researchSummaryWidget = status;
+       });
+       this.dashboardConfigurationService.currentdashboardawardedProposalBySponsorWidget.subscribe(status=>{
+           this.awardedProposalBySponsorWidget = status;
+       });
+       this.dashboardConfigurationService.currentdashboardAwardBysponsorTypesWidget.subscribe(status=>{
+           this.awardBysponsorTypesWidget = status;
+       });
+       this.dashboardConfigurationService.currentdashboardproposalBySponsorTypesWidget.subscribe(status=>{
+           this.proposalBySponsorTypesWidget = status;
+       });
+       this.dashboardConfigurationService.currentdashboardinProgressproposalBySponsorWidget.subscribe(status=>{
+           this.inProgressproposalBySponsorWidget = status;
+       });
     }
 	
     logout() {
@@ -69,9 +107,9 @@ export class HeaderComponent implements OnInit{
             } );
     }
     
-    userNotification(event: any) {
+    userNotification(event: any) {  debugger;
         event.preventDefault();
-        this.toggleBox = !this.toggleBox;
+        this.toggleBox = !this.toggleBox;   debugger;
         this.showmoreClicked = false;
         this.showmoreNeeded = true;
         this.first3notificationList = [];
@@ -103,5 +141,35 @@ export class HeaderComponent implements OnInit{
     myDashboard( event: any ) {
         event.preventDefault();
         this.router.navigate( ['/dashboard'] );
+    }
+    
+    configureDashboard(event : any) {
+        event.preventDefault();
+        this.showConfiguringOption = !this.showConfiguringOption;
+    }
+    
+    public onChangeOfexpenditureVolumWidget(value:boolean){
+        localStorage.setItem('dashboardExpenditureVolumeWidget', String(value));
+        this.dashboardConfigurationService.changeDashboardExpenditureVolumeWidget(value);
+    }
+    public onChangeOfresearchSummaryWidget(value:boolean){
+        localStorage.setItem('dashboardResearchSummaryWidget', String(value));
+        this.dashboardConfigurationService.changeDashboardResearchSummaryWidgett(value);
+    }
+    public onChangeOfawardedProposalBySponsorWidget(value:boolean){
+        localStorage.setItem('dashboardawardedProposalBySponsorWidget', String(value));
+        this.dashboardConfigurationService.changeDashboardawardedProposalBySponsorWidget(value);
+    }
+    public onChangeOfawardBysponsorTypesWidget(value:boolean){
+        localStorage.setItem('dashboardAwardBysponsorTypesWidget', String(value));
+        this.dashboardConfigurationService.changeDashboardAwardBysponsorTypesWidget(value);
+    }
+    public onChangeOfinProgressproposalBySponsorWidget(value:boolean){
+        localStorage.setItem('dashboardinProgressproposalBySponsorWidget', String(value));
+        this.dashboardConfigurationService.changeDashboardinProgressproposalBySponsorWidget(value);
+    }
+    public onChangeOfproposalBySponsorTypesWidget(value:boolean){
+        localStorage.setItem('dashboardproposalBySponsorTypesWidget', String(value));
+        this.dashboardConfigurationService.changeDashboardproposalBySponsorTypesWidget(value);
     }
 }

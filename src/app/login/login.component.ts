@@ -31,7 +31,7 @@ export class LoginComponent implements AfterViewInit {
     isLoginPage: boolean= false;
 
     constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionManagementService, private renderer: Renderer, private loginCheck: LoginCheckService) {
-        if ( !this.sessionService.canActivate() ) {
+     if ( !this.sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         } else {
             this.router.navigate( ['/dashboard'] );
@@ -49,6 +49,7 @@ export class LoginComponent implements AfterViewInit {
             data => {
                 this.result = data || [];
                 if(this.result != null){
+                    console.log( this.result);
                     if ( this.result.login == true ) {
                         this.fullName = this.result.fullName;
                         this.personId = this.result.personID;
