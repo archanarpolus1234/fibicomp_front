@@ -1,0 +1,253 @@
+
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="row">
+
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                         <div class="set">
+                                <div class="setHead">
+                                    <span>Approved Special Items</span><a href="#" (click)="showApprovedSpecialItemsTab($event)"><i class="fa fa-chevron-circle-up"></i></a>
+                                </div>
+                                <div class="setBody" *ngIf="showApprovedSpecialItems">
+                                    <p>
+                                    <label>Equipment</label>
+                                </p>
+                                    <table class="table tableSkin">
+                                        <thead>
+                                            <tr>
+                                                <th>Item</th>
+                                                <th>Vendor</th>
+                                                <th>Model</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>SparcStation 20</td>
+                                                <td>Sun Microsystems Computer Corp</td>
+                                                <td>S20TX1-21-32-p46</td>
+                                                <td>$3,752,22.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Mac 8100/80/CD Comp</td>
+                                                <td>Apple Computer,Inc.</td>
+                                                <td>M1884LL/A</td>
+                                                <td>$3,742,22.00</td>
+                                            </tr>
+                                            <tr>
+                                                <td>VRC21-PA-21* Color Mon</td>
+                                                <td>Mitsubishi</td>
+                                                <td>THN9105-5KTK</td>
+                                                <td>$1,733.00</td>
+                                            </tr>
+                                           
+
+                                        </tbody>
+                                    </table>
+                                    
+                                   <br> <p>
+                                    <label>Foreign Travel</label></p>
+                                    <table class="table  tableSkin">
+                                        <thead>
+                                            <tr>
+                                                <th>Traveller</th>
+                                                <th>Destination</th>
+                                                <th>Date From</th>
+                                                <th>Date To</th>
+                                                <th>Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Bradt, Hale Van Dorn</td>
+                                                <td>Italy</td>
+                                                <td>05/24/1999</td>
+                                                <td>07/16/1999</td>
+                                                <td>$3210.00</td>
+                                            </tr>
+                                            <tr>
+                                                   <td>Bradt, Hale Van Dorn</td>
+                                                <td>Italy</td>
+                                                <td>11/03/1998</td>
+                                                <td>11/06/1998</td>
+                                                <td>$1440.00</td>
+                                            </tr>
+                                            <tr>
+                                                  <td>Levin, Alan Helinski</td>
+                                                <td>Finland</td>
+                                                <td>09/24/1995</td>
+                                                <td>09/30/1995</td>
+                                                <td>$2000.00</td>
+                                            </tr>
+                                           
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                       
+                          
+                            <div class="set">
+                                <div class="setHead">
+                                    <span>Terms</span><a href="#" (click)="showTermsTab($event)"><i class="fa fa-chevron-circle-up"></i></a>
+                                </div>
+                                <div class="setBody" *ngIf="showTerms">
+                                    <p>
+                                        <label>Equipment Approval Terms</label><br><br>
+                                        All equipment purchases require prior approval, See Approved Equipment for list located at Special Approval on the Payment, Reports, and Terms Tab of award. <br><br>
+                                        All equipment over $1000 requires DD 1419 screening<br><br> 
+                                        
+                                    </p>
+                                    <p>
+                                        <label>Invention Terms</label><br><br>
+                                        FAR 52.227-11,Patenet Rights-Retention by Contractor<br><br>
+                                        Title to MIT;Non-exclusive,royalty-free license to Government
+                                    </p>
+                                    <p>
+                                        <label>Prior Approval Terms</label><br><br>
+                                        Prior approval required for change in key personnel. 
+                                        <br> 
+                                        Prior approval required for no-cost extensions;see award for details and deadlines.
+                                        <br>
+                                        Prior approval required for consultant costs.
+                                        
+                                        <br><br>
+                                        Regulations regarding export control may apply if the research undertaken is cited in either the Export Administration Regulations(EAR)  or the International Traffic in Arms Regulation(ITAR).
+                                        <br><br>
+                                        See memo from R.Brown and J.Norris dated 1/25/02 (available at http://web.mit.edu/osp/www/Export_Controls/index_files/resource.htm for more information).
+                                    </p>
+                                </div>
+                            </div>
+                           
+                        </div>
+                    
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                       <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                           <div class="set">
+
+                                <div class="setHead">
+                                    <span>Payment & Invoice</span><a href="#" (click)="showPaymentAndInvoiceTab($event)"><i class="fa fa-chevron-circle-up"></i></a>
+                                </div>
+                                <div class="setBody" *ngIf="showPaymentAndInvoice">
+                                    <div class="row">
+                                           <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                                     <p>
+                                        <label>Payment Basis</label><br><br>
+                                        No payment 
+                                    </p>
+                                </div>
+                                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
+                                     <p id="paymethod">
+                                        <label>Payment Method</label><br><br>
+                                        No payment 
+                                    </p>
+                                </div>
+                                </div>
+
+                                     <table class="table tableSkin subHeads">
+                                        <p>
+                                         <label>Payment and Invoice Requirement</label><br>
+                                        <thead>
+                                            <tr>
+                                                <th>Type</th>
+                                                <th>Frequency</th>
+                                                <th>Frequency Basis</th>
+                                                <th>OSP Distribution</th>
+                                                <th>Due Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           <tr>
+                                              
+                                           </tr>
+                                            <tr>
+                                                <td class="report_type">Final</td>
+                                                <td>At Expiration</td>
+                                                <td>Project End Date</td>
+                                                <td>Report</td>
+                                                <td>Due date</td>
+                                            </tr>
+                                            
+                                        </tbody>
+                                    </p>
+                                    </table>
+                                </div>
+                           </div>
+                          
+                            <div class="set">
+                                <div class="setHead">
+                                    <span>Reporting</span><a href="#" (click)="showReportingTab($event)"><i class="fa fa-chevron-circle-up"></i></a>
+                                </div>
+                                <div class="setBody" *ngIf="showReports">
+                                    <table class="table tableSkin subHeads">
+                                        <thead>
+                                            <tr>
+                                                <th>TYPE</th>
+                                                <th>FREQUENCY</th>
+                                                <th>FREQUENCY BASIS</th>
+                                                <th>OSP DISTRIBUTION</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           <tr>
+                                               <td colspan="4">
+                                                   <label>Intellectual Property</label>
+                                               </td>
+                                           </tr>
+                                            <tr>
+                                                <td class="report_type">Final</td>
+                                                <td>At Expiration</td>
+                                                <td>Project End Date</td>
+                                                <td>Report</td>
+                                                <td>Due Date</td>
+                                            </tr>
+                                            <tr>
+                                               <td colspan="4">
+                                                   <label>Property</label>
+                                               </td>
+                                           </tr>
+                                               <tr>
+                                                <td class="report_type">Final</td>
+                                                <td>30 Days after Expiration</td>
+                                                <td>Project End Date</td>
+                                                <td>Report</td>
+                                            </tr>
+                                            <tr>
+                                               <td colspan="4">
+                                                   <label>Property</label>
+                                               </td>
+                                           </tr>
+                                            <tr>
+                                                <td class="report_type">NF 1018</td>
+                                                <td>Annual</td>
+                                                <td>As Required</td>
+                                                <td>Letter only</td>
+                                            </tr>
+                                            <tr>
+                                               <td colspan="4">
+                                                   <label>Intellectual Property</label>
+                                               </td>
+                                           </tr>
+                                            <tr>
+                                                <td class="report_type">Progress/Status</td>
+                                                <td>Annual</td>
+                                                <td>Project Start Date</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                               <td colspan="4">
+                                                   <label>Financial</label>
+                                               </td>
+                                           </tr>
+                                            <tr>
+                                                <td class="report_type">SF 272 Cash Transaction Report</td>
+                                                <td>At Expiration</td>
+                                                <td>Obligation End Date</td>
+                                                <td>Report</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            

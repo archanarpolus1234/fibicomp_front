@@ -46,6 +46,13 @@ export class ExpandedviewComponent implements OnInit, OnDestroy{
     reverse: boolean = true;
     summaryIndex: string;
     summaryheading: string;
+    nullPiechartAwardData: boolean = false;
+    nullPiechartProposalData: boolean = false;
+    nullDonutchartAwardData: boolean = false;
+    nullDonutchartInprogressData: boolean = false;
+    nullResearchSummaryAwardData: boolean = false;
+    nullResearchSummaryProposalSubmittedData: boolean = false;
+    nullResearchSummaryProposalInprogressData: boolean = false;
 
     @ViewChild('notificationBar') notificationBar: ElementRef;
     
@@ -89,9 +96,15 @@ export class ExpandedviewComponent implements OnInit, OnDestroy{
                         this.piechartResult = data || [];
                         if ( localStorage.getItem('piechartIndex') == "AWARD" ) {
                         this.serviceRequestList = this.piechartResult.awardViews;
+                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0) {
+                            this.nullPiechartAwardData = true;
+                        }
                         }
                         if ( localStorage.getItem('piechartIndex') == "PROPOSAL" ) {
                             this.serviceRequestList = this.piechartResult.proposalViews;
+                            if (this.serviceRequestList == null || this.serviceRequestList.length == 0) {
+                                this.nullPiechartProposalData = true;
+                            }
                         }
                     } );
 	        }
@@ -101,24 +114,39 @@ export class ExpandedviewComponent implements OnInit, OnDestroy{
 	                        this.summaryResult = data || [];
 	                        if ( localStorage.getItem('researchSummaryIndex') == "PROPOSALSSUBMITTED" ) { 
 	                        this.serviceRequestList = this.summaryResult.proposalViews;
+	                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0) {
+	                            this.nullResearchSummaryProposalSubmittedData = true;
+	                        }
 	                        }
 	                        if ( localStorage.getItem('researchSummaryIndex') == "PROPOSALSINPROGRESS" ) {
 	                            this.serviceRequestList = this.summaryResult.proposalViews;
+	                            if (this.serviceRequestList == null || this.serviceRequestList.length == 0) {
+	                                this.nullResearchSummaryProposalInprogressData = true;
+	                            }
 	                        }
 	                        if ( localStorage.getItem('researchSummaryIndex') == "AWARDSACTIVE" ) {
                                 this.serviceRequestList = this.summaryResult.awardViews;
+                                if (this.serviceRequestList == null || this.serviceRequestList.length == 0) {
+                                    this.nullResearchSummaryAwardData = true;
+                                }
                             }
 	                    } );
 	            }
-	        if( localStorage.getItem('donutChartIndex') != null){
+	        if( localStorage.getItem('donutChartIndex') != null){  debugger;
 	            this.expandedViewService.loadDonutExpandedView( localStorage.getItem('sponsorCode'),  localStorage.getItem('personId'), localStorage.getItem('donutChartIndex') ).subscribe(
 	                    data => {
 	                        this.piechartResult = data || [];
 	                        if ( localStorage.getItem('donutChartIndex') == "AWARDED" ) {
 	                        this.serviceRequestList = this.piechartResult.proposalViews;
+	                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0) {
+	                            this.nullDonutchartAwardData = true;
+	                        }
 	                        }
 	                        if ( localStorage.getItem('donutChartIndex') == "INPROGRESS" ) {
 	                            this.serviceRequestList = this.piechartResult.proposalViews;
+	                            if (this.serviceRequestList == null || this.serviceRequestList.length == 0) {
+	                                this.nullDonutchartInprogressData = true;
+	                            }
 	                        }
 	                    } );
 	            }    

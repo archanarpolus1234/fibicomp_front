@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { SlicePipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { Constants } from '../constants/constants.service';
 import { ExpandedViewDataService } from '../research_summary/expanded-view-data-service';
 import { DashboardData } from '../dashboard/dashboard-data.service';
 import { ExpandedviewService } from '../research_summary/expanded-view.service';
+import { DashboardConfigurationService } from '../common/dashboard-configuration-service';
 
 
 @Component( {
@@ -97,29 +98,50 @@ export class DashboardComponent implements OnInit {
     private sponsorType: string;
     private proposalType: string;
     private isLoginPage: boolean = true;
-
-    @ViewChild( 'notificationBar' ) notificationBar: ElementRef;
-    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData ) {
+    private nullAwardData : boolean = false;
+    private nullProposalData : boolean = false;
+    private nullIrbData : boolean = false;
+    private nullIacucData : boolean = false;
+    private nullDisclosureData : boolean = false;
+    private dashboardHeaderData : any[];
+    
+    public dashboardExpenditureVolumeWidget : boolean = true;
+    public dashboardResearchSummaryWidget : boolean = true;
+    public dashboardawardedProposalBySponsorWidget : boolean = true;
+    public dashboardAwardBysponsorTypesWidget : boolean = true;
+    public dashboardproposalBySponsorTypesWidget : boolean = true;
+    public dashboardinProgressproposalBySponsorWidget : boolean = true;
+    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData,private dashboardConfigurationService: DashboardConfigurationService ) {
         this.outputPath = this.constant.outputPath;
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
-        } else {
-            this.router.navigate( ['/dashboard'] );
         }
         if(localStorage.getItem('click')=='true'){
             this.router.navigate( ['/expandedview'] );
         }
-        document.addEventListener( 'mouseup', this.offClickHandler.bind( this ) );
         this.getResearchSummaryData();
     }
-
-    offClickHandler( event: any ) {
-        if ( !this.notificationBar.nativeElement.contains( event.target ) ) {
-            this.toggleBox = false;
-        }
-    }
-
+    
     ngOnInit() {
+        this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.subscribe(status=>{
+            this.dashboardExpenditureVolumeWidget = status;
+        });
+        this.dashboardConfigurationService.currentdashboardResearchSummaryWidget.subscribe(status=>{
+            this.dashboardResearchSummaryWidget = status;
+        });
+        this.dashboardConfigurationService.currentdashboardawardedProposalBySponsorWidget.subscribe(status=>{
+            this.dashboardawardedProposalBySponsorWidget = status;
+        });
+        this.dashboardConfigurationService.currentdashboardAwardBysponsorTypesWidget.subscribe(status=>{
+            this.dashboardAwardBysponsorTypesWidget = status;
+        });
+        this.dashboardConfigurationService.currentdashboardproposalBySponsorTypesWidget.subscribe(status=>{
+            this.dashboardproposalBySponsorTypesWidget = status;
+        });
+        this.dashboardConfigurationService.currentdashboardinProgressproposalBySponsorWidget.subscribe(status=>{
+            this.dashboardinProgressproposalBySponsorWidget = status;
+        });
+        
         localStorage.setItem( 'researchSummaryIndex', null );
         this.adminStatus = localStorage.getItem( 'isAdmin' );
         this.userName = localStorage.getItem( 'currentUser' );
@@ -139,18 +161,34 @@ export class DashboardComponent implements OnInit {
                     this.totalPage = this.result.totalServiceRequest;
                     if ( this.currentPosition == "AWARD" ) {
                         this.serviceRequestList = this.result.awardViews;
+                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                            this.nullAwardData = true;
+                        }
                     }
                     if ( this.currentPosition == "PROPOSAL" ) {
                         this.serviceRequestList = this.result.proposalViews;
+                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                            this.nullProposalData = true;
+                        }
                     }
                     if ( this.currentPosition == "IRB" ) {
                         this.serviceRequestList = this.result.protocolViews;
+                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                            this.nullIrbData = true;
+                        }
                     }
                     if ( this.currentPosition == "IACUC" ) {
                         this.serviceRequestList = this.result.iacucViews;
+                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                            this.nullIacucData = true;
+                        }
                     }
                     if ( this.currentPosition == "DISCLOSURE" ) {
                         this.serviceRequestList = this.result.disclosureViews;
+                        console.log(this.serviceRequestList.length);
+                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                            this.nullDisclosureData = true;
+                        }
                     }
                     this.userName = localStorage.getItem( 'currentUser' );
                     this.fullName = localStorage.getItem( 'userFullname' );

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
 
 import { LoginCheckService } from './common/login-check.service';
 import { SessionManagementService } from './session/session-management.service';
@@ -17,11 +17,18 @@ export class AppComponent implements OnInit {
     isLoggedIn$: Observable<Boolean>;
 
     constructor( private loginCheckService: LoginCheckService, private sessionService: SessionManagementService, private router: Router ) {
+        router.events.subscribe(event => { 
+            if (event instanceof NavigationEnd ) {
+              if(event.url=='/logout'){
+                  localStorage.removeItem('currentUser');
+                  this.loginCheckService.logout();
+                  this.router.navigate( ['/loginpage'] );
+              }
+            }
+          });
         if ( !sessionService.canActivate() ) { 
             this.router.navigate( ['/loginpage'] );
-        } else {
-            this.router.navigate( ['/dashboard'] );
-        }
+        } 
     }
 
     ngOnInit(): void {

@@ -80,11 +80,7 @@ export class AwardElasticsearchService {
                           }]
                       }
                     },
-                    filter: {
-                        term: { 
-                            person_id: personId
-                        }
-                      },
+                   
                   sort: [{
                       _score: {
                         order: 'desc'

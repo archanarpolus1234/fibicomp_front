@@ -39,7 +39,7 @@ body{
     background: #fefefe;
     font-family: "Roboto", "Helvetica Neue", "Segoe UI", Arial, Sans-Serif;
 }
-
+.pageMinHeight{min-height: 100%;}
 .slideMenu {
     position: fixed;
     left: 0;
@@ -194,6 +194,7 @@ header a:hover{
     border: 1px #E9E9E9 solid;
     padding: 15px 10px;
     margin-bottom: 15px;
+    
 }
 
 .borderBoxHeading {
@@ -655,7 +656,7 @@ input[type="text"] {}
 /* Qsearch result card */
 .viewMode {}
 
-.viewMode>div>div>label {
+.viewMode>div>div>label, .setBody label {
     color: #26A69A;
     font-size: .85em;
     margin-bottom: 2px;
@@ -730,6 +731,195 @@ transition: display .25s}
     font-size: .9em;
     margin: 14px 0 12px 0;
     color: #424242;
+}
+
+.pullSide {
+    margin-right: -10px;
+    margin-left: -10px;
+    margin-top: -11px;    
+}
+.tabsIcon {
+    list-style: none;
+    padding: 0;
+    border-bottom: 1px #26A69A solid;
+}
+
+.tabsIcon>li {
+    display: inline-block;
+    margin: 0 1px 0 0;
+}
+
+.tabsIcon>li>a>i {
+    display: inline-block;
+    font-size: 1.2em;
+    margin-right: 0;
+    vertical-align: middle;
+}
+
+.tabsIcon>li>a {
+    color: #9E9E9E;
+    padding: 8px 15px 4px;
+    display: block;
+    text-decoration: none;
+}
+
+.tabsIcon>li.active a,.tabsIcon>li:hover a {
+    color: #FFFFFF;
+    background: #26A69A;
+}
+.tabsIcon>li.active a>span,.tabsIcon>li:hover a>span{
+display:inline-block;
+}
+
+.tabsIcon>li>a>span {
+    font-size:.8em;
+    display: none;
+}
+
+.tabsIcon>li.active a>i, .tabsIcon>li:hover a>i {
+    margin-right: 5px;
+}
+.borderBox>.tableSkin>tbody>tr:nth-child(1)>td {
+    border-top: 0;
+}
+.grid2 label{
+    color: #26A69A;
+    margin-bottom: .2em;
+    font-size: 1.1em;
+}
+.grid2>tbody>tr:nth-child(odd) td {
+    background: #fafafa;
+}
+.grid2>tbody>tr:nth-child(odd) td {
+    background: #fafafa;
+}
+
+.grid2 {
+    margin-bottom: -14px;
+}
+
+.grid2>tbody>tr>td {
+    color: #505050;
+}
+.setBody {
+    margin-bottom: 1em;
+}
+.setBody>p {
+    font-size: .8em;
+    color: #636363;
+    line-height: 17px;
+    margin-bottom: 1.5rem;
+}
+
+.setBody>p>label {
+    font-size: 1.1em;
+    font-weight:700;
+}
+
+.setHead {
+    margin: 0 0 5px;
+    position: relative;
+    cursor: pointer;
+}
+
+.setHead>span {
+    font-size: .75em;
+    background: #FEFEFE;
+    display: inline-block;
+    padding: 0px 5px 0px 0;
+    font-weight: bold;
+    color: #252525;
+}
+
+.setHead:after {
+    content: "";
+    height: 1px;
+    background: #BDBDBD;
+    position: absolute;
+    top: 13px;
+    left: 0;
+    right: 0;
+    z-index: -1;
+}
+
+.setHead>a {
+    color: #bdbdbd;
+    position: absolute;
+    right: 5px;
+    top: -2px;
+    background: #FEFEFE;
+    border: 5px #FEFEFE solid;
+    font-size: 1.1em;
+    line-height: normal;
+}
+
+.setHead:hover a {
+    color: #26A69A;
+}
+
+.setHead:hover:after {
+    background: #9E9E9E;
+}
+
+.setBody th:first-child,.setBody td:first-child {
+    padding-left: 0;
+}
+
+.setBody th:last-child,.setBody td:last-child {
+    padding-right: 0;
+}
+
+.setBody p{
+	font-size:0.8em;
+}
+.setBody p label{
+	font-size:1.1em;
+	font-weight:700;
+}
+.setBody .tableSkin thead th {
+    color: #4C4C4C;
+    text-transform: uppercase;
+    font-size: .75em;
+}
+.subHeads tr:nth-child(odd) td {
+    padding-top: 12px;
+    padding-bottom: 0px;
+}
+
+.subHeads tr:nth-child(odd) td label {
+    font-size: 1.1em;
+}
+
+.tree>li {
+    min-width: 200px;
+}
+.tree, .tree li ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tree li a {
+    display: block;
+    padding: 0 0 0 20px;
+    color: #000;
+    position: relative;
+}
+.tree li a:before {
+    position: absolute;left: 1px;
+    content: "\e082";
+    font-family: 'Glyphicons Halflings';
+    color: #a2a2a2;
+}
+.tree li.parent.closed>a:before{content:"\e081"}
+.tree li.parent.closed ul{display: none;}
+.tree li a.current{color: #139E67;}
+.tree li ul {
+    padding-left: 15px;
+}
+
+.tree {
+    overflow-x: auto;
 }
 
 

@@ -15,7 +15,7 @@
 					<li [ngClass]="{'active': currentPosition == 'PROPOSAL'}"><a
 						(click)="showTab('PROPOSAL')"> Proposal </a></li>
 					<li [ngClass]="{'active': currentPosition == 'IRB'}"><a
-						(click)="showTab('IRB')"> IRB </a></li>
+						(click)="showTab('IRB')"> IRB{{message}} </a></li>
 					<li [ngClass]="{'active': currentPosition == 'IACUC'}"><a
 						(click)="showTab('IACUC')"> IACUC </a></li>
 					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
@@ -34,7 +34,8 @@
 									(selected)="autocompleteAwardChanged($event)"
 									(found)="foundItemsChanged($event)"
 									(messageEvent)="receiveResultCard($event)"
-									[tabposition]="currentPosition"></app-elastic-search>
+									[tabPosition]="currentPosition"
+									[placeText]="'Search: Award#, Account#, Title, PI Name, Lead Unit, Sponsor'"></app-elastic-search>
 							</div>
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'PROPOSAL'">
@@ -42,14 +43,16 @@
 									(selected)="autocompleteProposalChanged($event)"
 									(found)="foundItemsChanged($event)"
 									(messageEvent)="receiveResultCard($event)"
-									[tabposition]="currentPosition"></app-elastic-search>
+									[tabPosition]="currentPosition"
+									[placeText]="'Search: Proposal#, Title, PI Name, Lead Unit, Sponsor, Status'"></app-elastic-search>
 							</div>
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'IRB'">
 								<app-elastic-search (selected)="autocompleteIrbChanged($event)"
 									(found)="foundItemsChanged($event)"
 									(messageEvent)="receiveResultCard($event)"
-									[tabposition]="currentPosition"></app-elastic-search>
+									[tabPosition]="currentPosition"
+									[placeText]="'Search: Protocol#, Type, Title, PI Name, Lead Unit, Status'"></app-elastic-search>
 							</div>
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'IACUC'">
@@ -57,7 +60,8 @@
 									(selected)="autocompleteIacucChanged($event)"
 									(found)="foundItemsChanged($event)"
 									(messageEvent)="receiveResultCard($event)"
-									[tabposition]="currentPosition"></app-elastic-search>
+									[tabPosition]="currentPosition"
+									[placeText]="'Search: Protocol#, Type, Title, PI Name, Lead Unit, Status'"></app-elastic-search>
 							</div>
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'DISCLOSURE'">
@@ -65,7 +69,8 @@
 									(selected)="autocompleteDisclosureChanged($event)"
 									(found)="foundItemsChanged($event)"
 									(messageEvent)="receiveResultCard($event)"
-									[tabposition]="currentPosition"></app-elastic-search>
+									[tabPosition]="currentPosition"
+									[placeText]="'Search: Disclosure#,  PI Name, Disposition, Status'"></app-elastic-search>
 							</div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
 								<a id="advcanceSearch" href="#" class="linkButton"
@@ -309,16 +314,13 @@
 				*ngIf="currentPosition == 'SUMMARY'">
 				<!-- Research Summary -->
 				<div class="row">
-					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div *ngIf="dashboardExpenditureVolumeWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<h4 class="borderBoxHeading">Expenditures Volume</h4>
 							<areachart></areachart>
 						</div>
-						<div class="borderBox">
-							<donut-chart></donut-chart>
-						</div>
 					</div>
-					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div *ngIf="dashboardResearchSummaryWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<table class="table table-responsive tableSkin">
 								<thead>
@@ -342,13 +344,32 @@
 								</tbody>
 							</table>
 						</div>
+					</div>
+					<div *ngIf="dashboardawardedProposalBySponsorWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
-							<pichart></pichart>
+							<awarded-proposal-donut-chart></awarded-proposal-donut-chart>
+						</div>
+					</div>
+					<div *ngIf="dashboardAwardBysponsorTypesWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="borderBox">
+							<award-by-sponsor-piechart></award-by-sponsor-piechart>
+						</div>
+					</div>
+					<div *ngIf="dashboardinProgressproposalBySponsorWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="borderBox">
+							<in-progress-proposal-donut-chart></in-progress-proposal-donut-chart>
+						</div>
+					</div>
+					<div *ngIf="dashboardproposalBySponsorTypesWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+						<div class="borderBox">
+							<proposal-by-sponsor-piechart></proposal-by-sponsor-piechart>
 						</div>
 					</div>
 				</div>
 			</div>
+			
 			<!-- Award -->
+			
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'AWARD')">
 				<div class="row">
@@ -399,8 +420,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<tr *ngIf="nullAwardData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
 							<tr
@@ -413,9 +433,10 @@
 								<td>{{awardDetails.fullName}}</td>
 								<td>
 									<ul class="actionButtonGroup">
-										<li><a title="Open {{awardDetails.awardNumber}}"
+										<!-- <li><a title="Open {{awardDetails.awardNumber}}"
 											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
-												class="fa fa-eye"></i> </a></li>
+												class="fa fa-eye"></i> </a></li> -->
+												<li><a title="Open {{awardDetails.awardNumber}}" routerLink='/award'><i class="fa fa-eye"></i> </a></li>
 									</ul>
 								</td>
 							</tr>
@@ -475,8 +496,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<tr *ngIf="nullProposalData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
 							<tr
@@ -546,8 +566,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<tr *ngIf="nullIrbData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
 							<tr
@@ -615,8 +634,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<tr *ngIf="nullIacucData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
 							<tr *ngFor="let IACUCDetails of serviceRequestList">
@@ -689,8 +707,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr
-								*ngIf="(serviceRequestList == null) || (serviceRequestList?.length == 0)">
+							<tr *ngIf="nullDisclosureData">
 								<td colspan=7>No Requests Found !</td>
 							</tr>
 							<tr *ngFor="let DisclosureDetails of serviceRequestList">
