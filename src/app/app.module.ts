@@ -27,6 +27,10 @@ import { LogoutComponent } from './login/logout.component';
 import { AwardBySponsorPieChartComponent } from './research_summary/award-by-sponsor-piechart.component';
 import { InProgressProposalDonutChartComponent } from './research_summary/in-progress-proposal-donut-chart.component';
 import {AwardComponent} from './award/award.component';
+import { AwardHomeComponent } from './award/award-home/award-home.component';
+import { AwardHierarchyComponent } from './award/award-hierarchy/award-hierarchy.component';
+import { AwardReportsAndTerms } from './award/award-reports-and-tabs/award-reports-and-terms.component';
+import { AwardCommitmentsComponent } from './award/award-commitments/award-commitments.component';
 
 import { LoginService } from './login/login.service';
 import { GoogleChartService } from './research_summary/google-chart.service';
@@ -43,10 +47,10 @@ import { ExpandedviewService } from './research_summary/expanded-view.service';
 import { LoginCheckService } from './common/login-check.service';
 import { AuthGuard } from './common/auth-guard.service';
 import { DashboardConfigurationService } from './common/dashboard-configuration-service';
-import { AwardReportsAndTerms } from './award/award-reports-and-tabs/award-reports-and-terms.component';
-import { AwardHomeComponent } from './award/award-home/award-home.component';
-import { AwardHierarchyComponent } from './award/award-hierarchy/award-hierarchy.component';
-
+import { AwardSummaryService } from './award/award-home/award-summary.service';
+import { AwardHierarchyService } from './award/award-hierarchy/award-hierarchy.service';
+import { AwardReportsAndTermsService } from './award/award-reports-and-tabs/award-reports-and-terms.service';
+import { AwardCommitmentsService } from './award/award-commitments/award-commitments.service';
 
 let appRoutes = [
     { path: '', component: LoginComponent},
@@ -83,7 +87,8 @@ let appRoutes = [
         AwardComponent,
         AwardReportsAndTerms,
         AwardHomeComponent,
-        AwardHierarchyComponent
+        AwardHierarchyComponent,
+        AwardCommitmentsComponent
     ],
     imports: [
         BrowserModule,
@@ -96,10 +101,11 @@ let appRoutes = [
         NgbModule.forRoot(),
         Ng2PageScrollModule
     ],
-    providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService,
+    providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
-        IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService],
+        IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
+        AwardCommitmentsService],
     bootstrap: [AppComponent]
 } )
 

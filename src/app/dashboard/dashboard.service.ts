@@ -5,7 +5,6 @@ import { Injectable } from '@angular/core';
 import { Http, HttpModule } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
-
 import { SessionManagementService } from '../session/session-management.service';
 import { Constants } from '../constants/constants.service';
 
@@ -33,7 +32,7 @@ export class DashboardService {
             userName: this.username,
             personId: this.personId,
             currentPage: currentPage
-        };
+		};
         return this.http.post( this.constant.dashboardUrl, params )
             .map( res => res.json()
             )

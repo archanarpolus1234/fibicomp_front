@@ -20,35 +20,35 @@
                 <div class="row">
                     <div class="col-xl-3 col-lg-6 col-md-10 col-sm-10 col-10">
                         <label>Award#:Account</label>
-                        <span>000030-00001:000006</span>
+                        <span>{{awardNumber}}:{{accountNumber}}</span>
                     </div>
                     
                   
                     <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
                         <label>Lead Unit</label>
-                        <span>University</span>
+                        <span>{{leadUnitName}}</span>
                     </div>
                     <div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
                         <label>Sponsor</label>
-                        <span>State of Arizona</span>
+                        <span>{{sponsorName}}</span>
                     </div>
                     <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
                         <label>Status</label>
-                        <span>Active</span>
+                        <span>{{awardStatus}}</span>
                     </div>
                       <div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
                         <label>Last Update</label>
-                        <span>11/22/2017 by Berret</span>
+                        <span>{{lastUpdate}} by Berret</span>
                     </div>
                 </div>
             </div> 
             
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <ul class="tabsIcon" style="margin-top:10px;">
-                    <li [ngClass]="{'active':currentTab=='award_home'}" ><a style="padding-top:-5px;" href="#" (click)="show_award_home($event,'award_home');"><i  class="fa fa-graduation-cap"></i><span>Award</span></a></li>
-                    <li [ngClass]="{'active':currentTab=='award_reports_and_terms'}" ><a href="#" (click)="show_award_reports_and_tabs($event,'award_reports_and_terms');"><i class="fa fa-thumbs-up"></i><span>Terms & Reports</span></a></li>
-                    <li [ngClass]="{'active':currentTab=='award_hierarchy'}" ><a href="#"  (click)="show_award_reports_and_tabs($event,'award_hierarchy');"><i class="fa fa-certificate"></i><span>Hierarchy</span></a></li>
-                    <li><a href="#"><i class="fa fa-pencil-square-o"></i><span>Commitments</span></a></li>
+                    <li [ngClass]="{'active':currentTab=='award_home'}" ><a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'award_home');"><i  class="fa fa-graduation-cap"></i><span>Award</span></a></li>
+                    <li [ngClass]="{'active':currentTab=='award_reports_and_terms'}" ><a href="#" (click)="show_current_tab($event,'award_reports_and_terms');"><i class="fa fa-thumbs-up"></i><span>Terms & Reports</span></a></li>
+                    <li [ngClass]="{'active':currentTab=='award_hierarchy'}" ><a href="#"  (click)="show_current_tab($event,'award_hierarchy');"><i class="fa fa-certificate"></i><span>Hierarchy</span></a></li>
+                    <li [ngClass]="{'active':currentTab=='award_commitments'}" ><a href="#"  (click)="show_current_tab($event,'award_commitments');"><i class="fa fa-pencil-square-o"></i><span>Commitments</span></a></li>
                 </ul>
             </div> 
           
@@ -61,6 +61,9 @@
             </div>
              <div *ngIf="currentTab =='award_hierarchy'">
             	<app-award-hierarchy></app-award-hierarchy>
+            </div>
+            <div *ngIf="currentTab =='award_commitments'">
+            	<app-award-commitments></app-award-commitments>
             </div>
         <div class="footerPush"></div>
     </div>

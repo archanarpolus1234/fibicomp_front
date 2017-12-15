@@ -9,12 +9,13 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 
 export class AwardReportsAndTerms {
-    showReports: boolean = false;
+    showReports: boolean = true;
     showPaymentAndInvoice: boolean = false;
-    showApprovedSpecialItems: boolean = true;
+    showApprovedSpecialItems: boolean = false;
     showTerms: boolean = false;
     result: any = {};
     awardReportKeyList: any = [];
+
     constructor( private awardreportsandtermsService: AwardReportsAndTermsService) {}
 
     ngOnInit() {

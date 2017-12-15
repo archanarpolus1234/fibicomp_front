@@ -17,24 +17,12 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>SparcStation 20</td>
-                                                    <td>Sun Microsystems Computer Corp</td>
-                                                    <td>S20TX1-21-32-p46</td>
-                                                    <td>$3,752,22.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Mac 8100/80/CD Comp</td>
-                                                    <td>Apple Computer,Inc.</td>
-                                                    <td>M1884LL/A</td>
-                                                    <td>$3,742,22.00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>VRC21-PA-21* Color Mon</td>
-                                                    <td>Mitsubishi</td>
-                                                    <td>THN9105-5KTK</td>
-                                                    <td>$1,733.00</td>
-                                                </tr>     
+                                            	<tr *ngFor="let costSharing of result.costShareDetails">
+                                            	<td>{{costSharing.cost_share_percentage}}</td>
+                                            	<td>{{costSharing.cost_share_type}}</td>
+                                            	<td>{{costSharing.project_period}}</td>
+                                            	<td>{{costSharing.commitment_amount}}</td>
+                                            	</tr>    
                                             </tbody>
                                         </table>                                                                                                                       
                                     </div>
@@ -49,10 +37,10 @@
                                         <span>Rates</span><a href="#" (click)="showRatesTab($event)"><i [ngClass]="(showRates == true)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
                                     </div>
                                     <div class="setBody"  *ngIf="showRates">
-                                        <div class="row">
+                                    <!-- <p> -->
+                                   <label>F&A Rates</label>
+                                   <!-- </p> -->
                                          <table class="table tableSkin subHeads">
-                                            <p>
-                                             <label>F&A Rates</label><br>
                                             <thead>
                                                 <tr>
                                                     <th>Rate</th>
@@ -63,19 +51,20 @@
                                                 </tr>
                                             </thead>
                                             <tbody>                                           
-                                                <tr>
-                                                    <td class="report_type">lorem ipsum</td>
-                                                    <td>lorem ipsum</td>
-                                                    <td>lorem ipsum</td>
-                                                    <td>lorem ipsum</td>
-                                                    <td>lorem ipsum</td>
-                                                </tr>                                                
+                                                <tr *ngFor="let fandaDetails of result.fAndADetails">
+                                            	<td>{{fandaDetails.applicable_idc_rate}}</td>
+                                            	<td>{{fandaDetails.idc_rate_type}}</td>
+                                            	<td>{{fandaDetails.fiscal_year}}</td>
+                                            	<td>{{fandaDetails.start_date}}</td>
+                                            	<td>{{fandaDetails.campus}}</td>
+                                            	</tr>                                                
                                             </tbody>
-                                        </p>
+                                       
                                         </table>
+                                       <!--  <p> -->
+                                          <label>Benefits Rates</label>
+                                         <!--  </p> -->
                                         <table class="table tableSkin subHeads">
-                                                <p>
-                                                 <label>Benefits Rates</label><br>
                                                 <thead>
                                                     <tr>
                                                         <th>On Campus</th>
@@ -84,41 +73,14 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>                                           
-                                                    <tr>
-                                                        <td class="report_type">lorem ipsum</td>
-                                                        <td>lorem ipsum</td>
-                                                        <td>lorem ipsum</td>
-                                                    </tr>
-                                                    
+		                                              <tr *ngFor="let benefitsRates of result.benefitsRates">
+		                                            	<td>{{benefitsRates.on_campus}}</td>
+		                                            	<td>{{benefitsRates.off_campus}}</td>
+		                                            	<td>{{benefitsRates.comments}}</td>
+		                                            	</tr> 
                                                 </tbody>
-                                            </p>
                                             </table>
-                                    </div>
-                               </div> 
-                               <div class="setBody">
-                                    <div class="row">
-                                     <!-- <table class="table tableSkin subHeads">
-                                        <p>
-                                         <label>Benefits Rates</label><br>
-                                        <thead>
-                                            <tr>
-                                                <th>On Campus</th>
-                                                <th>Off Campus</th>
-                                                <th>Comments</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>                                           
-                                            <tr>
-                                                <td class="report_type">lorem ipsum</td>
-                                                <td>lorem ipsum</td>
-                                                <td>lorem ipsum</td>
-                                            </tr>
-                                            
-                                        </tbody>
-                                    </p>
-                                    </table> -->
-                                </div>
-                                </div>                            
+                               </div>                        
                             </div>
                         </div>
                     </div>

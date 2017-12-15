@@ -314,13 +314,15 @@
 				*ngIf="currentPosition == 'SUMMARY'">
 				<!-- Research Summary -->
 				<div class="row">
-					<div *ngIf="dashboardExpenditureVolumeWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div *ngIf="dashboardExpenditureVolumeWidget"
+						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<h4 class="borderBoxHeading">Expenditures Volume</h4>
 							<areachart></areachart>
 						</div>
 					</div>
-					<div *ngIf="dashboardResearchSummaryWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div *ngIf="dashboardResearchSummaryWidget"
+						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<table class="table table-responsive tableSkin">
 								<thead>
@@ -345,31 +347,35 @@
 							</table>
 						</div>
 					</div>
-					<div *ngIf="dashboardawardedProposalBySponsorWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div *ngIf="dashboardawardedProposalBySponsorWidget"
+						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<awarded-proposal-donut-chart></awarded-proposal-donut-chart>
 						</div>
 					</div>
-					<div *ngIf="dashboardAwardBysponsorTypesWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div *ngIf="dashboardAwardBysponsorTypesWidget"
+						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<award-by-sponsor-piechart></award-by-sponsor-piechart>
 						</div>
 					</div>
-					<div *ngIf="dashboardinProgressproposalBySponsorWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div *ngIf="dashboardinProgressproposalBySponsorWidget"
+						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<in-progress-proposal-donut-chart></in-progress-proposal-donut-chart>
 						</div>
 					</div>
-					<div *ngIf="dashboardproposalBySponsorTypesWidget" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
+					<div *ngIf="dashboardproposalBySponsorTypesWidget"
+						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<proposal-by-sponsor-piechart></proposal-by-sponsor-piechart>
 						</div>
 					</div>
 				</div>
 			</div>
-			
+
 			<!-- Award -->
-			
+
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'AWARD')">
 				<div class="row">
@@ -436,7 +442,10 @@
 										<!-- <li><a title="Open {{awardDetails.awardNumber}}"
 											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
 												class="fa fa-eye"></i> </a></li> -->
-												<li><a title="Open {{awardDetails.awardNumber}}" routerLink='/award'><i class="fa fa-eye"></i> </a></li>
+										<li><a title="Open {{awardDetails.awardNumber}}"
+											routerLink='/award'
+											[queryParams]={awardId:awardDetails.awardId}><i
+												class="fa fa-eye"></i> </a></li>
 									</ul>
 								</td>
 							</tr>
