@@ -1,34 +1,51 @@
 {	
 	"/login" :{
-					 "target" : "http://demo.fibiweb.com/fibi-comp",
+					 "target" : "http://192.168.1.93:8080/fibi-comp",
 					 "secure" : false
 	},
 	"/fibiDashBoard" :{
-					"target" : "http://demo.fibiweb.com/fibi-comp",
+					"target" : "http://192.168.1.93:8080/fibi-comp",
 					"secure" : false
 	},
 	"/getResearchSummaryData" :{
-					 "target" : "http://demo.fibiweb.com/fibi-comp",
+					 "target" : "http://192.168.1.93:8080/fibi-comp",
 					 "secure" : false
 	},
 	"/logout" : {
-				     "target" : "http://demo.fibiweb.com/fibi-comp",
+				     "target" : "http://192.168.1.93:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getUserNotification" : {
-				     "target" : "http://demo.fibiweb.com/fibi-comp",
+				     "target" : "http://192.168.1.93:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getPieChartDataByType" : {
-					"target" : "http://demo.fibiweb.com/fibi-comp",
+					"target" : "http://192.168.1.93:8080/fibi-comp",
 				     "secure" : false
 	},
     "/getDetailedResearchSummary" : {
-					"target" : "http://demo.fibiweb.com/fibi-comp",
+					"target" : "http://192.168.1.93:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getDonutChartDataBySponsor" : {
-					"target" : "http://demo.fibiweb.com/fibi-comp",
+					"target" : "http://192.168.1.93:8080/fibi-comp",
+				     "secure" : false
+	},
+	"/getAwardSummary" : {
+					"target" : "http://192.168.1.93:8080/fibi-comp",
+				     "secure" : false
+	},
+	"/getAwardHierarchy" : {
+					"target" : "http://192.168.1.93:8080/fibi-comp",
+				     "secure" : false
+	},
+	"/getAwardReportsAndTerms" : {
+					"target" : "http://192.168.1.93:8080/fibi-comp",
+				     "secure" : false
+	},
+	"/getAwardCommitments" : {
+					"target" : "http://192.168.1.93:8080/fibi-comp",
 				     "secure" : false
 	}
+
 }

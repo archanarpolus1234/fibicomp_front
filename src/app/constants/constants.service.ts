@@ -13,6 +13,10 @@ export class Constants {
     notificationUrl: string;
     logoutUrl: string;
     outputPath: string;
+    awardSummaryUrl:string;
+    awardHierarchyUrl:string;
+	awardTermsAndReportsUrl: string;
+    commitmentsUrl: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -44,12 +48,27 @@ export class Constants {
         this.expandedSummaryViewUrl = '/getDetailedResearchSummary';
         //this.expandedSummaryViewUrl = 'http://demo.fibiweb.com/fibi-comp/getDetailedResearchSummary';
         //this.expandedSummaryViewUrl = 'http://192.168.1.76:8080/fibi-comp/getDetailedResearchSummary';
-        
+
         this.expandedDonutViewUrl = '/getDonutChartDataBySponsor';
         //this.expandedDonutViewUrl = 'http://demo.fibiweb.com/fibi-comp/getDonutChartDataBySponsor';
         //this.expandedDonutViewUrl = 'http://192.168.1.76:8080/fibi-comp/getDonutChartDataBySponsor';
 
+        this.awardSummaryUrl='/getAwardSummary';
+        //this.awardSummaryUrl = 'http://demo.fibiweb.com/fibi-comp/getAwardSummary';
+        //this.awardSummaryUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardSummary';
+        
+        this.awardHierarchyUrl='/getAwardHierarchy';
+        //this.awardHierarchyUrl = 'http://demo.fibiweb.com/fibi-comp/getAwardHierarchy';
+        //this.awardHierarchyUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardHierarchy';
 
+        this.awardTermsAndReportsUrl = '/getAwardReportsAndTerms';
+       	//this.awardTermsAndReportsUrl = 'http://demo.fibiweb.com/fibi-comp/getAwardReportsAndTerms';
+        //this.awardTermsAndReportsUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardReportsAndTerms'; 
+        
+        this.commitmentsUrl = '/getAwardCommitments';
+        //this.commitmentsUrl = 'http://demo.fibiweb.com/fibi-comp/getAwardCommitments';
+        //this.commitmentsUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardCommitments';
+        
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
         this.outputPath = 'http://192.168.1.76:8080/kc-dev';

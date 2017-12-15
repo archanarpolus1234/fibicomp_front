@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { SlicePipe } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 
 import { SessionManagementService } from '../session/session-management.service';
 import { ElasticSearchComponent } from '../elasticSearch/elastic-search.component';
@@ -111,7 +111,7 @@ export class DashboardComponent implements OnInit {
     public dashboardAwardBysponsorTypesWidget : boolean = true;
     public dashboardproposalBySponsorTypesWidget : boolean = true;
     public dashboardinProgressproposalBySponsorWidget : boolean = true;
-    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData,private dashboardConfigurationService: DashboardConfigurationService ) {
+	constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData,private dashboardConfigurationService: DashboardConfigurationService) {
         this.outputPath = this.constant.outputPath;
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );

@@ -1,149 +1,159 @@
 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <div class="row">
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="borderBox">
-                            <h4 class="borderBoxHeading">
-                                Details
-                            </h4>
-                            <div class="pullSide">
-                                <table class="table tableSkin grid2" >
-                                <tbody>
-                                    <tr >
-                                        <td><label style="
-    										font-weight: bold;">Activity Type</label><br>Distribution</td>
-                                        <td><label >Award Type</label><br>Grant</td>
-                                        <td><label >Account Type</label><br>Equipments</td>
-                                    </tr>
-                                    <tr>
-                                        <td><label style="  font-weight: bold;">Sponsor Award#</label><br>54862</td>
-                                        <td colspan="2"><label style="  font-weight: bold;">Title</label><br>The Distribution of Video Programming</td>
-                                    </tr>
-                                   
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="borderBox">
-                            <h4 class="borderBoxHeading">
-                                Dates & Amounts
-                            </h4>
-                            <div class="pullSide">
-                                <table class="table tableSkin grid2">
-                                <tbody>
-                                    <tr>
-                                        <td><label style=" font-weight: bold;">Award Effective Date</label><br>12/12/2017</td>
-                                        <td><label style=" font-weight: bold;">Obligation start</label><br>12/15/2017</td>
-                                        <td><label style=" font-weight: bold;">Obligation end</label><br>10/25/2019</td>
-                                    </tr>
-                                    <tr>
-                                        <td><label style=" font-weight: bold;">Notice Date</label><br>11/12/2017</td>
-                                        <td ><label style=" font-weight: bold;">Obligated Amount</label><br>$125,256</td>
-                                   
-                                        <td><label style=" font-weight: bold;">Anticipated Amount</label><br>$145,850</td>
-                                       
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
+	<div class="row">
+		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+			<div class="borderBox">
+				<h4 class="borderBoxHeading">Details</h4>
+				<div class="pullSide">
+					<table class="table tableSkin grid2">
+						<tbody>
+							<tr>
+								<td><label>Activity Type</label><br>{{activityType}}</td>
+								<td><label>Award Type</label><br>{{awardType}}</td>
+								<td><label>Account Type</label><br>{{accountType}}</td>
+							</tr>
+							<tr>
+								<td><label>Sponsor Award#</label><br>{{sponsorAwardNumber}}</td>
+								<td colspan="2"><label>Title</label><br>{{awardTitle}}</td>
+							</tr>
 
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="borderBox">
-                            <h4 class="borderBoxHeading">
-                                Personnel
-                            </h4>
-                            <div class="pullSide">
-                                <table class="table tableSkin grid2">
-                                <tbody>
-                                    <tr>
-                                        <td><label style=" font-weight: bold;">Investigators</label><br>(PI) Barret, William J (School of Architecture)
-                                            <br>(CO-I) Peter, Silver M (School of Chemistry) 
-                                            <br>(CO-I) Juan, Anna Mary (School of Chemistry)
-                                            <br><br>
-                                            <label style=" font-weight: bold;">Keypersons</label><br>(Member) Barret, William J (School of Architecture)
-                                            
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 
-                                        </td>
-                                       
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <div class="borderBox">
-                            <h4 class="borderBoxHeading">
-                                Contacts
-                            </h4>
-                            <div class="pullSide">
-                                <table class="table tableSkin grid2">
-                                <tbody>
-                                    <tr>
-                                        <td><label >Sponsor</label><br>(Awarding Office Contact 1) Schimmel, Aimee -tron@fdi.com 762-568-9756
-                                            <br>(Financial Contact) Samuel, Zenker - fwrng@fdi.com 879-569-8963 
-                                            
-                                            <br><br>
-                                            <label style=" font-weight: bold;">Unit</label><br>(Unit Head) Peter Fredrik - jack@univ.com 896-568-9656
-                                            
+		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+			<div class="borderBox">
+				<h4 class="borderBoxHeading">Dates & Amounts</h4>
+				<div class="pullSide">
+					<table class="table tableSkin grid2">
+						<tbody>
+							<tr>
+								<td><label>Award Effective Date</label><br>{{awardEffectiveDate}}</td>
+								<td><label>Obligation start</label><br>{{obligationStartDate}}</td>
+								<td><label>Obligation end</label><br>{{obligationEndDate}}</td>
+							</tr>
+							<tr>
+								<td><label>Notice Date</label><br>{{noticeDate}}</td>
+								<td><label>Obligated Amount</label><br>{{obligatedAmount}}
+								
+								<td><label>Anticipated Amount</label><br>{{anticipatedAmount}}</td>
 
-                                        </td>
-                                       
-                                    </tr>
-                                </tbody>
-                            </table>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-                    <div class="borderBox col-12">
-                    <h4 class="borderBoxHeading" >
-                                Funded Proposals
-                            </h4>
-                    <table class="table table-responsive tableSkin">
-                      
-                            <tr>
-                                <th 
-                                    title="Click to sort by Proposal">Proposal#
-                                </th>
-                                <th 
-                                    title="Click to sort by Title" >PI 
-                                </th>
-                                <th
-                                    title="Click to sort by Lead Unit">Lead Unit 
-                                </th>
-                                <th 
-                                    title="Click to sort by Sponsor">Sponsor 
-                                </th>
-                                <th 
-                                    title="Click to sort by Deadline">Start Date
-                                </th>
-                                <th 
-                                    title="Click to sort by Status">End Date
-                                </th>
-                                <th 
-                                    title="Click to sort by Status">Total Cost
-                                </th>
-                                
-                            </tr>
-                       
-                           
-                            <tr >
-                                <td>000016</td>
-                                <td>Fedric, Henry</td>
-                                <td>12568-School of Architecture</td>
-                                <td>NASA-OHR</td>
-                                <td>12/25/2017</td>
-                                <td>10/24/2019</td>
-                                <td>$556,230</td>
-                                
-                            </tr>
-                       
-                    </table>
-                </div>
-            </div>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+			<div class="borderBox">
+				<h4 class="borderBoxHeading">Personnel</h4>
+				<div class="pullSide">
+					<table class="table tableSkin grid2">
+						<tbody>
+							<tr>
+								<td><label>Investigators</label><br>
+									<div *ngFor="let person of awardPersons">
+
+										<div
+											*ngIf="person.contact_role_code=='PI' || person.contact_role_code=='COI'">
+											({{person.contact_role_code}}) {{person.full_name}}
+											({{person.unit_name}})</div>
+									</div> <br> <label>Keypersons</label><br>
+									<div *ngFor="let person of awardPersons">
+
+										<div
+											*ngIf="person.contact_role_code!='PI' && person.contact_role_code!='COI'">
+											({{person.contact_role_code}}) {{person.full_name}}
+											({{person.unit_name}})</div>
+									</div></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+			<div class="borderBox">
+				<h4 class="borderBoxHeading">Contacts</h4>
+				<div class="pullSide">
+					<table class="table tableSkin grid2">
+						<tbody>
+							<tr>
+								<td><label>Sponsor</label><br>
+									<div *ngFor="let awardSponsorContact of awardSponsorContacts">
+										{{awardSponsorContact.full_name}} -
+										{{awardSponsorContact.address_line_1}},
+										{{awardSponsorContact.address_line_2}},
+										{{awardSponsorContact.address_line_3}},
+										{{awardSponsorContact.city}},
+										{{awardSponsorContact.postal_code}},<br>
+										{{awardSponsorContact.email_address}} <br>
+										<br>
+									</div> <label style="font-weight: bold;">Unit</label><br>
+									<div *ngFor="let awardUnitContact of awardUnitContacts">
+										({{awardUnitContact.unit_administrator_type}}) -
+										{{awardUnitContact.full_name}},
+										{{awardUnitContact.email_addr}} <br>
+										<br>
+									</div></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="borderBox col-12">
+		<h4 class="borderBoxHeading">Funded Proposals</h4>
+		<table class="table table-responsive tableSkin">
+			<tr>
+				<th title="Click to sort by Proposal">Proposal#</th>
+				<th title="Click to sort by Title">PI</th>
+				<th title="Click to sort by Lead Unit">Lead Unit</th>
+				<th title="Click to sort by Sponsor">Sponsor</th>
+				<th title="Click to sort by Deadline">Start Date</th>
+				<th title="Click to sort by Status">End Date</th>
+				<th title="Click to sort by Status">Total Cost</th>
+
+			</tr>
+			<tr *ngFor="let awardFundedProposal of awardFundedProposals">
+				<td>{{awardFundedProposal.proposal_number}}</td>
+				<td>{{awardFundedProposal.pi}}</td>
+				<td>{{awardFundedProposal.unit_name}}</td>
+				<td>{{awardFundedProposal.sponsor_name}}</td>
+				<td>{{awardFundedProposal.start_date}}</td>
+				<td>{{awardFundedProposal.end_date}}</td>
+				<td>{{awardFundedProposal.total_direct_cost_total}}</td>
+
+			</tr>
+
+		</table>
+	</div>
+	<div class="borderBox col-12">
+
+		<h4 class="borderBoxHeading">Special Review</h4>
+		<table class="table table-responsive tableSkin">
+			<tr>
+				<th title="Click to sort by Proposal">Protocol#</th>
+				<th title="Click to sort by Title">Type</th>
+				<th title="Click to sort by Lead Unit">Description</th>
+				<th title="Click to sort by Sponsor">Approval Date</th>
+				<th title="Click to sort by Deadline">Expiration Date</th>
+				<th title="Click to sort by Status">Approval Status</th>
+				<th title="Click to sort by Status">Application Date</th>
+			</tr>
+			<tr *ngFor="let awardSpecialReview of awardSpecialReviews">
+				<td>{{awardSpecialReview.protocol_number}}</td>
+				<td>{{awardSpecialReview.special_review_type}}</td>
+				<td>{{awardSpecialReview.description}}</td>
+				<td>{{awardSpecialReview.approval_date}}</td>
+				<td>{{awardSpecialReview.expiration_date}}</td>
+				<td>{{awardSpecialReview.approval_status}}</td>
+				<td>{{awardSpecialReview.application_date}}</td>
+			</tr>
+
+		</table>
+	</div>
+</div>
