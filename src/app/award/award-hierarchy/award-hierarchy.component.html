@@ -1,66 +1,54 @@
-
-<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-	<div class="row">
-		<div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
-			<ul class="parent">
-				<ng-template #recursiveList let-list>
-				<li *ngFor="let item of list"><a id="awardItemFromHierarchy"
-					(click)="awardClickDetails(item.awardId,$event)">{{item.awardNumber}}</a>
-					<ul *ngIf="item.children!=null">
-						<ng-container
-							*ngTemplateOutlet="recursiveList; context:{ $implicit: item.children }"></ng-container>
-					</ul></li>
-				</ng-template>
-				<ng-container
-					*ngTemplateOutlet="recursiveList; context:{ $implicit: list }"></ng-container>
-			</ul>
-		</div>
-
-		<div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-9">
+<div class="pageMinHeight" id="scrollToTop">
+	<div class="pushFixedHeaderFooter">
+		<section class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<label><strong>Award Overview</strong></label><br>
-
-				<div class="borderBox">
-					<h4 class="borderBoxHeading">Details</h4>
-					<div class="pullSide">
-						<table class="table tableSkin grid2">
-							<tbody>
-								<tr>
-									<td><label>Activity Type</label><br>{{activityType}}</td>
-									<td><label>Award Type</label><br>{{awardType}}</td>
-									<td><label>Account Type</label><br>{{accountType}}</td>
-								</tr>
-								<tr>
-									<td><label>Sponsor Award#</label><br>{{sponsorAwardNumber}}</td>
-									<td colspan="2"><label>Title</label><br>{{awardTitle}}</td>
-								</tr>
-
-							</tbody>
-						</table>
+				<div class="row">
+					<div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
+						<input type="text" id="searchField" #filter
+							(keyup)="tree.treeModel.filterNodes(filter.value)"
+							placeholder="Search Award" />
+						<tree-root #tree [nodes]="nodes" [options]="options"></tree-root>
 					</div>
-				</div>
+					<div class="col-xl-9 col-lg-9 col-md-9 col-sm-9 col-9">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+							<label><strong>Award Overview</strong></label> &nbsp;<a
+								class="view_eye" href="#" (click)="awardView($event,awardId)">
+								<i title="Open {{awardNumber}}" class="fa fa-eye"></i>
+							</a><br>
+							<div class="borderBox">
+								<table class="table tableSkin grid2">
+									<tbody>
+										<tr>
+											<td><label>Activity Type</label><br>{{activityType}}</td>
+											<td><label>Award Type</label><br>{{awardType}}</td>
+											<td><label>Account Number</label><br>{{accountNumber}}</td>
+										</tr>
+										<tr>
+											<td><label>Title</label><br>{{awardTitle}}</td>
+											<td><label>Award Effective Date</label><br>{{awardEffectiveDate}}</td>
+											<td><label>Obligation Start</label><br>{{obligationStartDate}}</td>
+										</tr>
+										<tr>
+											<td><label>Obligation End</label><br>{{obligationEndDate}}</td>
+											<td><label>Obligated Amount</label><br>{{obligatedAmount}}
 
-				<div class="borderBox">
-					<h4 class="borderBoxHeading">Dates & Amounts</h4>
-					<div class="pullSide">
-						<table class="table tableSkin grid2">
-							<tbody>
-								<tr>
-									<td><label>Award Effective Date</label><br>{{awardEffectiveDate}}</td>
-									<td><label>Obligation start</label><br>{{obligationStartDate}}</td>
-									<td><label>Obligation end</label><br>{{obligationEndDate}}</td>
-								</tr>
-								<tr>
-									<td><label>Notice Date</label><br>{{noticeDate}}</td>
-									<td><label>Obligated Amount</label><br>{{obligatedAmount}}
-									
-									<td><label>Anticipated Amount</label><br>{{anticipatedAmount}}</td>
+											
+											<td><label>Anticipated Amount</label><br>{{anticipatedAmount}}</td>
+										</tr>
+										<tr>
+											<td><label> Sponsor Name</label><br>{{sponsorName}}</td>
 
-								</tr>
-							</tbody>
-						</table>
+											<td><label>Lead Unit</label><br>{{leadUnitName}}
+											<td><label>Status</label><br>{{awardStatus}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</section>
+		<div class="footerPush"></div>
 	</div>
+</div>

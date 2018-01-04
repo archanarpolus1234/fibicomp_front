@@ -18,7 +18,6 @@ export class LogoutComponent {
     logout() {
         this.dashboardService.logout().subscribe( 
                 data => {
-                    console.log(data);
                     if(data != null){ 
                         if (data == 'SUCCESS') {
                             localStorage.removeItem('currentUser');

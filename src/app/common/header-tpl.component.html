@@ -18,7 +18,7 @@
 			<i class="fa fa-arrow-left"></i>
 		</div>
 	</div>
-	
+
 	<div class="container-fluid pushFixedHeaderFooter">
 		<!-- <div class="headerPush"></div> -->
 		<header class="row">
@@ -36,8 +36,8 @@
 								of {{fullName}} (Admin) </span> <i style="cursor: pointer;"
 							class="fa fa-user" (click)="logout()" title="logout"></i>
 					</a></li>
-					<li title="notification" #notificationBar><a
-						href="#" id="showNotify" (click)="userNotification($event)"> <i
+					<li title="notification" #notificationBar><a href="#"
+						id="showNotify" (click)="userNotification($event)"> <i
 							class="fa fa-bell"></i>
 					</a>
 						<ul class="notificationBox" *ngIf="toggleBox"
@@ -101,59 +101,45 @@
 								href="#" (click)="showMore($event)" class="showMore"> Show
 									more </a></li>
 						</ul></li>
-						<li title="configuration" #configurationBar>
-						<a href="#" (click)="configureDashboard($event)"><i class="fa fa-cog"></i></a>
-							<ul class="notificationBox" *ngIf="showConfiguringOption">
-								<li>
-									Expenditure Volume
-									<input #expenditureVolumWidgetCheckBox
-							    id="expenditureVolumWidgetCheckBox" 
-							    type="checkbox" 
-							    [checked]="expenditureVolumWidget" 
-							    (change)="onChangeOfexpenditureVolumWidget(expenditureVolumWidgetCheckBox.checked)" />
-								</li>
-								<li>
-									Research Summary
-									<input #researchSummaryWidgetCheckBox
-							    id="researchSummaryWidgetCheckBox" 
-							    type="checkbox" 
-							    [checked]="researchSummaryWidget" 
-							    (change)="onChangeOfresearchSummaryWidget(researchSummaryWidgetCheckBox.checked)" />
-								</li>
-								<li>
-									Awarded proposal By Sponsors
-									<input #awardedProposalBySponsorWidgetCheckBox
-							    id="awardedProposalBySponsorWidgetCheckBox" 
-							    type="checkbox" 
-							    [checked]="awardedProposalBySponsorWidget" 
-							    (change)="onChangeOfawardedProposalBySponsorWidget(awardedProposalBySponsorWidgetCheckBox.checked)" />
-								</li>
-								<li>
-									Award By sponsor types
-									<input #awardBysponsorTypesWidgetCheckBox
-							    id="awardBysponsorTypesWidgetCheckBox" 
-							    type="checkbox" 
-							    [checked]="awardBysponsorTypesWidget" 
-							    (change)="onChangeOfawardBysponsorTypesWidget(awardBysponsorTypesWidgetCheckBox.checked)" />
-								</li>
-								<li>
-									In progress proposal by sponsor
-									<input #inProgressproposalBySponsorWidgetCheckBox
-							    id="inProgressproposalBySponsorWidgetCheckBox" 
-							    type="checkbox" 
-							    [checked]="inProgressproposalBySponsorWidget" 
-							    (change)="onChangeOfinProgressproposalBySponsorWidget(inProgressproposalBySponsorWidgetCheckBox.checked)" />
-								</li>
-								<li>
-									Proposal by sponsor types
-									<input #proposalBySponsorTypesWidgetCheckBox
-							    id="proposalBySponsorTypesWidgetCheckBox" 
-							    type="checkbox" 
-							    [checked]="proposalBySponsorTypesWidget" 
-							    (change)="onChangeOfproposalBySponsorTypesWidget(proposalBySponsorTypesWidgetCheckBox.checked)" />
-								</li>
-							</ul>
-						</li>
+					<li title="configuration" #configurationBar><a href="#"
+						(click)="configureDashboard($event)"><i class="fa fa-cog"></i></a>
+						<ul class="notificationBox" *ngIf="showConfiguringOption">
+							<li>Expenditure Volume <input
+								#expenditureVolumWidgetCheckBox
+								id="expenditureVolumWidgetCheckBox" type="checkbox"
+								[checked]="expenditureVolumWidget"
+								(change)="onChangeOfexpenditureVolumWidget(expenditureVolumWidgetCheckBox.checked)" />
+							</li>
+							<li>Research Summary <input #researchSummaryWidgetCheckBox
+								id="researchSummaryWidgetCheckBox" type="checkbox"
+								[checked]="researchSummaryWidget"
+								(change)="onChangeOfresearchSummaryWidget(researchSummaryWidgetCheckBox.checked)" />
+							</li>
+							<li>Awarded Proposal By Sponsors <input
+								#awardedProposalBySponsorWidgetCheckBox
+								id="awardedProposalBySponsorWidgetCheckBox" type="checkbox"
+								[checked]="awardedProposalBySponsorWidget"
+								(change)="onChangeOfawardedProposalBySponsorWidget(awardedProposalBySponsorWidgetCheckBox.checked)" />
+							</li>
+							<li>Award By Sponsor Types <input
+								#awardBysponsorTypesWidgetCheckBox
+								id="awardBysponsorTypesWidgetCheckBox" type="checkbox"
+								[checked]="awardBysponsorTypesWidget"
+								(change)="onChangeOfawardBysponsorTypesWidget(awardBysponsorTypesWidgetCheckBox.checked)" />
+							</li>
+							<li>In Progress Proposal By Sponsor <input
+								#inProgressproposalBySponsorWidgetCheckBox
+								id="inProgressproposalBySponsorWidgetCheckBox" type="checkbox"
+								[checked]="inProgressproposalBySponsorWidget"
+								(change)="onChangeOfinProgressproposalBySponsorWidget(inProgressproposalBySponsorWidgetCheckBox.checked)" />
+							</li>
+							<li>Proposal by Sponsor Types <input
+								#proposalBySponsorTypesWidgetCheckBox
+								id="proposalBySponsorTypesWidgetCheckBox" type="checkbox"
+								[checked]="proposalBySponsorTypesWidget"
+								(change)="onChangeOfproposalBySponsorTypesWidget(proposalBySponsorTypesWidgetCheckBox.checked)" />
+							</li>
+						</ul></li>
 					<li><a href="#" title="help"><i class="fa fa-question"></i>
 					</a></li>
 					<li class="d-md-none d-lg-none d-xl-none"><a href="#"

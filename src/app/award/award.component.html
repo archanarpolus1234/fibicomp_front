@@ -1,13 +1,4 @@
-  <div class="push4slideMenu">
-    <div class="slideMenu">
-        <ul class="iconMenu">
-            <li class="active"><a href="#"><i class="fa fa-tachometer"></i><span>Dashboard</span></a></li>
-            <li><a href="#"><i class="fa fa-user"></i><span>My Portal</span></a></li>
-            <li><a href="#"><i class="fa fa-cog"></i><span>System Admin Portal</span></a></li>
-        </ul>
-        <div class="pullBack d-md-none d-lg-none d-xl-none"><i class="fa fa-arrow-left"></i></div>
-    </div>
-    
+  <div class="push4slideMenu pageMinHeight" id="scrollToTop">
     <div class="container-fluid pushFixedHeaderFooter">
        <div class="headerPush"></div>
         <section class="row" >
@@ -16,7 +7,7 @@
             </div>
             
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
-               <button class="closeResultCard"><i class="fa fa-times"></i></button>
+               
                 <div class="row">
                     <div class="col-xl-3 col-lg-6 col-md-10 col-sm-10 col-10">
                         <label>Award#:Account</label>
@@ -38,19 +29,27 @@
                     </div>
                       <div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
                         <label>Last Update</label>
-                        <span>{{lastUpdate}} by Berret</span>
+                        <span>{{lastUpdate}}</span>
                     </div>
                 </div>
             </div> 
-            
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                <ul class="tabsIcon" style="margin-top:10px;">
-                    <li [ngClass]="{'active':currentTab=='award_home'}" ><a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'award_home');"><i  class="fa fa-graduation-cap"></i><span>Award</span></a></li>
-                    <li [ngClass]="{'active':currentTab=='award_reports_and_terms'}" ><a href="#" (click)="show_current_tab($event,'award_reports_and_terms');"><i class="fa fa-thumbs-up"></i><span>Terms & Reports</span></a></li>
-                    <li [ngClass]="{'active':currentTab=='award_hierarchy'}" ><a href="#"  (click)="show_current_tab($event,'award_hierarchy');"><i class="fa fa-certificate"></i><span>Hierarchy</span></a></li>
-                    <li [ngClass]="{'active':currentTab=='award_commitments'}" ><a href="#"  (click)="show_current_tab($event,'award_commitments');"><i class="fa fa-pencil-square-o"></i><span>Commitments</span></a></li>
-                </ul>
-            </div> 
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+	            <div class="row">
+	            	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+		                <ul class="tabsIcon" style="margin-top:10px;">
+		                    <li [ngClass]="{'active':currentTab=='award_home'}" ><a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'award_home');"><i  class="fa fa-usd"></i><span>Award</span></a></li>
+		                    <li [ngClass]="{'active':currentTab=='award_reports_and_terms'}" ><a href="#" (click)="show_current_tab($event,'award_reports_and_terms');"><i class="fa fa-file-text-o"></i><span>Terms & Reports</span></a></li>
+		                    <li [ngClass]="{'active':currentTab=='award_hierarchy'}" ><a href="#"  (click)="show_current_tab($event,'award_hierarchy');"><i class="fa fa-sitemap"></i><span>Hierarchy</span></a></li>
+		                    <li [ngClass]="{'active':currentTab=='award_commitments'}" ><a href="#"  (click)="show_current_tab($event,'award_commitments');"><i class="fa fa-handshake-o"></i><span>Commitments</span></a></li>
+		                		  <a class="view_external_link" title="Open {{awardNumber}}"
+													[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+result.awardDetails[0].document_number+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">
+													<i class="fa fa-external-link"></i> Open Award</a>
+		                </ul>
+		              
+	                </div>
+	               
+	            </div> 
+            </div>
           
         </section>
           <div *ngIf="currentTab =='award_home'">
@@ -67,5 +66,4 @@
             </div>
         <div class="footerPush"></div>
     </div>
-     
   </div>

@@ -53,7 +53,7 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService {
               }
               this.awardData =  google.visualization.arrayToDataTable(this.awardStateList);
               this.awardOptions = {
-                      title: 'Award by sponsor types',
+                      title: 'Award By Sponsor Types',
                       is3D: true,
                       legend: 'right',
                       colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',

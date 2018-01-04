@@ -49,7 +49,6 @@ export class LoginComponent implements AfterViewInit {
             data => {
                 this.result = data || [];
                 if(this.result != null){
-                    console.log( this.result);
                     if ( this.result.login == true ) {
                         this.fullName = this.result.fullName;
                         this.personId = this.result.personID;

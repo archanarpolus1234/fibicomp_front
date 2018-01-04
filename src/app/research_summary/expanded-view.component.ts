@@ -15,7 +15,7 @@ import { ExpandedViewDataService } from './expanded-view-data-service';
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css']
 })
 
-export class ExpandedviewComponent implements OnInit, OnDestroy{
+export class ExpandedviewComponent implements OnInit/*, OnDestroy*/{
     awardsheading: string;
     proposalheading:string;
     donutAwardHeading: string;
@@ -75,7 +75,6 @@ export class ExpandedviewComponent implements OnInit, OnDestroy{
     }
 	
 	 ngOnInit() {
-	        localStorage.setItem('click','true');
 	        this.adminStatus = localStorage.getItem( 'isAdmin' );
 	        this.userName = localStorage.getItem( 'currentUser' );
 	        this.fullName = localStorage.getItem( 'userFullname' );
@@ -160,8 +159,5 @@ export class ExpandedviewComponent implements OnInit, OnDestroy{
             this.sortOrder = "ASC";
         }
         this.sortBy = sortFieldBy;
-    }
-    ngOnDestroy(){
-       localStorage.setItem('click','false');
     }
 }

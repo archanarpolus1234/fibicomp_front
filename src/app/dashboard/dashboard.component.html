@@ -340,7 +340,7 @@
 										<td class="text-right">{{summaryView[1]}}</td>
 										<td class="text-right" *ngIf="summaryView[2] != null">
 											{{summaryView[2] | currency:'USD':true}}</td>
-										<td class="text-right" *ngIf="summaryView[2] == null">$ 0
+										<td class="text-right" *ngIf="summaryView[2] == null">$ 0.00
 										</td>
 									</tr>
 								</tbody>
@@ -426,11 +426,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullAwardData">
+							<tr *ngIf="nullAwardData; else noAwardNullData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr
-								*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
+							<tr #noAwardNullData *ngFor="let awardDetails of serviceRequestList | slice:begin:end">
 								<td width="8%">{{awardDetails.awardNumber}}</td>
 								<td>{{awardDetails.accountNumber}}</td>
 								<td>{{awardDetails.title}}</td>
@@ -505,10 +504,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullProposalData">
+							<tr *ngIf="nullProposalData; else noNullProposalData;">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr
+							<tr #noNullProposalData;
 								*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
 								<td>{{proposalDetails.proposalNumber}}</td>
 								<td>{{proposalDetails.title}}</td>
@@ -575,10 +574,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullIrbData">
+							<tr *ngIf="nullIrbData; else noNullIrbData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr
+							<tr #noNullIrbData
 								*ngFor="let IRBDetails of serviceRequestList | slice:begin:end">
 								<td>{{IRBDetails.protocolNumber}}</td>
 								<td>{{IRBDetails.title}}</td>
@@ -643,10 +642,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullIacucData">
+							<tr *ngIf="nullIacucData; else noNullIacucData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr *ngFor="let IACUCDetails of serviceRequestList">
+							<tr #noNullIacucData *ngFor="let IACUCDetails of serviceRequestList">
 								<td>{{IACUCDetails.protocolNumber}}</td>
 								<td>{{IACUCDetails.title}}</td>
 								<td>{{IACUCDetails.leadUnit}}</td>
@@ -716,10 +715,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullDisclosureData">
+							<tr *ngIf="nullDisclosureData; else noNullDisclosureData">
 								<td colspan=7>No Requests Found !</td>
 							</tr>
-							<tr *ngFor="let DisclosureDetails of serviceRequestList">
+							<tr #noNullDisclosureData *ngFor="let DisclosureDetails of serviceRequestList">
 								<td>{{DisclosureDetails.coiDisclosureNumber}}</td>
 								<td>{{DisclosureDetails.fullName}}</td>
 								<td>{{DisclosureDetails.disclosureDisposition}}</td>
