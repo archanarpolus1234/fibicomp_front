@@ -15,7 +15,7 @@ export class Constants {
     outputPath: string;
     awardSummaryUrl:string;
     awardHierarchyUrl:string;
-	awardTermsAndReportsUrl: string;
+    awardTermsAndReportsUrl: string;
     commitmentsUrl: string;
 
     constructor() {
@@ -27,7 +27,7 @@ export class Constants {
 
         this.dashboardUrl = '/fibiDashBoard';
         //this.dashboardUrl = 'http://demo.fibiweb.com/fibi-comp/fibiDashBoard';
-       // this.dashboardUrl = 'http://192.168.1.76:8080/fibi-comp/fibiDashBoard';
+       //this.dashboardUrl = 'http://192.168.1.76:8080/fibi-comp/fibiDashBoard';
 
         this.summaryUrl = '/getResearchSummaryData';
         //this.summaryUrl = 'http://demo.fibiweb.com/fibi-comp/getResearchSummaryData';
@@ -62,7 +62,7 @@ export class Constants {
         //this.awardHierarchyUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardHierarchy';
 
         this.awardTermsAndReportsUrl = '/getAwardReportsAndTerms';
-       	//this.awardTermsAndReportsUrl = 'http://demo.fibiweb.com/fibi-comp/getAwardReportsAndTerms';
+        //this.awardTermsAndReportsUrl = 'http://demo.fibiweb.com/fibi-comp/getAwardReportsAndTerms';
         //this.awardTermsAndReportsUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardReportsAndTerms'; 
         
         this.commitmentsUrl = '/getAwardCommitments';

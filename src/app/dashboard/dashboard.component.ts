@@ -111,13 +111,12 @@ export class DashboardComponent implements OnInit {
     public dashboardAwardBysponsorTypesWidget : boolean = true;
     public dashboardproposalBySponsorTypesWidget : boolean = true;
     public dashboardinProgressproposalBySponsorWidget : boolean = true;
+    public message : string;
+    
 	constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData,private dashboardConfigurationService: DashboardConfigurationService) {
         this.outputPath = this.constant.outputPath;
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
-        }
-        if(localStorage.getItem('click')=='true'){
-            this.router.navigate( ['/expandedview'] );
         }
         this.getResearchSummaryData();
     }
@@ -185,7 +184,6 @@ export class DashboardComponent implements OnInit {
                     }
                     if ( this.currentPosition == "DISCLOSURE" ) {
                         this.serviceRequestList = this.result.disclosureViews;
-                        console.log(this.serviceRequestList.length);
                         if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
                             this.nullDisclosureData = true;
                         }

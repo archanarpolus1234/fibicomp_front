@@ -9,6 +9,7 @@ import { Idle } from '@ng-idle/core';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
+import { TreeModule } from 'angular-tree-component';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -26,7 +27,7 @@ import { HeaderComponent } from './common/header-tpl.component';
 import { LogoutComponent } from './login/logout.component';
 import { AwardBySponsorPieChartComponent } from './research_summary/award-by-sponsor-piechart.component';
 import { InProgressProposalDonutChartComponent } from './research_summary/in-progress-proposal-donut-chart.component';
-import {AwardComponent} from './award/award.component';
+import { AwardComponent } from './award/award.component';
 import { AwardHomeComponent } from './award/award-home/award-home.component';
 import { AwardHierarchyComponent } from './award/award-hierarchy/award-hierarchy.component';
 import { AwardReportsAndTerms } from './award/award-reports-and-tabs/award-reports-and-terms.component';
@@ -53,17 +54,17 @@ import { AwardReportsAndTermsService } from './award/award-reports-and-tabs/awar
 import { AwardCommitmentsService } from './award/award-commitments/award-commitments.service';
 
 let appRoutes = [
-    { path: '', component: LoginComponent},
+    { path: '', component: LoginComponent },
 
     { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
     { path: 'loginpage', component: LoginComponent },
-    
-    {path: 'logout', component: LogoutComponent},
-    
-    {path: 'award', component: AwardComponent},
 
-    { path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard]}
+    { path: 'logout', component: LogoutComponent },
+
+    { path: 'award', component: AwardComponent },
+
+    { path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule( {
@@ -99,7 +100,8 @@ let appRoutes = [
         RouterModule.forRoot( appRoutes ),
         NgIdleKeepaliveModule.forRoot(),
         NgbModule.forRoot(),
-        Ng2PageScrollModule
+        Ng2PageScrollModule,
+        TreeModule
     ],
     providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },

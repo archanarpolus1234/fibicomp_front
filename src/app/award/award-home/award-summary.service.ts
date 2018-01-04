@@ -15,7 +15,7 @@ export class AwardSummaryService {
     
    }
 
-    loadAwardSummary(awardId:string) :Observable<JSON> {
+    public loadAwardSummary(awardId:string) :Observable<JSON> {
             var params={
                     awardId:awardId
                 };

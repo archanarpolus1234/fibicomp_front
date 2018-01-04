@@ -52,7 +52,7 @@ export class ProposalBySponsorPieChartComponent extends GoogleChartService {
               }
               this.proposalData =  google.visualization.arrayToDataTable(this.proposalStateList);
               this.proposalOptions = {
-                      title: 'Proposal by sponsor types',
+                      title: 'Proposal By Sponsor Types',
                       is3D: true,
                       colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',
                                '#7BCFFF', '#2AB6F4', '#25C8D9', '#24A095', '#68B96A',
