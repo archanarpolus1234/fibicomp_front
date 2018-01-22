@@ -20,7 +20,8 @@ export class Constants {
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
-
+        //this.index_url = 'http://52.20.110.7:9200/';
+        
         this.loginUrl = '/login';
         //this.loginUrl = 'http://demo.fibiweb.com/fibi-comp/login';
         //this.loginUrl = 'http://192.168.1.76:8080/fibi-comp/login';

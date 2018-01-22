@@ -1,69 +1,79 @@
-  <div class="push4slideMenu pageMinHeight" id="scrollToTop">
-    <div class="container-fluid pushFixedHeaderFooter">
-       <div class="headerPush"></div>
-        <section class="row" >
-            <div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-               <span> MY AWARD</span>
-            </div>
-            
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
-               
-                <div class="row">
-                    <div class="col-xl-3 col-lg-6 col-md-10 col-sm-10 col-10">
-                        <label>Award#:Account</label>
-                        <span>{{awardNumber}}:{{accountNumber}}</span>
-                    </div>
-                    
-                  
-                    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
-                        <label>Lead Unit</label>
-                        <span>{{leadUnitName}}</span>
-                    </div>
-                    <div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
-                        <label>Sponsor</label>
-                        <span>{{sponsorName}}</span>
-                    </div>
-                    <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
-                        <label>Status</label>
-                        <span>{{awardStatus}}</span>
-                    </div>
-                      <div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
-                        <label>Last Update</label>
-                        <span>{{lastUpdate}}</span>
-                    </div>
-                </div>
-            </div> 
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-	            <div class="row">
-	            	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
-		                <ul class="tabsIcon" style="margin-top:10px;">
-		                    <li [ngClass]="{'active':currentTab=='award_home'}" ><a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'award_home');"><i  class="fa fa-usd"></i><span>Award</span></a></li>
-		                    <li [ngClass]="{'active':currentTab=='award_reports_and_terms'}" ><a href="#" (click)="show_current_tab($event,'award_reports_and_terms');"><i class="fa fa-file-text-o"></i><span>Terms & Reports</span></a></li>
-		                    <li [ngClass]="{'active':currentTab=='award_hierarchy'}" ><a href="#"  (click)="show_current_tab($event,'award_hierarchy');"><i class="fa fa-sitemap"></i><span>Hierarchy</span></a></li>
-		                    <li [ngClass]="{'active':currentTab=='award_commitments'}" ><a href="#"  (click)="show_current_tab($event,'award_commitments');"><i class="fa fa-handshake-o"></i><span>Commitments</span></a></li>
-		                		  <a class="view_external_link" title="Open {{awardNumber}}"
-													[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+result.awardDetails[0].document_number+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">
-													<i class="fa fa-external-link"></i> Open Award</a>
-		                </ul>
-		              
-	                </div>
-	               
-	            </div> 
-            </div>
-          
-        </section>
-          <div *ngIf="currentTab =='award_home'">
-            	<app-award-home></app-award-home>
-            </div>
-            <div *ngIf="currentTab =='award_reports_and_terms'">
-            	<award-reports-and-terms></award-reports-and-terms>
-            </div>
-             <div *ngIf="currentTab =='award_hierarchy'">
-            	<app-award-hierarchy></app-award-hierarchy>
-            </div>
-            <div *ngIf="currentTab =='award_commitments'">
-            	<app-award-commitments></app-award-commitments>
-            </div>
-        <div class="footerPush"></div>
-    </div>
-  </div>
+
+<div class="push4slideMenu pageMinHeight" id="scrollToTop">
+	<div class="container-fluid pushFixedHeaderFooter">
+		<div class="headerPush"></div>
+		<section class="row">
+			<div id="myawa"
+				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<span> MY AWARD</span>
+			</div>
+
+			<div
+				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+
+				<div class="row">
+					<div class="col-xl-3 col-lg-6 col-md-10 col-sm-10 col-10">
+						<label>Award#:Account</label> <span>{{awardNumber}}:{{accountNumber}}</span>
+					</div>
+
+
+					<div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
+						<label>Lead Unit</label> <span>{{leadUnitName}}</span>
+					</div>
+					<div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
+						<label>Sponsor</label> <span>{{sponsorName}}</span>
+					</div>
+					<div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
+						<label>Status</label> <span>{{awardStatus}}</span>
+					</div>
+					<div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
+						<label>Last Update</label> <span>{{lastUpdate}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				<div class="row">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						<ul class="tabsIcon" style="margin-top: 10px;">
+							<li [ngClass]="{'active':currentTab=='award_home'}"><a
+								style="padding-top: -5px;" href="#"
+								(click)="show_current_tab($event,'award_home');"><i
+									class="fa fa-usd"></i><span>Award</span></a></li>
+							<li [ngClass]="{'active':currentTab=='award_reports_and_terms'}"><a
+								href="#"
+								(click)="show_current_tab($event,'award_reports_and_terms');"><i
+									class="fa fa-file-text-o"></i><span>Reporting
+										Requirements</span></a></li>
+							<li [ngClass]="{'active':currentTab=='award_hierarchy'}"><a
+								href="#" (click)="show_current_tab($event,'award_hierarchy');"><i
+									class="fa fa-sitemap"></i><span>Hierarchy</span></a></li>
+							<li [ngClass]="{'active':currentTab=='award_commitments'}"><a
+								href="#" (click)="show_current_tab($event,'award_commitments');"><i
+									class="fa fa-handshake-o"></i><span>Commitments</span></a></li>
+							<a class="view_external_link" title="Open {{awardNumber}}"
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+result.awardDetails[0].document_number+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">
+								<i class="fa fa-external-link"></i> Open Award
+							</a>
+						</ul>
+
+					</div>
+
+				</div>
+			</div>
+
+		</section>
+		<div *ngIf="currentTab =='award_home'">
+			<app-award-home></app-award-home>
+		</div>
+		<div *ngIf="currentTab =='award_reports_and_terms'">
+			<award-reports-and-terms></award-reports-and-terms>
+		</div>
+		<div *ngIf="currentTab =='award_hierarchy'">
+			<app-award-hierarchy></app-award-hierarchy>
+		</div>
+		<div *ngIf="currentTab =='award_commitments'">
+			<app-award-commitments></app-award-commitments>
+		</div>
+		<div class="footerPush"></div>
+	</div>
+</div>

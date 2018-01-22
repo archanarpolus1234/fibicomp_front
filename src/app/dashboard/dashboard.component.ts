@@ -424,7 +424,7 @@ export class DashboardComponent implements OnInit {
     }
     
     expandedView( summaryView ) {
-        localStorage.setItem('click','true');
+        //localStorage.setItem('click','true');
         if ( summaryView == 'Submitted Proposal' ) {
             localStorage.setItem( 'researchSummaryIndex', "PROPOSALSSUBMITTED" );
             localStorage.setItem( 'expandedViewHeading', summaryView );

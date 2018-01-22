@@ -42,7 +42,7 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService {
     drawGraph(){
       setTimeout(() => {
       localStorage.setItem('donutChartIndex', null);
-          this.resultPie = this.dashboardData.getDashboardPieChartData();   debugger;
+          this.resultPie = this.dashboardData.getDashboardPieChartData();
           if ( this.resultPie != null ){
               this.proposalList = this.resultPie.summaryProposalDonutChart;
               this.proposalStateList.push( [ 'Task', 'Hours per Day' ] );

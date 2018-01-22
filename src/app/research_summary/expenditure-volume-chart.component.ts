@@ -49,7 +49,11 @@ export class ExpenditureVolumeChartComponent extends GoogleChartService {
                         colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',
                                  '#7BCFFF', '#2AB6F4', '#25C8D9', '#24A095', '#68B96A',
                                  '#9CCC66', '#E5F37A', '#FFF15A', '#FDD154', '#FFA827',
-                                 '#FF7143', '#8C6E63', '#BDBDBD', '#78909C']
+                                 '#FF7143', '#8C6E63', '#BDBDBD', '#78909C'],
+                                 animation: {
+                                     duration: 250 * 1.5,
+                                     easing: 'linear'
+                                   }
                       };
                        if(this.noData){
                            document.getElementById('chart_divEvolution').innerHTML = 'No data';  

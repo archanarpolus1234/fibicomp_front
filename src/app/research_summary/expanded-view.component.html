@@ -47,9 +47,11 @@
 							<td width="8%">{{awardDetails[7]}}</td>
 							<td>
 								<ul class="actionButtonGroup">
-									<li><a title="Open {{awardDetails[0]}}"
+									<li><!-- <a title="Open {{awardDetails[0]}}"
 										[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails[1]+'%26docId%3D'+awardDetails[2]+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
-											class="fa fa-eye"></i> </a></li>
+											class="fa fa-eye"></i> </a> -->
+											<a title="Open {{awardDetails[0]}}" [routerLink]="['/award']" [queryParams]="{awardId:awardDetails[1]}"><i
+											class="fa fa-eye"></i></a></li>
 								</ul>
 							</td>
 						</tr>
@@ -265,15 +267,15 @@
 						</tr>
 						<tr
 							*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
-							<td>{{proposalDetails[1]}}</td>
-							<td>{{proposalDetails[2]}}</td>
-							<td>{{proposalDetails[3]}}</td>
-							<td>{{proposalDetails[4]}}</td>
-							<td>{{proposalDetails[5]}}</td>
+							<td>{{proposalDetails.proposalNumber}}</td>
+							<td>{{proposalDetails.title}}</td>
+							<td>{{proposalDetails.sponsor}}</td>
+							<td>{{proposalDetails.totalCost}}</td>
+							<td>{{proposalDetails.fullName}}</td>
 							<td>
 								<ul class="actionButtonGroup">
-									<li><a title="Open {{proposalDetails[0]}}"
-										[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails[0]+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+									<li><a title="Open {{proposalDetails.documentNumber}}"
+										[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails.documentNumber+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
 											class="fa fa-eye"></i> </a></li>
 								</ul>
 							</td>
@@ -321,15 +323,15 @@
 						</tr>
 						<tr
 							*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
-							<td>{{proposalDetails[1]}}</td>
-							<td>{{proposalDetails[2]}}</td>
-							<td>{{proposalDetails[3]}}</td>
-							<td>{{proposalDetails[4]}}</td>
-							<td>{{proposalDetails[5]}}</td>
+							<td>{{proposalDetails.proposalNumber}}</td>
+							<td>{{proposalDetails.title}}</td>
+							<td>{{proposalDetails.sponsor}}</td>
+							<td>{{proposalDetails.totalCost}}</td>
+							<td>{{proposalDetails.fullName}}</td>
 							<td>
 								<ul class="actionButtonGroup">
-									<li><a title="Open {{proposalDetails[0]}}"
-										[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails[0]+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
+									<li><a title="Open {{proposalDetails.documentNumber}}"
+										[href]="outputPath+'/kc-pd-krad/proposalDevelopment?methodToCall=docHandler&docId='+proposalDetails.documentNumber+'&command=displayDocSearchView&__login_user='+userName+'&kcComp=true'"><i
 											class="fa fa-eye"></i> </a></li>
 								</ul>
 							</td>
@@ -384,17 +386,19 @@
 						</tr>
 						<tr
 							*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
-							<td width="8%">{{awardDetails[2]}}</td>
-							<td>{{awardDetails[3]}}</td>
-							<td>{{awardDetails[4]}}</td>
-							<td>{{awardDetails[5]}}</td>
-							<td>{{awardDetails[6]}}</td>
-							<td>{{awardDetails[7]}}</td>
+							<td width="8%">{{awardDetails.awardNumber}}</td>
+							<td>{{awardDetails.accountNumber}}</td>
+							<td>{{awardDetails.title}}</td>
+							<td>{{awardDetails.sponsor}}</td>
+							<td>{{awardDetails.fullName}}</td>
+							<td>{{awardDetails.total_cost}}</td>
 							<td>
 								<ul class="actionButtonGroup">
-									<li><a title="Open {{awardDetails[0]}}"
-										[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails[0]+'%26docId%3D'+awardDetails[1]+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
-											class="fa fa-eye"></i> </a></li>
+									<!-- <li><a title="Open {{awardDetails.awardNumber}}"
+										[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+											class="fa fa-eye"></i> </a></li> -->
+											<li><a title="Open {{awardDetails.awardNumber}}" [routerLink]="'/award'" [queryParams]="{awardId:awardDetails.awardId}"><i
+											class="fa fa-eye"></i> </a></li> 
 								</ul>
 							</td>
 						</tr>

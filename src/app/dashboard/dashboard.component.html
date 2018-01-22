@@ -340,8 +340,8 @@
 										<td class="text-right">{{summaryView[1]}}</td>
 										<td class="text-right" *ngIf="summaryView[2] != null">
 											{{summaryView[2] | currency:'USD':true}}</td>
-										<td class="text-right" *ngIf="summaryView[2] == null">$ 0.00
-										</td>
+										<td class="text-right" *ngIf="summaryView[2] == null">$
+											0.00</td>
 									</tr>
 								</tbody>
 							</table>
@@ -429,7 +429,8 @@
 							<tr *ngIf="nullAwardData; else noAwardNullData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr #noAwardNullData *ngFor="let awardDetails of serviceRequestList | slice:begin:end">
+							<tr #noAwardNullData
+								*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
 								<td width="8%">{{awardDetails.awardNumber}}</td>
 								<td>{{awardDetails.accountNumber}}</td>
 								<td>{{awardDetails.title}}</td>
@@ -507,7 +508,8 @@
 							<tr *ngIf="nullProposalData; else noNullProposalData;">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr #noNullProposalData;
+							<tr
+								#noNullProposalData;
 								*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
 								<td>{{proposalDetails.proposalNumber}}</td>
 								<td>{{proposalDetails.title}}</td>
@@ -645,7 +647,8 @@
 							<tr *ngIf="nullIacucData; else noNullIacucData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr #noNullIacucData *ngFor="let IACUCDetails of serviceRequestList">
+							<tr #noNullIacucData
+								*ngFor="let IACUCDetails of serviceRequestList">
 								<td>{{IACUCDetails.protocolNumber}}</td>
 								<td>{{IACUCDetails.title}}</td>
 								<td>{{IACUCDetails.leadUnit}}</td>
@@ -718,7 +721,8 @@
 							<tr *ngIf="nullDisclosureData; else noNullDisclosureData">
 								<td colspan=7>No Requests Found !</td>
 							</tr>
-							<tr #noNullDisclosureData *ngFor="let DisclosureDetails of serviceRequestList">
+							<tr #noNullDisclosureData
+								*ngFor="let DisclosureDetails of serviceRequestList">
 								<td>{{DisclosureDetails.coiDisclosureNumber}}</td>
 								<td>{{DisclosureDetails.fullName}}</td>
 								<td>{{DisclosureDetails.disclosureDisposition}}</td>
