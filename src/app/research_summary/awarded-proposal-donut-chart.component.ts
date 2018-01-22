@@ -42,7 +42,7 @@ export class AwardedProposalDonutChartComponent extends GoogleChartService {
     drawGraph(){
       setTimeout(() => {
       localStorage.setItem('donutChartIndex', null);
-          this.resultPie = this.dashboardData.getDashboardPieChartData();   debugger;
+          this.resultPie = this.dashboardData.getDashboardPieChartData();
           if ( this.resultPie != null ){
               this.awardList = this.resultPie.summaryAwardDonutChart;
               this.awardStateList.push( [ 'Task', 'Hours per Day' ] );

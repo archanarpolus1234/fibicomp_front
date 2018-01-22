@@ -21,7 +21,7 @@ export class AwardComponent {
     result: any = {};
     outputPath: string;
     userName: string;
-    
+
     constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants ) {
         this.outputPath = this.constant.outputPath;
     }

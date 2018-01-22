@@ -37,6 +37,8 @@ export class AwardHierarchyComponent implements AfterViewInit {
     public anticipatedAmount: string;
     public treeData: any[] = [];
     public accountNumber: string;
+    piName: string;
+    expandAllEnabled: boolean = false;
     nodes: any = [];
     options: ITreeOptions = {
         displayField: 'name',
@@ -64,6 +66,7 @@ export class AwardHierarchyComponent implements AfterViewInit {
                             this.obligatedAmount = this.result.awardDetails[0].obligated_amount;
                             this.anticipatedAmount = this.result.awardDetails[0].anticipated_amount;
                             this.accountNumber = this.result.awardDetails[0].account_number;
+                            this.piName = this.result.awardDetails[0].full_name;
                         }
                     } );
 
@@ -97,7 +100,6 @@ export class AwardHierarchyComponent implements AfterViewInit {
 
     @ViewChild( 'tree' ) tree;
     ngAfterViewInit() {
-        debugger;
         setTimeout(() => {
             this.tree.treeModel.expandAll();
             const currentNode = this.tree.treeModel.getNodeById( this.awardId );
@@ -105,11 +107,25 @@ export class AwardHierarchyComponent implements AfterViewInit {
         }, 1000 );
     }
 
+    expandAllNodes( e: any ) {
+        this.expandAllEnabled = false;
+        e.preventDefault();
+        this.tree.treeModel.expandAll();
+        const currentNode = this.tree.treeModel.getNodeById( this.awardId );
+        currentNode.setActiveAndVisible();
+    }
+
+    collapseAllNodes( event: any ) {
+        this.expandAllEnabled = true;
+        event.preventDefault();
+        this.tree.treeModel.collapseAll();
+    }
     awardDetailsFetching( awardId: string ) {
         this.awardSummaryService.loadAwardSummary( awardId ).subscribe( data => {
             this.result = data || [];
-            if ( this.result != null ) {
+            if ( this.result.awardDetails[0] != null ) {
                 this.accountNumber = this.result.awardDetails[0].account_number;
+                this.piName = this.result.awardDetails[0].full_name;
                 this.activityType = this.result.awardDetails[0].activity_type;
                 this.awardType = this.result.awardDetails[0].award_type;
                 this.accountType = this.result.awardDetails[0].account_type;
