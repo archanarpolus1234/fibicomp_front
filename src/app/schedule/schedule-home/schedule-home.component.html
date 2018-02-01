@@ -1,0 +1,281 @@
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <div class="row">
+         <div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+        </div>
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div>
+               <h4 class="borderBoxHeading"> 
+   			 <div class="row">
+                <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+                	KC IRB 1 #91 Meeting 07/20/2010
+                    </div>
+                    <div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+                    Last Agenda Generated : 05/15/2010
+                        </div>
+   			 </div>
+   			 </h4>
+                <div class="borderBox">
+                    <table class="table tableSkin grid2" >
+                        <tbody>
+                            <tr>
+                                <td><label> Schedule Date</label><br>07/20/2010</td>
+                                <td><label>Meeting Date</label><br></td>
+                                 <td><label>Status</label><br>Scheduled</td>
+                                <td><label>Place</label><br>EHOB 341</td>
+                                <td><label>Time</label><br>01:00 PM</td>
+                           
+                            </tr> 
+                            <tr>
+                                     <td><label>Submission Deadline</label><br>07/17/2010</td>
+                                     <td><label>Max Protocols</label><br>22</td>
+                           
+                                <td><label>Start Time</label><br>12:00 AM</td>
+                                <td><label>End Time</label><br>12:00 AM</td>
+                                  <td><label>Available to reviewers</label><br>No</td>
+                            </tr>
+                            <tr>
+                                <!--  <td><label></label><br>No</td> -->
+                                <td colspan="8"><label>Comments</label><br></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    <div class="container-fluid">
+       <div>
+       <div>
+         <div>
+            <div class="setHead">
+            <span>Protocol Submitted</span><a href="#"(click)="showProtocolsTab($event)"><i
+									[ngClass]="(showProtocol == true)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
+            </div>
+               <div class="setBody" *ngIf="showProtocol">
+                <div>
+                 <!--  <div class="pullSide"> -->
+                  <table class="table table-responsive tableSkin" >
+                      <tr>
+                          <th title="">Protocol Number</th>
+                          <th title="">PI</th>
+                          <th title="">Protocol Title</th>
+                          <th title="">Submission Type</th>
+                          <th title="">Sub. Type Qualifier</th>
+                          <th title="">Sub. Review Type</th>
+                          <th title="">Submission Status</th>
+                          <th title="">Submission Date</th>
+                          <th title="">Action</th>
+                      </tr>
+                      <tr >
+                          <td>1000911157</td>
+                          <td>PAULETTE SMOCK</td>
+                          <td>Test Protocol Title</td>
+                          <td>Initial Protocol Application for Approval</td>
+                          <td>Complaint</td>
+                          <td>Full</td>
+                          <td>Submitted to Committee</td>
+                          <td>01/02/2019</td>
+                          <td>
+                          <ul class="actionButtonGroup"><li>
+                          &nbsp;&nbsp;<a title="Open Protocol" href="#"><i class="fa fa-eye"></i></a>
+                          </li></ul>
+                          </td>
+                      </tr>
+
+                  </table>
+              <!-- </div> -->
+            </div>
+          </div>
+        </div>
+      </div>
+          <div class="setHead">
+           <span>Attendance</span><a href="#"(click)="showAttendanceTab($event)"><i
+									[ngClass]="(showAttendance == true)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
+          </div>
+           <div class="setBody" *ngIf="showAttendance">
+            <div>
+          <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+              <div class="row">
+              <div class="col-xl-6 col-lg-2 col-md-2 col-sm-2 col-2 text-right">
+               <label>Add Guest</label>
+               </div>
+              <div class="col-xl-6 col-lg-2 col-md-2 col-sm-2 col-2 text-left">
+              <label class="containerCheckBox">Employee
+                      <input type="radio" name="guestType" checked>
+                      <span class="checkmark"></span>
+                  </label>
+                   <label class="containerCheckBox">Non Employee
+                      <input type="radio" name="guestType">
+                      <span class="checkmark"></span>
+                      </label>
+               </div>
+              </div>
+              <div class="row">
+                  <div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2">
+                  	<!-- <label>Add Guest</label> -->
+                  </div>
+                  <div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-2">
+                 <!--  <label class="containerCheckBox">Employee
+                      <input type="radio" name="guestType" checked>
+                      <span class="checkmark"></span>
+                  </label><br>
+                   <label class="containerCheckBox">Non Employee
+                      <input type="radio" name="guestType">
+                      <span class="checkmark"></span>
+                      </label> -->
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-2">
+                      <input type="text"/>
+                  </div>
+                  <div class="col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
+                      <button class="btnSkin btnSkinPrimary">Add</button>
+                  </div>
+                   <div class="col-xl-4 col-lg-3 col-md-3 col-sm-3 col-12 text-right">
+                    <i class="fa fa-user-o" aria-hidden="true"> &nbsp;Guest</i> &nbsp;
+                   <i class="fa fa-user-circle" aria-hidden="true">&nbsp; Alternate</i>
+                  </div>
+              </div>
+          </div>
+        </div>
+        <br>
+           <table class="table tableSkin">
+               <thead>
+                   <tr>
+                       <th>Sl no</th>
+                       <th>Name</th>
+                       <th>Alternate For</th>
+                       <th>Action</th>
+                       <th id="scheduleCommentHeader">Comments</th>
+                   </tr>
+               </thead>
+               <tbody>                   
+                   <tr>
+                       <td>1</td>
+                       <td> Della Woods</td>
+                       <td></td>
+                       <td>
+                           <ul class="actionButtonGroup statusIndicator">
+                               <li><a href="#" class="present current" title="Present"><i class="fa fa-check-circle"></i></a></li>
+                               <li><a><i id="dellaComment" class="fa fa-comment-o" aria-hidden="true"></i></a></li>
+                           </ul>
+                       </td>
+                       <td id="dellaCommentBox">Dellas comment</td>
+                   </tr>
+                   <tr>
+                       <td>2</td>
+                       <td><i class="fa fa-user-o" aria-hidden="true"></i>  Peter Sam</td>
+                       <td></td>
+                       <td>
+                           <ul class="actionButtonGroup statusIndicator">
+                               <li><a href="#" class="present " title="Present"><i class="fa fa-check-circle"></i></a></li>
+                               <li><a><i id="peterSamComment" class="fa fa-comment-o" aria-hidden="true"></i></a></li>
+                           </ul>
+                       </td>
+                       <td id="peterSamCommentBox">Peter's comments</td>
+                   </tr>
+                   <tr>
+                       <td>3</td>
+                       <td><i class="fa fa-user-circle" aria-hidden="true"></i>  Inez Chew</td>
+                       <td>Peter Sam</td>
+                       <td>
+                           <ul class="actionButtonGroup statusIndicator">
+                               <li><a href="#" class="present current" title="Present"><i class="fa fa-check-circle"></i></a></li>
+                               <li><a><i id="InezChewComment" class="fa fa-comment-o" aria-hidden="true"></i></a></li> 
+                           </ul>
+                       </td>
+                       <td id="InezChewCommentBox">Member was present from the begining.</td>
+                   </tr>
+               </tbody>
+           </table>
+       </div>
+     </div>
+      
+      <div class="setHead">
+           <span>Other Actions</span><a href="#"(click)="showOtherActionsTab($event)"><i
+									[ngClass]="(showOtherActions == true)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
+          </div>
+           <div class="setBody" *ngIf="showOtherActions">
+        <div>
+           <!--  <h4 class="borderBoxHeading">Other Actions</h4> -->
+              <div>
+            <table class="table table-responsive tableSkin" >
+                <tr>
+                    <th title="">Sl No</th>
+                    <th title="">Type</th>
+                    <th title="">Description</th>
+                    <th title="">Actions</th>
+                </tr>
+                <tr>
+                  <td class="noData">Add :</td>
+                  <td>
+                    <select>
+                      <option value="select">Select</option>                    
+                    </select>
+                </td>
+                  <td><input type="text" class="scheduleBoxes"></td>
+                  <td><input type="button" value="Add" class="btnSkin btnSkinPrimary"></td>
+                </tr>
+                <tr >
+                   <td>1</td>
+                   <td>Adverse Event</td>
+                   <td>Adverse Event happend during protocol #122538 during clinical trial. refer #23654</td>
+                   <td>&nbsp;&nbsp;<i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                </tr>
+                <tr >
+                   <td>2</td>
+                   <td>New Member Consideration</td>
+                   <td>As Evana Tessy is leaving, need to consider membership of Santo Defry</td>
+                   <td>&nbsp;&nbsp;<i class="fa fa-trash-o" aria-hidden="true"></i></td>
+                </tr>
+            </table>
+          </div>
+        </div>
+        </div>
+        <div class="setHead">
+           <span>Attachment</span><a href="#"(click)="showAttachmentTab($event)"><i
+									[ngClass]="(showAttachment == true)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
+          </div>
+           <div class="setBody" *ngIf="showAttachment">
+          <div>
+          <div class="row">
+              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+              <div class="row">
+                  <div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2">
+                    
+                  </div>
+                  <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-2">
+                      
+                  </div>
+                  <div class="col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
+                      
+                  </div>
+                   <div class="col-xl-6 col-lg-3 col-md-3 col-sm-3 col-12 text-right">
+                    <ul class="addAttachmentsIcon actionButtonGroup">
+							<li><a title="Open" href="#"><i class="fa fa-plus"></i>&nbsp;&nbsp;Add Attachment</a></li>
+					</ul>
+                  </div>
+              </div>
+          </div>
+        </div>
+            <table class="table table-responsive tableSkin" >
+                <tr>
+                    <th title="">Sl Number</th>
+                    <th title="">Attachment Type</th>
+                    <th title="">Description</th>
+                    <th title="">File Name</th>
+                    
+                </tr>
+                <tr >
+                    <td>1</td>
+                    <td>Schedule</td>
+                    <td>Schedule</td>
+                    <td>Business_Proposal_BTC_Private_Ticker.pdf</td>
+                </tr>
+            </table>
+            </div>
+        </div>
+    </div> 
+</div>
+</div>
+</div>

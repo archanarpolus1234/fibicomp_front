@@ -23,7 +23,7 @@ export class IrbElasticsearchService {
   search( value, personId ): any { 
     if ( value ) {
       return this._client.search({
-        index: 'irbfibiqa',
+        index: 'irbfibi',
         size: 20 ,
         type: 'irb',
         body: {
@@ -32,7 +32,7 @@ export class IrbElasticsearchService {
                     should: [
                       {
                         match: {
-                          protocol_id: {
+                            protocol_number: {
                             query: value,
                             operator: 'or'
                           }
@@ -40,7 +40,7 @@ export class IrbElasticsearchService {
                       },
                       {
                         match: {
-                          protocol_number: {
+                            title: {
                             query: value,
                             operator: 'or'
                           }
@@ -48,7 +48,7 @@ export class IrbElasticsearchService {
                       },
                       {
                         match: {
-                          title: {
+                            lead_unit_number: {
                             query: value,
                             operator: 'or'
                           }
@@ -57,7 +57,7 @@ export class IrbElasticsearchService {
                       ,
                       {
                         match: {
-                          lead_unit: {
+                            status: {
                             query: value,
                             operator: 'or'
                           }
@@ -66,7 +66,7 @@ export class IrbElasticsearchService {
                       ,
                       {
                         match: {
-                          unit_number: {
+                            lead_unit_name: {
                             query: value,
                             operator: 'or'
                           }
@@ -74,15 +74,7 @@ export class IrbElasticsearchService {
                       },
                       {
                         match: {
-                          protocol_type: {
-                            query: value,
-                            operator: 'or'
-                          }
-                        }
-                      },
-                      {
-                        match: {
-                          status: {
+                            person_name: {
                             query: value,
                             operator: 'or'
                           }
@@ -90,7 +82,11 @@ export class IrbElasticsearchService {
                       }]
                   }
                 } ,
-                
+                /*filter: {
+                    term: { 
+                        person_id: personId
+                    }
+                  },*/
               sort: [{
                   _score: {
                     order: 'desc'
@@ -100,13 +96,12 @@ export class IrbElasticsearchService {
                   pre_tags: ['<b>'],
                   post_tags: ['</b>'],
                   fields: {
-                    protocol_id: {},
-                    protocol_number: {},
-                    title: {},
-                    lead_unit: {},
-                    unit_number: {},
-                    protocol_type: {},
-                    status: {}
+                      protocol_number: {},
+                      title: {},
+                      lead_unit_number: {},
+                      status: {},
+                      lead_unit_name: {},
+                      person_name: {}
                   }
                 } 
                      }

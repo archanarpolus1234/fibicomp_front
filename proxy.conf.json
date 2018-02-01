@@ -1,50 +1,58 @@
 {	
 	"/login" :{
-					 "target" : "http://192.168.1.93:8080/fibi-comp",
+					 "target" : "http://192.168.1.76:8080/fibi-comp",
 					 "secure" : false
 	},
 	"/fibiDashBoard" :{
-					"target" : "http://192.168.1.93:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 					"secure" : false
 	},
 	"/getResearchSummaryData" :{
-					 "target" : "http://192.168.1.93:8080/fibi-comp",
+					 "target" : "http://192.168.1.76:8080/fibi-comp",
 					 "secure" : false
 	},
 	"/logout" : {
-				     "target" : "http://192.168.1.93:8080/fibi-comp",
+				     "target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getUserNotification" : {
-				     "target" : "http://192.168.1.93:8080/fibi-comp",
+				     "target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getPieChartDataByType" : {
-					"target" : "http://192.168.1.93:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
     "/getDetailedResearchSummary" : {
-					"target" : "http://192.168.1.93:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getDonutChartDataBySponsor" : {
-					"target" : "http://192.168.1.93:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getAwardSummary" : {
-					"target" : "http://192.168.1.93:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getAwardHierarchy" : {
-					"target" : "http://192.168.1.93:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getAwardReportsAndTerms" : {
-					"target" : "http://192.168.1.93:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
 	},
 	"/getAwardCommitments" : {
-					"target" : "http://192.168.1.93:8080/fibi-comp",
+					"target" : "http://192.168.1.76:8080/fibi-comp",
 				     "secure" : false
+	},
+	"/createCommittee" : {
+					"target" : "http://192.168.1.76:8080/fibi-comp",
+				     "secure" : false
+	},
+	"/saveCommittee" : {
+					"target" : "http://192.168.1.242:8090/fibi-comp",
+				     "secure" : false	
 	}
 }

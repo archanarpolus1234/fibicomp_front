@@ -1,0 +1,50 @@
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <div class="row">
+        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="col-12">
+               <h4 class="borderBoxHeading">Minutes
+                    <button class="editBtn"><i class="fa fa-pencil"></i></button>
+                     <button id="minutesAddBtn" class="addBtn" (click)="addMinutes($event)">
+			<i class="fa fa-plus"></i>	
+			</button>
+                </h4>
+                  <div>
+                     <table class="table table-responsive tableSkin" >
+                     <tr id="addMinutesRow" *ngIf="addMinutesEntry">
+        		<td>
+        			Minutes
+        		</td>
+        		<td>
+        		 <input type="text" class="committeeBox">
+        		</td>
+        		<td>
+        			 <button class="btnSkin btnSkinPrimary">Add</button>
+        		</td>
+        	</tr>
+                <tr>
+                    <th title="">Sl Number</th>
+                    <th  title="">Entry Type</th>
+                    <th  title="">Entry</th>
+                    <th title="">Private</th>
+                    <th title="">Final</th>
+                </tr>
+                <tr >
+                    <td>1</td>
+                    <td >General Comments</td>
+                    <td >Meeting gathered on time</td>
+                    <td>True</td>
+                    <td>True</td>
+                </tr>
+                 <tr >
+                    <td>2</td>
+                    <td >Protocol 1000911157</td>
+                    <td >Protocol submitted to committee</td>
+                    <td>True</td>
+                    <td>False</td>
+                </tr>
+            </table>   
+           </div>
+          </div>
+        </div>
+	</div>
+</div>
