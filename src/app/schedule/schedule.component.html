@@ -1,0 +1,61 @@
+<div class="push4slideMenu pageMinHeight" id="scrollToTop">
+	<div class="container-fluid pushFixedHeaderFooter">
+		<div class="headerPush"></div>
+		<!-- Session handling component -->
+		<app-sessiontimeout> </app-sessiontimeout>
+		   <section class="row" >
+
+            <div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><br>
+               <div class="h6"> COMMITTEE</div>
+            </div>
+            
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+               
+                <div class="row">
+                    <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+                        <label>Id</label>
+                        <span>KC001</span>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+                        <label>Name</label>
+                        <span>KC IRB 1</span>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+                        <label>Type</label>
+                        <span>IRB</span>
+                    </div>
+                      <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+                        <label>Home Unit</label>
+                        <span>University</span>
+                    </div>
+                      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+                        <label>Last Updated User</label>
+                        <span>10/10/2017 by admin</span>
+                    </div>
+                    <!-- <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+                        <label>Updated User</label>
+                        <span>admin</span>
+                    </div> -->
+                </div>
+            </div> 
+            <!-- tabs in committee view -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <section class="row">
+             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <ul class="tabsIcon" style="margin-top:10px;">
+                    <li class="active" [ngClass]="{'active':currentTab=='schedule_home'}" ><a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'schedule_home');"><i  class="fa fa-calendar"></i><span>Schedule</span></a></li>
+                    <li [ngClass]="{'active':currentTab=='minutes'}" ><a href="#" (click)="show_current_tab($event,'minutes');"><i class="fa fa-users"></i><span>Minutes</span></a></li>
+                </ul>
+            </div> 
+		</section>
+      </div>
+    </section>
+   <div *ngIf="currentTab =='schedule_home'">
+	<app-schedule-home></app-schedule-home>
+   </div>
+   <div *ngIf="currentTab =='minutes'">
+	<app-minutes></app-minutes>
+	</div>
+	<div class="footerPush"></div>
+	</div>
+</div>

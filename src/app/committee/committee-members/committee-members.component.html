@@ -1,0 +1,588 @@
+<section class="row">
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+<div class="row">
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 row filterRadioBtns">
+		<span>Filter Members : &nbsp;</span>
+		<input type="checkbox" name="filterMember" value="active" checked>&nbsp;Active &nbsp;&nbsp;
+		<input type="checkbox" name="filterMember" value="inactive">&nbsp;Inactive
+	</div>
+	<br>
+		<div class="set">
+			<div class="setHead">
+				<span>Opal Blood (Active)</span><a href="#"(click)="showMembersTab($event)"><i
+									[ngClass]="(showMembers == true)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
+			</div>
+<div class="setBody" style="display: block;" *ngIf="showMembers">
+	<div class="row">
+		<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+			<div class="borderBox col-12">
+				<h4 class="borderBoxHeading">
+					Person Details
+				<button class="editBtn">
+					<i class="fa fa-pencil"></i>
+				</button>
+			</h4>
+			<div class="pullSide">
+				<table class="table tableSkin grid2">
+					<tbody>
+						<tr>
+							<td><label>Person Name</label><br>Opal
+								Blood</td>
+							<td><label>Membership Type</label><br>Voting
+								Member</td>
+							<td><label> Term Start Date</label><br>08/23/2017</td>
+							<td><label> Term End Date</label><br>07/09/2019</td>
+						</tr>
+						<tr>
+							<td colspan="2"><label> Contact Notes</label><br></td>
+							<td colspan="2"><label> Training Notes</label><br></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="borderBox">
+			<h4 class="borderBoxHeading">Contact Information</h4>
+			<div class="row">
+				<div
+					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+					<div class="row">
+						<div
+							class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
+							<label>Oblood Primary Title (Primary) <br>
+								Oblood Directory Title (Directory)</label><br> <span>Coeus, MASSACHUSETTS,
+								United States, 53421<br>
+							(Ofc) 321-321-1203, (Mob) 9345 7866 2356,
+								(Fax) 321-321-1264
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+</div>
+
+<!-- ROLES -->
+<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+		<div class=" borderBox col-12">
+			<h4 class="borderBoxHeading">
+				Roles
+				<button class="editBtn" id="roleEditBtn">
+					<i class="fa fa-pencil"></i>
+				</button>
+				<button id="rolesAddBtn" class="addBtn" (click)="addRoles($event)">
+					<i class="fa fa-plus"></i>
+				</button>
+			</h4>
+			<div class="pullSide">
+				<table class="table table-responsive tableSkin">
+					<tr id="roleAddingRow" *ngIf="addRole">
+						<td align="justify">Role :</td>
+						<td><input type="text" class="scheduleBoxes">
+						</td>
+						<td>
+							<button class="btnSkin btnSkinPrimary">Add</button>
+						</td>
+					</tr>
+					<tr>
+						<th title="">Sl No</th>
+						<th title="">Role</th>
+						<th title="">Start Date</th>
+						<th title="">End Date</th>
+						<th title="" class="roleEditingActions">Action</th>
+
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>Alternate</td>
+						<td>08/23/2017</td>
+						<td>07/03/2019</td>
+						<td class="roleEditingActions"><i class="fa fa-trash-o"></i></td>
+
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div class=" borderBox col-12">
+
+			<h4 class="borderBoxHeading">
+				Expertise
+				<button class="editBtn" id="expertiseEditBtn">
+					<i class="fa fa-pencil"></i>
+				</button>
+				<button id="expertiseAddBtn" class="addBtn" (click)="addExpertises($event)">
+					<i class="fa fa-plus"></i>
+				</button>
+			</h4>
+			<div class="pullSide">
+				<table class="table table-responsive tableSkin">
+					<tr id="expertiseAddingRow" *ngIf="addExpertise">
+						<td align="justify">Expertise In :</td>
+						<td><input type="text" class="scheduleBoxes">
+						</td>
+						<td>
+							<button class="btnSkin btnSkinPrimary">Add</button>
+						</td>
+					</tr>
+					<tr>
+						<th title="">Sl No</th>
+						<th title="">Code</th>
+						<th title="">Area of Expertise</th>
+						<th title="" class="expertiseEditingActions">Action</th>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>000001</td>
+						<td>All Research Areas</td>
+						<td class="expertiseEditingActions"><i class="fa fa-trash-o" ></i></td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>000001</td>
+						<td>All Research Areas</td>
+						<td class="expertiseEditingActions"><i class="fa fa-trash-o" ></i></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	<div class="set">
+		<div class="setHead">
+			<span>Cecile Cary (Active)</span><a href="#"><i
+				class="fa fa-chevron-circle-up"></i></a>
+		</div>
+		<div class="setBody">
+			<div class="row">
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+					<div class="borderBox col-12">
+						<h4 class="borderBoxHeading">
+							Person Details
+							<button class="editBtn">
+								<i class="fa fa-pencil"></i>
+							</button>
+						</h4>
+						<div class="pullSide">
+							<table class="table tableSkin grid2">
+								<tbody>
+									<tr>
+										<td><label>Person Name</label><br>Cecile
+											Cary</td>
+										<td><label>Membership Type</label><br>Voting
+											Member</td>
+										<td><label> Term Start Date</label><br>08/23/2017</td>
+										<td><label> Term End Date</label><br>08/07/2020</td>
+									</tr>
+									<tr>
+										<td colspan="2"><label> Contact Notes</label><br></td>
+										<td colspan="2"><label> Training Notes</label><br></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<!-- CONTACT INFORMATION -->
+
+		<div class="borderBox">
+			<h4 class="borderBoxHeading">Contact Information</h4>
+				<div class="row">
+				  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+					<div class="row">
+				     <div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
+					<label>Cecile Cary Primary Title (Primary) <br>
+						Cecile Cary Directory Title (Secondary)</label><br><span>Coeus, MASSACHUSETTS,
+						United States, 53421<br>
+					(Ofc) 321-321-1203, (Mob) 9345 7866 2356,
+						(Fax) 321-321-1264
+					</span>
+				  </div>
+			   </div>
+		     </div>
+	        </div>
+		</div>
+
+<!-- CONTACT INFORMATION END -->
+</div>
+<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+	<div class=" borderBox col-12">
+		<h4 class="borderBoxHeading">
+			Roles
+			<button class="editBtn">
+				<i class="fa fa-pencil"></i>
+			</button>
+			<button class="addBtn">
+				<i class="fa fa-plus"></i>
+			</button>
+		</h4>
+		<div class="pullSide">
+			<table class="table table-responsive tableSkin">
+				<tr>
+					<th title="">Sl No</th>
+					<th title="">Role</th>
+					<th title="">Start Date</th>
+					<th title="">End Date</th>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>Chair</td>
+					<td>08/23/2017</td>
+					<td>08/09/2019</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<!-- ROLES END -->
+
+<!-- EXPERTISE -->
+		<div class=" borderBox col-12">
+			<h4 class="borderBoxHeading">
+				Expertise
+				<button class="addBtn">
+					<i class="fa fa-plus"></i>
+				</button>
+				<button class="editBtn">
+					<i class="fa fa-pencil"></i>
+				</button>
+			</h4>
+			<div class="pullSide">
+				<table class="table table-responsive tableSkin">
+					<tr>
+						<th title="">Sl No</th>
+						<th title="">Code</th>
+						<th title="">Area of Expertise</th>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>01.0302</td>
+						<td>AnimalLivestock Husbandry and Production</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>01.0508</td>
+						<td>TaxidermyTaxidermist</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>01.0404</td>
+						<td>Photojournalism</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- ROLES -->
+		</div>
+	</div>
+</div>
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	<div class="set">
+		<div class="setHead">
+			<span>Mitzi Pond (Inactive)</span><a href="#"><i
+				class="fa fa-chevron-circle-up"></i></a>
+		</div>
+		<div class="setBody">
+			<div class="row">
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+					<div class="borderBox col-12">
+						<h4 class="borderBoxHeading">
+							Person Details
+							<button class="editBtn">
+								<i class="fa fa-pencil"></i>
+							</button>
+						</h4>
+						<div class="pullSide">
+
+							<table class="table tableSkin grid2">
+								<tbody>
+									<tr>
+										<td><label>Person Name</label><br>Opal
+											Blood</td>
+										<td><label>Membership Type</label><br>Voting
+											Member</td>
+										<td><label> Term Start Date</label><br>08/23/2017</td>
+										<td><label> Term End Date</label><br>08/09/2019</td>
+									</tr>
+									<tr>
+										<td colspan="2"><label> Contact Notes</label><br></td>
+										<td colspan="2"><label> Training Notes</label><br></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="borderBox">
+						<h4 class="borderBoxHeading">Contact Information</h4>
+						<div class="pullSide">
+							<table class="table tableSkin grid2">
+								<tbody>
+									<tr>
+										<td><label>Email Address</label><br>mjpond@kuali.org</td>
+										<td><label>Primary Title</label><br>Mjpond
+											Primary Title</td>
+										<td><label> Home Unit</label><br>000001</td>
+									</tr>
+									<tr>
+
+										<td><label> Pager</label><br></td>
+
+										<td><label> Office Location</label><br>Kuali
+											Foundation</td>
+										<td><label> Address Line 1</label><br>1124
+											Kuali Drive</td>
+									</tr>
+									<tr>
+										<td><label>Address Line 2</label><br>Kuali
+											Foundation</td>
+										<td><label>City</label><br>Coeus</td>
+										<td><label>Postal Code</label><br>53421</td>
+									</tr>
+									<tr>
+										<td><label> Office Phone</label><br>321-321-1227</td>
+										<td><label> Directory Title</label><br>Mjpond
+											Directory Title</td>
+										<td><label>School</label><br></td>
+									</tr>
+									<tr>
+										<td><label>Fax</label><br>321-321-1288</td>
+										<td><label> Mobile</label><br></td>
+										<td><label>Secondary Office Location</label><br></td>
+									</tr>
+									<tr>
+
+										<td><label>County</label><br></td>
+										<td><label>State</label><br>MASSACHUSETTS</td>
+										<td><label> Country</label><br>United
+											States</td>
+
+									</tr>
+									<tr>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+					<div class=" borderBox col-12">
+						<h4 class="borderBoxHeading">
+							Roles
+							<button class="editBtn">
+								<i class="fa fa-pencil"></i>
+							</button>
+						</h4>
+						<div class="pullSide">
+							<table class="table table-responsive tableSkin">
+								<tr>
+									<th title="">Sl No</th>
+									<th title="">Role</th>
+									<th title="">Start Date</th>
+									<th title="">End Date</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Member - Scientist</td>
+									<td>08/24/2017</td>
+									<td>08/08/2019</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+					<div class=" borderBox col-12">
+						<h4 class="borderBoxHeading">
+							Expertise
+							<button class="editBtn">
+								<i class="fa fa-pencil"></i>
+							</button>
+						</h4>
+						<div class="pullSide">
+							<table class="table table-responsive tableSkin">
+								<tr>
+									<th title="">Sl No</th>
+									<th title="">Code</th>
+									<th title="">Area of Expertise</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>01.0508</td>
+									<td>TaxidermyTaxidermist</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>01.0599</td>
+									<td>Agricultural and Domestic Animals Services,
+										Other</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td>01.06</td>
+									<td>Applied HorticultureHorticultural Business
+										Services</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+	<div class="set">
+		<div class="setHead">
+			<span>Allyson Cate (Inactive)</span><a href="#"><i
+				class="fa fa-chevron-circle-up"></i></a>
+		</div>
+		<div class="setBody">
+			<div class="row">
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+					<div class="borderBox col-12">
+						<h4 class="borderBoxHeading">
+							Person Details
+							<button class="editBtn">
+								<i class="fa fa-pencil"></i>
+							</button>
+						</h4>
+						<div class="pullSide">
+							<table class="table tableSkin grid2">
+								<tbody>
+									<tr>
+										<td><label>Person Name</label><br>Allyson
+											Cate</td>
+										<td><label>Membership Type</label><br>Voting
+											Member</td>
+										<td><label> Term Start Date</label><br>08/24/2017</td>
+										<td><label> Term End Date</label><br>08/08/2019</td>
+									</tr>
+									<tr>
+										<td colspan="2"><label> Contact Notes</label><br></td>
+										<td colspan="2"><label> Training Notes</label><br></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+					<div class="borderBox">
+						<h4 class="borderBoxHeading">Contact Information</h4>
+						<div class="pullSide">
+							<table class="table tableSkin grid2">
+								<tbody>
+									<tr>
+										<td><label>Email Address</label><br>
+											cate@kuali.org</td>
+										<td><label>Primary Title</label><br>Cate
+											Primary Title</td>
+										<td><label> Home Unit</label><br>IN-MDEP</td>
+									</tr>
+									<tr>
+										<td><label> Pager</label><br></td>
+
+										<td><label> Office Location</label><br>Kuali
+											Foundation</td>
+										<td><label> Address Line 1</label><br>1124
+											Kuali Drive</td>
+									</tr>
+									<tr>
+										<td><label>Address Line 2</label><br>Kuali
+											Foundation</td>
+										<td><label>City</label><br>Coeus</td>
+										<td><label>Postal Code</label><br>53421</td>
+									</tr>
+									<tr>
+
+										<td><label> Office Phone</label><br>321-321-1204</td>
+										<td><label> Directory Title</label><br>Cate
+											Directory Title</td>
+										<td><label>School</label><br></td>
+									</tr>
+									<tr>
+										<td><label>Fax</label><br>321-321-1265</td>
+										<td><label> Mobile</label><br></td>
+										<td><label>Secondary Office Location</label><br></td>
+									</tr>
+									<tr>
+										<td><label>County</label><br></td>
+										<td><label>State</label><br>MASSACHUSETTS</td>
+										<td><label> Country</label><br>United
+											States</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+					<div class=" borderBox col-12">
+						<h4 class="borderBoxHeading">
+							Roles
+							<button class="editBtn">
+								<i class="fa fa-pencil"></i>
+							</button>
+						</h4>
+						<div class="pullSide">
+							<table class="table table-responsive tableSkin">
+								<tr>
+									<th title="">Sl No</th>
+									<th title="">Role</th>
+									<th title="">Start Date</th>
+									<th title="">End Date</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Member - Non Scientist</td>
+									<td>08/24/2017</td>
+									<td>08/05/2019</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+					<div class=" borderBox col-12">
+						<h4 class="borderBoxHeading">
+							Expertise
+							<button class="editBtn">
+								<i class="fa fa-pencil"></i>
+							</button>
+						</h4>
+						<div class="pullSide">
+							<table class="table table-responsive tableSkin">
+								<tr>
+									<th title="">Sl No</th>
+									<th title="">Code</th>
+									<th title="">Area of Expertise</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>01.0302</td>
+									<td>AnimalLivestock Husbandry and Production</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>01.0508</td>
+									<td>TaxidermyTaxidermist</td>
+								</tr>
+								<tr>
+									<td>3</td>
+									<td>01.0404</td>
+									<td>Photojournalism</td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+</div>
+</section>

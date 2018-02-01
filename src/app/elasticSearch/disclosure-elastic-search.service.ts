@@ -23,7 +23,7 @@ export class DisclosureElasticsearchService {
     search( value, personId ): any {
         if ( value ) {
             return this._client.search( {
-                index: 'coifibiqa',
+                index: 'coifibi',
                 size: 20,
                 type: 'coi',
                 body: {
@@ -73,7 +73,11 @@ export class DisclosureElasticsearchService {
                             ]
                         }
                     },
-                    
+                    /*filter: {
+                        term: {
+                            person_id: personId
+                        }
+                    },*/
                     sort: [{
                         _score: {
                             order: 'desc'
@@ -83,7 +87,7 @@ export class DisclosureElasticsearchService {
                         pre_tags: ['<b>'],
                         post_tags: ['</b>'],
                         fields: {
-                            coi_disclosure_id: {},
+                            coi_disclosure_number: {},
                             full_name: {},
                             disclosure_disposition: {},
                             disclosure_status: {},

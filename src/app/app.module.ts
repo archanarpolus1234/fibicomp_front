@@ -10,6 +10,7 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { TreeModule } from 'angular-tree-component';
+import { Ng2CompleterModule } from 'ng2-completer';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -52,6 +53,12 @@ import { AwardSummaryService } from './award/award-home/award-summary.service';
 import { AwardHierarchyService } from './award/award-hierarchy/award-hierarchy.service';
 import { AwardReportsAndTermsService } from './award/award-reports-and-tabs/award-reports-and-terms.service';
 import { AwardCommitmentsService } from './award/award-commitments/award-commitments.service';
+import { CommitteeHomeComponent } from './committee/committee-home/committee-home.component';
+import { CommitteeMembersComponent } from './committee/committee-members/committee-members.component';
+import { ScheduleHomeComponent } from './schedule/schedule-home/schedule-home.component';
+import { MinutesComponent } from './schedule/minutes/minutes.component';
+import { CommitteeComponent } from './committee/committee.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -64,7 +71,11 @@ let appRoutes = [
 
     { path: 'award', component: AwardComponent },
 
-    { path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard] }
+    { path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard] },
+    
+    { path: 'committee', component: CommitteeComponent },
+    
+    { path: 'schedule', component: ScheduleComponent }
 ];
 
 @NgModule( {
@@ -89,7 +100,13 @@ let appRoutes = [
         AwardReportsAndTerms,
         AwardHomeComponent,
         AwardHierarchyComponent,
-        AwardCommitmentsComponent
+        AwardCommitmentsComponent,
+        CommitteeHomeComponent,
+        CommitteeMembersComponent,
+        ScheduleHomeComponent,
+        MinutesComponent,
+        CommitteeComponent,
+        ScheduleComponent,
     ],
     imports: [
         BrowserModule,
@@ -101,7 +118,8 @@ let appRoutes = [
         NgIdleKeepaliveModule.forRoot(),
         NgbModule.forRoot(),
         Ng2PageScrollModule,
-        TreeModule
+        TreeModule,
+        Ng2CompleterModule
     ],
     providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },

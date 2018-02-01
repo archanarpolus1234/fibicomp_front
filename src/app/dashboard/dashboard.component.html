@@ -20,6 +20,8 @@
 						(click)="showTab('IACUC')"> IACUC </a></li>
 					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
 						(click)="showTab('DISCLOSURE')"> Disclosures </a></li>
+					<li [ngClass]="{'active': currentPosition == 'COMMITTEE'}"><a
+						(click)="showTab('COMMITTEE')"> COMMITTEE & SCHEDULES </a></li>
 				</ul>
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
@@ -72,7 +74,7 @@
 									[tabPosition]="currentPosition"
 									[placeText]="'Search: Disclosure#,  PI Name, Disposition, Status'"></app-elastic-search>
 							</div>
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" *ngIf="currentPosition !== 'COMMITTEE'">
 								<a id="advcanceSearch" href="#" class="linkButton"
 									(click)="advanceSearch($event)"> <i class="fa fa-cog"></i>
 									Advanced Search
@@ -740,6 +742,38 @@
 							</tr>
 						</tbody>
 					</table>
+				</div>
+			</div>
+			
+			<!-- COMMITTEE & SCHEDULE -->
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition == 'COMMITTEE')">
+				<div class="row">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a title="Open"
+											routerLink='/committee' [queryParams]="{mode:'view'}"><i
+												class="fa fa-eye"></i>View COMMITTEE</a>
+						</span>
+					</div>
+				</div>
+					<div class="row">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a routerLink='/schedule'>
+								<i class="fa fa-eye"></i> View SCHEDULE
+						</a>
+						</span>
+					</div>
+				</div>
+					<div class="row">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a title="Open"
+											routerLink='/committee' [queryParams]="{mode:'create'}"><i
+												class="fa fa-eye"></i>Create COMMITTEE</a>
+						</span>
+					</div>
 				</div>
 			</div>
 

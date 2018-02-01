@@ -1,0 +1,72 @@
+<div class="push4slideMenu pageMinHeight" id="scrollToTop">
+	<div class="container-fluid pushFixedHeaderFooter">
+		<div class="headerPush"></div>
+		<!-- Session handling component -->
+		<app-sessiontimeout> </app-sessiontimeout>
+		   <section class="row" >
+
+            <div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><br>
+               <div class="h6"> COMMITTEE</div>
+               <button class="editBtn" *ngIf="editDetails ==false" (click)="showEditDetails()"><i class="fa fa-pencil"></i></button>
+            <button class="addBtn" *ngIf="editDetails" (click)="saveDetails()"><i class="fa fa-floppy-o"></i></button>
+             <button class="editBtn" *ngIf="editDetails" (click)="cancelEditDetails()"><i class="fa fa-times"></i></button>
+            </div>
+            
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+               
+                <div class="row">
+                    <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+                        <label>Id</label>
+                        <span><input type="text" [ngClass]="class" [(ngModel)]="id" [disabled]="mode=='view'"/></span>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+                        <label>Name</label>
+                        <span><input type="text" [ngClass]="class" [(ngModel)]="name" [disabled]="mode=='view'"/></span>
+                    </div>
+                    <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+                        <label>Type</label>
+                        <span><input type="text" [ngClass]="class" [(ngModel)]="type" [disabled]="mode=='view'"/></span>
+                    </div>
+                      <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+                        <label>Home Unit</label>
+                        <span>
+		        		<ng2-completer
+						title="Enter Home Unit"
+						[(ngModel)]="homeUnitInput.unitName"
+						[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
+						(ngModelChange)="homeChangeFunction(homeUnitInput.unitName)"
+						(selected)="onHomeSelect()"></ng2-completer></span>
+                    </div>
+                      <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+                        <label>Last Updated User</label>
+                        <span><input type="text" [ngClass]="class" [(ngModel)]="lastUpdated" [disabled]="mode=='view'"/></span>
+                    </div>
+                    <!-- <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+                        <label>Updated User</label>
+                        <span>admin</span>
+                    </div> -->
+                </div>
+            </div> 
+            <!-- tabs in committee view -->
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <section class="row">
+             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <ul class="tabsIcon" style="margin-top:10px;">
+                    <li class="active" [ngClass]="{'active':currentTab=='committee_home'}" ><a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'committee_home');"><i  class="fa fa-calendar"></i><span>Committee</span></a></li>
+                    <li [ngClass]="{'active':currentTab=='committee_members'}" ><a href="#" (click)="show_current_tab($event,'committee_members');"><i class="fa fa-users"></i><span>Members</span></a></li>
+                </ul>
+            </div> 
+		</section>
+						
+          </div>
+		</section>
+		  <div *ngIf="currentTab =='committee_home'">
+			<app-committee-home [Id]="id" [Name]="name" [Type]="type" [Unit]="homeUnitInput.unitNumber"></app-committee-home>
+		</div>
+		<div *ngIf="currentTab =='committee_members'">
+			<app-committee-members></app-committee-members>
+		</div>
+				<div class="footerPush"></div>
+	</div>
+</div>
+

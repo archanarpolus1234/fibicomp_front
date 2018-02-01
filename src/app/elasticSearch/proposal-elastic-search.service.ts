@@ -24,7 +24,7 @@ export class ProposalElasticsearchService {
   search( value, personId ): any {
     if ( value) {
       return this._client.search({
-        index: 'pdfibiqa',
+        index: 'pdfibi',
         size: 20 ,
         type: 'devproposal',
         body: {
@@ -33,7 +33,7 @@ export class ProposalElasticsearchService {
                     should: [
                       {
                         match: {
-                          document_number: {
+                            proposal_number: {
                             query: value,
                             operator: 'or'
                           }
@@ -41,7 +41,7 @@ export class ProposalElasticsearchService {
                       },
                       {
                         match: {
-                          proposal_number: {
+                            title: {
                             query: value,
                             operator: 'or'
                           }
@@ -49,7 +49,7 @@ export class ProposalElasticsearchService {
                       },
                       {
                         match: {
-                          title: {
+                            lead_unit_number: {
                             query: value,
                             operator: 'or'
                           }
@@ -57,7 +57,7 @@ export class ProposalElasticsearchService {
                       },
                       {
                         match: {
-                          lead_unit_number: {
+                            lead_unit_name: {
                             query: value,
                             operator: 'or'
                           }
@@ -65,7 +65,7 @@ export class ProposalElasticsearchService {
                       },
                       {
                         match: {
-                          lead_unit_name: {
+                            sponsor: {
                             query: value,
                             operator: 'or'
                           }
@@ -73,7 +73,7 @@ export class ProposalElasticsearchService {
                       },
                       {
                         match: {
-                          sponsor: {
+                            person_name: {
                             query: value,
                             operator: 'or'
                           }
@@ -81,15 +81,7 @@ export class ProposalElasticsearchService {
                       },
                       {
                         match: {
-                          status_code: {
-                            query: value,
-                            operator: 'or'
-                          }
-                        }
-                      },
-                      {
-                        match: {
-                          person_name: {
+                            status: {
                             query: value,
                             operator: 'or'
                           }
@@ -97,7 +89,11 @@ export class ProposalElasticsearchService {
                       }]
                   }
                 } ,
-                
+                /*filter: {
+                    term: { 
+                        person_id: personId
+                    }
+                  },*/
               sort: [{
                   _score: {
                     order: 'desc'
@@ -107,14 +103,13 @@ export class ProposalElasticsearchService {
                   pre_tags: ['<b>'],
                   post_tags: ['</b>'],
                   fields: {
-                    document_number: {},
-                    proposal_number: {},
-                    title: {},
-                    lead_unit_number: {},
-                    lead_unit_name: {},
-                    sponsor: {},
-                    status_code: {},
-                    person_name: {}
+                      proposal_number: {},
+                      title: {},
+                      lead_unit_number: {},
+                      lead_unit_name: {},
+                      sponsor: {},
+                      person_name: {},
+                      status: {}
                   }
                 } 
                         }

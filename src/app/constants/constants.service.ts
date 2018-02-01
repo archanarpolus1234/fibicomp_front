@@ -17,6 +17,8 @@ export class Constants {
     awardHierarchyUrl:string;
     awardTermsAndReportsUrl: string;
     commitmentsUrl: string;
+    committeeCreateUrl: string;
+    committeeSaveUrl: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -70,9 +72,18 @@ export class Constants {
         //this.commitmentsUrl = 'http://demo.fibiweb.com/fibi-comp/getAwardCommitments';
         //this.commitmentsUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardCommitments';
         
+        this.committeeCreateUrl = '/createCommittee';
+       //this.commitmentsUrl = 'http://demo.fibiweb.com/fibi-comp/createCommittee';
+       //this.commitmentsUrl = 'http://192.168.1.76:8080/fibi-comp/createCommittee';   
+        
+        this.committeeSaveUrl = '/saveCommittee';
+        //this.committeeSaveUrl = 'http://demo.fibiweb.com/fibi-comp/createCommittee';
+        //this.committeeSaveUrl = 'http://192.168.1.76:8080/fibi-comp/createCommittee';   
+            
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
         this.outputPath = 'http://192.168.1.76:8080/kc-dev';
         //this.outputPath = 'http://192.168.1.72:8080/kc-dev';
+
     }
 }

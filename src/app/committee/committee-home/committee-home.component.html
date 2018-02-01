@@ -1,0 +1,203 @@
+ <!-- COMMITTEE HOME -->
+
+<section class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <div class="row">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="borderBox col-12">
+               <h4 class="borderBoxHeading">Details
+                    <button class="editBtn" *ngIf="editDetails ==false" (click)="showEditDetails()"><i class="fa fa-pencil"></i></button>
+                    <button class="addBtn" *ngIf="editDetails" (click)="saveDetails()"><i class="fa fa-floppy-o"></i></button>
+                    <button class="editBtn" *ngIf="editDetails" (click)="cancelEditDetails()"><i class="fa fa-times"></i></button>
+                </h4>
+                  <div class="pullSide">
+                    <table class="table tableSkin grid2" >
+                        <tbody>
+                            <tr>
+                                <td><label>  Review Type</label><br>
+                                <select [(ngModel)]="reviewType" name="Select Type" [disabled]="editDetails==false" [ngClass]="editClass"> 
+                                <option selected="select">Select</option>
+                                  <option *ngFor="let type of reviewTypes">{{type.description}}</option>
+     							</select></td>
+                                <td colspan="2"><label>Description</label><br><input type="text" [disabled]="editDetails==false" [ngClass]="editClass" [(ngModel)]="description"></td>
+                                
+                               <!--  <td ><label>Schedule Description</label><br>Meets monthly</td> -->
+                                
+                            </tr>
+                            <tr>
+                                <td><label>Min Members for Quorum</label><br><input type="text" [disabled]="editDetails==false" [ngClass]="editClass" [(ngModel)]="minMembers"/></td>
+                                <td ><label> Adv Submission Days</label><br><input type="text" [disabled]="editDetails==false" [ngClass]="editClass" [(ngModel)]="advSubDays"/></td>
+                                 <td ><label> Maximum Protocols</label><br><input type="text" [disabled]="editDetails==false" [ngClass]="editClass" [(ngModel)]="maxProtocols"/></td>
+                            </tr>
+                           <tr  *ngIf="errorFlag"> 
+                            <td><span>{{error}}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                   
+                </div>
+            </div>
+        </div>
+
+        <div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+            <div class="borderBox col-12">
+                <h4 class="borderBoxHeading ">Area of Research 
+                 <button class="editBtn" *ngIf="editResearch ==false" (click)="showEditResearch()"><i class="fa fa-pencil"></i></button>
+                    <button class="addBtn" *ngIf="editResearch" (click)="saveEditResearch()"><i class="fa fa-floppy-o"></i></button>
+                    <button class="editBtn" *ngIf="editResearch" (click)="cancelEditResearch()"><i class="fa fa-times"></i></button>
+           <button id="areaOfResearchAddBtn" *ngIf="editResearch ==false" class="addBtn" (click)="showaddAreaOfResearch()">
+			<i class="fa fa-plus"></i>	
+			</button>
+                </h4>
+                   <div class="pullSide">
+        <table class="table table-responsive tableSkin ">
+        	<tr id="addAreaOfResearchRow" *ngIf="addResearch">
+        		<td>
+        			Area of Research
+        		</td>
+        		<td>
+				<div >
+        		<ng2-completer
+				title="Add area of research"
+				[(ngModel)]="areaInput.description"
+				[datasource]="dataServiceArea" [minSearchLength]="0"
+				(ngModelChange)="areaChangeFunction(areaInput.description)"
+				(selected)="onAreaSelect()"></ng2-completer>
+            	</div>
+        		</td>
+        		<td>
+        			 <button class="btnSkin btnSkinPrimary" (click)="addAreaOfResearch()">Add</button>
+        		</td>
+        	</tr>
+            <tr>
+                <th title="">Sl No</th>
+                <th title="">Research Area Code</th>
+                <th title="">Code/Description</th>
+               
+            </tr>
+            <tr *ngFor="let area of areaOfReasearch">
+                <td><input type="text" [disabled]="editResearch==false" [ngClass]="editAreaClass" value="{{slNo}}"/></td>
+                <td><input type="text" [disabled]="editResearch==false" [ngClass]="editAreaClass" value="{{ area.researchAreaCode}}"/></td>
+                <td><input type="text" [disabled]="editResearch==false" [ngClass]="editAreaClass" value="{{ area.description}}"/></td>
+            </tr><!-- 
+            <tr *ngIf="mode=='create'">
+               <td> No Data found!</td>
+            </tr> -->
+        </table>
+   	     </div>
+       </div>
+      </div>
+  <div class="container-fluid">
+    <div class="borderBox col-12" >
+    	
+        <h4 class="borderBoxHeading">Schedule
+            <button class="editBtn" style="position: static;float: right;"><i class="fa fa-plus">&nbsp;Generate Schedule</i></button>
+                                    <!-- Generate Schedules -->
+            
+        </h4>
+        <div class="pullSide">
+            <table class="table table-responsive tableSkin" >
+                <tr class="scheduleFilterBoxes">
+                    <td class="noDataOnChart">From : </td>
+                     <td><input type="text" class="committeeBox"></td>
+                      <td class="noDataOnChart">To : </td>
+                       <td> <input type="text" class="committeeBox"></td>
+                </tr>
+                <tr>
+                    <th title="Click to sort by Proposal">Sl No</th>
+                    <th title="Click to sort by Title">Schedule Date</th>
+                    <th title="Click to sort by Lead Unit">Day of Week</th>
+                    <th title="Click to sort by Sponsor">Deadline</th>
+                    <th title="Click to sort by Deadline">Status</th>
+                    <th title="Click to sort by Status">Place</th>
+                    <th title="Click to sort by Status">Time</th>
+                    <th title="Click to sort by Status">Action</th>
+                </tr>
+                <tr >
+                    <td>1</td>
+                    <td>07/20/2010</td>
+                    <td>TUESDAY</td>
+                    <td>07/18/2010</td>
+                    <td>Scheduled</td>
+                    <td>EHOB 341</td>
+                    <td>01:00</td>
+                    <td>
+	                    <ul class="actionButtonGroup">
+							<li>&nbsp;&nbsp;<a title="Open" href="#" routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
+							<li><a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+						</ul>
+					</td>
+                </tr>
+                 <tr >
+                    <td>2</td>
+                    <td>11/11/2015</td>
+                    <td>WEDNESDAY</td>
+                    <td>11/09/2015</td>
+                    <td>Scheduled</td>
+                    <td>EHOB 341</td>
+                    <td>11:00</td>
+                   <td>
+	                    <ul class="actionButtonGroup">
+							<li>&nbsp;&nbsp;<a title="Open" href="#" routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
+							<li><a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+						</ul>
+					</td>
+                </tr>
+                 <tr >
+                    <td>3</td>
+                    <td>07/20/2010</td>
+                    <td>MONDAY</td>
+                    <td>07/18/2017</td>
+                    <td>Scheduled</td>
+                    <td>EHOB 341</td>
+                    <td>02:00</td>
+                    <td>
+	                    <ul class="actionButtonGroup">
+							<li>&nbsp;&nbsp;<a title="Open" href="#" routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
+							<li><a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+						</ul>
+					</td>
+                </tr>
+                 <tr >
+                    <td>4</td>
+                    <td>11/24/2010</td>
+                    <td>FRIDAY</td>
+                    <td>11/22/2010</td>
+                    <td>Scheduled</td>
+                    <td>EHOB 341</td>
+                    <td>14:00</td>
+	                 <td>
+	                    <ul class="actionButtonGroup">
+							<li>&nbsp;&nbsp;<a title="Open" href="#" routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
+							<li><a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+						</ul>
+					</td>
+                </tr>
+                 <tr >
+                    <td>5</td>
+                    <td>07/23/2010</td>
+                    <td>TUESDAY</td>
+                    <td>07/21/2010</td>
+                    <td>Scheduled</td>
+                    <td>EHOB 341</td>
+                    <td>12:00</td>
+                    <td>
+	                    <ul class="actionButtonGroup">
+							<li>&nbsp;&nbsp;<a title="Open" href="#" routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
+							<li><a href="#"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+							<li><a href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+						</ul>
+					</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>   
+</div>
+</div>
+</section>
+
