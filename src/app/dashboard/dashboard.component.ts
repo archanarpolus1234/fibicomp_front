@@ -188,6 +188,9 @@ export class DashboardComponent implements OnInit {
                             this.nullDisclosureData = true;
                         }
                     }
+                    if ( this.currentPosition == "COMMITTEE" ) {
+                        this.serviceRequestList = this.result.committees;
+                    }
                     this.userName = localStorage.getItem( 'currentUser' );
                     this.fullName = localStorage.getItem( 'userFullname' );
                     this.firstName = localStorage.getItem( 'firstName' );

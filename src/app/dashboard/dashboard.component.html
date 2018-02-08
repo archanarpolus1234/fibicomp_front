@@ -21,8 +21,8 @@
 					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
 						(click)="showTab('DISCLOSURE')"> Disclosures </a></li>
 					<li [ngClass]="{'active': currentPosition == 'COMMITTEE'}"><a
-						(click)="showTab('COMMITTEE')"> COMMITTEE & SCHEDULES </a></li>
-				</ul>
+						(click)="showTab('COMMITTEE')"> Committee & Schedules </a></li>
+				</ul> 
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="currentPosition != 'SUMMARY'">
@@ -748,15 +748,6 @@
 			<!-- COMMITTEE & SCHEDULE -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'COMMITTEE')">
-				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a title="Open"
-											routerLink='/committee' [queryParams]="{mode:'view'}"><i
-												class="fa fa-eye"></i>View COMMITTEE</a>
-						</span>
-					</div>
-				</div>
 					<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
@@ -766,6 +757,12 @@
 						</span>
 					</div>
 				</div>
+			</div>
+			
+			
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition == 'COMMITTEE')">
+				
 					<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
@@ -775,7 +772,61 @@
 						</span>
 					</div>
 				</div>
+				<div class="borderBox"
+					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin">
+						<thead>
+							<tr>
+								<th (click)="sortResult('awardNumber',currentPosition)"
+									title="Click to sort by Award">Committee Id<span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
+								</th>
+								<th (click)="sortResult('accountNumber',currentPosition)"
+									title="Click to sort by Account">Committee Name<span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
+								</th>
+								<th (click)="sortResult('title',currentPosition)"
+									title="Click to sort by Title">Committee Type Code <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+								</th>
+								<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Home Unit Number <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+								</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngIf="nullAwardData; else noAwardNullData">
+								<td colspan=6>No Requests Found !</td>
+							</tr>
+							<tr #noAwardNullData
+								*ngFor="let coommitteeDetails of serviceRequestList | slice:begin:end">
+								<td width="8%">{{coommitteeDetails.committeeId}}</td>
+								<td>{{coommitteeDetails.committeeName}}</td>
+								<td>{{coommitteeDetails.committeeTypeCode}}</td>
+								<td>{{coommitteeDetails.homeUnitNumber}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<!-- <li><a title="Open {{awardDetails.awardNumber}}"
+											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+												class="fa fa-eye"></i> </a></li> -->
+										<li><a title="Open"
+											routerLink='/committee' [queryParams]="{mode:'view','id':coommitteeDetails.committeeId}"><i
+												class="fa fa-eye"></i></a></li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</div>
+			
+			
 
 			<!-- Pagination -->
 
