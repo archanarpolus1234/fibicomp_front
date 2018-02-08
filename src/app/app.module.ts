@@ -33,6 +33,12 @@ import { AwardHomeComponent } from './award/award-home/award-home.component';
 import { AwardHierarchyComponent } from './award/award-hierarchy/award-hierarchy.component';
 import { AwardReportsAndTerms } from './award/award-reports-and-tabs/award-reports-and-terms.component';
 import { AwardCommitmentsComponent } from './award/award-commitments/award-commitments.component';
+import { CommitteeHomeComponent } from './committee/committee-home/committee-home.component';
+import { CommitteeMembersComponent } from './committee/committee-members/committee-members.component';
+import { ScheduleHomeComponent } from './schedule/schedule-home/schedule-home.component';
+import { MinutesComponent } from './schedule/minutes/minutes.component';
+import { CommitteeComponent } from './committee/committee.component';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 import { LoginService } from './login/login.service';
 import { GoogleChartService } from './research_summary/google-chart.service';
@@ -53,12 +59,8 @@ import { AwardSummaryService } from './award/award-home/award-summary.service';
 import { AwardHierarchyService } from './award/award-hierarchy/award-hierarchy.service';
 import { AwardReportsAndTermsService } from './award/award-reports-and-tabs/award-reports-and-terms.service';
 import { AwardCommitmentsService } from './award/award-commitments/award-commitments.service';
-import { CommitteeHomeComponent } from './committee/committee-home/committee-home.component';
-import { CommitteeMembersComponent } from './committee/committee-members/committee-members.component';
-import { ScheduleHomeComponent } from './schedule/schedule-home/schedule-home.component';
-import { MinutesComponent } from './schedule/minutes/minutes.component';
-import { CommitteeComponent } from './committee/committee.component';
-import { ScheduleComponent } from './schedule/schedule.component';
+import { CommitteeConfigurationService } from './common/committee-configuration.service';
+
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -72,9 +74,9 @@ let appRoutes = [
     { path: 'award', component: AwardComponent },
 
     { path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard] },
-    
+
     { path: 'committee', component: CommitteeComponent },
-    
+
     { path: 'schedule', component: ScheduleComponent }
 ];
 
@@ -125,7 +127,7 @@ let appRoutes = [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
-        AwardCommitmentsService],
+        AwardCommitmentsService, CommitteeConfigurationService],
     bootstrap: [AppComponent]
 } )
 

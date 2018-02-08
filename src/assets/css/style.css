@@ -1291,7 +1291,6 @@ a:hover {
     width: 100%;
     padding-right: 35px;
     line-height: 27px;
-    font-size: .8em;
     padding-left: 10px;
 }
 .scheduleActions{
@@ -1416,4 +1415,23 @@ a:hover {
 .pullSide>.tableSkin tr>td .committeeBoxNotEditable{
     background: transparent;
 }
-
+.scheduleBoxes, .inputTxtCover input[type="text"],.inputTxtCover select{
+    border-radius: 20px;
+    border: 1px #DEDEDE solid;
+    width: 100%;
+    padding-right: 35px;
+    line-height: 27px;
+    padding-left: 10px;
+    height: 30px;
+}
+.inputTxtCover input[type="text"],.inputTxtCover select{
+    padding: 2px 5px;
+    line-height: 24px;
+    height: 30px;
+    color: #5F5F5F;
+}
+.inputTxtCover>.row>div>label{
+    margin-bottom: 5px;
+    font-size: .85em;
+    color: #5F5F5F;
+}

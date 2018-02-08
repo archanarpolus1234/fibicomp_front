@@ -1,90 +1,129 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommitteeHomeComponent } from './committee-home/committee-home.component';
 
 import { CommitteCreateEditService } from './committee-create-edit.service';
 import { CommitteeSaveService } from './committee-save.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
+import { CommitteeConfigurationService } from '../common/committee-configuration.service';
 
-@Component({
-  selector: 'app-committee',
-  templateUrl: './committee.component.html',
-  providers: [CommitteCreateEditService,CommitteeSaveService],
-  styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
-})
-export class CommitteeComponent implements OnInit {
-  currentTab: string = 'committee_home';
-  schedule: boolean = false;
-  mode: string;
-  class: string;
-  id: string;
-  name: string;
-  type: string;
-  homeUnit: string;
-  lastUpdated: string;
-  homeUnits:any=[];
-  result: any = {};
-  homeUnitInput:any=[];
-  editDetails:boolean = false;
 
-  public dataServiceHomeUnit: CompleterData;
+@Component( {
+    selector: 'app-committee',
+    templateUrl: './committee.component.html',
+    providers: [CommitteCreateEditService, CommitteeSaveService],
+    styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
+} )
 
-  constructor( public route: ActivatedRoute, public router: Router, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService,  public committeeSaveService: CommitteeSaveService) {
-      this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
-      if(this.mode == 'create')
-          {
-           this.editDetails = true;
-           this.class = 'committeeBox';
-          }
-      else{
-          this.class = 'committeeBoxNotEditable';
-      }
-  }
-  
-  ngOnInit(){ 
-      if(this.mode=='view')
-       {
-          this.id = 'KC001';
-          this.name = 'KC IRB 1';
-          this.type = 'IRB';
-          this.homeUnit = 'University';
-          this.lastUpdated = '10/10/2017 by admin';
-         }
-    this.initialLoad();
-  }
-  initialLoad(){debugger;
-      this.committeCreateService.getCommitteeData('1')
-      .subscribe( data => {
-          this.result = data || [];
-          if ( this.result != null ) {
-              this.homeUnits = this.result.homeUnits;
-              console.log("sc");
-              console.log(this.homeUnits);
-              this.dataServiceHomeUnit = this.completerService.local(this.homeUnits, 'unitName', 'unitName');
-          }
-      } );
-  }
-  show_current_tab( e: any, current_tab ) {
-      e.preventDefault();
-      this.currentTab = current_tab;
-  }
-  areaChangeFunction(unitName){debugger;
-  this.homeUnits.forEach((value, index) => {
-      if(value.unitName == unitName){
-          this.homeUnitInput.unitNumber = value.unitNumber;
-      }
-  }); 
-}    
+export class CommitteeComponent {
+    currentTab: string = 'committee_home';
+    schedule: boolean = false;
+    mode: string;
+    class: string;
+    id: string;
+    name: string;
+    type: string;
+    homeUnit: string;
+    lastUpdated: string;
+    homeUnits: any = [];
+    result: any = {};
+    homeUnitInput: any = [];
+    editDetails: boolean = false;
+    homeUnitName: string;
+    editFlag: boolean = false;
+    constantClass: string;
+    public dataServiceHomeUnit: CompleterData;
 
-  onHomeSelect(){
-  this.homeUnits.forEach((value, index) => {
-      if(value.unitName == this.homeUnitInput.unitName){
-          this.homeUnitInput.unitNumber = value.unitNumber;
-      }
-  }); 
-  }
-  
-  saveDetails(){
-      this.result.committee.homeUnitNumber = this.homeUnitInput.unitNumber;
-      alert( this.result.committee.homeUnitNumber);
-  }
+    constructor( public route: ActivatedRoute, public router: Router, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
+        this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
+        this.id = this.route.snapshot.queryParamMap.get( 'id' );
+
+        this.committeCreateService.getCommitteeData( '1' )
+            .subscribe( data => {
+                this.result = data || [];
+                if ( this.result != null ) {
+                    this.homeUnits = this.result.homeUnits;
+                    this.committeeConfigurationService.changeCommmitteeData( this.result );
+                    this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
+                }
+            } );
+        if ( this.mode == 'create' ) {
+            this.editDetails = true;
+            this.class = 'committeeBox';
+            this.constantClass = 'committeeBox';
+        }
+        else if ( this.mode == 'view' ) {
+            debugger;
+            this.committeCreateService.loadCommitteeById( this.id )
+                .subscribe( data => {
+                    this.result = data || [];
+                    if ( this.result != null ) {
+                        this.id = this.result.committee.committeeId || "";
+                        this.name = this.result.committee.committeeName || "";
+                        this.type = this.result.committee.committeeType.description;
+                        this.homeUnitInput.unitNumber = this.result.committee.homeUnitNumber;
+                        this.homeUnitInput.unitName = this.result.committee.homeUnitName;
+                        var ts = new Date( this.result.committee.updateTimestamp );
+                        let month = String( ts.getMonth() + 1 );
+                        let day = String( ts.getDate() );
+                        const year = String( ts.getFullYear() );
+                        if ( month.length < 2 ) month = '0' + month;
+                        if ( day.length < 2 ) day = '0' + day;
+                        this.lastUpdated = `${day}/${month}/${year}` + " by " + this.result.committee.updateUser;
+                        this.homeUnits = this.result.homeUnits;
+                        this.committeeConfigurationService.changeCommmitteeData( this.result );
+                        this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
+                    }
+                } );
+            this.class = 'committeeBoxNotEditable';
+            this.constantClass = 'committeeBoxNotEditable';
+        }
+
+    }
+
+    show_current_tab( e: any, current_tab ) {
+        e.preventDefault();
+        if ( current_tab == 'committee_members' ) {
+            if ( this.editFlag ) {
+                if ( !confirm( "You are in the middle of editing Committee Details, Do you want to stay on the page..?" ) ) {
+                    this.editFlag = !this.editFlag;
+                    this.class = "committeeBoxNotEditable"
+                } else {
+                    current_tab = 'committee_home';
+                }
+            }
+        }
+        this.currentTab = current_tab;
+    }
+
+    areaChangeFunction( unitName ) {
+        debugger;
+        this.homeUnits.forEach(( value, index ) => {
+            if ( value.unitName == unitName ) {
+                this.homeUnitInput.unitNumber = value.unitNumber;
+            }
+        } );
+    }
+
+    onHomeSelect() {
+        this.homeUnits.forEach(( value, index ) => {
+            if ( value.unitName == this.homeUnitInput.unitName ) {
+                this.homeUnitInput.unitNumber = value.unitNumber;
+            }
+        } );
+    }
+
+    saveDetails() {
+        this.result.committee.homeUnitNumber = this.homeUnitInput.unitNumber;
+        alert( this.result.committee.homeUnitNumber );
+    }
+
+    recieveFlag( $event ) {
+        this.editFlag = $event;
+        if ( this.editFlag ) {
+            this.class = 'scheduleBoxes';
+        } else {
+            this.class = 'committeeBoxNotEditable';
+        }
+    }
 }

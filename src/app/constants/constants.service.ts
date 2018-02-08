@@ -19,6 +19,8 @@ export class Constants {
     commitmentsUrl: string;
     committeeCreateUrl: string;
     committeeSaveUrl: string;
+    committeeViewUrl: string;
+    researchAreaSaveUrl: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -77,8 +79,17 @@ export class Constants {
        //this.commitmentsUrl = 'http://192.168.1.76:8080/fibi-comp/createCommittee';   
         
         this.committeeSaveUrl = '/saveCommittee';
-        //this.committeeSaveUrl = 'http://demo.fibiweb.com/fibi-comp/createCommittee';
-        //this.committeeSaveUrl = 'http://192.168.1.76:8080/fibi-comp/createCommittee';   
+        //this.committeeSaveUrl = 'http://demo.fibiweb.com/fibi-comp/saveCommittee';
+        //this.committeeSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveCommittee';  
+        
+        this.committeeViewUrl = '/loadCommitteeById';
+        //this.committeeViewUrl = 'http://demo.fibiweb.com/fibi-comp/loadCommitteeById';
+        //this.committeeViewUrl = 'http://192.168.1.76:8080/fibi-comp/loadCommitteeById';  
+        
+        this.researchAreaSaveUrl = '/saveAreaOfResearch';
+        //this.researchAreaSaveUrl = 'http://demo.fibiweb.com/fibi-comp/saveAreaOfResearch';
+        //this.researchAreaSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveAreaOfResearch';  
+        
             
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';

@@ -102,7 +102,6 @@ export class ExpandedviewComponent implements OnInit/*, OnDestroy*/ {
             this.expandedViewService.loadExpandedSummaryView( localStorage.getItem( 'personId' ), localStorage.getItem( 'researchSummaryIndex' ) ).subscribe(
                 data => {
                     this.summaryResult = data || [];
-                    console.log(this.summaryResult);
                     if ( localStorage.getItem( 'researchSummaryIndex' ) == "PROPOSALSSUBMITTED" ) {
                         this.serviceRequestList = this.summaryResult.proposalViews;
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
