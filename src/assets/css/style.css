@@ -1435,3 +1435,19 @@ a:hover {
     font-size: .85em;
     color: #5F5F5F;
 }
+.completer-dropdown {
+              overflow-y: auto;
+              max-height: 100px;
+}
+.completerID{
+   border-radius: 20px;
+    border: 1px #DEDEDE solid;
+    width: 100%;
+    padding-right: 35px;
+    line-height: 27px;
+    padding-left: 10px;
+    height: 30px;
+    border-color: red;
+    
+}
+       

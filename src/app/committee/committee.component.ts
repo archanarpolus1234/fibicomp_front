@@ -32,37 +32,37 @@ export class CommitteeComponent {
     homeUnitName: string;
     editFlag: boolean = false;
     constantClass: string;
+    areaList : any =[];
     public dataServiceHomeUnit: CompleterData;
 
     constructor( public route: ActivatedRoute, public router: Router, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
         this.id = this.route.snapshot.queryParamMap.get( 'id' );
-
+        this.initLoadParent();
+    }
+        initLoadParent(){
         this.committeCreateService.getCommitteeData( '1' )
             .subscribe( data => {
                 this.result = data || [];
                 if ( this.result != null ) {
                     this.homeUnits = this.result.homeUnits;
                     this.committeeConfigurationService.changeCommmitteeData( this.result );
+                    this.homeUnitInput.unitName = this.result.committee.homeUnitName;
+                    this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' );
                     this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
                 }
             } );
         if ( this.mode == 'create' ) {
             this.editDetails = true;
-            this.class = 'committeeBox';
-            this.constantClass = 'committeeBox';
+            this.class = 'scheduleBoxes';
+            this.constantClass = 'scheduleBoxes';
+            this.homeUnitInput.unitName= '';
         }
         else if ( this.mode == 'view' ) {
-            debugger;
             this.committeCreateService.loadCommitteeById( this.id )
                 .subscribe( data => {
                     this.result = data || [];
                     if ( this.result != null ) {
-                        this.id = this.result.committee.committeeId || "";
-                        this.name = this.result.committee.committeeName || "";
-                        this.type = this.result.committee.committeeType.description;
-                        this.homeUnitInput.unitNumber = this.result.committee.homeUnitNumber;
-                        this.homeUnitInput.unitName = this.result.committee.homeUnitName;
                         var ts = new Date( this.result.committee.updateTimestamp );
                         let month = String( ts.getMonth() + 1 );
                         let day = String( ts.getDate() );
@@ -70,11 +70,11 @@ export class CommitteeComponent {
                         if ( month.length < 2 ) month = '0' + month;
                         if ( day.length < 2 ) day = '0' + day;
                         this.lastUpdated = `${day}/${month}/${year}` + " by " + this.result.committee.updateUser;
-                        this.homeUnits = this.result.homeUnits;
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
                     }
                 } );
+            this.editDetails = false;
             this.class = 'committeeBoxNotEditable';
             this.constantClass = 'committeeBoxNotEditable';
         }
@@ -96,26 +96,21 @@ export class CommitteeComponent {
         this.currentTab = current_tab;
     }
 
-    areaChangeFunction( unitName ) {
-        debugger;
+    homeChangeFunction( unitName ) {
         this.homeUnits.forEach(( value, index ) => {
             if ( value.unitName == unitName ) {
-                this.homeUnitInput.unitNumber = value.unitNumber;
+                this.result.committee.homeUnitNumber = value.unitNumber;
             }
         } );
     }
 
     onHomeSelect() {
         this.homeUnits.forEach(( value, index ) => {
-            if ( value.unitName == this.homeUnitInput.unitName ) {
-                this.homeUnitInput.unitNumber = value.unitNumber;
+            if ( value.unitName == this.result.committee.homeUnitName ) {
+                this.result.committee.homeUnitNumber = value.unitNumber;
             }
         } );
-    }
-
-    saveDetails() {
-        this.result.committee.homeUnitNumber = this.homeUnitInput.unitNumber;
-        alert( this.result.committee.homeUnitNumber );
+        alert("parent"+this.result.committee.homeUnitNumber+this.result.committee.homeUnitName);
     }
 
     recieveFlag( $event ) {
@@ -124,6 +119,15 @@ export class CommitteeComponent {
             this.class = 'scheduleBoxes';
         } else {
             this.class = 'committeeBoxNotEditable';
+        }
+    }
+    recievemode($event){
+        this.mode = $event;
+        if(this.mode == 'view'){
+            this.initLoadParent();
+            this.editDetails = false;
+            this.class = 'committeeBoxNotEditable';
+            this.constantClass = 'committeeBoxNotEditable';
         }
     }
 }

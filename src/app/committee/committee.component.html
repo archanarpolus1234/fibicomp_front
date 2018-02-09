@@ -9,17 +9,6 @@
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
 				<div class="h6">COMMITTEE</div>
-				<button class="editBtn" *ngIf="editDetails ==false"
-					(click)="showEditDetails()">
-					<i class="fa fa-pencil"></i>
-				</button>
-				<button class="addBtn" *ngIf="editDetails" (click)="saveDetails()">
-					<i class="fa fa-floppy-o"></i>
-				</button>
-				<button class="editBtn" *ngIf="editDetails"
-					(click)="cancelEditDetails()">
-					<i class="fa fa-times"></i>
-				</button>
 			</div>
 
 			<div
@@ -28,26 +17,26 @@
 				<div class="row">
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label>Id</label> <span><input type="text"
-							[ngClass]="constantClass" [(ngModel)]="id"
+							[ngClass]="constantClass" [(ngModel)]="result.committee.committeeId"
 							[disabled]="mode=='view'" /></span>
 					</div>
 					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 						<label>Name</label> <span><input type="text"
-							[ngClass]="class" [(ngModel)]="name"
+							[ngClass]="class" [(ngModel)]="result.committee.committeeName"
 							[disabled]="mode=='view' && editFlag == false" /></span>
 					</div>
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label>Type</label> <span><input type="text"
-							[ngClass]="constantClass" [(ngModel)]="type"
+							[ngClass]="constantClass" [(ngModel)]="result.committee.committeeType.description"
 							[disabled]="mode=='view'" /></span>
 					</div>
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label>Home Unit</label> <span> 
 							    <ng2-completer [inputClass]="class"
 							     [disabled]="mode=='view' && editFlag == false"
-								title="Enter Home Unit" [(ngModel)]="homeUnitInput.unitName"
+								title="Enter Home Unit" [(ngModel)]="result.committee.homeUnitName"
 								[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
-								(ngModelChange)="homeChangeFunction(homeUnitInput.unitName)"
+								(ngModelChange)="homeChangeFunction(result.committee.homeUnitName)"
 								(selected)="onHomeSelect()"></ng2-completer></span> <span
 							*ngIf="mode =='view'"> 
 						</span>
@@ -55,7 +44,7 @@
 					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 						<label>Last Updated User</label> <span><input type="text"
 							class="committeeBoxNotEditable" [(ngModel)]="lastUpdated"
-							[disabled]="mode=='view'" /></span>
+							disabled /></span>
 					</div>
 					<!-- <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
                         <label>Updated User</label>
@@ -83,9 +72,9 @@
 			</div>
 		</section>
 		<div *ngIf="currentTab =='committee_home'">
-			<app-committee-home [Id]="id" [Name]="name" [Type]="type"
-				[Unit]="homeUnitInput.unitNumber" (editFlag)="recieveFlag($event)"
-				[unitName]="homeUnitInput.unitName" [reviewTypes]=" this.result.reviewTypes" [areaList]= "this.result.researchAreas"></app-committee-home>
+			<app-committee-home [Id]="result.committee.committeeId" [Name]="result.committee.committeeName" [Type]="result.committee.committeeType.description"
+				[Unit]="result.committee.homeUnitNumber" (editFlag)="recieveFlag($event)" (modeFlag)="recievemode($event)"
+				[unitName]="result.committee.homeUnitName" [reviewTypes]=" result.reviewTypes" [areaList]= "areaList"></app-committee-home>
 		</div>
 		<div *ngIf="currentTab =='committee_members'">
 			<app-committee-members></app-committee-members>

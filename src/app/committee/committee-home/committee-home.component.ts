@@ -35,18 +35,21 @@ export class CommitteeHomeComponent implements OnInit {
     public areaInput: any = {};
     slNo: number = 0;
     public researchArea: any = {};
-    public dataServiceArea: CompleterData;
+    public dataServiceArea: any =[];
     @Input() Id: string;
     @Input() Name: string;
     @Input() Type: string;
     @Input() Unit: string;
     @Input() unitName: string;
     @Output() editFlag = new EventEmitter<boolean>();
+    @Output() modeFlag = new EventEmitter<String>();
     @Input() reviewTypes: any[];
-    @Input() areaList: any[];
+    @Input() areaList: any = [];
     result: any = {};
     resultSave: any = {};
     sendObject: any;
+    pattern = [0-9];
+    addResearchArea :string;
 
 
     constructor( public route: ActivatedRoute, public router: Router, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, private committeeConfigurationService: CommitteeConfigurationService ) {
@@ -55,14 +58,17 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     ngOnInit() {
-        debugger;
     }
 
     initialLoadChild() {
         this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
             this.result = data;
+          if( this.result != null ){
             if ( this.mode == 'view' ) {
                 this.errorFlag = false;
+                this.editDetails = false;
+                this.editFlag.emit( this.editDetails );
+                this.Id = this.result.committee.committeeId;
                 this.Name = this.result.committee.committeeName;
                 this.unitName = this.result.homeUnitName;
                 this.Unit = this.result.homeUnitNumber;
@@ -74,18 +80,13 @@ export class CommitteeHomeComponent implements OnInit {
                 this.advSubDays = this.result.committee.advSubmissionDaysReq;
                 this.maxProtocols = this.result.committee.maxProtocols;
                 this.saveCommitteeFlag = true;
-                /*
-                 this.reviewTypes = this.result.reviewTypes;
-                 this.areaList = this.result.researchAreas;*/
-                //this.areaOfReasearch = this.result.committee.researchAreas;
-                //  this.dataServiceArea = this.completerService.local( this.areaList, 'description', 'description' );
             }
             else {
                 this.editClass = 'scheduleBoxes';
                 this.editAreaClass = 'scheduleBoxes';
                 this.editDetails = true;
-                // this.dataServiceArea = this.completerService.local(this.areaList, 'description', 'description' );
             }
+           }
         } );
     }
 
@@ -106,7 +107,7 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     saveDetails() {
-        if ( ( this.minMembers == undefined || this.advSubDays == undefined || this.maxProtocols == undefined || this.Id == undefined || this.Type == undefined || this.Name == undefined || this.unitName == undefined ) || ( this.reviewType == 'Select' ) ) {
+        if ( ( this.result.committee.minimumMembersRequired == undefined || this.result.committee.advSubmissionDaysReq == undefined || this.result.committee.maxProtocols == undefined || this.Id == undefined || this.Type == undefined || this.Name == undefined || this.unitName == undefined ) || ( this.result.committee.reviewTypeDescription == 'Select' ) ) {
             this.errorFlag = true;
             this.error = 'please fill all the mandatory fileds';
         }
@@ -117,21 +118,8 @@ export class CommitteeHomeComponent implements OnInit {
             this.result.committee.committeeType.committeeTypeCode = '1';
             this.result.committee.homeUnitNumber = this.Unit;
             this.result.committee.homeUnitName = this.unitName;
-            this.result.committee.description = this.description;
-            this.result.committee.minimumMembersRequired = this.minMembers;
-            this.result.committee.maxProtocols = this.maxProtocols;
-            this.result.committee.advSubmissionDaysReq = this.advSubDays;
             this.result.updateType = 'SAVE';
             this.result.currentUser = 'admin';
-            /* this.result.homeUnits = [];
-             this.result.reviewTypes = [];
-             this.result.researchAreas = [];*/
-            /* if ( this.areaOfReasearch != [] ) {
-                 this.areaOfReasearch.forEach(( value, index ) => {
-                     this.result.committee.researchAreas.push( this.areaOfReasearch[index] );
-                 } );
-               
-             }*/
             this.editDetails = !this.editDetails;
             this.editFlag.emit( this.editDetails );
             if ( this.editDetails == false ) {
@@ -145,31 +133,68 @@ export class CommitteeHomeComponent implements OnInit {
             } );
             this.committeeSaveService.saveCommitteeData( this.result ).subscribe( data => {
                 this.result = data || [];
+                this.committeeConfigurationService.changeCommmitteeData( this.result );
                 if ( this.mode == 'create' ) {
                     this.saveCommitteeFlag = true;
                 }
             } );
-            this.initialLoadChild();
+            if(this.mode == 'view'){
+                this.initialLoadChild();
+            }
+            else{
+                this.mode= 'view';
+                this.modeFlag.emit( this.mode );
+                this.initialLoadChild();
+            }
         }
     }
 
     cancelEditDetails() {
-        this.editDetails = !this.editDetails;
-        this.editFlag.emit( this.editDetails );
-        this.initialLoadChild();
-        if ( !this.editDetails ) {
-            this.editClass = 'committeeBoxNotEditable';
+        if(this.mode == 'view'){
+            this.editDetails = !this.editDetails;
+            this.editFlag.emit( this.editDetails );
+            if ( !this.editDetails ) {
+                this.editClass = 'committeeBoxNotEditable';
+            }
+            this.result.committee.committeeId = this.Id;
+            this.result.committee.committeeType.description = 'IRB'; 
+            this.result.committee.committeeName =  this.Name;
+            this.result.committee.homeUnitName = this.unitName;
+            this.result.committee.homeUnitNumber = this.Unit;
+            this.result.committee.reviewTypeDescription = this.reviewType;
+            this.result.committee.description = this.description;
+            this.result.committee.minimumMembersRequired = this.minMembers;
+            this.result.committee.advSubmissionDaysReq = this.advSubDays;
+            this.result.committee.maxProtocols = this.maxProtocols;
+        }
+        else{
+            this.result.committee.committeeId = '';
+            this.result.committee.committeeType.description = ''; 
+            this.result.committee.committeeName = '';
+            this.result.committee.homeUnitName = '';
+            this.result.committee.reviewTypeDescription = '';
+            this.result.committee.description = '';
+            this.result.committee.minimumMembersRequired = '';
+            this.result.committee.advSubmissionDaysReq = '';
+            this.result.committee.maxProtocols = '';
+            this.router.navigate(['/committee'], { queryParams: { mode: 'create' } });
         }
     }
 
     addAreaOfResearch( Object ) {
         this.showSaveAreaOfResearch = true;
+        this.addResearchArea = '0';
         this.editAreaClass = 'committeeBoxNotEditable';
-        this.result.committee.researchAreas.push( Object );
-        for ( let i = 0; i < this.areaList.length; i++ ) {
-            if ( Object.researchAreaDescription == this.areaList[i].description ) {
-                this.areaList.splice( i, 1 );
+        for ( let i = 0;  i<this.result.committee.researchAreas.length; i++ ) {
+            if ( Object.researchAreaCode ==  this.result.committee.researchAreas[i].researchAreaCode ) {
+                this.addResearchArea = '1';
             }
+        }
+        if(this.addResearchArea == '1'){
+            alert("cannot add");
+        }
+        else{
+            this.result.committee.researchAreas.push(Object);
         }
         this.areaInput = {};
     }
@@ -182,17 +207,10 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     areaChangeFunction( researchAreaDescription ) {
-        debugger;
-        this.dataServiceArea = this.completerService.local( this.areaList, 'description', 'description' );
-        this.areaList.forEach(( value, index ) => {
-            if ( value.description == researchAreaDescription ) {
-                this.areaInput.researchAreaCode = value.researchAreaCode;
-            }
-        } );
     }
 
     onAreaSelect() {
-        this.areaList.forEach(( value, index ) => {
+        this.areaList._data.forEach(( value, index ) => {
             if ( value.description == this.areaInput.researchAreaDescription ) {
                 this.areaInput.researchAreaCode = value.researchAreaCode;
                 this.areaInput.researchAreaDescription = value.description;
@@ -207,17 +225,26 @@ export class CommitteeHomeComponent implements OnInit {
         this.sendObject.committee = this.result.committee;
         this.committeeSaveService.saveResearchAreaCommitteeData( this.sendObject ).subscribe( data => {
             this.result = data || [];
+            this.committeeConfigurationService.changeCommmitteeData( this.result );
         } );
         this.initialLoadChild();
         this.deleteResearch = false;
     }
-    deleteAreaOfResearch( $event, code ) {
+   
+    deleteAreaOfResearch( $event, Id, code) {
         event.preventDefault();
-        for ( let i = 0; i < this.result.committee.researchAreas.length; i++ ) {
-            if ( code == this.result.committee.researchAreas[i].researchAreaCode ) {
-                this.result.committee.researchAreas.splice( i, 1 );
-            }
+        if(this.result.committee.researchAreas.length!=null && Id!=undefined){
+
+            this.committeeSaveService.deleteAreaOfResearch( Id ).subscribe( data => {
+                
+            } );
         }
+       for ( let i = 0; i < this.result.committee.researchAreas.length; i++ ) {
+                    if ( code == this.result.committee.researchAreas[i].researchAreaCode ) {
+                        this.result.committee.researchAreas.splice( i, 1 );
+                    }
+                } 
+        this.committeeConfigurationService.changeCommmitteeData( this.result );
         this.initialLoadChild();
         this.deleteResearch = true;
     }

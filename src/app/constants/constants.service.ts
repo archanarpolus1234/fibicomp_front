@@ -21,6 +21,7 @@ export class Constants {
     committeeSaveUrl: string;
     committeeViewUrl: string;
     researchAreaSaveUrl: string;
+    deleteResearchAreaUrl: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -89,6 +90,10 @@ export class Constants {
         this.researchAreaSaveUrl = '/saveAreaOfResearch';
         //this.researchAreaSaveUrl = 'http://demo.fibiweb.com/fibi-comp/saveAreaOfResearch';
         //this.researchAreaSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveAreaOfResearch';  
+        
+        this.deleteResearchAreaUrl = '/deleteAreaOfResearch';
+        //this.deleteResearchAreaUrl = 'http://demo.fibiweb.com/fibi-comp/deleteAreaOfResearch';
+        //this.deleteResearchAreaUrl = 'http://192.168.1.76:8080/fibi-comp/deleteAreaOfResearch';  
         
             
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';

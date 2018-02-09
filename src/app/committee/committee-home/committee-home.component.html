@@ -26,32 +26,32 @@
 								<tr>
 									<td><label> Review Type</label><br> <span
 										*ngIf="editDetails != false"> <select
-											[(ngModel)]="reviewType" name="Select Type"
+											[(ngModel)]="result.committee.reviewTypeDescription" name="Select Type"
 											[disabled]="editDetails==false" [ngClass]="editClass">
 												<option selected="select">Select</option>
-												<option *ngFor="let type of reviewTypes">{{type.description}}</option>
+												<option *ngFor="let type of result.reviewTypes">{{type.description}}</option>
 										</select>
 									</span> <span *ngIf="editDetails == false"> <input type="text"
 											[disabled]="editDetails==false" [ngClass]="editClass"
-											[(ngModel)]="reviewType">
+											[(ngModel)]="result.committee.reviewTypeDescription">
 									</span></td>
 									<td colspan="2"><label>Description</label><br>
 									<input type="text" [disabled]="editDetails==false"
-										[ngClass]="editClass" [(ngModel)]="description"></td>
+										[ngClass]="editClass" [(ngModel)]="result.committee.description"></td>
 
 									<!--  <td ><label>Schedule Description</label><br>Meets monthly</td> -->
 
 								</tr>
 								<tr>
 									<td><label>Min Members for Quorum</label><br>
-									<input type="text" [disabled]="editDetails==false"
-										[ngClass]="editClass" [(ngModel)]="minMembers" /></td>
+									<input type="number" [disabled]="editDetails==false" min = "1"
+										[ngClass]="editClass" [(ngModel)]="result.committee.minimumMembersRequired"/></td>
 									<td><label> Adv Submission Days</label><br>
-									<input type="text" [disabled]="editDetails==false"
-										[ngClass]="editClass" [(ngModel)]="advSubDays" /></td>
+									<input type="number" [disabled]="editDetails==false" min = "1"
+										[ngClass]="editClass" [(ngModel)]="result.committee.advSubmissionDaysReq"/></td>
 									<td><label> Maximum Protocols</label><br>
-									<input type="text" [disabled]="editDetails==false"
-										[ngClass]="editClass" [(ngModel)]="maxProtocols" /></td>
+									<input type="number" [disabled]="editDetails==false" min = "1"
+										[ngClass]="editClass" [(ngModel)]="result.committee.maxProtocols" /></td>
 								</tr>
 								<tr *ngIf="errorFlag">
 									<td><span>{{error}}</span></td>
@@ -84,10 +84,10 @@
 								<td>Area of Research</td>
 								<td>
 									<div>
-										<ng2-completer title="Add area of research"
+										<ng2-completer title="Add area of research" [inputClass]="completerID"
 											[(ngModel)]="areaInput.researchAreaDescription"
-											[datasource]="dataServiceArea" [minSearchLength]="0"
-											(ngModelChange)="areaChangeFunction(areaInput.researchAreaDescription)"
+											[datasource]="areaList" [minSearchLength]="0"
+											(ngModelChange)="areaChangeFunction(areaInput)"
 											(selected)="onAreaSelect()"></ng2-completer>
 									</div>
 								</td>
@@ -114,7 +114,7 @@
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a href="#"
-											(click)="deleteAreaOfResearch($event,area.researchAreaCode)"><i
+											(click)="deleteAreaOfResearch($event,area.commResearchAreasId,area.researchAreaCode)"><i
 												class="fa fa-trash-o" aria-hidden="true" *ngIf="addResearch"></i></a></li>
 									</ul>
 								</td>

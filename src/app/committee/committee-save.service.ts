@@ -31,4 +31,11 @@ export class CommitteeSaveService {
                 return Observable.throw( error.message || error )
             } );
     }
+    
+    deleteAreaOfResearch( researchAreaId) {
+        var params = {
+                researchAreaId: researchAreaId,
+            };
+        return this.http.get(this.constant.deleteResearchAreaUrl, {params: params })
+    }   
 }
