@@ -22,6 +22,10 @@ export class Constants {
     committeeViewUrl: string;
     researchAreaSaveUrl: string;
     deleteResearchAreaUrl: string;
+    addCommitteeMembership: string;
+    saveCommitteeMembers: string;
+    generateScheduleUrl: string;
+    deleteScheduleUrl: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -76,30 +80,44 @@ export class Constants {
         //this.commitmentsUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardCommitments';
         
         this.committeeCreateUrl = '/createCommittee';
-       //this.commitmentsUrl = 'http://demo.fibiweb.com/fibi-comp/createCommittee';
-       //this.commitmentsUrl = 'http://192.168.1.76:8080/fibi-comp/createCommittee';   
-        
-        this.committeeSaveUrl = '/saveCommittee';
-        //this.committeeSaveUrl = 'http://demo.fibiweb.com/fibi-comp/saveCommittee';
-        //this.committeeSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveCommittee';  
-        
-        this.committeeViewUrl = '/loadCommitteeById';
-        //this.committeeViewUrl = 'http://demo.fibiweb.com/fibi-comp/loadCommitteeById';
-        //this.committeeViewUrl = 'http://192.168.1.76:8080/fibi-comp/loadCommitteeById';  
-        
-        this.researchAreaSaveUrl = '/saveAreaOfResearch';
-        //this.researchAreaSaveUrl = 'http://demo.fibiweb.com/fibi-comp/saveAreaOfResearch';
-        //this.researchAreaSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveAreaOfResearch';  
-        
-        this.deleteResearchAreaUrl = '/deleteAreaOfResearch';
-        //this.deleteResearchAreaUrl = 'http://demo.fibiweb.com/fibi-comp/deleteAreaOfResearch';
-        //this.deleteResearchAreaUrl = 'http://192.168.1.76:8080/fibi-comp/deleteAreaOfResearch';  
-        
-            
-        //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
-        //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
-        this.outputPath = 'http://192.168.1.76:8080/kc-dev';
-        //this.outputPath = 'http://192.168.1.72:8080/kc-dev';
+        //this.committeeCreateUrl = 'http://demo.fibziweb.com/fibi-comp/createCommittee';
+        //this.committeeCreateUrl = 'http://192.168.1.76:8080/fibi-comp/createCommittee';   
+         
+         this.committeeSaveUrl = '/saveCommittee';
+         //this.committeeSaveUrl = 'http://demo.fibiweb.com/fibi-comp/saveCommittee';
+         //this.committeeSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveCommittee';  
+         
+         this.committeeViewUrl = '/loadCommitteeById';
+         //this.committeeViewUrl = 'http://demo.fibiweb.com/fibi-comp/loadCommitteeById';
+         //this.committeeViewUrl = 'http://192.168.1.76:8080/fibi-comp/loadCommitteeById';  
+         
+         this.researchAreaSaveUrl = '/saveAreaOfResearch';
+         //this.researchAreaSaveUrl = 'http://demo.fibiweb.com/fibi-comp/saveAreaOfResearch';
+         //this.researchAreaSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveAreaOfResearch';  
+         
+         this.deleteResearchAreaUrl = '/deleteAreaOfResearch';
+         //this.deleteResearchAreaUrl = 'http://demo.fibiweb.com/fibi-comp/deleteAreaOfResearch';
+         //this.deleteResearchAreaUrl = 'http://192.168.1.76:8080/fibi-comp/deleteAreaOfResearch';  
+         
+         this.addCommitteeMembership = '/addCommitteeMembership';
+       //this.addCommitteeMembership = 'http://demo.fibiweb.com/fibi-comp/addCommitteeMembership';
+         //this.addCommitteeMembership = 'http://192.168.1.76:8080/fibi-comp/addCommitteeMembership';  
 
+         this.saveCommitteeMembers = '/saveCommitteeMembers';
+         //this.saveCommitteeMembers = 'http://demo.fibiweb.com/fibi-comp/saveCommitteeMembers';
+         //this.saveCommitteeMembers = 'http://192.168.1.76:8080/fibi-comp/saveCommitteeMembers';  
+         
+         this.generateScheduleUrl = '/addSchedule';
+         //this.generateScheduleUrl = 'http://demo.fibiweb.com/fibi-comp/addSchedule';
+         //this.generateScheduleUrl = 'http://192.168.1.76:8080/fibi-comp/addSchedule';
+         
+         this.deleteScheduleUrl = '/deleteSchedule';
+         //this.deleteSchedsuleUrl = 'http://demo.fibiweb.com/fibi-comp/deleteSchedule';
+         //this.deleteScheduleUrl = 'http://192.168.1.76:8080/fibi-comp/deleteSchedule';
+         
+         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
+         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
+         this.outputPath = 'http://192.168.1.76:8080/kc-dev';
+         //this.outputPath = 'http://192.168.1.72:8080/kc-dev';
     }
 }

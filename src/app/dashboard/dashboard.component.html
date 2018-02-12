@@ -22,7 +22,8 @@
 						(click)="showTab('DISCLOSURE')"> Disclosures </a></li>
 					<li [ngClass]="{'active': currentPosition == 'COMMITTEE'}"><a
 						(click)="showTab('COMMITTEE')"> Committee & Schedules </a></li>
-				</ul> 
+				</ul> <!-- 
+				<angular2-date-picker [(ngModel)]="date" [settings]="settings"></angular2-date-picker> -->
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="currentPosition != 'SUMMARY'">

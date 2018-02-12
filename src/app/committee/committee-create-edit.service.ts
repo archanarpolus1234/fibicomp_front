@@ -37,4 +37,28 @@ export class CommitteCreateEditService {
                 return Observable.throw( error.message || error )
             } );
     }
+    
+    addMember(personId,committeeId ): Observable<JSON> {
+       var params = {
+          personId: personId,
+          committeeId : committeeId
+        };
+       return this.http.post( this.constant.addCommitteeMembership, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+    
+    saveCommitteeMembers(CommiteeeObj: Object) : Observable<JSON>{
+        return this.http.post( this.constant.saveCommitteeMembers, CommiteeeObj )
+              .map( res => res.json()
+              )
+              .catch( error => {
+                  console.error( error.message || error );
+                  return Observable.throw( error.message || error )
+              } );
+      }
 }

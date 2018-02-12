@@ -11,6 +11,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { TreeModule } from 'angular-tree-component';
 import { Ng2CompleterModule } from 'ng2-completer';
+import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -121,7 +122,8 @@ let appRoutes = [
         NgbModule.forRoot(),
         Ng2PageScrollModule,
         TreeModule,
-        Ng2CompleterModule
+        Ng2CompleterModule,
+        AngularDateTimePickerModule
     ],
     providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },

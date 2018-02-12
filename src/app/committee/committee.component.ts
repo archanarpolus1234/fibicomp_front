@@ -32,7 +32,7 @@ export class CommitteeComponent {
     homeUnitName: string;
     editFlag: boolean = false;
     constantClass: string;
-    areaList : any =[];
+    areaList: any = [];
     public dataServiceHomeUnit: CompleterData;
 
     constructor( public route: ActivatedRoute, public router: Router, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
@@ -40,7 +40,7 @@ export class CommitteeComponent {
         this.id = this.route.snapshot.queryParamMap.get( 'id' );
         this.initLoadParent();
     }
-        initLoadParent(){
+    initLoadParent() {
         this.committeCreateService.getCommitteeData( '1' )
             .subscribe( data => {
                 this.result = data || [];
@@ -56,7 +56,7 @@ export class CommitteeComponent {
             this.editDetails = true;
             this.class = 'scheduleBoxes';
             this.constantClass = 'scheduleBoxes';
-            this.homeUnitInput.unitName= '';
+            this.homeUnitInput.unitName = '';
         }
         else if ( this.mode == 'view' ) {
             this.committeCreateService.loadCommitteeById( this.id )
@@ -110,7 +110,6 @@ export class CommitteeComponent {
                 this.result.committee.homeUnitNumber = value.unitNumber;
             }
         } );
-        alert("parent"+this.result.committee.homeUnitNumber+this.result.committee.homeUnitName);
     }
 
     recieveFlag( $event ) {
@@ -121,9 +120,10 @@ export class CommitteeComponent {
             this.class = 'committeeBoxNotEditable';
         }
     }
-    recievemode($event){
+
+    recievemode( $event ) {
         this.mode = $event;
-        if(this.mode == 'view'){
+        if ( this.mode == 'view' ) {
             this.initLoadParent();
             this.editDetails = false;
             this.class = 'committeeBoxNotEditable';

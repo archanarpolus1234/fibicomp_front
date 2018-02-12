@@ -17,7 +17,8 @@
 				<div class="row">
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label>Id</label> <span><input type="text"
-							[ngClass]="constantClass" [(ngModel)]="result.committee.committeeId"
+							[ngClass]="constantClass"
+							[(ngModel)]="result.committee.committeeId"
 							[disabled]="mode=='view'" /></span>
 					</div>
 					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
@@ -27,19 +28,20 @@
 					</div>
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label>Type</label> <span><input type="text"
-							[ngClass]="constantClass" [(ngModel)]="result.committee.committeeType.description"
+							[ngClass]="constantClass"
+							[(ngModel)]="result.committee.committeeType.description"
 							[disabled]="mode=='view'" /></span>
 					</div>
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-						<label>Home Unit</label> <span> 
-							    <ng2-completer [inputClass]="class"
-							     [disabled]="mode=='view' && editFlag == false"
-								title="Enter Home Unit" [(ngModel)]="result.committee.homeUnitName"
+						<label>Home Unit</label> <span> <ng2-completer
+								[inputClass]="class"
+								[disabled]="mode=='view' && editFlag == false"
+								title="Enter Home Unit"
+								[(ngModel)]="result.committee.homeUnitName"
 								[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
 								(ngModelChange)="homeChangeFunction(result.committee.homeUnitName)"
 								(selected)="onHomeSelect()"></ng2-completer></span> <span
-							*ngIf="mode =='view'"> 
-						</span>
+							*ngIf="mode =='view'"> </span>
 					</div>
 					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 						<label>Last Updated User</label> <span><input type="text"
@@ -72,9 +74,13 @@
 			</div>
 		</section>
 		<div *ngIf="currentTab =='committee_home'">
-			<app-committee-home [Id]="result.committee.committeeId" [Name]="result.committee.committeeName" [Type]="result.committee.committeeType.description"
-				[Unit]="result.committee.homeUnitNumber" (editFlag)="recieveFlag($event)" (modeFlag)="recievemode($event)"
-				[unitName]="result.committee.homeUnitName" [reviewTypes]=" result.reviewTypes" [areaList]= "areaList"></app-committee-home>
+			<app-committee-home [Id]="result.committee.committeeId"
+				[Name]="result.committee.committeeName"
+				[Type]="result.committee.committeeType.description"
+				[Unit]="result.committee.homeUnitNumber"
+				(editFlag)="recieveFlag($event)" (modeFlag)="recievemode($event)"
+				[unitName]="result.committee.homeUnitName"
+				[reviewTypes]=" result.reviewTypes" [areaList]="areaList"></app-committee-home>
 		</div>
 		<div *ngIf="currentTab =='committee_members'">
 			<app-committee-members></app-committee-members>

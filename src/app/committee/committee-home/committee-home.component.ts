@@ -50,6 +50,15 @@ export class CommitteeHomeComponent implements OnInit {
     sendObject: any;
     pattern = [0-9];
     addResearchArea :string;
+    
+    showGenerateSchedule:boolean = false;
+    committeeData: any = {};
+    scheduleData:any = {};
+    sendScheduleRequestData:any;
+    optionDay: string = 'XDAY';
+    currentScheduleTab: string = 'DAILY';
+    editSchedule = {};
+    editScheduleClass: string = 'committeeBoxNotEditable';
 
 
     constructor( public route: ActivatedRoute, public router: Router, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, private committeeConfigurationService: CommitteeConfigurationService ) {
@@ -64,6 +73,27 @@ export class CommitteeHomeComponent implements OnInit {
         this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
             this.result = data;
           if( this.result != null ){
+              
+              if(this.result.committee == null || this.result.committee == undefined) {
+                  this.committeeData.committee = {};
+              } else {
+                  this.committeeData.committee = this.result.committee;
+              }
+              if(this.result.committee.committeeSchedules == null || this.result.committee.committeeSchedules== undefined) {
+                  this.committeeData.committee.committeeSchedules = [];
+              } else {
+                  this.committeeData.committee.committeeSchedules = this.result.committee.committeeSchedules;
+              }
+              if ( this.result.scheduleData == null ) {
+                  this.result.scheduleData = {};
+                  this.result.scheduleData.time = {};
+                  this.result.scheduleData.dailySchedule = {};
+                  this.result.scheduleData.recurrenceType = 'DAILY';
+                  if(this.optionDay == 'XDAY') {
+                      this.result.scheduleData.dailySchedule.day = 1;
+                  }
+              }
+              
             if ( this.mode == 'view' ) {
                 this.errorFlag = false;
                 this.editDetails = false;
@@ -191,7 +221,7 @@ export class CommitteeHomeComponent implements OnInit {
             }
         }
         if(this.addResearchArea == '1'){
-            alert("cannot add");
+            alert("Cannot add  Research area since it is already there in the committee!");
         }
         else{
             this.result.committee.researchAreas.push(Object);
@@ -247,5 +277,58 @@ export class CommitteeHomeComponent implements OnInit {
         this.committeeConfigurationService.changeCommmitteeData( this.result );
         this.initialLoadChild();
         this.deleteResearch = true;
+    }
+    
+    showSchedulePopUp() {
+        if(this.showGenerateSchedule == false) {
+            this.showGenerateSchedule = true;
+        }
+    }
+    
+    showTab(recurrenceType) {
+        this.result.scheduleData.recurrenceType = recurrenceType;
+    }
+
+    sentDayOption() {
+        setTimeout(() => {
+                    if(this.optionDay == 'XDAY') {
+                        this.result.scheduleData.dailySchedule.day = 1;
+                    } else {
+                        this.result.scheduleData.dailySchedule.day = "";
+                    }
+               }, 100);
+    }
+    
+    generateSchedule() {
+        this.result.scheduleData.time.meridiem = "AM";
+        this.result.scheduleData.dailySchedule.dayOption = this.optionDay;
+        this.sendScheduleRequestData = {};
+        this.sendScheduleRequestData.committee = this.result.committee;
+        this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
+        this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).subscribe( data => {
+            this.committeeData = data || [];
+        } );
+    }
+    
+    editScheduleData(e, i) {
+        e.preventDefault();
+        this.editSchedule[i] = !this.editSchedule[i];
+    }
+    
+    deleteScheduleData(e, scheduleId) {
+        e.preventDefault();
+        this.committeeSaveService.deleteScheduleData( scheduleId ).subscribe( data => {
+            this.committeeData = data || [];
+        } );
+    }
+    
+    updateScheduleData(e, i) {
+        e.preventDefault();
+        this.editSchedule[i] = !this.editSchedule[i];
+    }
+    
+    cancelEditSchedule(e, i) {
+        e.preventDefault();
+        this.editSchedule[i] = !this.editSchedule[i];
     }
 }

@@ -38,4 +38,27 @@ export class CommitteeSaveService {
             };
         return this.http.get(this.constant.deleteResearchAreaUrl, {params: params })
     }   
+    
+    saveScheduleData(scheduleData: Object):Observable<JSON> {
+        return this.http.post( this.constant.generateScheduleUrl, scheduleData )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    deleteScheduleData(scheduleData: number):Observable<JSON> {
+        var params = {
+                scheduleId : scheduleData
+        }
+        return this.http.get( this.constant.deleteScheduleUrl, { params: params } )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
 }
