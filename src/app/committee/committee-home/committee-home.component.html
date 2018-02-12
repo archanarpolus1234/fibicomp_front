@@ -26,8 +26,9 @@
 								<tr>
 									<td><label> Review Type</label><br> <span
 										*ngIf="editDetails != false"> <select
-											[(ngModel)]="result.committee.reviewTypeDescription" name="Select Type"
-											[disabled]="editDetails==false" [ngClass]="editClass">
+											[(ngModel)]="result.committee.reviewTypeDescription"
+											name="Select Type" [disabled]="editDetails==false"
+											[ngClass]="editClass">
 												<option selected="select">Select</option>
 												<option *ngFor="let type of result.reviewTypes">{{type.description}}</option>
 										</select>
@@ -35,23 +36,27 @@
 											[disabled]="editDetails==false" [ngClass]="editClass"
 											[(ngModel)]="result.committee.reviewTypeDescription">
 									</span></td>
-									<td colspan="2"><label>Description</label><br>
-									<input type="text" [disabled]="editDetails==false"
-										[ngClass]="editClass" [(ngModel)]="result.committee.description"></td>
+									<td colspan="2"><label>Description</label><br> <input
+										type="text" [disabled]="editDetails==false"
+										[ngClass]="editClass"
+										[(ngModel)]="result.committee.description"></td>
 
 									<!--  <td ><label>Schedule Description</label><br>Meets monthly</td> -->
 
 								</tr>
 								<tr>
-									<td><label>Min Members for Quorum</label><br>
-									<input type="number" [disabled]="editDetails==false" min = "1"
-										[ngClass]="editClass" [(ngModel)]="result.committee.minimumMembersRequired"/></td>
-									<td><label> Adv Submission Days</label><br>
-									<input type="number" [disabled]="editDetails==false" min = "1"
-										[ngClass]="editClass" [(ngModel)]="result.committee.advSubmissionDaysReq"/></td>
-									<td><label> Maximum Protocols</label><br>
-									<input type="number" [disabled]="editDetails==false" min = "1"
-										[ngClass]="editClass" [(ngModel)]="result.committee.maxProtocols" /></td>
+									<td><label>Min Members for Quorum</label><br> <input
+										type="number" [disabled]="editDetails==false" min="1"
+										[ngClass]="editClass"
+										[(ngModel)]="result.committee.minimumMembersRequired" /></td>
+									<td><label> Adv Submission Days</label><br> <input
+										type="number" [disabled]="editDetails==false" min="1"
+										[ngClass]="editClass"
+										[(ngModel)]="result.committee.advSubmissionDaysReq" /></td>
+									<td><label> Maximum Protocols</label><br> <input
+										type="number" [disabled]="editDetails==false" min="1"
+										[ngClass]="editClass"
+										[(ngModel)]="result.committee.maxProtocols" /></td>
 								</tr>
 								<tr *ngIf="errorFlag">
 									<td><span>{{error}}</span></td>
@@ -84,7 +89,8 @@
 								<td>Area of Research</td>
 								<td>
 									<div>
-										<ng2-completer title="Add area of research" [inputClass]="completerID"
+										<ng2-completer title="Add area of research"
+											[inputClass]="completerID"
 											[(ngModel)]="areaInput.researchAreaDescription"
 											[datasource]="areaList" [minSearchLength]="0"
 											(ngModelChange)="areaChangeFunction(areaInput)"
@@ -127,12 +133,16 @@
 					</div>
 				</div>
 			</div>
+
+
 			<div class="container-fluid">
 				<div class="borderBox col-12">
 
 					<h4 class="borderBoxHeading">
 						Schedule
-						<button class="editBtn" style="position: static; float: right;">
+						<button class="editBtn" (click)="showSchedulePopUp()"
+							data-toggle="modal" data-target="#exampleModalCenter"
+							style="position: static; float: right;">
 							<i class="fa fa-plus">&nbsp;Generate Schedule</i>
 						</button>
 						<!-- Generate Schedules -->
@@ -156,102 +166,257 @@
 								<th title="Click to sort by Status">Time</th>
 								<th title="Click to sort by Status">Action</th>
 							</tr>
-							<tr>
-								<td>1</td>
-								<td>07/20/2010</td>
-								<td>TUESDAY</td>
-								<td>07/18/2010</td>
-								<td>Scheduled</td>
-								<td>EHOB 341</td>
-								<td>01:00</td>
+							<tr
+								*ngFor="let committeScheduleData of committeeData.committee.committeeSchedules; let i = index">
+								<td>{{ i + 1 }}</td>
+								<td><input type="text"
+									[ngClass]="(editSchedule[i] == true)? 'committeeBox' : 'committeeBoxNotEditable'"
+									[disabled]="editSchedule[i] == false"
+									[(ngModel)]="committeScheduleData.scheduledDate"></td>
+								<td>{{ committeScheduleData.dayOfWeek }}</td>
+								<td>{{ committeScheduleData.protocolSubDeadline }}</td>
+								<td>{{ committeScheduleData.scheduleStatus.description }}</td>
+								<td><input type="text"
+									[ngClass]="(editSchedule[i] == true)? 'committeeBox' : 'committeeBoxNotEditable'"
+									[disabled]="editSchedule[i] == false"
+									[(ngModel)]="committeScheduleData.place"></td>
+								<td>{{ committeScheduleData.time | date:'shortTime' }}</td>
 								<td>
 									<ul class="actionButtonGroup">
-										<li>&nbsp;&nbsp;<a title="Open" href="#"
-											routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
-										<li><a href="#"><i class="fa fa-pencil-square-o"
-												aria-hidden="true"></i></a></li>
-										<li><a href="#"><i class="fa fa-trash-o"
-												aria-hidden="true"></i></a></li>
-									</ul>
-								</td>
-							</tr>
-							<tr>
-								<td>2</td>
-								<td>11/11/2015</td>
-								<td>WEDNESDAY</td>
-								<td>11/09/2015</td>
-								<td>Scheduled</td>
-								<td>EHOB 341</td>
-								<td>11:00</td>
-								<td>
-									<ul class="actionButtonGroup">
-										<li>&nbsp;&nbsp;<a title="Open" href="#"
-											routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
-										<li><a href="#"><i class="fa fa-pencil-square-o"
-												aria-hidden="true"></i></a></li>
-										<li><a href="#"><i class="fa fa-trash-o"
-												aria-hidden="true"></i></a></li>
-									</ul>
-								</td>
-							</tr>
-							<tr>
-								<td>3</td>
-								<td>07/20/2010</td>
-								<td>MONDAY</td>
-								<td>07/18/2017</td>
-								<td>Scheduled</td>
-								<td>EHOB 341</td>
-								<td>02:00</td>
-								<td>
-									<ul class="actionButtonGroup">
-										<li>&nbsp;&nbsp;<a title="Open" href="#"
-											routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
-										<li><a href="#"><i class="fa fa-pencil-square-o"
-												aria-hidden="true"></i></a></li>
-										<li><a href="#"><i class="fa fa-trash-o"
-												aria-hidden="true"></i></a></li>
-									</ul>
-								</td>
-							</tr>
-							<tr>
-								<td>4</td>
-								<td>11/24/2010</td>
-								<td>FRIDAY</td>
-								<td>11/22/2010</td>
-								<td>Scheduled</td>
-								<td>EHOB 341</td>
-								<td>14:00</td>
-								<td>
-									<ul class="actionButtonGroup">
-										<li>&nbsp;&nbsp;<a title="Open" href="#"
-											routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
-										<li><a href="#"><i class="fa fa-pencil-square-o"
-												aria-hidden="true"></i></a></li>
-										<li><a href="#"><i class="fa fa-trash-o"
-												aria-hidden="true"></i></a></li>
-									</ul>
-								</td>
-							</tr>
-							<tr>
-								<td>5</td>
-								<td>07/23/2010</td>
-								<td>TUESDAY</td>
-								<td>07/21/2010</td>
-								<td>Scheduled</td>
-								<td>EHOB 341</td>
-								<td>12:00</td>
-								<td>
-									<ul class="actionButtonGroup">
-										<li>&nbsp;&nbsp;<a title="Open" href="#"
-											routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
-										<li><a href="#"><i class="fa fa-pencil-square-o"
-												aria-hidden="true"></i></a></li>
-										<li><a href="#"><i class="fa fa-trash-o"
-												aria-hidden="true"></i></a></li>
+										<li><a title="Open" *ngIf="!editSchedule[i] == true"
+											href="#" routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
+										<li><a href="#" *ngIf="!editSchedule[i] == true"
+											(click)="editScheduleData($event, i)"><i
+												class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+										<li><a href="#" *ngIf="!editSchedule[i] == true"
+											(click)="deleteScheduleData($event, committeScheduleData.scheduleId)"><i
+												class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+										<li><a href="#" *ngIf="!editSchedule[i] == false"
+											(click)="updateScheduleData($event, i)"><i
+												class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+										<li><a href="#" *ngIf="!editSchedule[i] == false"
+											(click)="cancelEditSchedule($event, i)"><i
+												class="fa fa-times" aria-hidden="true"></i></a></li>
 									</ul>
 								</td>
 							</tr>
 						</table>
+					</div>
+				</div>
+			</div>
+
+			<!-- code starts -->
+			<!-- Modal for generate schedule-->
+			<div class="modal fade mySkinDialog modalFallBack"
+				*ngIf="showGenerateSchedule && saveCommitteeFlag"
+				id="exampleModalCenter" tabindex="-1" role="dialog"
+				aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLongTitle">Generate
+								Schedule</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="inputTxtCover">
+								<div class="row">
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+										<label>Date</label><input type="date"
+											[(ngModel)]="result.scheduleData.scheduleStartDate" />
+									</div>
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+										<label>Start Time</label><input type="text"
+											[(ngModel)]="result.scheduleData.time.time" />
+									</div>
+									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
+										<label>Place</label><input type="text"
+											[(ngModel)]="result.scheduleData.place" />
+									</div>
+								</div>
+								<br>
+								<div>
+									<ul class="nav nav-tabs tabsIcon" id="myTab" role="tablist">
+										<li class="nav-item"><a class="nav-link active"
+											id="home-tab" data-toggle="tab" href="#Daily" role="tab"
+											aria-controls="home" aria-selected="true"
+											(click)="showTab('DAILY')">Daily</a></li>
+										<li class="nav-item"><a class="nav-link" id="profile-tab"
+											data-toggle="tab" href="#Weekly" role="tab"
+											aria-controls="profile" aria-selected="false"
+											(click)="showTab('WEEKLY')">Weekly</a></li>
+										<li class="nav-item"><a class="nav-link" id="contact-tab"
+											data-toggle="tab" href="#Monthly" role="tab"
+											aria-controls="contact" aria-selected="false"
+											(click)="showTab('MONTHLY')">Monthly</a></li>
+										<li class="nav-item"><a class="nav-link" id="contact-tab"
+											data-toggle="tab" href="#Yearly" role="tab"
+											aria-controls="contact" aria-selected="false"
+											(click)="showTab('YEARLY')">Yearly</a></li>
+										<li class="nav-item"><a class="nav-link" id="contact-tab"
+											data-toggle="tab" href="#Never" role="tab"
+											aria-controls="contact" aria-selected="false"
+											(click)="showTab('NEVER')">Never</a></li>
+									</ul>
+									<div class="tab-content" id="myTabContent">
+										<div class="tab-pane fade show active" id="Daily"
+											role="tabpanel" aria-labelledby="home-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li><input type="radio" name="dayOption" value="XDAY"
+														[(ngModel)]="optionDay" (click)="sentDayOption()" checked />
+														Every</li>
+													<li><input type="text"
+														[(ngModel)]="result.scheduleData.dailySchedule.day" /></li>
+													<li>day(s)</li>
+													<li><input type="radio" name="dayOption"
+														value="WEEKDAY" [(ngModel)]="optionDay"
+														(click)="sentDayOption()" /> Every Weekday</li>
+												</ul>
+												<ul class="tablelayout">
+													<li>
+														<table>
+															<tr>
+																<td>Ending on</td>
+																<td><input type="date"
+																	[(ngModel)]="result.scheduleData.dailySchedule.scheduleEndDate" /></td>
+															</tr>
+														</table>
+													</li>
+												</ul>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="Weekly" role="tabpanel"
+											aria-labelledby="profile-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li><input type="radio" /> Every</li>
+													<li><select><option>January</option>
+															<option>Feburary</option></select></li>
+													<li><input type="text" /></li>
+													<li>of every</li>
+													<li><input type="text" /></li>
+													<li>year(s)</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><input type="checkbox" /> Sunday</li>
+													<li><input type="checkbox" /> Monday</li>
+													<li><input type="checkbox" /> Tuesday</li>
+													<li><input type="checkbox" /> Wednesday</li>
+													<li><input type="checkbox" /> Thursday</li>
+													<li><input type="checkbox" /> Friday</li>
+												</ul>
+												<ul class="tablelayout">
+													<li>
+														<table>
+															<tr>
+																<td>Ending on</td>
+																<td><input type="text" /></td>
+															</tr>
+														</table>
+													</li>
+												</ul>
+											</div>
+
+										</div>
+										<div class="tab-pane fade" id="Monthly" role="tabpanel"
+											aria-labelledby="contact-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li><input type="radio" /> Day</li>
+													<li><input type="text" /></li>
+													<li>of every</li>
+													<li><input type="text" /></li>
+													<li>month(s)</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><input type="radio" /> The</li>
+													<li><select><option>First</option>
+															<option>second</option>
+															<option>third</option>
+															<option>fourth</option>
+															<option>last</option></select></li>
+													<li><select><option>Monday</option>
+															<option>Tuesday</option>
+															<option>Wednesday</option>
+															<option>Thrusday</option>
+															<option>Friday</option></select></li>
+													<li>of every</li>
+													<li><input type="text" /></li>
+													<li>month(s)</li>
+												</ul>
+												<ul class="tablelayout">
+													<li>
+														<table>
+															<tr>
+																<td>Ending on</td>
+																<td><input type="text" /></td>
+															</tr>
+														</table>
+													</li>
+												</ul>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="Yearly" role="tabpanel"
+											aria-labelledby="contact-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li><input type="radio" /> Every</li>
+													<li><select><option>January</option>
+															<option>Feburary</option></select></li>
+													<li><input type="text" /></li>
+													<li>of every</li>
+													<li><input type="text" /></li>
+													<li>year(s)</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><input type="radio" /> The</li>
+													<li><select><option>First</option>
+															<option>Monday</option></select></li>
+													<li><select><option>Monday</option>
+															<option>Monday</option></select></li>
+													<li>of</li>
+													<li><select><option>January</option>
+															<option>Monday</option></select></li>
+													<li>of every</li>
+													<li><input type="text" /></li>
+													<li>year(s)</li>
+												</ul>
+												<ul class="tablelayout">
+													<li>
+														<table>
+															<tr>
+																<td>Ending on</td>
+																<td><input type="text" /></td>
+															</tr>
+														</table>
+													</li>
+												</ul>
+											</div>
+										</div>
+										<div class="tab-pane fade" id="Never" role="tabpanel"
+											aria-labelledby="contact-tab">
+											<div class="tabCover">
+												<ul class="tablelayout">
+													<li>Do not repeat this event.</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btn-secondary"
+								data-dismiss="modal">Close</button>
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="generateSchedule()" data-dismiss="modal">Save
+								changes</button>
+						</div>
 					</div>
 				</div>
 			</div>
