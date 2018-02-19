@@ -10,48 +10,44 @@
 				<br>
 				<div class="h6">COMMITTEE</div>
 			</div>
-
 			<div
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
 
 				<div class="row">
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-						<label>Id</label> <span><input type="text"
-							[ngClass]="constantClass"
-							[(ngModel)]="result.committee.committeeId"
-							[disabled]="mode=='view'" /></span>
+						<label><span class="mandatory">*</span> Id</label> <span><input
+							type="text" class="committeeBoxNotEditable"
+							[(ngModel)]="result.committee.committeeId" disabled /></span>
 					</div>
 					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
-						<label>Name</label> <span><input type="text"
-							[ngClass]="class" [(ngModel)]="result.committee.committeeName"
+						<label><span class="mandatory">*</span> Name</label> <span><input
+							type="text" [ngClass]="class"
+							[(ngModel)]="result.committee.committeeName"
 							[disabled]="mode=='view' && editFlag == false" /></span>
 					</div>
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-						<label>Type</label> <span><input type="text"
-							[ngClass]="constantClass"
+						<label><span class="mandatory">*</span> Type</label> <span><input
+							type="text" [ngClass]="constantClass"
 							[(ngModel)]="result.committee.committeeType.description"
 							[disabled]="mode=='view'" /></span>
 					</div>
-					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-						<label>Home Unit</label> <span> <ng2-completer
-								[inputClass]="class"
-								[disabled]="mode=='view' && editFlag == false"
-								title="Enter Home Unit"
+					<div class="col-xl-3 col-lg-2 col-md-6 col-sm-6 col-6">
+						<label><span class="mandatory">*</span> Home Unit</label> <span>
+							<ng2-completer *ngIf="editFlag" title="Enter Home Unit"
 								[(ngModel)]="result.committee.homeUnitName"
 								[datasource]="dataServiceHomeUnit" [minSearchLength]="0"
 								(ngModelChange)="homeChangeFunction(result.committee.homeUnitName)"
-								(selected)="onHomeSelect()"></ng2-completer></span> <span
-							*ngIf="mode =='view'"> </span>
+								(selected)="onHomeSelect()"></ng2-completer>
+						</span> <span *ngIf="editFlag == false &&  mode =='view'"> <input
+							type="text" [disabled]="mode=='view' && editFlag == false"
+							class="committeeBoxNotEditable"
+							[(ngModel)]="result.committee.homeUnitName" disabled /></span>
 					</div>
-					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+					<div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
 						<label>Last Updated User</label> <span><input type="text"
 							class="committeeBoxNotEditable" [(ngModel)]="lastUpdated"
 							disabled /></span>
 					</div>
-					<!-- <div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-                        <label>Updated User</label>
-                        <span>admin</span>
-                    </div> -->
 				</div>
 			</div>
 			<!-- tabs in committee view -->
@@ -65,12 +61,12 @@
 								(click)="show_current_tab($event,'committee_home');"><i
 									class="fa fa-calendar"></i><span>Committee</span></a></li>
 							<li [ngClass]="{'active':currentTab=='committee_members'}"><a
-								href="#" (click)="show_current_tab($event,'committee_members');"><i
+								href="#" data-toggle="modal" data-target="#warningModalMain"
+								(click)="show_current_tab($event,'committee_members');"><i
 									class="fa fa-users"></i><span>Members</span></a></li>
 						</ul>
 					</div>
 				</section>
-
 			</div>
 		</section>
 		<div *ngIf="currentTab =='committee_home'">
@@ -80,10 +76,44 @@
 				[Unit]="result.committee.homeUnitNumber"
 				(editFlag)="recieveFlag($event)" (modeFlag)="recievemode($event)"
 				[unitName]="result.committee.homeUnitName"
-				[reviewTypes]=" result.reviewTypes" [areaList]="areaList"></app-committee-home>
+				[reviewTypes]="result.reviewTypes" [areaList]="areaList"
+				#homeComponent></app-committee-home>
 		</div>
 		<div *ngIf="currentTab =='committee_members'">
 			<app-committee-members></app-committee-members>
+		</div>
+
+		<!-- modal for showing warnings -->
+		<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
+			id="warningModalMain" tabindex="-1" role="dialog"
+			aria-labelledby="deleteModalTitle" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" *ngIf="middleOfEdit || middleOfSave"
+							id="exampleModalLongTitle">Alert!</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p *ngIf="middleOfEdit">{{ alertMsgMiddleOfEdit }}</p>
+						<p *ngIf="middleOfSave">{{ alertMsgNotSaved }}</p>
+					</div>
+					<div class="modal-footer" *ngIf="middleOfEdit">
+						<button type="button" class="btnSkin btn-secondary"
+							data-dismiss="modal">Ok</button>
+						<button type="button" class="btnSkin btnSkinPrimary"
+							(click)="saveAndContinue()" data-dismiss="modal">Save
+							and continue</button>
+					</div>
+					<div class="modal-footer" *ngIf="alertMsgNotSaved">
+						<button type="button" class="btnSkin btnSkinPrimary"
+							data-dismiss="modal">Ok</button>
+					</div>
+				</div>
+			</div>
 		</div>
 		<div class="footerPush"></div>
 	</div>

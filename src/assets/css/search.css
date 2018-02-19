@@ -167,3 +167,36 @@ ul.sb-results-dropdown-menu > li:last-child {
 #pichart_divEvolution{
 	cursor:pointer;
 }
+.forSkipSchedule {
+	font-size: 0.8em;
+	padding: 0 1em;
+}
+.forSkipSchedule li {
+	color: #444444;
+	text-align: center;
+	margin: 1rem auto;
+}
+.sp-color {
+	color: #00bcd4 !important;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    margin: 0; 
+}				  
+				
+					
+				   
+ 
+		   
+						   
+ 
+											   
+												
+							 
+						  
+					 
+			   
+ 

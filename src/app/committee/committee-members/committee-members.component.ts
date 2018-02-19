@@ -1,25 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, NgZone, ChangeDetectionStrategy, } from '@angular/core';
+import { FormGroup, FormControl, FormControlName } from '@angular/forms';
+import { Subject, Observable } from 'rxjs';
 import { CommitteCreateEditService } from '../committee-create-edit.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CommitteeConfigurationService } from '../../common/committee-configuration.service'
+import { CommitteeMemberEmployeeElasticService } from '../../elasticSearch/committee-members-employees-elastic-search.service';
+import { CommitteeMemberNonEmployeeElasticService } from '../../elasticSearch/committee-members-nonEmployee-elastic-search.service';
 
 @Component( {
     selector: 'app-committee-members',
     templateUrl: './committee-members.component.html',
-    styleUrls: ['../../../assets/css/bootstrap.min.css', '../../../assets/css/font-awesome.min.css', '../../../assets/css/style.css', '../../../assets/css/search.css']
+    styleUrls: ['../../../assets/css/bootstrap.min.css', '../../../assets/css/font-awesome.min.css', '../../../assets/css/style.css', '../../../assets/css/search.css'],
+    providers: [CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService],
+    changeDetection: ChangeDetectionStrategy.Default
 } )
 
-export class CommitteeMembersComponent implements OnInit {
+export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     memberType;
     addRole: boolean = false;
     editRole: boolean = false;
     addExpertise: boolean = false;
+    editExpertise: boolean = false;
     showMembers: boolean = false;
     showAddMember: boolean = false;
     roleAdded = 0;
     committeeId;
     editDetails: boolean = false;
-    editClass = "committeeBox";
+    editClass = "committeeBoxNotEditable";
     mode;
     memberSearchInput: any = {};
     roleSearchInput: any = {};
@@ -27,6 +35,7 @@ export class CommitteeMembersComponent implements OnInit {
     employeeId;
     personId;
     personIdFromService;
+    rolodexIdFromService;
     memberList: any = {};
     memberListtoView: any = {};
     membershipRoleList: any = {};
@@ -48,15 +57,51 @@ export class CommitteeMembersComponent implements OnInit {
     memberRoleObject: any = {};
     memberExpertiseObject: any = {};
     selectedExpertise;
-    selectedRole;
-    currentUser = localStorage.getItem( 'currentUser' );
+    nonEmployeeFlag: boolean = false;
 
-    constructor( public route: ActivatedRoute, public completerService: CompleterService, public committeCreateEditService: CommitteCreateEditService ) {
+    selectedRole;
+    searchString;
+    hits_source;
+    hits_highlight;
+    first_name;
+    middle_name;
+    last_name;
+    organization;
+    elasticSearchresults: any = [];
+    searchTextModel: string;
+    changePersonDetails: boolean = false;
+    searchActive: boolean = false;
+    selectedMember: any = {};
+    _results: Subject<Array<any>> = new Subject<Array<any>>();
+
+    prncpl_id;
+    full_name;
+    prncpl_nm;
+    email_addr;
+    unit_number;
+    unit_name;
+    addr_line_1;
+    phone_nbr;
+    rolodexId;
+
+    iconClass: string = 'fa fa-search';
+    editClassRole = "committeeBoxNotEditable";
+    message;
+    activeMembers = true;
+    inactiveMembers;
+    currentUser = localStorage.getItem( 'currentUser' );
+    searchText: FormControl = new FormControl( '' );
+
+    constructor( public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, private _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public committeeConfigurationService: CommitteeConfigurationService, public route: ActivatedRoute, public completerService: CompleterService, public committeCreateEditService: CommitteCreateEditService ) {
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
         this.committeeId = this.route.snapshot.queryParamMap.get( 'id' );
-        this.committeCreateEditService.loadCommitteeById( this.committeeId ).subscribe( data => {
+        this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
             this.resultLoadedById = data;
             if ( this.resultLoadedById != null ) {
+                this.membershipRoles = this.resultLoadedById.membershipRoles;
+                this.membershipExpertise = this.resultLoadedById.researchAreas;
+                this.dataServiceRoleList = this.completerService.local( this.membershipRoles, 'description', 'description' );
+                this.dataServiceExpertiseList = this.completerService.local( this.membershipExpertise, 'description', 'description' );
                 this.memberList.committeeMembershipTypes = this.resultLoadedById.committeeMembershipTypes;
                 this.memberExist = true;
             }
@@ -72,23 +117,135 @@ export class CommitteeMembersComponent implements OnInit {
         this.initialLoad();
     }
 
+    setActiveAndchangeIconSearch() {
+        this.searchActive = true;
+        this.iconClass = 'fa fa-times';
+
+
+    }
+    setInActiveAndchangeIconSearch() {
+        this.searchActive = false;
+        this.iconClass = 'fa fa-search';
+    }
+    ngAfterViewInit() {
+        this.searchText
+            .valueChanges
+            .map(( text: any ) => text ? text.trim() : '' )
+            .do( searchString => searchString ? this.message = 'searching...' : this.message = '' )
+            .debounceTime( 500 )
+            .distinctUntilChanged()
+            .switchMap( searchString => {
+                return new Promise<Array<String>>(( resolve, reject ) => {
+                    if ( this.nonEmployeeFlag == false ) {
+
+                        this._ngZone.runOutsideAngular(() => {
+                            this.committeeMemberEmployeeElasticService.search( searchString )
+                                .then(( searchResult ) => {
+                                    this.elasticSearchresults = [];
+                                    this._ngZone.run(() => {
+                                        this.hits_source = ( ( searchResult.hits || {} ).hits || [] )
+                                            .map(( hit ) => hit._source );
+                                        this.hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
+                                            .map(( hit ) => hit.highlight );
+
+                                        this.hits_source.forEach(( elmnt, j ) => {
+                                            this.prncpl_id = this.hits_source[j].prncpl_id;
+                                            this.full_name = this.hits_source[j].full_name;
+                                            this.prncpl_nm = this.hits_source[j].prncpl_nm;
+                                            this.email_addr = this.hits_source[j].email_addr;
+                                            this.unit_number = this.hits_source[j].unit_number;
+                                            this.unit_name = this.hits_source[j].unit_name;
+                                            this.addr_line_1 = this.hits_source[j].addr_line_1;
+                                            this.phone_nbr = this.hits_source[j].phone_nbr;
+                                            this.elasticSearchresults.push( {
+                                                label: this.full_name,
+                                                id: this.prncpl_id
+                                            }
+                                            );
+                                        }
+                                        );
+                                        if ( this.elasticSearchresults.length > 0 ) {
+                                            this.message = '';
+                                        } else {
+                                            if ( this.searchTextModel && this.searchTextModel.trim() ) {
+                                                this.message = 'nothing was found';
+                                            }
+                                        }
+                                        resolve( this.elasticSearchresults );
+                                    } );
+
+                                } )
+                                .catch(( error ) => {
+                                    alert( "catch error" );
+                                } );
+                        } );
+                    }
+                    if ( this.nonEmployeeFlag == true ) {
+                        this._ngZone.runOutsideAngular(() => {
+                            this.committeeMemberNonEmployeeElasticService.search( searchString )
+                                .then(( searchResult ) => {
+                                    this._ngZone.run(() => {
+                                        this.hits_source = ( ( searchResult.hits || {} ).hits || [] )
+                                            .map(( hit ) => hit._source );
+                                        this.hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
+                                            .map(( hit ) => hit.highlight );
+                                        this.hits_source.forEach(( elmnt, j ) => {
+                                            this.rolodexId = this.hits_source[j].rolodex_id;
+                                            this.first_name = this.hits_source[j].first_name;
+                                            this.middle_name = this.hits_source[j].middle_name;
+                                            this.last_name = this.hits_source[j].last_name;
+                                            this.organization = this.hits_source[j].organization;
+                                            this.elasticSearchresults.push( {
+                                                label: this.first_name + '  ' + this.middle_name
+                                                + '  ' + this.last_name,
+                                                id: this.rolodexId
+                                            }
+                                            );
+                                        }
+                                        );
+                                        if ( this.elasticSearchresults.length > 0 ) {
+                                            this.message = '';
+                                        } else {
+                                            if ( this.searchTextModel && this.searchTextModel.trim() ) {
+                                                this.message = 'nothing was found';
+                                            }
+                                        }
+                                        resolve( this.elasticSearchresults );
+
+                                    } );
+
+                                } )
+                                .catch(( error ) => {
+                                    console.log( "catch error", error );
+
+                                } );
+                        } );
+                    }
+                } );
+            } ).catch( this.handleError )
+            .subscribe( this._results );
+    }
+
+    handleError(): any {
+        this.message = 'something went wrong';
+    }
+
     initialLoad() {
-        this.committeCreateEditService.getCommitteeData( '1' )
-            .subscribe( data => {
-                this.result = data;
-                if ( this.result != null ) {
-                    this.employees = this.result.employees;
-                    this.non_employees = this.result.nonEmployees;
-                    this.membershipRoles = this.result.membershipRoles;
-                    this.membershipExpertise = this.result.researchAreas;
-                    this.dataServiceMemberList = this.completerService.local( this.employees, 'fullName', 'fullName' );
-                    this.dataServiceRoleList = this.completerService.local( this.membershipRoles, 'description', 'description' );
-                    this.dataServiceExpertiseList = this.completerService.local( this.membershipExpertise, 'description', 'description' );
-                }
-            } );
         if ( this.mode == 'view' ) { } else {
             this.editDetails = true;
         }
+    }
+    selected( value ) {
+        this.searchTextModel = value.label
+        this.selectedMember = value;
+    }
+
+    employeeRadioChecked() {
+        this.nonEmployeeFlag = false;
+    }
+
+    nonEmployeeRadioChecked() {
+        this.nonEmployeeFlag = true;
     }
 
     showEditDetails() {
@@ -103,6 +260,8 @@ export class CommitteeMembersComponent implements OnInit {
             if ( membertype.description == types ) {
                 var d = new Date();
                 var timestamp = d.getTime();
+                membertype.updateTimestamp = timestamp;
+                membertype.updateUser = this.currentUser;
                 member.committeeMembershipType = membertype;
                 member.membershipTypeCode = membertype.membershipTypeCode;
             }
@@ -110,7 +269,7 @@ export class CommitteeMembersComponent implements OnInit {
     }
 
     saveDetails() {
-        this.editDetails = !this.editDetails;
+        this.editDetails = false;
         this.editClass = 'committeeBoxNotEditable';
         var currentDate = new Date();
         var currentTime = currentDate.getTime();
@@ -120,9 +279,6 @@ export class CommitteeMembersComponent implements OnInit {
         }
         this.sendMemberObject = {};
         this.sendMemberObject.committee = this.resultLoadedById.committee;
-        for ( let member of this.sendMemberObject.committee.committeeMemberships ) {
-            delete member['active'];
-        }
         this.committeCreateEditService.saveCommitteeMembers( this.sendMemberObject ).subscribe( data => {
             this.saveResult = data;
             this.resultLoadedById.committee = this.saveResult.committee;
@@ -130,90 +286,146 @@ export class CommitteeMembersComponent implements OnInit {
     }
 
     cancelEditDetails() {
-        this.editDetails = !this.editDetails;
+        this.editDetails = false;
         if ( !this.editDetails ) {
             this.editClass = 'committeeBoxNotEditable';
         }
     }
 
-    addRoles( $event ) {
+    addRoles( event: any ) {
         event.preventDefault();
         this.addRole = true;
         this.editRole = true;
+        this.editClassRole = 'committeeBox';
     }
 
-    saveRole() {
+    saveRole( role, member ) {
         this.addRole = false;
         this.editRole = false;
+        this.editClassRole = 'committeeBoxNotEditable';
+        this.committeCreateEditService.updateMemberRoles( role.commMemberRolesId, this.committeeId, member.commMembershipId, role ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.resultLoadedById.committee = temp.committee;
+        } );
     }
 
     cancelRole() {
         this.addRole = false;
         this.editRole = false;
+        this.editClassRole = 'committeeBoxNotEditable';
+    }
+
+
+    addExpertises( event: any ) {
+        event.preventDefault();
+        this.addExpertise = true;
+        this.editExpertise = true;
+        this.editClass = 'committeeBox';
+    }
+
+    cancelExpertise() {
+        this.addExpertise = false;
+        this.editExpertise = false;
+        this.editClass = 'committeeBoxNotEditable';
     }
     editRoles() {
-
         this.editRole = true;
+        this.editClassRole = 'committeeBox';
+    }
+
+    editExpertises() {
+        this.editExpertise = true;
+        this.editClass = 'committeeBox';
     }
 
     roleAddtoTable( member ) {
         var flag: boolean = false;
-        if ( member.committeeMemberRoles.length == 0 ) {
-            member.committeeMemberRoles.push( this.memberRoleObject );
-        } else {
-            for ( let role of member.committeeMemberRoles ) {
-                if ( role.membershipRoleDescription == this.selectedRole ) {
-                    flag = true;
-                }
-            }
-            if ( flag == false ) {
-                member.committeeMemberRoles.push( this.memberRoleObject );
-            }
-        }
+        this.committeCreateEditService.saveCommMemberRole( member.commMembershipId, this.committeeId, this.memberRoleObject ).subscribe( data => {
+            this.memberRoleObject.startDate = '';
+            this.memberRoleObject.endDate = '';
+            this.membershipRoles.description = '';
+            var temp: any = {};
+            temp = data;
+            this.resultLoadedById.committee = temp.committee;
+        } );
     }
 
     expertiseAddtoTable( member ) {
-        zvar flag: boolean = false;
-        if ( member.committeeMemberExpertises.length == 0 ) {
-            member.committeeMemberExpertises.push( this.memberExpertiseObject );
-        } else {
-            for ( let expertise of member.committeeMemberExpertises ) {
-                if ( expertise.researchAreaDescription == this.selectedExpertise ) {
-                    flag = true;
-                }
-            }
-            if ( flag == false ) {
-                member.committeeMemberExpertises.push( this.memberExpertiseObject );
-            }
-        }
+        var flag: boolean = false;
+        this.addExpertise = false;
+        this.editExpertise = false;
+        this.editClass = 'committeeBoxNotEditable';
+        this.committeCreateEditService.saveCommMemberExpertise( member.commMembershipId, this.committeeId, this.memberExpertiseObject ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.resultLoadedById.committee = temp.committee;
+        } );
     }
 
-
-    deleteRole( description ) {
+    clearsearchBox( e: any ) {
+        e.preventDefault();
+        this.searchTextModel = '';
     }
 
-    addExpertises( $event ) {
+    deleteRole( event: any, commMemberRolesId, commMembershipId ) {
         event.preventDefault();
-        this.addExpertise = !this.addExpertise;
+        event.preventDefault();
+        this.committeCreateEditService.deleteRoles( commMemberRolesId, commMembershipId, this.committeeId ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.resultLoadedById.committee = temp.committee;
+        } );
+
     }
 
-    showMembersTab( $event, personIdFromService ) {
+    deleteExpertise( event: any, commMemberExpertiseId, commMembershipId ) {
         event.preventDefault();
+        this.committeCreateEditService.deleteExpertises( commMemberExpertiseId, commMembershipId, this.committeeId ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.resultLoadedById.committee = temp.committee;
+        } );
+    }
+
+    deleteMember( event: any, commMembershipId ) {
+        event.preventDefault();
+        this.committeCreateEditService.deleteMember( commMembershipId, this.committeeId ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.resultLoadedById.committee = temp.committee;
+        } );
+    }
+
+    showMembersNonEmployeesTab( event: any, rolodexIdFromService ) {
+        event.preventDefault();
+        this.personId = null;
+        this.showMembers = !this.showMembers;
+        this.rolodexId = rolodexIdFromService;
+    }
+
+    showMembersTab( event: any, personIdFromService ) {
+        event.preventDefault();
+        this.rolodexId = null;
         this.showMembers = !this.showMembers;
         this.personId = personIdFromService;
     }
 
-    addMemberDiv( $event ) {
-        $event.preventDefault();
+    addMemberDiv( event: any ) {
+        event.preventDefault();
         this.showAddMember = !this.showAddMember;
     }
 
     addMember() {
-        this.committeCreateEditService.addMember( this.memberSearchInput.personId, this.committeeId ).subscribe( data => {
+        this.committeCreateEditService.addMember( this.selectedMember.id, this.committeeId, this.nonEmployeeFlag, this.resultLoadedById.committee ).subscribe( data => {
             this.memberList = data;
             var length = this.memberList.committee.committeeMemberships.length;
             for ( let membertype of this.memberList.committeeMembershipTypes ) {
                 if ( membertype.description == 'Non-voting member' ) {
+                    var d = new Date();
+                    var timestamp = d.getTime();
+                    membertype.updateTimestamp = timestamp;
+                    membertype.updateUser = this.currentUser;
                     this.memberList.committee.committeeMemberships[length - 1].committeeMembershipType = membertype;
                     this.memberList.committee.committeeMemberships[length - 1].membershipTypeCode = membertype.membershipTypeCode;
                 }

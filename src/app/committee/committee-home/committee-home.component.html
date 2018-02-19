@@ -12,7 +12,8 @@
 							(click)="showEditDetails()">
 							<i class="fa fa-pencil"></i>
 						</button>
-						<button class="addBtn" *ngIf="editDetails" (click)="saveDetails()">
+						<button class="addBtn" *ngIf="editDetails" (click)="saveDetails()"
+							data-toggle="modal" data-target="#warningModal">
 							<i class="fa fa-floppy-o"></i>
 						</button>
 						<button class="editBtn" *ngIf="editDetails"
@@ -20,17 +21,20 @@
 							<i class="fa fa-times"></i>
 						</button>
 					</h4>
+					<p *ngIf="errorFlag">
+						<span>{{error}}<span class="mandatory">*</span></span>
+					</p>
 					<div class="pullSide">
 						<table class="table tableSkin grid2">
 							<tbody>
 								<tr>
-									<td><label> Review Type</label><br> <span
-										*ngIf="editDetails != false"> <select
+									<td><label><span class="mandatory">*</span> Review
+											Type</label><br> <span *ngIf="editDetails != false"> <select
 											[(ngModel)]="result.committee.reviewTypeDescription"
 											name="Select Type" [disabled]="editDetails==false"
 											[ngClass]="editClass">
-												<option selected="select">Select</option>
-												<option *ngFor="let type of result.reviewTypes">{{type.description}}</option>
+												<option value="Select">Select</option>
+												<option *ngFor="let type of reviewTypes">{{type.description}}</option>
 										</select>
 									</span> <span *ngIf="editDetails == false"> <input type="text"
 											[disabled]="editDetails==false" [ngClass]="editClass"
@@ -40,27 +44,25 @@
 										type="text" [disabled]="editDetails==false"
 										[ngClass]="editClass"
 										[(ngModel)]="result.committee.description"></td>
-
 									<!--  <td ><label>Schedule Description</label><br>Meets monthly</td> -->
-
 								</tr>
 								<tr>
-									<td><label>Min Members for Quorum</label><br> <input
-										type="number" [disabled]="editDetails==false" min="1"
-										[ngClass]="editClass"
+									<td><label><span class="mandatory">*</span> Min
+											Members for Quorum</label><br> <input type="number"
+										[disabled]="editDetails==false" min="1" [ngClass]="editClass"
 										[(ngModel)]="result.committee.minimumMembersRequired" /></td>
-									<td><label> Adv Submission Days</label><br> <input
-										type="number" [disabled]="editDetails==false" min="1"
-										[ngClass]="editClass"
+									<td><label><span class="mandatory">*</span> Adv
+											Submission Days</label><br> <input type="number"
+										[disabled]="editDetails==false" min="1" [ngClass]="editClass"
 										[(ngModel)]="result.committee.advSubmissionDaysReq" /></td>
-									<td><label> Maximum Protocols</label><br> <input
-										type="number" [disabled]="editDetails==false" min="1"
-										[ngClass]="editClass"
+									<td><label><span class="mandatory">*</span>
+											Maximum Protocols</label><br> <input type="number"
+										[disabled]="editDetails==false" min="1" [ngClass]="editClass"
 										[(ngModel)]="result.committee.maxProtocols" /></td>
 								</tr>
-								<tr *ngIf="errorFlag">
-									<td><span>{{error}}</span></td>
-								</tr>
+
+
+
 							</tbody>
 						</table>
 
@@ -75,11 +77,6 @@
 						<button id="areaOfResearchAddBtn" class="addBtn"
 							(click)="showaddAreaOfResearch()">
 							<i class="fa fa-plus"></i>
-						</button>
-						<button class="editBtn"
-							*ngIf="showSaveAreaOfResearch || deleteResearch"
-							(click)="saveAreaOfResearch()">
-							<i class="fa fa-floppy-o"></i>
 						</button>
 					</h4>
 					<div class="pullSide">
@@ -98,7 +95,8 @@
 									</div>
 								</td>
 								<td>
-									<button class="btnSkin btnSkinPrimary"
+									<button class="btnSkin btnSkinPrimary" data-toggle="modal"
+										data-target="#warningModal"
 										(click)="addAreaOfResearch(areaInput)">Add</button>
 								</td>
 							</tr>
@@ -106,7 +104,7 @@
 								<th title="">Sl No</th>
 								<th title="">Research Area Code</th>
 								<th title="">Code/Description</th>
-								<th title="" *ngIf="addResearch && saveCommitteeFlag">Action</th>
+								<th title="">Action</th>
 
 							</tr>
 							<tr
@@ -119,16 +117,13 @@
 									value="{{ area.researchAreaDescription }}" /></td>
 								<td>
 									<ul class="actionButtonGroup">
-										<li><a href="#"
-											(click)="deleteAreaOfResearch($event,area.commResearchAreasId,area.researchAreaCode)"><i
-												class="fa fa-trash-o" aria-hidden="true" *ngIf="addResearch"></i></a></li>
+										<li><a href="#" data-toggle="modal"
+											data-target="#warningModal"
+											(click)="deleteAreaOfResearchConfirmation($event,area)"><i
+												class="fa fa-trash-o" aria-hidden="true"></i></a></li>
 									</ul>
 								</td>
 							</tr>
-							<!-- 
-            <tr *ngIf="mode=='create'">
-               <td> No Data found!</td>
-            </tr> -->
 						</table>
 					</div>
 				</div>
@@ -152,9 +147,17 @@
 						<table class="table table-responsive tableSkin">
 							<tr class="scheduleFilterBoxes">
 								<td class="noDataOnChart">From :</td>
-								<td><input type="text" class="committeeBox"></td>
+								<td><input type="date" class="scheduleBoxes"
+									[(ngModel)]="result.scheduleData.filterStartDate"></td>
 								<td class="noDataOnChart">To :</td>
-								<td><input type="text" class="committeeBox"></td>
+								<td><input type="date" class="scheduleBoxes"
+									[(ngModel)]="result.scheduleData.filerEndDate"></td>
+								<td><button type="button" class="btnSkin btnSkinPrimary"
+										(click)="filterSchedule()">Filter</button></td>
+								<td><button type="button" class="btnSkin btn-secondary"
+										(click)="resetFilterSchedule()">Clear</button></td>
+
+
 							</tr>
 							<tr>
 								<th title="Click to sort by Proposal">Sl No</th>
@@ -167,9 +170,10 @@
 								<th title="Click to sort by Status">Action</th>
 							</tr>
 							<tr
-								*ngFor="let committeScheduleData of committeeData.committee.committeeSchedules; let i = index">
+								*ngFor="let committeScheduleData of result.committee.committeeSchedules; let i = index;">
+								<ng-container *ngIf="committeScheduleData.filter">
 								<td>{{ i + 1 }}</td>
-								<td><input type="text"
+								<td><input type="date"
 									[ngClass]="(editSchedule[i] == true)? 'committeeBox' : 'committeeBoxNotEditable'"
 									[disabled]="editSchedule[i] == false"
 									[(ngModel)]="committeScheduleData.scheduledDate"></td>
@@ -189,23 +193,24 @@
 											(click)="editScheduleData($event, i)"><i
 												class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
 										<li><a href="#" *ngIf="!editSchedule[i] == true"
-											(click)="deleteScheduleData($event, committeScheduleData.scheduleId)"><i
+											data-toggle="modal" data-target="#deleteModal"
+											(click)="showDeleteModal($event, committeScheduleData.scheduleId, result.committee.committeeId, committeScheduleData.scheduledDate)"><i
 												class="fa fa-trash-o" aria-hidden="true"></i></a></li>
 										<li><a href="#" *ngIf="!editSchedule[i] == false"
-											(click)="updateScheduleData($event, i)"><i
+											(click)="updateScheduleData($event, i, committeScheduleData)"><i
 												class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
 										<li><a href="#" *ngIf="!editSchedule[i] == false"
 											(click)="cancelEditSchedule($event, i)"><i
 												class="fa fa-times" aria-hidden="true"></i></a></li>
 									</ul>
 								</td>
+								</ng-container>
 							</tr>
 						</table>
 					</div>
 				</div>
 			</div>
 
-			<!-- code starts -->
 			<!-- Modal for generate schedule-->
 			<div class="modal fade mySkinDialog modalFallBack"
 				*ngIf="showGenerateSchedule && saveCommitteeFlag"
@@ -270,7 +275,7 @@
 													<li><input type="radio" name="dayOption" value="XDAY"
 														[(ngModel)]="optionDay" (click)="sentDayOption()" checked />
 														Every</li>
-													<li><input type="text"
+													<li><input type="number" min="1" max="100"
 														[(ngModel)]="result.scheduleData.dailySchedule.day" /></li>
 													<li>day(s)</li>
 													<li><input type="radio" name="dayOption"
@@ -294,28 +299,24 @@
 											aria-labelledby="profile-tab">
 											<div class="tabCover">
 												<ul class="tablelayout">
-													<li><input type="radio" /> Every</li>
-													<li><select><option>January</option>
-															<option>Feburary</option></select></li>
-													<li><input type="text" /></li>
-													<li>of every</li>
-													<li><input type="text" /></li>
-													<li>year(s)</li>
+													<li>Recur every</li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.weeklySchedule.week" /></li>
+
+													<li>week(s) on:</li>
 												</ul>
 												<ul class="tablelayout">
-													<li><input type="checkbox" /> Sunday</li>
-													<li><input type="checkbox" /> Monday</li>
-													<li><input type="checkbox" /> Tuesday</li>
-													<li><input type="checkbox" /> Wednesday</li>
-													<li><input type="checkbox" /> Thursday</li>
-													<li><input type="checkbox" /> Friday</li>
+													<li *ngFor="let option of dayOptions"><input
+														type="checkbox" name="options" value="{{option.value}}"
+														[(ngModel)]="option.checked" /> {{option.name}}</li>
 												</ul>
 												<ul class="tablelayout">
 													<li>
 														<table>
 															<tr>
 																<td>Ending on</td>
-																<td><input type="text" /></td>
+																<td><input type="date"
+																	[(ngModel)]="result.scheduleData.weeklySchedule.scheduleEndDate" /></td>
 															</tr>
 														</table>
 													</li>
@@ -327,26 +328,35 @@
 											aria-labelledby="contact-tab">
 											<div class="tabCover">
 												<ul class="tablelayout">
-													<li><input type="radio" /> Day</li>
-													<li><input type="text" /></li>
+													<li><input type="radio" name="monthOptionDay"
+														value="XDAYANDXMONTH" [(ngModel)]="monthOptionDay"
+														(click)="sentMonthOption()" checked /> Day</li>
+													<li><input type="number" min="1" max="31"
+														[(ngModel)]="result.scheduleData.monthlySchedule.day" /></li>
 													<li>of every</li>
-													<li><input type="text" /></li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.monthlySchedule.option1Month" /></li>
 													<li>month(s)</li>
 												</ul>
 												<ul class="tablelayout">
-													<li><input type="radio" /> The</li>
-													<li><select><option>First</option>
-															<option>second</option>
-															<option>third</option>
-															<option>fourth</option>
-															<option>last</option></select></li>
-													<li><select><option>Monday</option>
-															<option>Tuesday</option>
-															<option>Wednesday</option>
-															<option>Thrusday</option>
-															<option>Friday</option></select></li>
+													<li><input type="radio" name="monthOptionDay"
+														value="XDAYOFWEEKANDXMONTH" [(ngModel)]="monthOptionDay"
+														(click)="sentMonthOption()" /> The</li>
+													<li><select
+														[(ngModel)]="result.scheduleData.monthlySchedule.selectedMonthsWeek">
+															<option *ngFor="let day of selectedMonthWeek"
+																[value]="day.value"
+																[selected]="selectedMonthWeek[0].name">{{day.name}}</option>
+
+													</select></li>
+													<li><select
+														[(ngModel)]="result.scheduleData.monthlySchedule.selectedDayOfWeek">
+															<option *ngFor="let day of dayOptions"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
 													<li>of every</li>
-													<li><input type="text" /></li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.monthlySchedule.option2Month" /></li>
 													<li>month(s)</li>
 												</ul>
 												<ul class="tablelayout">
@@ -354,7 +364,8 @@
 														<table>
 															<tr>
 																<td>Ending on</td>
-																<td><input type="text" /></td>
+																<td><input type="date"
+																	[(ngModel)]="result.scheduleData.monthlySchedule.scheduleEndDate" /></td>
 															</tr>
 														</table>
 													</li>
@@ -365,25 +376,44 @@
 											aria-labelledby="contact-tab">
 											<div class="tabCover">
 												<ul class="tablelayout">
-													<li><input type="radio" /> Every</li>
-													<li><select><option>January</option>
-															<option>Feburary</option></select></li>
-													<li><input type="text" /></li>
+													<li><input type="radio" name="yearOption" value="XDAY"
+														[(ngModel)]="yearOption" (click)="sentYearOption()" />
+														Every</li>
+													<li><select
+														[(ngModel)]="result.scheduleData.yearlySchedule.selectedOption1Month">
+															<option *ngFor="let day of yearMonthOptions"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
+													<li><input type="number" min="1" max="31"
+														[(ngModel)]="result.scheduleData.yearlySchedule.day" /></li>
 													<li>of every</li>
-													<li><input type="text" /></li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.yearlySchedule.option1Year" /></li>
 													<li>year(s)</li>
 												</ul>
 												<ul class="tablelayout">
-													<li><input type="radio" /> The</li>
-													<li><select><option>First</option>
-															<option>Monday</option></select></li>
-													<li><select><option>Monday</option>
-															<option>Monday</option></select></li>
+													<li><input type="radio" name="yearOption"
+														value="CMPLX" [(ngModel)]="yearOption"
+														(click)="sentYearOption()" /> The</li>
+													<li><select
+														[(ngModel)]="result.scheduleData.yearlySchedule.selectedMonthsWeek">
+															<option *ngFor="let day of selectedMonthWeek"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
+													<li><select
+														[(ngModel)]="result.scheduleData.yearlySchedule.selectedDayOfWeek">
+															<option *ngFor="let day of dayOptions"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
 													<li>of</li>
-													<li><select><option>January</option>
-															<option>Monday</option></select></li>
+													<li><select
+														[(ngModel)]="result.scheduleData.yearlySchedule.selectedOption2Month">
+															<option *ngFor="let day of yearMonthOptions"
+																[value]="day.value">{{day.name}}</option>
+													</select></li>
 													<li>of every</li>
-													<li><input type="text" /></li>
+													<li><input type="number" min="1" max="100"
+														[(ngModel)]="result.scheduleData.yearlySchedule.option2Year" /></li>
 													<li>year(s)</li>
 												</ul>
 												<ul class="tablelayout">
@@ -391,7 +421,8 @@
 														<table>
 															<tr>
 																<td>Ending on</td>
-																<td><input type="text" /></td>
+																<td><input type="date"
+																	[(ngModel)]="result.scheduleData.yearlySchedule.scheduleEndDate" /></td>
 															</tr>
 														</table>
 													</li>
@@ -414,12 +445,124 @@
 							<button type="button" class="btnSkin btn-secondary"
 								data-dismiss="modal">Close</button>
 							<button type="button" class="btnSkin btnSkinPrimary"
-								(click)="generateSchedule()" data-dismiss="modal">Save
-								changes</button>
+								data-dismiss="modal" data-toggle="modal"
+								data-target="#skippedSchedules" (click)="generateSchedule()">Generate
+								Schedules</button>
 						</div>
 					</div>
 				</div>
 			</div>
+
+			<!-- Modal for show warning on conflicted dates on generate schedule -->
+
+			<div class="modal fade mySkinDialog modalFallBack"
+				*ngIf="isConflictDates" id="skippedSchedules" tabindex="-1"
+				role="dialog" aria-labelledby="skippedSchedulesTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="skippedSchedulesLongTitle">Already
+								scheduled for these dates?</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p class="forSkipSchedule">Schedules can not be generated on
+								the following date(s)</p>
+							<ul class="forSkipSchedule">
+								<li *ngFor="let conflictDate of conflictDates"><span
+									class="fa fa-calendar sp-color">&nbsp;&nbsp;{{
+										conflictDate }}&nbsp;&nbsp;</span> is skipped in recurrence, meeting
+									already scheduled.</li>
+							</ul>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btnSkinPrimary"
+								data-dismiss="modal" (click)="closeConflictDateModal()">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Modal for Show Warning-->
+
+			<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
+				id="warningModal" tabindex="-1" role="dialog"
+				aria-labelledby="deleteModalTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" *ngIf="deleteConfirmation">Want to
+								delete?</h5>
+							<h5 class="modal-title" *ngIf="duplicateIdFlag">Cannot Save!</h5>
+							<h5 class="modal-title"
+								*ngIf="duplicateAreaOfResearch || emptyAreaOfResearch">Cannot
+								Add!</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p *ngIf="deleteConfirmation">{{ this.deleteMsg }}</p>
+							<p
+								*ngIf="duplicateIdFlag || duplicateAreaOfResearch || emptyAreaOfResearch">
+								{{ this.alertMsg }}</p>
+						</div>
+						<div class="modal-footer" *ngIf="deleteConfirmation">
+							<button type="button" class="btnSkin btn-secondary"
+								data-dismiss="modal" (click)="cancelDelete()">No</button>
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="deleteAreaOfResearch(areaOfResearchToDelete)"
+								data-dismiss="modal">Yes</button>
+						</div>
+						<div class="modal-footer"
+							*ngIf="duplicateIdFlag || duplicateAreaOfResearch || emptyAreaOfResearch">
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="duplicateId()" data-dismiss="modal">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end of modal showing warnings -->
+
+			<!-- Modal for Show Warning on Delete Schedule from List -->
+
+			<div class="modal fade mySkinDialog modalFallBack" *ngIf="isTodelete"
+				id="deleteModal" tabindex="-1" role="dialog"
+				aria-labelledby="deleteModalTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLongTitle">Want to
+								delete?</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p>
+								Are you sure you want to delete the schedule on the date<span>
+									{{scheduledDate}}</span> ?
+							</p>
+
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btn-secondary"
+								data-dismiss="modal">No</button>
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="deleteScheduleData()" data-dismiss="modal">Yes</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- End of Modal for Show Warning on Delete Schedule from List -->
+			<!-- All Modal ends -->
+
 		</div>
 	</div>
 </section>

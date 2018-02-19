@@ -27,14 +27,6 @@ export class DashboardComponent implements OnInit {
         property4: ''
     };
     
-  /*  date: Date = new Date();
-    settings = {
-        bigBanner: true,
-        timePicker: true,
-        format: 'dd-MM-yyyy',
-        defaultOpen: true
-    }*/
-    
     currentPosition: string = 'SUMMARY';
     pageNumber: number;
     sortBy: string = 'updateTimeStamp';

@@ -11,7 +11,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { TreeModule } from 'angular-tree-component';
 import { Ng2CompleterModule } from 'ng2-completer';
-import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -61,7 +62,8 @@ import { AwardHierarchyService } from './award/award-hierarchy/award-hierarchy.s
 import { AwardReportsAndTermsService } from './award/award-reports-and-tabs/award-reports-and-terms.service';
 import { AwardCommitmentsService } from './award/award-commitments/award-commitments.service';
 import { CommitteeConfigurationService } from './common/committee-configuration.service';
-
+import { CommitteeMemberEmployeeElasticService } from './elasticSearch/committee-members-employees-elastic-search.service';
+import { CommitteeMemberNonEmployeeElasticService } from './elasticSearch/committee-members-nonEmployee-elastic-search.service';
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -123,13 +125,15 @@ let appRoutes = [
         Ng2PageScrollModule,
         TreeModule,
         Ng2CompleterModule,
-        AngularDateTimePickerModule
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        BrowserAnimationsModule
     ],
     providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
-        AwardCommitmentsService, CommitteeConfigurationService],
+        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService],
     bootstrap: [AppComponent]
 } )
 
