@@ -7,11 +7,10 @@ import { Constants } from '../constants/constants.service';
 
 @Injectable()
 export class CommitteCreateEditService {
-
     constructor( private http: Http, private constant: Constants ) {
 
     }
-    
+
     getCommitteeData( committeeTypeCode: string ): Observable<JSON> {
         var params = {
             committeeTypeCode: committeeTypeCode,
@@ -24,8 +23,8 @@ export class CommitteCreateEditService {
                 return Observable.throw( error.message || error )
             } );
     }
-    
-    loadCommitteeById( committeeId: string ): Observable<JSON> {
+
+    loadCommittee( committeeId: string ): Observable<JSON> {
         var params = {
             committeeId: committeeId,
         };
@@ -37,13 +36,27 @@ export class CommitteCreateEditService {
                 return Observable.throw( error.message || error )
             } );
     }
-    
-    addMember(personId,committeeId ): Observable<JSON> {
-       var params = {
-          personId: personId,
-          committeeId : committeeId
-        };
-       return this.http.post( this.constant.addCommitteeMembership, params )
+
+    addMember( Id: string, committeeId: string, nonEmployeeFlag: boolean, committeeObj: Object ): Observable<JSON> {
+        var params: any = {};
+        if ( nonEmployeeFlag == true ) {
+            params = {
+                rolodexId: Id,
+                committeeId: committeeId,
+                nonEmployeeFlag: nonEmployeeFlag,
+                committee: committeeObj
+            };
+        }
+        if ( nonEmployeeFlag == false ) {
+            params = {
+                personId: Id,
+                committeeId: committeeId,
+                nonEmployeeFlag: nonEmployeeFlag,
+                committee: committeeObj
+            };
+
+        }
+        return this.http.post( this.constant.addCommitteeMembership, params )
             .map( res => res.json()
             )
             .catch( error => {
@@ -51,14 +64,107 @@ export class CommitteCreateEditService {
                 return Observable.throw( error.message || error )
             } );
     }
-    
-    saveCommitteeMembers(CommiteeeObj: Object) : Observable<JSON>{
+
+    saveCommitteeMembers( CommiteeeObj: Object ): Observable<JSON> {
         return this.http.post( this.constant.saveCommitteeMembers, CommiteeeObj )
-              .map( res => res.json()
-              )
-              .catch( error => {
-                  console.error( error.message || error );
-                  return Observable.throw( error.message || error )
-              } );
-      }
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    deleteRoles( commMemberRolesId: number, commMembershipId: string, committeeId: string ) {
+        var params = {
+            commMemberRolesId: commMemberRolesId,
+            committeeId: committeeId,
+            commMembershipId: commMembershipId
+
+        };
+        return this.http.post( this.constant.deleteMemberRoles, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+
+    deleteExpertises( commMemberExpertiseId: number, commMembershipId: string, committeeId: string ) {
+        var params = {
+            commMemberExpertiseId: commMemberExpertiseId,
+            committeeId: committeeId,
+            commMembershipId: commMembershipId
+        };
+        return this.http.post( this.constant.deleteMemberExpertise, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    deleteMember( commMembershipId: string, committeeId: string ) {
+        var params = {
+            committeeId: committeeId,
+            commMembershipId: commMembershipId
+        };
+        return this.http.post( this.constant.deleteCommitteeMembers, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    saveCommMemberRole( commMembershipId: string, committeeId: string, committeeMemberRole: object ) {
+        var params = {
+            committeeId: committeeId,
+            commMembershipId: commMembershipId,
+            committeeMemberRole: committeeMemberRole
+        };
+        return this.http.post( this.constant.saveCommitteeMembersRole, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    saveCommMemberExpertise( commMembershipId: string, committeeId: string, committeeMemberExpertise: object ) {
+        var params = {
+            committeeId: committeeId,
+            commMembershipId: commMembershipId,
+            committeeMemberExpertise: committeeMemberExpertise
+        };
+        return this.http.post( this.constant.saveCommitteeMembersExpertise, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    updateMemberRoles( commMemberRolesId, committeeId, commMembershipId, role ) {
+        var params = {
+            commMemberRolesId: commMemberRolesId,
+            committeeId: committeeId,
+            commMembershipId: commMembershipId,
+            committeeMemberRole: role
+
+        };
+        return this.http.post( this.constant.updateMemberRoles, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
 }

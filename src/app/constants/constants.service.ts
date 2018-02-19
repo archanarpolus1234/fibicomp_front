@@ -17,15 +17,27 @@ export class Constants {
     awardHierarchyUrl:string;
     awardTermsAndReportsUrl: string;
     commitmentsUrl: string;
+
     committeeCreateUrl: string;
     committeeSaveUrl: string;
     committeeViewUrl: string;
     researchAreaSaveUrl: string;
     deleteResearchAreaUrl: string;
-    addCommitteeMembership: string;
-    saveCommitteeMembers: string;
+
     generateScheduleUrl: string;
     deleteScheduleUrl: string;
+    filterScheduleUrl: string;
+    resetFilterScheduleUrl: string;
+    updateScheduleUrl: string;  
+
+    addCommitteeMembership: string;
+    saveCommitteeMembers: string;
+    deleteMemberRoles: string;
+    deleteMemberExpertise: string;
+    deleteCommitteeMembers: string;
+    saveCommitteeMembersRole: string;
+    saveCommitteeMembersExpertise:string;
+    updateMemberRoles:string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -78,14 +90,15 @@ export class Constants {
         this.commitmentsUrl = '/getAwardCommitments';
         //this.commitmentsUrl = 'http://demo.fibiweb.com/fibi-comp/getAwardCommitments';
         //this.commitmentsUrl = 'http://192.168.1.76:8080/fibi-comp/getAwardCommitments';
-        
+
+
         this.committeeCreateUrl = '/createCommittee';
         //this.committeeCreateUrl = 'http://demo.fibziweb.com/fibi-comp/createCommittee';
         //this.committeeCreateUrl = 'http://192.168.1.76:8080/fibi-comp/createCommittee';   
          
          this.committeeSaveUrl = '/saveCommittee';
          //this.committeeSaveUrl = 'http://demo.fibiweb.com/fibi-comp/saveCommittee';
-         //this.committeeSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveCommittee';  
+        //this.committeeSaveUrl = 'http://192.168.1.76:8080/fibi-comp/saveCommittee';  
          
          this.committeeViewUrl = '/loadCommitteeById';
          //this.committeeViewUrl = 'http://demo.fibiweb.com/fibi-comp/loadCommitteeById';
@@ -115,9 +128,45 @@ export class Constants {
          //this.deleteSchedsuleUrl = 'http://demo.fibiweb.com/fibi-comp/deleteSchedule';
          //this.deleteScheduleUrl = 'http://192.168.1.76:8080/fibi-comp/deleteSchedule';
          
-         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
-         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
-         this.outputPath = 'http://192.168.1.76:8080/kc-dev';
-         //this.outputPath = 'http://192.168.1.72:8080/kc-dev';
+         this.filterScheduleUrl = '/filterCommitteeScheduleDates';
+         //this.filterScheduleUrl = 'http://demo.fibiweb.com/fibi-comp/filterCommitteeScheduleDates';
+        // this.filterScheduleUrl = 'http://192.168.1.76:8080/fibi-comp/filterCommitteeScheduleDates';
+         
+         this.resetFilterScheduleUrl = '/resetCommitteeScheduleDates';
+         //this.resetFilterScheduleUrl = 'http://demo.fibiweb.com/fibi-comp/resetCommitteeScheduleDates';
+        // this.resetFilterScheduleUrl = 'http://192.168.1.76:8080/fibi-comp/resetCommitteeScheduleDates';
+         
+        this.updateScheduleUrl = '/updateCommitteeSchedule';
+         //this.updateScheduleUrl = 'http://demo.fibiweb.com/fibi-comp/updateCommitteeSchedule';
+        //  this.updateScheduleUrl = 'http://192.168.1.76:8080/fibi-comp/updateCommitteeSchedule';
+         
+         this.deleteMemberRoles = '/deleteMemberRoles';
+         //this.deleteMemberRoles = 'http://demo.fibiweb.com/fibi-comp/deleteMemberRoles';
+        //this.deleteMemberRoles = 'http://192.168.1.76:8080/fibi-comp/deleteMemberRoles';
+
+        this.deleteMemberExpertise = '/deleteMemberExpertise';
+         //this.deleteMemberExpertise = 'http://demo.fibiweb.com/fibi-comp/deleteMemberExpertise';
+        //this.deleteMemberExpertise = 'http://192.168.1.76:8080/fibi-comp/deleteMemberExpertise';
+
+         this.deleteCommitteeMembers = '/deleteCommitteeMembers';
+         //this.deleteCommitteeMembers = 'http://demo.fibiweb.com/fibi-comp/deleteCommitteeMembers';
+        //this.deleteCommitteeMembers = 'http://192.168.1.76:8080/fibi-comp/deleteCommitteeMembers';
+
+        this.saveCommitteeMembersRole='/saveCommitteeMembersRole'
+         //this.saveCommitteeMembersRole = 'http://demo.fibiweb.com/fibi-comp/saveCommitteeMembersRole';
+        //this.saveCommitteeMembersRole = 'http://192.168.1.76:8080/fibi-comp/saveCommitteeMembersRole';
+
+        this.saveCommitteeMembersExpertise='/saveCommitteeMembersExpertise'
+         //this.saveCommitteeMembersExpertise = 'http://demo.fibiweb.com/fibi-comp/saveCommitteeMembersExpertise';
+        //this.saveCommitteeMembersExpertise = 'http://192.168.1.76:8080/fibi-comp/saveCommitteeMembersExpertise';
+
+         this.updateMemberRoles='/updateMemberRoles'
+         //this.updateMemberRoles = 'http://demo.fibiweb.com/fibi-comp/updateMemberRoles';
+        //this.updateMemberRoles = 'http://192.168.1.76:8080/fibi-comp/updateMemberRoles';
+        
+        //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
+        //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
+        this.outputPath = 'http://192.168.1.76:8080/kc-dev';
+        //this.outputPath = 'http://192.168.1.72:8080/kc-dev';
     }
 }

@@ -22,8 +22,12 @@ export class CommitteeSaveService {
             } );
     }
 
-    saveResearchAreaCommitteeData( committeeObj ) {
-        return this.http.post( this.constant.researchAreaSaveUrl, committeeObj )
+    saveResearchAreaCommitteeData( committeeId, committeeObj ) {
+        var params = {
+            committeeId: committeeId,
+            committeeResearchArea: committeeObj
+        };
+        return this.http.post( this.constant.researchAreaSaveUrl, params )
             .map( res => res.json()
             )
             .catch( error => {
@@ -31,15 +35,22 @@ export class CommitteeSaveService {
                 return Observable.throw( error.message || error )
             } );
     }
-    
-    deleteAreaOfResearch( researchAreaId) {
+
+    deleteAreaOfResearch( commResearchAreasId, committeeId ) {
         var params = {
-                researchAreaId: researchAreaId,
-            };
-        return this.http.get(this.constant.deleteResearchAreaUrl, {params: params })
-    }   
-    
-    saveScheduleData(scheduleData: Object):Observable<JSON> {
+            commResearchAreasId: commResearchAreasId,
+            committeeId: committeeId
+        };
+        return this.http.post( this.constant.deleteResearchAreaUrl, params )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    saveScheduleData( scheduleData: Object ): Observable<JSON> {
         return this.http.post( this.constant.generateScheduleUrl, scheduleData )
             .map( res => res.json()
             )
@@ -49,11 +60,38 @@ export class CommitteeSaveService {
             } );
     }
 
-    deleteScheduleData(scheduleData: number):Observable<JSON> {
-        var params = {
-                scheduleId : scheduleData
-        }
-        return this.http.get( this.constant.deleteScheduleUrl, { params: params } )
+    updateScheduleData( scheduleData: Object ): Observable<JSON> {
+        return this.http.post( this.constant.updateScheduleUrl, scheduleData )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    deleteScheduleData( sendScheduleRequestData: Object ): Observable<JSON> {
+        return this.http.post( this.constant.deleteScheduleUrl, sendScheduleRequestData )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    filterScheduleData( scheduleData: Object ): Observable<JSON> {
+        return this.http.post( this.constant.filterScheduleUrl, scheduleData )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    resetFilterSchedule( scheduleData: Object ): Observable<JSON> {
+        return this.http.post( this.constant.resetFilterScheduleUrl, scheduleData )
             .map( res => res.json()
             )
             .catch( error => {

@@ -5,6 +5,6 @@ import { InjectionToken } from '@angular/core';
  * Note: Document might not be available in the Application Context when Application and Rendering
  * Contexts are not the same (e.g. when running the application into a Web Worker).
  *
- * @deprecated, import from `@angular/common` instead.
+ * @deprecated import from `@angular/common` instead.
  */
 export declare const DOCUMENT: InjectionToken<Document>;

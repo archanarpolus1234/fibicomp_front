@@ -26,6 +26,7 @@ export class CommitteeComponent {
     homeUnit: string;
     lastUpdated: string;
     homeUnits: any = [];
+    reviewTypes: any = [];
     result: any = {};
     homeUnitInput: any = [];
     editDetails: boolean = false;
@@ -33,33 +34,45 @@ export class CommitteeComponent {
     editFlag: boolean = false;
     constantClass: string;
     areaList: any = [];
+    showPopup = false;
+    middleOfEdit = false;
+    middleOfSave= false;
+    alertMsgNotSaved: string = '';
+    alertMsgMiddleOfEdit: string = '';
+    @ViewChild('homeComponent') committeeHome;
     public dataServiceHomeUnit: CompleterData;
 
     constructor( public route: ActivatedRoute, public router: Router, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
+        this.result.committee = {};
+        this.result.committee.committeeType = {};
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
         this.id = this.route.snapshot.queryParamMap.get( 'id' );
         this.initLoadParent();
     }
+
     initLoadParent() {
-        this.committeCreateService.getCommitteeData( '1' )
-            .subscribe( data => {
-                this.result = data || [];
-                if ( this.result != null ) {
-                    this.homeUnits = this.result.homeUnits;
-                    this.committeeConfigurationService.changeCommmitteeData( this.result );
-                    this.homeUnitInput.unitName = this.result.committee.homeUnitName;
-                    this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' );
-                    this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
-                }
-            } );
         if ( this.mode == 'create' ) {
+            this.editFlag = true;
+            this.committeCreateService.getCommitteeData( '1' )
+                .subscribe( data => {
+                    this.result = data || [];
+                    if ( this.result != null ) {
+                        this.homeUnits = this.result.homeUnits;
+                        this.committeeConfigurationService.changeCommmitteeData( this.result );
+                        this.homeUnitInput.unitName = this.result.committee.homeUnitName;
+                        this.reviewTypes = this.result.reviewTypes;
+                        this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' );
+                        this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
+                    }
+                } );
+            this.committeeConfigurationService.changeMode( this.mode );
             this.editDetails = true;
             this.class = 'scheduleBoxes';
             this.constantClass = 'scheduleBoxes';
             this.homeUnitInput.unitName = '';
         }
         else if ( this.mode == 'view' ) {
-            this.committeCreateService.loadCommitteeById( this.id )
+            this.committeCreateService.loadCommittee( this.id )
                 .subscribe( data => {
                     this.result = data || [];
                     if ( this.result != null ) {
@@ -70,10 +83,15 @@ export class CommitteeComponent {
                         if ( month.length < 2 ) month = '0' + month;
                         if ( day.length < 2 ) day = '0' + day;
                         this.lastUpdated = `${day}/${month}/${year}` + " by " + this.result.committee.updateUser;
+                        this.homeUnits = this.result.homeUnits;
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
+                        this.homeUnitInput.unitName = this.result.committee.homeUnitName;
+                        this.reviewTypes = this.result.reviewTypes;
+                        this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' );
                         this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
                     }
                 } );
+            this.committeeConfigurationService.changeMode( this.mode );
             this.editDetails = false;
             this.class = 'committeeBoxNotEditable';
             this.constantClass = 'committeeBoxNotEditable';
@@ -83,17 +101,42 @@ export class CommitteeComponent {
 
     show_current_tab( e: any, current_tab ) {
         e.preventDefault();
+        this.clear();
         if ( current_tab == 'committee_members' ) {
             if ( this.editFlag ) {
-                if ( !confirm( "You are in the middle of editing Committee Details, Do you want to stay on the page..?" ) ) {
-                    this.editFlag = !this.editFlag;
-                    this.class = "committeeBoxNotEditable"
-                } else {
-                    current_tab = 'committee_home';
+                this.showPopup = true;
+                if ( this.mode == 'view' ) {
+                    this.middleOfEdit = true;
+                    this.alertMsgMiddleOfEdit = 'You are in the middle of editing Committee Details, Do you want to stay on the page..?';
+                }
+                else if ( this.mode == 'create' ) {
+                    this.middleOfSave = true;
+                    this.alertMsgNotSaved = 'You have to save the committee to proceed!';
                 }
             }
+            else{
+                this.currentTab = current_tab;
+            }
         }
-        this.currentTab = current_tab;
+        else{
+            this.currentTab = current_tab;
+        }
+    }
+
+    saveAndContinue(){
+        this.editFlag = !this.editFlag;
+        this.class = "committeeBoxNotEditable";
+        this.currentTab = 'committee_members';
+        this.clear();
+        this.committeeHome.saveDetails();
+    }
+
+    clear(){
+        this.showPopup = false;
+        this.middleOfEdit = false;
+        this.alertMsgMiddleOfEdit = ''; 
+        this.middleOfSave = false;
+        this.alertMsgNotSaved = '';
     }
 
     homeChangeFunction( unitName ) {
@@ -123,6 +166,11 @@ export class CommitteeComponent {
 
     recievemode( $event ) {
         this.mode = $event;
+        this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
+            this.result = data;
+            this.id = this.result.committee.committeeId;
+        });
+        
         if ( this.mode == 'view' ) {
             this.initLoadParent();
             this.editDetails = false;

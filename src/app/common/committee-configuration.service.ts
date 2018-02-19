@@ -3,8 +3,8 @@ import { BehaviorSubject } from "rxjs/BehaviorSubject";
 
 @Injectable()
 export class CommitteeConfigurationService {
-    private committeeReviewtype = new BehaviorSubject<any[]>([]);
-    currentReviewType = this.committeeReviewtype.asObservable();
+    private committeeMode = new BehaviorSubject<string>("");
+    currentMode = this.committeeMode.asObservable(); 
     private committeeAreaOfResearch = new BehaviorSubject<any[]>([]);
     currentAreaOfResearch = this.committeeAreaOfResearch.asObservable();
     private committeeData = new BehaviorSubject<any[]>([]);
@@ -14,8 +14,8 @@ export class CommitteeConfigurationService {
         
     }
     
-    changeReviewType(review :any[]){
-        this.committeeReviewtype.next(review);
+    changeMode(mode :string){
+        this.committeeMode.next(mode);
     }
     
     changeAreaOfResearch(areaOfResearch :any[]){

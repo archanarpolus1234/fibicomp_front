@@ -22,8 +22,7 @@
 						(click)="showTab('DISCLOSURE')"> Disclosures </a></li>
 					<li [ngClass]="{'active': currentPosition == 'COMMITTEE'}"><a
 						(click)="showTab('COMMITTEE')"> Committee & Schedules </a></li>
-				</ul> <!-- 
-				<angular2-date-picker [(ngModel)]="date" [settings]="settings"></angular2-date-picker> -->
+				</ul>
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="currentPosition != 'SUMMARY'">
@@ -75,7 +74,8 @@
 									[tabPosition]="currentPosition"
 									[placeText]="'Search: Disclosure#,  PI Name, Disposition, Status'"></app-elastic-search>
 							</div>
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" *ngIf="currentPosition !== 'COMMITTEE'">
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"
+								*ngIf="currentPosition !== 'COMMITTEE'">
 								<a id="advcanceSearch" href="#" class="linkButton"
 									(click)="advanceSearch($event)"> <i class="fa fa-cog"></i>
 									Advanced Search
@@ -745,11 +745,11 @@
 					</table>
 				</div>
 			</div>
-			
+
 			<!-- COMMITTEE & SCHEDULE -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'COMMITTEE')">
-					<div class="row">
+				<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a routerLink='/schedule'>
@@ -759,17 +759,17 @@
 					</div>
 				</div>
 			</div>
-			
-			
+
+
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'COMMITTEE')">
-				
-					<div class="row">
+
+				<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a title="Open"
-											routerLink='/committee' [queryParams]="{mode:'create'}"><i
-												class="fa fa-eye"></i>Create COMMITTEE</a>
+							routerLink='/committee' [queryParams]="{mode:'create'}"><i
+								class="fa fa-eye"></i>Create COMMITTEE</a>
 						</span>
 					</div>
 				</div>
@@ -816,8 +816,8 @@
 										<!-- <li><a title="Open {{awardDetails.awardNumber}}"
 											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
 												class="fa fa-eye"></i> </a></li> -->
-										<li><a title="Open"
-											routerLink='/committee' [queryParams]="{mode:'view','id':coommitteeDetails.committeeId}"><i
+										<li><a title="Open" routerLink='/committee'
+											[queryParams]="{mode:'view','id':coommitteeDetails.committeeId}"><i
 												class="fa fa-eye"></i></a></li>
 									</ul>
 								</td>
@@ -826,8 +826,8 @@
 					</table>
 				</div>
 			</div>
-			
-			
+
+
 
 			<!-- Pagination -->
 
