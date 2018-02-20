@@ -147,17 +147,31 @@
 						<table class="table table-responsive tableSkin">
 							<tr class="scheduleFilterBoxes">
 								<td class="noDataOnChart">From :</td>
-								<td><input type="date" class="scheduleBoxes"
-									[(ngModel)]="result.scheduleData.filterStartDate"></td>
+								<td><input [owlDateTimeTrigger]="fltrStrDt"
+									[owlDateTime]="fltrStrDt"
+									[(ngModel)]="result.scheduleData.filterStartDate"
+									class="committeeBox text-border-padding" /> <span
+									class="fa fa-calendar fa-large"
+									[owlDateTimeTrigger]="fltrStrDt"></span> <owl-date-time
+										#fltrStrDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
+								</td>
 								<td class="noDataOnChart">To :</td>
-								<td><input type="date" class="scheduleBoxes"
-									[(ngModel)]="result.scheduleData.filerEndDate"></td>
+								<td><input [owlDateTimeTrigger]="fltrEndDt"
+									[owlDateTime]="fltrEndDt"
+									[(ngModel)]="result.scheduleData.filerEndDate"
+									class="committeeBox text-border-padding" /> <span
+									class="fa fa-calendar fa-large"
+									[owlDateTimeTrigger]="fltrEndDt"></span> <owl-date-time
+										#fltrEndDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time></td>
 								<td><button type="button" class="btnSkin btnSkinPrimary"
 										(click)="filterSchedule()">Filter</button></td>
 								<td><button type="button" class="btnSkin btn-secondary"
 										(click)="resetFilterSchedule()">Clear</button></td>
 
 
+							</tr>
+							<tr *ngIf="isDatePrevious" class="mandatory">
+								<td>{{scheduleValidationMessage}}</td>
 							</tr>
 							<tr>
 								<th title="Click to sort by Proposal">Sl No</th>
@@ -173,10 +187,13 @@
 								*ngFor="let committeScheduleData of result.committee.committeeSchedules; let i = index;">
 								<ng-container *ngIf="committeScheduleData.filter">
 								<td>{{ i + 1 }}</td>
-								<td><input type="date"
-									[ngClass]="(editSchedule[i] == true)? 'committeeBox' : 'committeeBoxNotEditable'"
-									[disabled]="editSchedule[i] == false"
-									[(ngModel)]="committeScheduleData.scheduledDate"></td>
+								<td><input [owlDateTimeTrigger]="schdlDt"
+									[owlDateTime]="schdlDt"
+									[(ngModel)]="committeScheduleData.scheduledDate"
+									[disabled]="!editSchedule[i] == true"
+									[ngClass]="(editSchedule[i] == true)? 'committeeBox' : 'committeeBoxNotEditable'" />
+									<owl-date-time #schdlDt [pickerType]="'calendar'"
+										[pickerMode]="'dialog'"></owl-date-time></td>
 								<td>{{ committeScheduleData.dayOfWeek }}</td>
 								<td>{{ committeScheduleData.protocolSubDeadline }}</td>
 								<td>{{ committeScheduleData.scheduleStatus.description }}</td>
@@ -184,7 +201,11 @@
 									[ngClass]="(editSchedule[i] == true)? 'committeeBox' : 'committeeBoxNotEditable'"
 									[disabled]="editSchedule[i] == false"
 									[(ngModel)]="committeScheduleData.place"></td>
-								<td>{{ committeScheduleData.time | date:'shortTime' }}</td>
+								<td><span>{{ committeScheduleData.time |
+										date:'shortTime' }}</span> <!-- <input *ngIf="!editSchedule[i] == false" [owlDateTimeTrigger]="schdlTm" [owlDateTime]="schdlTm"
+											[(ngModel)]="committeScheduleData.time" class="committeeBox text-border-padding" />
+										<owl-date-time #schdlTm [pickerType]="'timer'" [pickerMode]="'dialog'"></owl-date-time> -->
+								</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open" *ngIf="!editSchedule[i] == true"
@@ -231,16 +252,29 @@
 							<div class="inputTxtCover">
 								<div class="row">
 									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-										<label>Date</label><input type="date"
-											[(ngModel)]="result.scheduleData.scheduleStartDate" />
+										<label><span class="mandatory">*&nbsp;</span>Date</label> <input
+											[owlDateTimeTrigger]="strdt" [owlDateTime]="strdt"
+											[min]="today"
+											[(ngModel)]="result.scheduleData.scheduleStartDate"
+											class="committeeBox text-border-padding" /> <span
+											class="fa fa-calendar fa-large" [owlDateTimeTrigger]="strdt"></span>
+										<owl-date-time #strdt [pickerType]="'calendar'"
+											[pickerMode]="'dialog'"></owl-date-time>
+
 									</div>
 									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-										<label>Start Time</label><input type="text"
-											[(ngModel)]="result.scheduleData.time.time" />
+										<label><span class="mandatory">*&nbsp;</span>Start
+											Time</label> <input [owlDateTimeTrigger]="strTime"
+											[owlDateTime]="strTime" [(ngModel)]="displayTime"
+											class="committeeBox text-border-padding" /> <span
+											class="fa fa-clock-o fa-large" [owlDateTimeTrigger]="strTime"></span>
+										<owl-date-time #strTime [pickerType]="'timer'"
+											[pickerMode]="'dialog'"></owl-date-time>
 									</div>
 									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-										<label>Place</label><input type="text"
-											[(ngModel)]="result.scheduleData.place" />
+										<label><span class="mandatory">*&nbsp;</span>Place</label><input
+											type="text" [(ngModel)]="result.scheduleData.place"
+											class="text-border-padding" />
 									</div>
 								</div>
 								<br>
@@ -282,16 +316,23 @@
 														value="WEEKDAY" [(ngModel)]="optionDay"
 														(click)="sentDayOption()" /> Every Weekday</li>
 												</ul>
-												<ul class="tablelayout">
-													<li>
-														<table>
-															<tr>
-																<td>Ending on</td>
-																<td><input type="date"
-																	[(ngModel)]="result.scheduleData.dailySchedule.scheduleEndDate" /></td>
-															</tr>
-														</table>
+												<ul class="tablelayout half-width">
+													<li><span class="mandatory">*&nbsp;</span>Ending on</li>
+													<li><input [owlDateTimeTrigger]="endDt"
+														[owlDateTime]="endDt"
+														[min]="result.scheduleData.dailySchedule.scheduleStartDate"
+														[(ngModel)]="result.scheduleData.dailySchedule.scheduleEndDate"
+														class="committeeBox text-border-padding" /> <span
+														class="fa fa-calendar fa-large"
+														[owlDateTimeTrigger]="endDt"></span> <owl-date-time #endDt
+															[pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
 													</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><span *ngIf="isDatePrevious" class="mandatory">
+															{{scheduleValidationMessage}}</span> <span
+														*ngIf="isMandatoryFilled == false" class="mandatory">
+															{{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
 										</div>
@@ -310,16 +351,22 @@
 														type="checkbox" name="options" value="{{option.value}}"
 														[(ngModel)]="option.checked" /> {{option.name}}</li>
 												</ul>
+												<ul class="tablelayout half-width">
+													<li><span class="mandatory">*&nbsp;</span>Ending on</li>
+													<li><input [owlDateTimeTrigger]="wkendDt"
+														[owlDateTime]="wkendDt"
+														[(ngModel)]="result.scheduleData.weeklySchedule.scheduleEndDate"
+														class="committeeBox text-border-padding" /> <span
+														class="fa fa-calendar fa-large"
+														[owlDateTimeTrigger]="wkendDt"></span> <owl-date-time
+															#wkendDt [pickerType]="'calendar'"
+															[pickerMode]="'dialog'"></owl-date-time></li>
+												</ul>
 												<ul class="tablelayout">
-													<li>
-														<table>
-															<tr>
-																<td>Ending on</td>
-																<td><input type="date"
-																	[(ngModel)]="result.scheduleData.weeklySchedule.scheduleEndDate" /></td>
-															</tr>
-														</table>
-													</li>
+													<li><span *ngIf="isDatePrevious" class="mandatory">
+															{{scheduleValidationMessage}}</span> <span
+														*ngIf="isMandatoryFilled == false" class="mandatory">
+															{{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
 
@@ -359,16 +406,22 @@
 														[(ngModel)]="result.scheduleData.monthlySchedule.option2Month" /></li>
 													<li>month(s)</li>
 												</ul>
+												<ul class="tablelayout half-width">
+													<li><span class="mandatory">*&nbsp;</span>Ending on</li>
+													<li><input [owlDateTimeTrigger]="mnendDt"
+														[owlDateTime]="mnendDt"
+														[(ngModel)]="result.scheduleData.monthlySchedule.scheduleEndDate"
+														class="committeeBox text-border-padding" /> <span
+														class="fa fa-calendar fa-large"
+														[owlDateTimeTrigger]="mnendDt"></span> <owl-date-time
+															#mnendDt [pickerType]="'calendar'"
+															[pickerMode]="'dialog'"></owl-date-time></li>
+												</ul>
 												<ul class="tablelayout">
-													<li>
-														<table>
-															<tr>
-																<td>Ending on</td>
-																<td><input type="date"
-																	[(ngModel)]="result.scheduleData.monthlySchedule.scheduleEndDate" /></td>
-															</tr>
-														</table>
-													</li>
+													<li><span *ngIf="isDatePrevious" class="mandatory">
+															{{scheduleValidationMessage}}</span> <span
+														*ngIf="isMandatoryFilled == false" class="mandatory">
+															{{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
 										</div>
@@ -416,16 +469,22 @@
 														[(ngModel)]="result.scheduleData.yearlySchedule.option2Year" /></li>
 													<li>year(s)</li>
 												</ul>
+												<ul class="tablelayout half-width">
+													<li><span class="mandatory">*&nbsp;</span>Ending on</li>
+													<li><input [owlDateTimeTrigger]="yrendDt"
+														[owlDateTime]="yrendDt"
+														[(ngModel)]="result.scheduleData.yearlySchedule.scheduleEndDate"
+														class="committeeBox text-border-padding" /> <span
+														class="fa fa-calendar fa-large"
+														[owlDateTimeTrigger]="yrendDt"></span> <owl-date-time
+															#yrendDt [pickerType]="'calendar'"
+															[pickerMode]="'dialog'"></owl-date-time></li>
+												</ul>
 												<ul class="tablelayout">
-													<li>
-														<table>
-															<tr>
-																<td>Ending on</td>
-																<td><input type="date"
-																	[(ngModel)]="result.scheduleData.yearlySchedule.scheduleEndDate" /></td>
-															</tr>
-														</table>
-													</li>
+													<li><span *ngIf="isDatePrevious" class="mandatory">
+															{{scheduleValidationMessage}}</span> <span
+														*ngIf="isMandatoryFilled == false" class="mandatory">
+															{{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
 										</div>
@@ -434,6 +493,10 @@
 											<div class="tabCover">
 												<ul class="tablelayout">
 													<li>Do not repeat this event.</li>
+												</ul>
+												<ul class="tablelayout">
+													<li><span *ngIf="isMandatoryFilled == false"
+														class="mandatory"> {{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
 										</div>
@@ -445,9 +508,8 @@
 							<button type="button" class="btnSkin btn-secondary"
 								data-dismiss="modal">Close</button>
 							<button type="button" class="btnSkin btnSkinPrimary"
-								data-dismiss="modal" data-toggle="modal"
-								data-target="#skippedSchedules" (click)="generateSchedule()">Generate
-								Schedules</button>
+								data-toggle="modal" data-target="#skippedSchedules"
+								(click)="generateSchedule()">Generate Schedules</button>
 						</div>
 					</div>
 				</div>
