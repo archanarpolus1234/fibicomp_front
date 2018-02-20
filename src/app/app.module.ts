@@ -13,6 +13,7 @@ import { TreeModule } from 'angular-tree-component';
 import { Ng2CompleterModule } from 'ng2-completer';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DatePipe } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -133,7 +134,7 @@ let appRoutes = [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
-        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService],
+        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe],
     bootstrap: [AppComponent]
 } )
 

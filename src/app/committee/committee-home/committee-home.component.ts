@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 import { CommitteCreateEditService } from '../committee-create-edit.service';
 import { CommitteeSaveService } from '../committee-save.service';
@@ -37,6 +38,7 @@ export class CommitteeHomeComponent implements OnInit {
     slNo: number = 0;
     public researchArea: any = {};
     public dataServiceArea: any = [];
+
     @Input() Id: string;
     @Input() Name: string;
     @Input() Type: string;
@@ -46,7 +48,7 @@ export class CommitteeHomeComponent implements OnInit {
     @Output() modeFlag = new EventEmitter<String>();
     @Input() reviewTypes: any[];
     @Input() areaList: any = [];
-    
+
     result: any = {};
     resultTemp: any = {};
     showPopup = false;
@@ -71,6 +73,7 @@ export class CommitteeHomeComponent implements OnInit {
     editSchedule = {};
     editScheduleClass: string = 'committeeBoxNotEditable';
     showConflictDates: boolean = false;
+
     dayOptions = [
         { name: 'Sunday', value: 'Sunday', checked: false },
         { name: 'Monday', value: 'Monday', checked: false },
@@ -101,7 +104,7 @@ export class CommitteeHomeComponent implements OnInit {
         { name: 'November', value: 'NOVEMBER' },
         { name: 'December', value: 'DECEMBER' }
     ];
-    
+
     monthOptionDay: string = 'XDAYANDXMONTH';
     selectedDayOfWeek: string;
     day: number = 1;
@@ -115,9 +118,14 @@ export class CommitteeHomeComponent implements OnInit {
     isMandatoryFilled: boolean = true;
     conflictDates: any = [];
     filterStartDate: string;
-    filterEndDate: string;
+    filerEndDate: string;
+    today: any = new Date();
+    scheduleValidationMessage: string;
+    isDatePrevious: boolean = true;
+    dateTime: { time: string, meridiem: string };
+    displayTime: any = {};
 
-    constructor( public route: ActivatedRoute, public router: Router, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, private committeeConfigurationService: CommitteeConfigurationService ) {
+    constructor( public route: ActivatedRoute, private datePipe: DatePipe, public router: Router, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, private committeeConfigurationService: CommitteeConfigurationService ) {
         this.committeeConfigurationService.currentMode.subscribe( data => {
             this.mode = data;
         } );
@@ -237,10 +245,7 @@ export class CommitteeHomeComponent implements OnInit {
                 this.result.committee.updateUser = localStorage.getItem( "currentUser" );
                 this.result.committee.updateTimestamp = new Date().getTime();
             }
-
             this.result.currentUser = localStorage.getItem( "currentUser" );
-
-
             if ( this.editDetails == false ) {
                 this.editClass = 'committeeBoxNotEditable';
             }
@@ -266,7 +271,6 @@ export class CommitteeHomeComponent implements OnInit {
                         this.initialLoadChild();
                         this.modeFlag.emit( this.mode );
                     }
-
                 }
             } );
         }
@@ -400,6 +404,23 @@ export class CommitteeHomeComponent implements OnInit {
         if ( this.showGenerateSchedule == false ) {
             this.showGenerateSchedule = true;
         }
+        this.result.scheduleData = {};
+        this.result.scheduleData.time = {};
+        this.result.scheduleData.dailySchedule = {};
+        this.result.scheduleData.weeklySchedule = {};
+        this.result.scheduleData.monthlySchedule = {};
+        this.result.scheduleData.yearlySchedule = {};
+        this.result.scheduleData.scheduleStartDate = this.today;
+        this.result.scheduleData.dailySchedule.scheduleEndDate = this.today;
+        this.result.scheduleData.weeklySchedule.scheduleEndDate = this.today;
+        this.result.scheduleData.monthlySchedule.scheduleEndDate = this.today;
+        this.result.scheduleData.yearlySchedule.scheduleEndDate = this.today;
+        this.result.scheduleData.recurrenceType = 'DAILY';
+        this.result.scheduleData.dailySchedule.day = 1;
+        this.displayTime = null;
+        this.isDatePrevious = false;
+        this.isMandatoryFilled = true;
+        this.optionDay = 'XDAY';
     }
 
     showTab( recurrenceType ) {
@@ -462,49 +483,105 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     generateSchedule() {
+        this.result.scheduleData.time.time = this.datePipe.transform( this.displayTime, 'hh:mm' );
+        this.result.scheduleData.time.meridiem = this.datePipe.transform( this.displayTime, 'aa' );
         this.sendScheduleRequestData = {};
         this.sendScheduleRequestData.scheduleData = {};
         this.sendScheduleRequestData.scheduleData.weeklySchedule = {};
         this.sendScheduleRequestData.scheduleData.monthlySchedule = {};
         this.sendScheduleRequestData.scheduleData.yearlySchedule = {};
-        this.result.scheduleData.time.meridiem = "AM";
         this.sendScheduleRequestData.currentUser = localStorage.getItem( "currentUser" );
         this.sendScheduleRequestData.committee = this.result.committee;
         switch ( this.result.scheduleData.recurrenceType ) {
             case 'DAILY': this.result.scheduleData.dailySchedule.dayOption = this.optionDay;
                 this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
-                if ( this.result.scheduleData.dailySchedule.day == null || this.result.scheduleData.dailySchedule.dayOption == null || this.result.scheduleData.dailySchedule.scheduleEndDate ) {
+                if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.dailySchedule.scheduleEndDate ) {
+                    this.isDatePrevious = true;
+                    this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
+                } else {
+                    this.isDatePrevious = false;
+                }
+                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.dailySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
                     this.isMandatoryFilled = false;
+                    this.scheduleValidationMessage = "Please fill the mandatory fields.";
+                } else {
+                    this.isMandatoryFilled = true;
                 }
                 break;
             case 'WEEKLY': this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
                 this.sendScheduleRequestData.scheduleData.weeklySchedule.daysOfWeek = this.selectedOptions;
+                if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.weeklySchedule.scheduleEndDate ) {
+                    this.isDatePrevious = true;
+                    this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
+                } else {
+                    this.isDatePrevious = false;
+                }
+                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.weeklySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                    this.isMandatoryFilled = false;
+                    this.scheduleValidationMessage = "Please fill the mandatory fields.";
+                } else {
+                    this.isMandatoryFilled = true;
+                }
                 break;
             case 'MONTHLY': this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
                 this.sendScheduleRequestData.scheduleData.monthlySchedule.monthOption = this.monthOptionDay;
+                if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.monthlySchedule.scheduleEndDate ) {
+                    this.isDatePrevious = true;
+                    this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
+                } else {
+                    this.isDatePrevious = false;
+                }
+                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.monthlySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                    this.isMandatoryFilled = false;
+                    this.scheduleValidationMessage = "Please fill the mandatory fields.";
+                } else {
+                    this.isMandatoryFilled = true;
+                }
                 break;
             case 'YEARLY': this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
                 this.sendScheduleRequestData.scheduleData.yearlySchedule.yearOption = this.yearOption;
+                if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.yearlySchedule.scheduleEndDate ) {
+                    this.isDatePrevious = true;
+                    this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
+                } else {
+                    this.isDatePrevious = false;
+                }
+                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.yearlySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                    this.isMandatoryFilled = false;
+                    this.scheduleValidationMessage = "Please fill the mandatory fields.";
+                } else {
+                    this.isMandatoryFilled = true;
+                }
                 break;
             case 'NEVER': this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
+                if ( this.result.scheduleData.scheduleStartDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                    this.isMandatoryFilled = false;
+                    this.scheduleValidationMessage = "Please fill the mandatory fields.";
+                } else {
+                    this.isMandatoryFilled = true;
+                }
                 break;
         }
-        this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).subscribe( data => {
-            this.result = data || [];
-            this.conflictDates = this.result.scheduleData.datesInConflict;
-            this.filterStartDate = this.result.scheduleData.filterStartDate;
-            this.filterEndDate = this.result.scheduleData.filterEndDate;
-            this.result.scheduleData = {};
-            this.result.scheduleData.time = {};
-            this.result.scheduleData.dailySchedule = {};
-            this.result.scheduleData.weeklySchedule = {};
-            this.result.scheduleData.monthlySchedule = {};
-            this.result.scheduleData.yearlySchedule = {};
-            this.result.scheduleData.filterStartDate = this.filterStartDate;
-            this.result.scheduleData.filterEndDate = this.filterEndDate;
-        } );
-        if ( this.conflictDates != null && this.isConflictDates == false ) {
-            this.isConflictDates = true;
+
+        if ( this.isDatePrevious == false && this.showGenerateSchedule == true && this.isMandatoryFilled == true ) {
+            this.showGenerateSchedule = false;
+            this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).subscribe( data => {
+                this.result = data || [];
+                this.conflictDates = this.result.scheduleData.datesInConflict;
+                this.filterStartDate = this.result.scheduleData.filterStartDate;
+                this.filerEndDate = this.result.scheduleData.filerEndDate;
+                this.result.scheduleData = {};
+                this.result.scheduleData.time = {};
+                this.result.scheduleData.dailySchedule = {};
+                this.result.scheduleData.weeklySchedule = {};
+                this.result.scheduleData.monthlySchedule = {};
+                this.result.scheduleData.yearlySchedule = {};
+                this.result.scheduleData.filterStartDate = this.filterStartDate;
+                this.result.scheduleData.filerEndDate = this.filerEndDate;
+            } );
+            if ( this.conflictDates != null && this.conflictDates.length != 0 && this.isConflictDates == false ) {
+                this.isConflictDates = true;
+            }
         }
 
     }
@@ -552,6 +629,9 @@ export class CommitteeHomeComponent implements OnInit {
         e.preventDefault();
         this.editSchedule[i] = !this.editSchedule[i];
         this.sendScheduleRequestData = {};
+        scheduleObject.viewTime = {};
+        scheduleObject.viewTime.time = this.datePipe.transform( scheduleObject.time, 'hh:mm' );
+        scheduleObject.viewTime.meridiem = this.datePipe.transform( scheduleObject.time, 'aa' );
         this.sendScheduleRequestData.committeeSchedule = scheduleObject;
         this.sendScheduleRequestData.committeeId = this.result.committee.committeeId;
         this.committeeSaveService.updateScheduleData( this.sendScheduleRequestData ).subscribe( data => {
@@ -573,19 +653,27 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     filterSchedule() {
-        this.sendScheduleRequestData = {};
-        if ( this.result.scheduleData == null || this.result.scheduleData == undefined ) {
-            this.sendScheduleRequestData.scheduleData = {};
+        debugger;
+        if ( this.result.scheduleData.filterStartDate > this.result.scheduleData.dailySchedule.filerEndDate ) {
+            this.isDatePrevious = true;
+            this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
         } else {
-            this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
+            this.isDatePrevious = false;
+            this.sendScheduleRequestData = {};
+            if ( this.result.scheduleData == null || this.result.scheduleData == undefined ) {
+                this.sendScheduleRequestData.scheduleData = {};
+            } else {
+                this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
+            }
+            this.sendScheduleRequestData.committee = this.result.committee;
+            this.committeeSaveService.filterScheduleData( this.sendScheduleRequestData ).subscribe( data => {
+                this.result = data || [];
+            } );
         }
-        this.sendScheduleRequestData.committee = this.result.committee;
-        this.committeeSaveService.filterScheduleData( this.sendScheduleRequestData ).subscribe( data => {
-            this.result = data || [];
-        } );
     }
 
     resetFilterSchedule() {
+        this.isDatePrevious = false;
         this.sendScheduleRequestData = {};
         this.sendScheduleRequestData.scheduleData = {};
         this.sendScheduleRequestData.committee = this.result.committee;
