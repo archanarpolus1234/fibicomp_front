@@ -5,9 +5,12 @@
 				<div
 					class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 row filterRadioBtns">
 					<span>Filter Members : &nbsp;</span> <input type="checkbox"
-						name="filterMember" value="active" id="activeMembers"  [checked]="activeMembers" (change)="activeMembers = !activeMembers"  >&nbsp;Active
+						name="filterMember" value="active" id="activeMembers"
+						[checked]="activeMembers"
+						(change)="activeMembers = !activeMembers">&nbsp;Active
 					&nbsp;&nbsp; <input type="checkbox" name="filterMember"
-						value="inactive" id="inactiveMembers" [checked]="inactiveMembers" (change)="inactiveMembers = !inactiveMembers">&nbsp;Inactive
+						value="inactive" id="inactiveMembers" [checked]="inactiveMembers"
+						(change)="inactiveMembers = !inactiveMembers">&nbsp;Inactive
 				</div>
 
 				<button class="addBtn" (click)="addMemberDiv($event)">
@@ -23,13 +26,15 @@
 							<div class="row">
 								<div
 									class="col-xl-4 col-lg-4 col-md-2 col-sm-2 col-2 text-right">
-									
+
 								</div>
 								<div class="col-xl-6 col-lg-2 col-md-2 col-sm-2 col-2 text-left">
 									<label class="containerCheckBox">Employee <input
-										type="radio" name="member" id="employeeRadio" (change)="employeeRadioChecked()" checked> <span
+										type="radio" name="member" id="employeeRadio"
+										(change)="employeeRadioChecked()" checked> <span
 										class="checkmark"></span>
-									</label> <label class="containerCheckBox" (change)="nonEmployeeRadioChecked()">Non Employee <input
+									</label> <label class="containerCheckBox"
+										(change)="nonEmployeeRadioChecked()">Non Employee <input
 										type="radio" name="member" id="nonEmployeeRadio"> <span
 										class="checkmark"></span>
 									</label>
@@ -38,24 +43,30 @@
 							<div class="row">
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2"></div>
 								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2"></div>
-								
+
 								<div class="col-xl-5 col-lg-5 col-md-2 col-sm-4 col-2">
 									<span>
-											<div class="searchBox ">
-			<input type="text" placeholder="Search"  [(ngModel)]="searchTextModel"  (blur)="setInActiveAndchangeIconSearch()" (focus)="setActiveAndchangeIconSearch()" id="member_search" [formControl]="searchText" /> 
-			 <a href = "#" class="searchButton" (click)="clearsearchBox($event)"><i [ngClass]="iconClass"></i></a>
-		<div class="sb-seachresults">
-			<ul class="sb-results-dropdown-menu" *ngIf="searchActive" >      
-				<li *ngFor="let result of this.elasticSearchresults " (mousedown)="selected(result)" ><span [innerHTML]="result.label"></span></li>
-			 </ul> 
-			
-		</div>  
-		<div>{{message}}</div>
-</div>
-											</span>
+										<div class="searchBox ">
+											<input type="text" placeholder="Search"
+												[(ngModel)]="searchTextModel"
+												(blur)="setInActiveAndchangeIconSearch()"
+												(focus)="setActiveAndchangeIconSearch()" id="member_search"
+												[formControl]="searchText" /> <a href="#"
+												class="searchButton" (click)="clearsearchBox($event)"><i
+												[ngClass]="iconClass"></i></a>
+											<div class="sb-seachresults">
+												<ul class="sb-results-dropdown-menu" *ngIf="searchActive">
+													<li *ngFor="let result of this.elasticSearchresults "
+														(mousedown)="selected(result)"><span
+														[innerHTML]="result.label"></span></li>
+												</ul>
+											</div>
+											<div>{{message}}</div>
+										</div>
+									</span>
 								</div>
 								<div class="col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
-									<button class="btnSkin btnSkinPrimary" (click)="addMember()">Add</button>
+									<button class="btnSkin btnSkinPrimary" [disabled]="memberAdded==true" (click)="addMember()">Add</button>
 								</div>
 
 							</div>
@@ -63,20 +74,28 @@
 					</div>
 				</div>
 				<div *ngIf="memberExist">
-					<div *ngFor="let member of resultLoadedById.committee.committeeMemberships">
+					<div
+						*ngFor="let member of resultLoadedById.committee.committeeMemberships">
 						<div class="set" *ngIf="member.active && activeMembers">
-							
+
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
-								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})</span><a
+								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
+									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
 									href="#" (click)="showMembersTab($event,member.personId)"><i
-									[ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a (click)="deleteMember($event,member.commMembershipId)"><i class="fa fa-trash-o"></i></a></span>
+									[ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
+									(click)="deleteMember($event,member.commMembershipId)"><i
+										class="fa fa-trash-o"></i></a></span>
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
-								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})</span><a
-									href="#" (click)="showMembersNonEmployeesTab($event,member.rolodexId)"><i
-									[ngClass]="(showMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a (click)="deleteMember($event,member.commMembershipId)"><i class="fa fa-trash-o"></i></a></span>
+								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
+									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
+									href="#"
+									(click)="showMembersNonEmployeesTab($event,member.rolodexId)"><i
+									[ngClass]="(showMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
+									(click)="deleteMember($event,member.commMembershipId)"><i
+										class="fa fa-trash-o"></i></a></span>
 							</div>
-							
+
 							<div class="setBody" style="display: block;"
 								*ngIf="member.personId == personId && showMembers==true ">
 								<div class="row">
@@ -84,7 +103,8 @@
 										<div class="borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Person Details
-												<button [disabled]="addExpertise || editRole ||addRole" class="editBtn" *ngIf="editDetails ==false"
+												<button [disabled]="addExpertise || editRole ||addRole"
+													class="editBtn" *ngIf="editDetails ==false"
 													(click)="showEditDetails()">
 													<i class="fa fa-pencil"></i>
 												</button>
@@ -101,15 +121,13 @@
 												<table class="table tableSkin grid2">
 													<tbody>
 														<tr>
-															<td><label>Person Name</label><br>
-															
-															<span  *ngIf="!member.nonEmployeeFlag">{{member.personDetails.fullName }}</span>
-															<span *ngIf="member.nonEmployeeFlag">{{member.rolodex.fullName}}</span>
-																
-															<td><label>Membership Type</label><br>
-															<select id="membershipType"
-																[disabled]="editDetails==false"
-																(change)="memberTypeChange(member,$event.target.value)" [ngClass]="editClass">
+															<td><label>Person Name</label><br> <span
+																*ngIf="!member.nonEmployeeFlag">{{member.personDetails.fullName
+																	}}</span> <span *ngIf="member.nonEmployeeFlag">{{member.rolodex.fullName}}</span>
+															<td><label>Membership Type</label><br> <select
+																id="membershipType" [disabled]="editDetails==false"
+																(change)="memberTypeChange(member,$event.target.value)"
+																[ngClass]="editClass">
 
 																	<option
 																		*ngFor="let type of memberList.committeeMembershipTypes"
@@ -117,24 +135,26 @@
 																		[selected]="member.committeeMembershipType.description==type.description">{{type.description}}</option>
 
 															</select></td>
-																<td><label> Term Start Date</label><br>
-															 <input [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1" [disabled]="editDetails==false" [(ngModel)]="member.termStartDate" [ngClass]="editClass" />
-															 <owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time></td>
-															<td><label> Term End Date</label><br>
-															 <input
-															 [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2" [disabled]="editDetails==false"
+															<td><label> Term Start Date</label><br> <input
+																[owlDateTimeTrigger]="dt1" [owlDateTime]="dt1"
+																[disabled]="editDetails==false"
+																[(ngModel)]="member.termStartDate" [ngClass]="editClass" />
+																<owl-date-time #dt1 [pickerType]="'calendar'"></owl-date-time></td>
+															<td><label> Term End Date</label><br> <input
+																[owlDateTimeTrigger]="dt2" [owlDateTime]="dt2"
+																[disabled]="editDetails==false"
 																[(ngModel)]="member.termEndDate" [ngClass]="editClass" />
 																<owl-date-time #dt2 [pickerType]="'calendar'"></owl-date-time>
 															</td>
 														</tr>
 														<tr>
 															<td colspan="2"><label> Contact Notes</label><br>
-															<textarea id="contactNotes"
+																<textarea id="contactNotes"
 																	[disabled]="editDetails==false"
 																	[value]="member.contactNotes"
 																	[(ngModel)]="member.contactNotes" [ngClass]="editClass"></textarea></td>
 															<td colspan="2"><label> Training Notes</label><br>
-															<textarea id="trainingNotes"
+																<textarea id="trainingNotes"
 																	[disabled]="editDetails==false"
 																	[value]="member.trainingNotes"
 																	[(ngModel)]="member.trainingNotes"
@@ -144,75 +164,48 @@
 												</table>
 											</div>
 										</div>
-										<div class="borderBox">
-											<h4 class="borderBoxHeading">Contact Information</h4>
-											<div class="row">
-												<div
-													class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
-													<div class="row">
-														<div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
-															<label><span  *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.firstName }}</span>
-															<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.firstName}}</span> Primary
-																Title (Primary)
-																 <br>
-
-																<span  *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.fullName }}</span>
-															<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.fullName}}</span>
-																 Directory Title
-																(Directory)
-															</label>
-															<br> 
-															<span><span  *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.addressLine1 }}</span>
-															<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.addressLine1}}</span><br>
-																(Ofc)<span  *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.phoneNumber }}</span>
-															<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.phoneNumber}}</span>, (Mob) 9345
-																7866 2356, (Fax) 321-321-1264
-															</span>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<!-- ROLES -->
-									<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+										<!-- ROLES -->
 										<div class=" borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Roles
-												
+
 												<button id="rolesAddBtn" class="addBtn"
-													*ngIf="!addRole && !editRole" (click)="addRoles($event)"  [disabled]="editDetails ||addExpertise">
+													*ngIf="!addRole && !editRole" (click)="addRoles($event)"
+													[disabled]="editDetails ||addExpertise">
 													<i class="fa fa-plus"></i>
 												</button>
+
 											</h4>
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin">
 													<tr id="roleAddingRow" *ngIf="addRole">
 														<td align="justify">Role :</td>
-														
-														<td>
-															<ng2-completer title="Enter Role"
-																	[(ngModel)]="membershipRoles.description"
-																	[datasource]="dataServiceRoleList"
-																	[minSearchLength]="0" placeholder="Search"
-																	(selected)="onSelectRole()"></ng2-completer>
+
+														<td><ng2-completer title="Enter Role"
+																[(ngModel)]="membershipRoles.description"
+																[datasource]="dataServiceRoleList" [minSearchLength]="0"
+																placeholder="Search" (selected)="onSelectRole()"></ng2-completer>
 														</td>
-																<td><input [owlDateTimeTrigger]="dt5" [owlDateTime]="dt5" [(ngModel)]="memberRoleObject.startDate"
-															[disabled]="editRole==false" [ngClass]="editClassRole" [min]="member.termStartDate" [max]="member.termEndDate" #dateTime="ngModel" />
-															<owl-date-time #dt5 [pickerType]="'calendar'"></owl-date-time>
-														</td>
-														<td>
-															<input [owlDateTimeTrigger]="dt6" [owlDateTime]="dt6" [(ngModel)]="memberRoleObject.endDate"
-																[disabled]="editRole==false" [ngClass]="editClassRole" [min]="member.termStartDate" [max]="member.termEndDate"/>
+														<td><input [owlDateTimeTrigger]="dt5"
+															[owlDateTime]="dt5"
+															[(ngModel)]="memberRoleObject.startDate"
+															[disabled]="addRole==false" [ngClass]="editClassRole"
+															[min]="member.termStartDate" [max]="member.termEndDate"
+															#dateTime="ngModel" /> <owl-date-time #dt5
+																[pickerType]="'calendar'"></owl-date-time></td>
+														<td><input [owlDateTimeTrigger]="dt6"
+															[owlDateTime]="dt6"
+															[(ngModel)]="memberRoleObject.endDate"
+															[disabled]="addRole==false" [ngClass]="editClassRole"
+															[min]="member.termStartDate" [max]="member.termEndDate" />
 															<owl-date-time #dt6 [pickerType]="'calendar'"></owl-date-time>
 														</td>
-															
+
 														<td>
 															<button class="btnSkin btnSkinPrimary"
 																(click)="roleAddtoTable(member)">Add</button>
 														</td>
-														
+
 													</tr>
 													<tr>
 														<th title="">Sl No</th>
@@ -223,25 +216,69 @@
 
 													</tr>
 
-													<tr *ngFor="let role of  member.committeeMemberRoles;let i=index">
+													<tr
+														*ngFor="let role of  member.committeeMemberRoles;let i=index">
 														<td>{{i+1}}</td>
 														<td>{{role.membershipRoleDescription}}</td>
-														<td><input [owlDateTimeTrigger]="dt7" [owlDateTime]="dt7" [(ngModel)]="role.startDate"
-															[disabled]="editRole==false" [ngClass]="editClassRole" [min]="member.termStartDate" [max]="member.termEndDate" #dateTime="ngModel" />
-															<owl-date-time #dt7 [pickerType]="'calendar'"></owl-date-time>
-														</td>
-														<td>
-															<input [owlDateTimeTrigger]="dt8" [owlDateTime]="dt8" [(ngModel)]="role.endDate"
-																[disabled]="editRole==false" [ngClass]="editClassRole" [min]="member.termStartDate" [max]="member.termEndDate"/>
+														<td><input [owlDateTimeTrigger]="dt7"
+															[owlDateTime]="dt7" [(ngModel)]="role.startDate"
+															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode" [ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
+															[min]="member.termStartDate" [max]="member.termEndDate"
+															#dateTime="ngModel" /> <owl-date-time #dt7
+																[pickerType]="'calendar'"></owl-date-time></td>
+														<td><input [owlDateTimeTrigger]="dt8"
+															[owlDateTime]="dt8" [(ngModel)]="role.endDate"
+															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode" [ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
+															[min]="member.termStartDate" [max]="member.termEndDate" />
 															<owl-date-time #dt8 [pickerType]="'calendar'"></owl-date-time>
 														</td>
-														<td><button [disabled]="editDetails ||addExpertise" (click)="deleteRole($event,role.commMemberRolesId,member.commMembershipId)"><i class="fa fa-trash-o"></i></button>
-															<button  [disabled]="editDetails ||addExpertise" (click)="editRoles()" *ngIf="!editRole" id="roleEditBtn"><i class="fa fa-pencil"></i></button>
-															<button class="addBtn" *ngIf="editRole" (click)="saveRole(role,member)"><i class="fa fa-floppy-o"></i>
-															</button>
+														<td>
+														<ul class="actionButtonGroup">
+																<li><a href="#"
+																	(click)="deleteRole($event,role.commMemberRolesId,member.commMembershipId)">
+																		<i class="fa fa-trash-o"></i>
+																</a></li>
+																<li><a href="#" (click)="editRoles($event,role)"
+																	*ngIf="!editRole" id="roleEditBtn"> <i
+																		class="fa fa-pencil"></i>
+																</a></li>
+																<li><a href="#" *ngIf="editRole && role.membershipRoleCode==memberRoleCode"
+																	(click)="saveRole($event, role,member)"> <i
+																		class="fa fa-floppy-o"></i>
+																</a></li>
+																<li><a href="#" *ngIf="editRole && role.membershipRoleCode==memberRoleCode"
+																	(click)="cancelEditRoles($event,role)"><i
+																		class="fa fa-times" aria-hidden="true"></i></a></li>
+															</ul>
 														</td>
 													</tr>
 												</table>
+											</div>
+										</div>
+									</div>
+									<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+										<div class="borderBox">
+											<h4 class="borderBoxHeading">Contact Information</h4>
+											<div class="row">
+												<div
+													class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
+															<label><span
+																*ngIf="member.nonEmployeeFlag==false">{{member.personDetails.firstName
+																	}}</span> <span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.firstName}}</span>
+																Primary Title (Primary) <br> <span
+																*ngIf="member.nonEmployeeFlag==false">{{member.personDetails.fullName
+																	}}</span> <span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.fullName}}</span>
+																Directory Title (Directory) </label> <br> <span><span
+																*ngIf="member.nonEmployeeFlag==false">{{member.personDetails.addressLine1
+																	}}</span> <span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.addressLine1}}</span><br>
+																(Ofc)<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.phoneNumber
+																	}}</span> <span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.phoneNumber}}</span>,
+																(Mob) 9345 7866 2356, (Fax) 321-321-1264 </span>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 
@@ -250,9 +287,11 @@
 
 											<h4 class="borderBoxHeading">
 												Expertise
-												
+
 												<button id="rolesAddBtn" class="addBtn"
-													*ngIf="!addExpertise && !editExpertise" [disabled]="editDetails || editRole ||addRole" (click)="addExpertises($event)">
+													*ngIf="!addExpertise && !editExpertise"
+													[disabled]="editDetails || editRole ||addRole"
+													(click)="addExpertises($event)">
 													<i class="fa fa-plus"></i>
 												</button>
 											</h4>
@@ -283,7 +322,15 @@
 														<td>{{i+1}}</td>
 														<td>{{expertise.researchAreaCode}}</td>
 														<td>{{expertise.researchAreaDescription}}</td>
-														<td class="expertiseEditingActions"><button  [disabled]="editDetails || editRole ||addRole" (click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)"><i class="fa fa-trash-o"></i></button></td>
+														<td class="expertiseEditingActions">
+														<ul class="actionButtonGroup">
+															<li>
+																<a href="#" (click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)">
+																<i class="fa fa-trash-o"></i>
+																</a>
+															</li>
+														</ul>
+														</td>
 													</tr>
 												</table>
 											</div>
@@ -297,18 +344,25 @@
 						<!-- INACTIVE MEMBERS -->
 
 						<div class="set" *ngIf="!member.active && inactiveMembers">
-							
+
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
-								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})</span><a
+								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
+									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
 									href="#" (click)="showMembersTab($event,member.personId)"><i
-									[ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a (click)="deleteMember($event,member.commMembershipId)"><i class="fa fa-trash-o"></i></a></span>
+									[ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
+									(click)="deleteMember($event,member.commMembershipId)"><i
+										class="fa fa-trash-o"></i></a></span>
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
-								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})</span><a
-									href="#" (click)="showMembersNonEmployeesTab($event,member.rolodexId)"><i
-									[ngClass]="(showMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a (click)="deleteMember($event,member.commMembershipId)"><i class="fa fa-trash-o"></i></a></span>
+								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
+									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
+									href="#"
+									(click)="showMembersNonEmployeesTab($event,member.rolodexId)"><i
+									[ngClass]="(showMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
+									(click)="deleteMember($event,member.commMembershipId)"><i
+										class="fa fa-trash-o"></i></a></span>
 							</div>
-							
+
 							<div class="setBody" style="display: block;"
 								*ngIf="member.personId == personId && showMembers==true ">
 								<div class="row">
@@ -316,7 +370,8 @@
 										<div class="borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Person Details
-												<button [disabled]="addExpertise || editRole ||addRole" class="editBtn" *ngIf="editDetails ==false"
+												<button [disabled]="addExpertise || editRole ||addRole"
+													class="editBtn" *ngIf="editDetails ==false"
 													(click)="showEditDetails()">
 													<i class="fa fa-pencil"></i>
 												</button>
@@ -333,15 +388,13 @@
 												<table class="table tableSkin grid2">
 													<tbody>
 														<tr>
-															<td><label>Person Name</label><br>
-															
-															<span  *ngIf="!member.nonEmployeeFlag">{{member.personDetails.fullName }}</span>
-															<span *ngIf="member.nonEmployeeFlag">{{member.rolodex.fullName}}</span>
-																
-															<td><label>Membership Type</label><br>
-															<select id="membershipType"
-																[disabled]="editDetails==false"
-																(change)="memberTypeChange(member,$event.target.value)" [ngClass]="editClass">
+															<td><label>Person Name</label><br> <span
+																*ngIf="!member.nonEmployeeFlag">{{member.personDetails.fullName
+																	}}</span> <span *ngIf="member.nonEmployeeFlag">{{member.rolodex.fullName}}</span>
+															<td><label>Membership Type</label><br> <select
+																id="membershipType" [disabled]="editDetails==false"
+																(change)="memberTypeChange(member,$event.target.value)"
+																[ngClass]="editClass">
 
 																	<option
 																		*ngFor="let type of memberList.committeeMembershipTypes"
@@ -349,24 +402,26 @@
 																		[selected]="member.committeeMembershipType.description==type.description">{{type.description}}</option>
 
 															</select></td>
-																<td><label> Term Start Date</label><br>
-															 <input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" [disabled]="editDetails==false" [(ngModel)]="member.termStartDate" [ngClass]="editClass" />
-															 <owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time></td>
-															<td><label> Term End Date</label><br>
-															 <input
-															 [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" [disabled]="editDetails==false"
+															<td><label> Term Start Date</label><br> <input
+																[owlDateTimeTrigger]="dt3" [owlDateTime]="dt3"
+																[disabled]="editDetails==false"
+																[(ngModel)]="member.termStartDate" [ngClass]="editClass" />
+																<owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time></td>
+															<td><label> Term End Date</label><br> <input
+																[owlDateTimeTrigger]="dt4" [owlDateTime]="dt4"
+																[disabled]="editDetails==false"
 																[(ngModel)]="member.termEndDate" [ngClass]="editClass" />
 																<owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
 															</td>
 														</tr>
 														<tr>
 															<td colspan="2"><label> Contact Notes</label><br>
-															<textarea id="contactNotes"
+																<textarea id="contactNotes"
 																	[disabled]="editDetails==false"
 																	[value]="member.contactNotes"
 																	[(ngModel)]="member.contactNotes" [ngClass]="editClass"></textarea></td>
 															<td colspan="2"><label> Training Notes</label><br>
-															<textarea id="trainingNotes"
+																<textarea id="trainingNotes"
 																	[disabled]="editDetails==false"
 																	[value]="member.trainingNotes"
 																	[(ngModel)]="member.trainingNotes"
@@ -376,80 +431,47 @@
 												</table>
 											</div>
 										</div>
-										<div class="borderBox">
-											<h4 class="borderBoxHeading">Contact Information</h4>
-											<div class="row">
-												<div
-													class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
-													<div class="row">
-														<div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
-															<label><span  *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.firstName }}</span>
-															<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.firstName}}</span> Primary
-																Title (Primary)
-																 <br>
-
-																<span  *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.fullName }}</span>
-															<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.fullName}}</span>
-																 Directory Title
-																(Directory)
-															</label>
-															<br> 
-															<span><span  *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.addressLine1 }}</span>
-															<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.addressLine1}}</span><br>
-																(Ofc)<span  *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.phoneNumber }}</span>
-															<span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.phoneNumber}}</span>, (Mob) 9345
-																7866 2356, (Fax) 321-321-1264
-															</span>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<!-- ROLES -->
-									<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 										<div class=" borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Roles
-												
+
 												<button id="rolesAddBtn" class="addBtn"
-													*ngIf="!addRole && !editRole" (click)="addRoles($event)"  [disabled]="editDetails ||addExpertise">
+													*ngIf="!addRole && !editRole" (click)="addRoles($event)"
+													[disabled]="editDetails ||addExpertise">
 													<i class="fa fa-plus"></i>
 												</button>
-												<button class="addBtn" *ngIf="editRole"
-													(click)="saveRole(member)">
-													<i class="fa fa-floppy-o"></i>
-												</button>
-												
+
 											</h4>
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin">
 													<tr id="roleAddingRow" *ngIf="addRole">
-
-														
 														<td align="justify">Role :</td>
-														
-														<td>
-															<ng2-completer title="Enter Role"
-																	[(ngModel)]="membershipRoles.description"
-																	[datasource]="dataServiceRoleList"
-																	[minSearchLength]="0" placeholder="Search"
-																	(selected)="onSelectRole()"></ng2-completer>
+
+														<td><ng2-completer title="Enter Role"
+																[(ngModel)]="membershipRoles.description"
+																[datasource]="dataServiceRoleList" [minSearchLength]="0"
+																placeholder="Search" (selected)="onSelectRole()"></ng2-completer>
 														</td>
-															<td><input [owlDateTimeTrigger]="dt3" [owlDateTime]="dt3" [(ngModel)]="memberRoleObject.startDate"
-															[disabled]="editRole==false" [ngClass]="editClassRole" [min]="member.termStartDate" [max]="member.termEndDate" #dateTime="ngModel" />
-															<owl-date-time #dt3 [pickerType]="'calendar'"></owl-date-time>
-														</td>
-														<td>
-															<input [owlDateTimeTrigger]="dt4" [owlDateTime]="dt4" [(ngModel)]="memberRoleObject.endDate"
-																[disabled]="editRole==false" [ngClass]="editClassRole" [min]="member.termStartDate" [max]="member.termEndDate"/>
+														<td><input [owlDateTimeTrigger]="dt3"
+															[owlDateTime]="dt3"
+															[(ngModel)]="memberRoleObject.startDate"
+															[disabled]="addRole==false" [ngClass]="editClassRole"
+															[min]="member.termStartDate" [max]="member.termEndDate"
+															#dateTime="ngModel" /> <owl-date-time #dt3
+																[pickerType]="'calendar'"></owl-date-time></td>
+														<td><input [owlDateTimeTrigger]="dt4"
+															[owlDateTime]="dt4"
+															[(ngModel)]="memberRoleObject.endDate"
+															[disabled]="addRole==false" [ngClass]="editClassRole"
+															[min]="member.termStartDate" [max]="member.termEndDate" />
 															<owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
 														</td>
+
 														<td>
 															<button class="btnSkin btnSkinPrimary"
-																(click)="roleAddtoTable(member)">Add</button>	
+																(click)="roleAddtoTable(member)">Add</button>
 														</td>
+
 													</tr>
 													<tr>
 														<th title="">Sl No</th>
@@ -457,24 +479,74 @@
 														<th title="">Start Date</th>
 														<th title="">End Date</th>
 														<th title="" class="text-left">Action</th>
+
 													</tr>
-													<tr *ngFor="let role of  member.committeeMemberRoles;let i=index">
+
+													<tr
+														*ngFor="let role of  member.committeeMemberRoles;let i=index">
 														<td>{{i+1}}</td>
 														<td>{{role.membershipRoleDescription}}</td>
-														<td><input [owlDateTimeTrigger]="dt9" [owlDateTime]="dt9" [(ngModel)]="role.startDate"
-															[disabled]="editRole==false" [ngClass]="editClassRole" [min]="member.termStartDate" [max]="member.termEndDate" #dateTime="ngModel" />
-															<owl-date-time #dt9 [pickerType]="'calendar'"></owl-date-time>
-														</td>
-														<td>
-															<input [owlDateTimeTrigger]="dt10" [owlDateTime]="dt10" [(ngModel)]="role.endDate"
-																[disabled]="editRole==false" [ngClass]="editClassRole" [min]="member.termStartDate" [max]="member.termEndDate"/>
+														<td><input [owlDateTimeTrigger]="dt9"
+															[owlDateTime]="dt9" [(ngModel)]="role.startDate"
+															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode" [ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
+															[min]="member.termStartDate" [max]="member.termEndDate"
+															#dateTime="ngModel" /> <owl-date-time #dt9
+																[pickerType]="'calendar'"></owl-date-time></td>
+														<td><input [owlDateTimeTrigger]="dt10"
+															[owlDateTime]="dt10" [(ngModel)]="role.endDate"
+															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode" [ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
+															[min]="member.termStartDate" [max]="member.termEndDate" />
 															<owl-date-time #dt10 [pickerType]="'calendar'"></owl-date-time>
 														</td>
-														<td class="roleEditingActions"
-															><button [disabled]="editDetails ||addExpertise" (click)="deleteRole($event,role.commMemberRolesId,member.commMembershipId)"><i class="fa fa-trash-o"></i></button>
-															<button  [disabled]="editDetails ||addExpertise" (click)="editRoles()" id="roleEditBtn"><i class="fa fa-pencil"></i></button></td>
+														<td>
+														<ul class="actionButtonGroup">
+																<li><a href="#"
+																	(click)="deleteRole($event,role.commMemberRolesId,member.commMembershipId)">
+																		<i class="fa fa-trash-o"></i>
+																</a></li>
+																<li><a href="#" (click)="editRoles($event,role)"
+																	*ngIf="!editRole" id="roleEditBtn"> <i
+																		class="fa fa-pencil"></i>
+																</a></li>
+																<li><a href="#" *ngIf="editRole && role.membershipRoleCode==memberRoleCode"
+																	(click)="saveRole($event, role,member)"> <i
+																		class="fa fa-floppy-o"></i>
+																</a></li>
+																<li><a href="#" *ngIf="editRole && role.membershipRoleCode==memberRoleCode"
+																	(click)="cancelEditRoles($event,role)"><i
+																		class="fa fa-times" aria-hidden="true"></i></a></li>
+															</ul>
+														</td>
 													</tr>
 												</table>
+											</div>
+										</div>
+									</div>
+
+									<!-- Contact Information -->
+									<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+										<div class="borderBox">
+											<h4 class="borderBoxHeading">Contact Information</h4>
+											<div class="row">
+												<div
+													class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+													<div class="row">
+														<div class="col-xl-12 col-lg-12 col-md-6 col-sm-6 col-6">
+															<label><span
+																*ngIf="member.nonEmployeeFlag==false">{{member.personDetails.firstName
+																	}}</span> <span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.firstName}}</span>
+																Primary Title (Primary) <br> <span
+																*ngIf="member.nonEmployeeFlag==false">{{member.personDetails.fullName
+																	}}</span> <span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.fullName}}</span>
+																Directory Title (Directory) </label> <br> <span><span
+																*ngIf="member.nonEmployeeFlag==false">{{member.personDetails.addressLine1
+																	}}</span> <span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.addressLine1}}</span><br>
+																(Ofc)<span *ngIf="member.nonEmployeeFlag==false">{{member.personDetails.phoneNumber
+																	}}</span> <span *ngIf="member.nonEmployeeFlag==true">{{member.rolodex.phoneNumber}}</span>,
+																(Mob) 9345 7866 2356, (Fax) 321-321-1264 </span>
+														</div>
+													</div>
+												</div>
 											</div>
 										</div>
 
@@ -483,16 +555,18 @@
 
 											<h4 class="borderBoxHeading">
 												Expertise
-												
+
 												<button id="rolesAddBtn" class="addBtn"
-													*ngIf="!addExpertise && !editExpertise" [disabled]="editDetails || editRole ||addRole" (click)="addExpertises($event)">
+													*ngIf="!addExpertise && !editExpertise"
+													[disabled]="editDetails || editRole ||addRole"
+													(click)="addExpertises($event)">
 													<i class="fa fa-plus"></i>
 												</button>
 												<button class="addBtn" *ngIf="editExpertise"
 													(click)="saveExpertise(member)">
 													<i class="fa fa-floppy-o"></i>
 												</button>
-												
+
 											</h4>
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin">
@@ -521,7 +595,15 @@
 														<td>{{i+1}}</td>
 														<td>{{expertise.researchAreaCode}}</td>
 														<td>{{expertise.researchAreaDescription}}</td>
-														<td class="expertiseEditingActions"><button  [disabled]="editDetails || editRole ||addRole" (click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)"><i class="fa fa-trash-o"></i></button></td>
+														<td class="expertiseEditingActions">
+														<ul class="actionButtonGroup">
+															<li>
+																<a href="#" (click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)">
+																<i class="fa fa-trash-o"></i>
+																</a>
+															</li>
+														</ul>
+														</td>
 													</tr>
 
 												</table>

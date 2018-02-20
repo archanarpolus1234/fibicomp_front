@@ -18,8 +18,12 @@ import { CommitteeMemberNonEmployeeElasticService } from '../../elasticSearch/co
 
 export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     memberType;
+    memberAdded: boolean = false;
     addRole: boolean = false;
+    memberRoleCode;
     editRole: boolean = false;
+    temp_startDate;
+    temp_endDate;
     addExpertise: boolean = false;
     editExpertise: boolean = false;
     showMembers: boolean = false;
@@ -120,13 +124,13 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     setActiveAndchangeIconSearch() {
         this.searchActive = true;
         this.iconClass = 'fa fa-times';
-
-
     }
+    
     setInActiveAndchangeIconSearch() {
         this.searchActive = false;
         this.iconClass = 'fa fa-search';
     }
+    
     ngAfterViewInit() {
         this.searchText
             .valueChanges
@@ -165,10 +169,10 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
                                         }
                                         );
                                         if ( this.elasticSearchresults.length > 0 ) {
-                                            this.message = '';
+                                            //this.message = '';
                                         } else {
                                             if ( this.searchTextModel && this.searchTextModel.trim() ) {
-                                                this.message = 'nothing was found';
+                                                this.message = '';
                                             }
                                         }
                                         resolve( this.elasticSearchresults );
@@ -270,6 +274,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
     saveDetails() {
         this.editDetails = false;
+        this.memberAdded = false;
         this.editClass = 'committeeBoxNotEditable';
         var currentDate = new Date();
         var currentTime = currentDate.getTime();
@@ -295,14 +300,18 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     addRoles( event: any ) {
         event.preventDefault();
         this.addRole = true;
-        this.editRole = true;
         this.editClassRole = 'committeeBox';
     }
 
-    saveRole( role, member ) {
+    saveRole( event: any, role, member ) {
+        event.preventDefault();
         this.addRole = false;
+        this.memberAdded = false;
+        this.memberRoleCode = '';
         this.editRole = false;
         this.editClassRole = 'committeeBoxNotEditable';
+        console.log( "role", role );
+        console.log( "member", member );
         this.committeCreateEditService.updateMemberRoles( role.commMemberRolesId, this.committeeId, member.commMembershipId, role ).subscribe( data => {
             var temp: any = {};
             temp = data;
@@ -310,12 +319,15 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         } );
     }
 
-    cancelRole() {
+    cancelEditRoles( event: any, role ) {
+        event.preventDefault();
+        role.startDate = this.temp_startDate;
+        role.endDate = this.temp_endDate;
+        this.memberRoleCode = '';
         this.addRole = false;
         this.editRole = false;
         this.editClassRole = 'committeeBoxNotEditable';
     }
-
 
     addExpertises( event: any ) {
         event.preventDefault();
@@ -329,7 +341,11 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         this.editExpertise = false;
         this.editClass = 'committeeBoxNotEditable';
     }
-    editRoles() {
+    editRoles( event: any, role ) {
+        event.preventDefault();
+        this.memberRoleCode = role.membershipRoleCode;
+        this.temp_startDate = role.startDate;
+        this.temp_endDate = role.endDate;
         this.editRole = true;
         this.editClassRole = 'committeeBox';
     }
@@ -341,6 +357,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
     roleAddtoTable( member ) {
         var flag: boolean = false;
+        this.memberAdded = false;
         this.committeCreateEditService.saveCommMemberRole( member.commMembershipId, this.committeeId, this.memberRoleObject ).subscribe( data => {
             this.memberRoleObject.startDate = '';
             this.memberRoleObject.endDate = '';
@@ -354,6 +371,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     expertiseAddtoTable( member ) {
         var flag: boolean = false;
         this.addExpertise = false;
+        this.memberAdded = false;
         this.editExpertise = false;
         this.editClass = 'committeeBoxNotEditable';
         this.committeCreateEditService.saveCommMemberExpertise( member.commMembershipId, this.committeeId, this.memberExpertiseObject ).subscribe( data => {
@@ -430,6 +448,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
                     this.memberList.committee.committeeMemberships[length - 1].membershipTypeCode = membertype.membershipTypeCode;
                 }
             }
+            this.memberAdded = true;
             this.resultLoadedById.committee.committeeMemberships = this.memberList.committee.committeeMemberships;
             this.memberExist = true;
         } );
