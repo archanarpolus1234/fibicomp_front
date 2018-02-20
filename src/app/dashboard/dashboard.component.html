@@ -21,7 +21,9 @@
 					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
 						(click)="showTab('DISCLOSURE')"> Disclosures </a></li>
 					<li [ngClass]="{'active': currentPosition == 'COMMITTEE'}"><a
-						(click)="showTab('COMMITTEE')"> Committee & Schedules </a></li>
+						(click)="showTab('COMMITTEE')"> Committee</a></li>
+					<li [ngClass]="{'active': currentPosition == 'SCHEDULE'}"><a
+					(click)="showTab('SCHEDULE')"> Schedules</a></li>
 				</ul>
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
@@ -75,7 +77,7 @@
 									[placeText]="'Search: Disclosure#,  PI Name, Disposition, Status'"></app-elastic-search>
 							</div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"
-								*ngIf="currentPosition !== 'COMMITTEE'">
+								*ngIf="currentPosition !== 'SCHEDULE' && currentPosition !== 'COMMITTEE'">
 								<a id="advcanceSearch" href="#" class="linkButton"
 									(click)="advanceSearch($event)"> <i class="fa fa-cog"></i>
 									Advanced Search
@@ -111,7 +113,6 @@
 									<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
 										<button class="btnSkin btnSkinPrimary"
 											(click)="searchUsingAdvanceOptions(currentPage)">Search</button>
-										<!--  (click) = "searchUsingAdvanceOptions()" -->
 									</div>
 									<div class="col-xl-4 col-lg-5 col-md-6 col-sm-6 col-6">
 										<button class="btnSkin btnSkinSecondary" (click)="clear()">Clear</button>
@@ -746,24 +747,10 @@
 				</div>
 			</div>
 
-			<!-- COMMITTEE & SCHEDULE -->
+
+			<!-- COMMITTEE -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'COMMITTEE')">
-				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a routerLink='/schedule'>
-								<i class="fa fa-eye"></i> View SCHEDULE
-						</a>
-						</span>
-					</div>
-				</div>
-			</div>
-
-
-			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-				*ngIf="(currentPosition == 'COMMITTEE')">
-
 				<div class="row">
 					<div
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
@@ -826,8 +813,83 @@
 					</table>
 				</div>
 			</div>
-
-
+			
+			<!-- SCHEDULE -->
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+				*ngIf="(currentPosition == 'SCHEDULE')">
+				<div class="row">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a routerLink='/schedule'>
+								<i class="fa fa-eye"></i> View SCHEDULE
+						</a>
+						</span>
+					</div>
+				</div>
+				<div class="borderBox"
+					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin">
+						<thead>
+							<tr>
+								<th (click)="sortResult('awardNumber',currentPosition)"
+									title="Click to sort by Award">Schedule Id<span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
+								</th>
+								<th (click)="sortResult('accountNumber',currentPosition)"
+									title="Click to sort by Account">Schedule Date<span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
+								</th>
+								<th (click)="sortResult('title',currentPosition)"
+									title="Click to sort by Title">Place  <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+								</th>
+								<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Deadline <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+								</th>
+								<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Schedule Status <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+								</th>
+									<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Committee Id <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+								</th>
+									<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Committee Name <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+								</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+						<tr>
+						<td>109</td>
+						<td>09/10/2019</td>
+						<td>CR 101</td>
+						<td>10/10/2019</td>
+						<td>Scheduled</td>
+						<td>KC002</td>
+						<td>KC IACUC 1</td>
+						<td>
+							<ul class="actionButtonGroup">		
+										<li><a title="Open" routerLink='/schedule'><i
+												class="fa fa-eye"></i></a>
+												</li>
+							</ul>
+						</td>
+						</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 
 			<!-- Pagination -->
 

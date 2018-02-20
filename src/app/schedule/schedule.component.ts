@@ -12,6 +12,7 @@ export class ScheduleComponent implements OnInit {
 
   ngOnInit() {
   }
+  
   show_current_tab( e: any, current_tab ) {
       e.preventDefault();
       this.currentTab = current_tab;
