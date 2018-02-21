@@ -19,17 +19,17 @@ import { DashboardConfigurationService } from '../common/dashboard-configuration
 } )
 
 export class DashboardComponent implements OnInit {
-
+    nullScheduleData: boolean =false;
+    nullCommitteeData: boolean=false;
     advanceSearchCriteria = {
         property1: '',
         property2: '',
         property3: '',
         property4: ''
     };
-    
     currentPosition: string = 'SUMMARY';
     pageNumber: number;
-    sortBy: string = 'updateTimeStamp';
+    sortBy: string;
     sortOrder: string = "DESC";
     result: any = {};
     serviceRequestList: any[];
@@ -191,6 +191,15 @@ export class DashboardComponent implements OnInit {
                     }
                     if ( this.currentPosition == "COMMITTEE" ) {
                         this.serviceRequestList = this.result.committees;
+                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                            this.nullCommitteeData = true;
+                        }
+                    }
+                    if ( this.currentPosition == "SCHEDULE" ) {
+                        this.serviceRequestList = this.result.committeeSchedules;
+                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                            this.nullScheduleData = true;
+                        }
                     }
                     this.userName = localStorage.getItem( 'currentUser' );
                     this.fullName = localStorage.getItem( 'userFullname' );
@@ -215,8 +224,13 @@ export class DashboardComponent implements OnInit {
         this.pageNumber = 20;
         this.propertyName = '';
         this.currentPosition = currentTabPosition;
+        
         this.pagedItems = null;
-        this.sortBy = 'updateTimeStamp';
+        if(currentTabPosition === 'COMMITTEE' || currentTabPosition === 'SCHEDULE'){
+            this.sortBy = 'updateTimestamp';
+        } else{
+            this.sortBy = 'updateTimeStamp';
+        }
         this.adminStatus = localStorage.getItem( 'isAdmin' );
         this.accountNo = ' ';
         this.awardNo = ' ';
@@ -273,6 +287,7 @@ export class DashboardComponent implements OnInit {
         if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
+        
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
             .subscribe( data => {
                 this.result = data || [];

@@ -653,7 +653,6 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     filterSchedule() {
-        debugger;
         if ( this.result.scheduleData.filterStartDate > this.result.scheduleData.dailySchedule.filerEndDate ) {
             this.isDatePrevious = true;
             this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
