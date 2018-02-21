@@ -38,6 +38,7 @@ export class Constants {
     saveCommitteeMembersRole: string;
     saveCommitteeMembersExpertise:string;
     updateMemberRoles:string;
+    loadScheduleData: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -163,6 +164,10 @@ export class Constants {
          this.updateMemberRoles='/updateMemberRoles'
          //this.updateMemberRoles = 'http://demo.fibiweb.com/fibi-comp/updateMemberRoles';
         //this.updateMemberRoles = 'http://192.168.1.76:8080/fibi-comp/updateMemberRoles';
+             
+        this.loadScheduleData = '/loadScheduleById';
+      //this.loadScheduleData = 'http://demo.fibiweb.com/fibi-comp/loadScheduleById';
+        //this.loadScheduleData = 'http://192.168.1.76:8080/fibi-comp/loadScheduleById';
         
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';

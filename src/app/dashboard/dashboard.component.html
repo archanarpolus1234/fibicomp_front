@@ -765,34 +765,34 @@
 					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click)="sortResult('awardNumber',currentPosition)"
-									title="Click to sort by Award">Committee Id<span
+								<th (click)="sortResult('committeeId',currentPosition)"
+									title="Click to sort by Committee Id">Committee Id<span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'committeeId')}"></span>
 								</th>
-								<th (click)="sortResult('accountNumber',currentPosition)"
-									title="Click to sort by Account">Committee Name<span
+								<th (click)="sortResult('committeeName',currentPosition)"
+									title="Click to sort by Committee Name">Committee Name<span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'committeeName')}"></span>
 								</th>
-								<th (click)="sortResult('title',currentPosition)"
-									title="Click to sort by Title">Committee Type Code <span
+								<th (click)="sortResult('committeeTypeCode',currentPosition)"
+									title="Click to sort by Committee Type Code">Committee Type Code <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'committeeTypeCode')}"></span>
 								</th>
-								<th (click)="sortResult('unitName',currentPosition)"
-									title="Click to sort by Lead Unit">Home Unit Number <span
+								<th (click)="sortResult('homeUnitNumber',currentPosition)"
+									title="Click to sort by Home Unit Number">Home Unit Number <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
 								</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullAwardData; else noAwardNullData">
+							<tr *ngIf="nullCommitteeData else noNullCommitteeData">
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr #noAwardNullData
+							<tr #noNullCommitteeData
 								*ngFor="let coommitteeDetails of serviceRequestList | slice:begin:end">
 								<td width="8%">{{coommitteeDetails.committeeId}}</td>
 								<td>{{coommitteeDetails.committeeName}}</td>
@@ -800,9 +800,6 @@
 								<td>{{coommitteeDetails.homeUnitNumber}}</td>
 								<td>
 									<ul class="actionButtonGroup">
-										<!-- <li><a title="Open {{awardDetails.awardNumber}}"
-											[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardDetails.awardId+'%26docId%3D'+awardDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
-												class="fa fa-eye"></i> </a></li> -->
 										<li><a title="Open" routerLink='/committee'
 											[queryParams]="{mode:'view','id':coommitteeDetails.committeeId}"><i
 												class="fa fa-eye"></i></a></li>
@@ -817,70 +814,62 @@
 			<!-- SCHEDULE -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'SCHEDULE')">
-				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a routerLink='/schedule'>
-								<i class="fa fa-eye"></i> View SCHEDULE
-						</a>
-						</span>
-					</div>
-				</div>
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
 					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click)="sortResult('awardNumber',currentPosition)"
-									title="Click to sort by Award">Schedule Id<span
+								<th (click)="sortResult('scheduleId',currentPosition)"
+									title="Click to sort by Schedule Id">Schedule Id<span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduleId')}"></span>
 								</th>
-								<th (click)="sortResult('accountNumber',currentPosition)"
-									title="Click to sort by Account">Schedule Date<span
+								<th (click)="sortResult('scheduledDate',currentPosition)"
+									title="Click to sort by Schedule Date">Schedule Date<span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduledDate')}"></span>
 								</th>
-								<th (click)="sortResult('title',currentPosition)"
-									title="Click to sort by Title">Place  <span
+								<th (click)="sortResult('place',currentPosition)"
+									title="Click to sort by Place">Place  <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'place')}"></span>
 								</th>
-								<th (click)="sortResult('unitName',currentPosition)"
-									title="Click to sort by Lead Unit">Deadline <span
+								<th (click)="sortResult('protocolSubDeadline',currentPosition)"
+									title="Click to sort by Deadline">Deadline <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolSubDeadline')}"></span>
 								</th>
-								<th (click)="sortResult('unitName',currentPosition)"
-									title="Click to sort by Lead Unit">Schedule Status <span
+								<th (click)="sortResult('',currentPosition)"
+									title="Click to sort by Schedule Status">Schedule Status <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == '')}"></span>
 								</th>
-									<th (click)="sortResult('unitName',currentPosition)"
-									title="Click to sort by Lead Unit">Committee Id <span
+									<th (click)="sortResult('',currentPosition)"
+									title="Click to sort by Committee Id">Committee Id <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == '')}"></span>
 								</th>
-									<th (click)="sortResult('unitName',currentPosition)"
-									title="Click to sort by Lead Unit">Committee Name <span
+									<th (click)="sortResult('',currentPosition)"
+									title="Click to sort by committeeName">Committee Name <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == '')}"></span>
 								</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-						<tr>
-						<td>109</td>
-						<td>09/10/2019</td>
-						<td>CR 101</td>
-						<td>10/10/2019</td>
-						<td>Scheduled</td>
-						<td>KC002</td>
-						<td>KC IACUC 1</td>
+						<tr *ngIf="nullScheduleData"; else noNullScheduledata> No Schedule Data</tr>
+						<tr #noNullScheduledata *ngFor="let schedule of serviceRequestList">
+						<td>{{schedule.scheduleId}}</td>
+						<td>{{schedule.scheduledDate}}</td>
+						<td>{{schedule.place}}</td>
+						<td>{{schedule.protocolSubDeadline}}</td>
+						<td>{{schedule.scheduleStatus.description}}</td>
+						<td>{{schedule.committeeId}}</td>
+						<td>{{schedule.committeeName}}</td>
 						<td>
 							<ul class="actionButtonGroup">		
-										<li><a title="Open" routerLink='/schedule'><i
+										<li><a title="Open" routerLink='/schedule' [queryParams]="{'scheduleId':schedule.scheduleId}"><i
 												class="fa fa-eye"></i></a>
 												</li>
 							</ul>

@@ -310,8 +310,6 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         this.memberRoleCode = '';
         this.editRole = false;
         this.editClassRole = 'committeeBoxNotEditable';
-        console.log( "role", role );
-        console.log( "member", member );
         this.committeCreateEditService.updateMemberRoles( role.commMemberRolesId, this.committeeId, member.commMembershipId, role ).subscribe( data => {
             var temp: any = {};
             temp = data;

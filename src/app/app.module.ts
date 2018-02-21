@@ -65,6 +65,7 @@ import { AwardCommitmentsService } from './award/award-commitments/award-commitm
 import { CommitteeConfigurationService } from './common/committee-configuration.service';
 import { CommitteeMemberEmployeeElasticService } from './elasticSearch/committee-members-employees-elastic-search.service';
 import { CommitteeMemberNonEmployeeElasticService } from './elasticSearch/committee-members-nonEmployee-elastic-search.service';
+import { ScheduleService } from './schedule/schedule.service';
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -134,7 +135,7 @@ let appRoutes = [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
-        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe],
+        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService],
     bootstrap: [AppComponent]
 } )
 
