@@ -3,10 +3,9 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
             <div class="col-12">
                <h4 class="borderBoxHeading">Minutes
-                    <button class="editBtn"><i class="fa fa-pencil"></i></button>
-                     <button id="minutesAddBtn" class="addBtn" (click)="addMinutes($event)">
-			<i class="fa fa-plus"></i>	
-			</button>
+                    <button title="add new entry" id="minutesAddBtn" data-target="#minuteModal" data-toggle="modal" class="addBtn" (click)="showAddMinutes($event)">
+					<i class="fa fa-plus"></i>	
+					</button>
                 </h4>
                   <div>
                      <table class="table table-responsive tableSkin" >
@@ -21,14 +20,14 @@
         			 <button class="btnSkin btnSkinPrimary">Add</button>
         		</td>
         	</tr>
-                <tr>
-                    <th title="">Sl Number</th>
-                    <th  title="">Entry Type</th>
-                    <th  title="">Entry</th>
-                    <th title="">Private</th>
-                    <th title="">Final</th>
-                </tr>
-                <tr >
+			<tr>
+				<th title="">Sl Number</th>
+				<th title="">Entry Type</th>
+				<th title="">Entry</th>
+				<th title="">Private</th>
+				<th title="">Final</th>
+			</tr>
+			<tr >
                     <td>1</td>
                     <td >General Comments</td>
                     <td >Meeting gathered on time</td>
@@ -46,5 +45,67 @@
            </div>
           </div>
         </div>
+        
+        <!-- Minute Entry Modal -->
+        <div class="modal fade mySkinDialog fallback" *ngIf="isMinuteEntryPoppedUp" id="minuteModal" tabindex="-1" role="dialog"
+				aria-labelledby="minuteModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="minuteModalLongTitle">Minute Entry</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<div class="inputTxtCover">
+								<div class="row">
+									<div class="col-xl-8 col-lg-8 col-md-4 col-sm-12 col-12">
+										<label><span class="mandatory">*&nbsp;</span>Entity Type</label>
+										<select name="entityType" class="forEntityType" >
+											<option [value]="generalComments">General Comments</option>
+											<option [value]="adverseEvents">Adverse Events</option>
+											<option [value]="attendance">Attendance</option>
+											<option [value]="otherBusiness">Other Business</option>
+											<option [value]="protocol">Protocol</option>
+											<option [value]="protocolReviewerComment">Protocol Reviewer Comment</option>
+										</select>
+									</div>
+									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
+										<label>Final</label>
+										<input type="checkbox" name="final" />
+									</div>
+									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
+										<label>Private</label>
+										<input type="checkbox" name="final" />
+									</div>
+								</div>
+								<br/>
+								<div class="tab-content" id="myTabContent">
+									<div class="tab-pane fade show active" id="AdverseEvents">
+										<div class="tabCover">
+											<ul class="tablelayout">
+												<li><label><span class="mandatory">*&nbsp;</span>Entry</label>
+													<input type="textarea" name="description" />
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btn-secondary" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btnSkin btnSkinPrimary" (click)="saveAndClose()">Save & Close</button>
+							<button type="button" class="btnSkin btnSkinPrimary" (click)="saveAndNew()">Save & New</button>
+						</div>
+					</div>
+				</div>
+			</div>
+        <!-- modal ends -->
+        
+        
 	</div>
 </div>

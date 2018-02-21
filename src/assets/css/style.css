@@ -80,6 +80,7 @@ input[type="text"] [disabled] {
 	border: none;
 }
 /* end of generate schedule style updation */
+
 .pageMinHeight {
 	min-height: 100%;
 }
@@ -1254,7 +1255,7 @@ tbody td label {
 .timeout {
 	display: block;
 	position: fixed;
-	z-index: 1;
+	z-index: 1100;
 	left: 0;
 	top: 0;
 	width: 100%; /* Full width */
