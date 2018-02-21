@@ -14,9 +14,7 @@ export class ScheduleService {
 
     }
     public loadScheduleData( scheduleId: number ): Observable<JSON> {
-        var params = {
-                scheduleId: scheduleId
-            };
+        var params = {"scheduleId": "895"};
             return this.http.post( this.constant.loadScheduleData, params )
                 .map( res => res.json() )
                 .catch( error => {
