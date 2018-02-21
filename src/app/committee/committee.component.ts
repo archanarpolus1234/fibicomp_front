@@ -27,6 +27,7 @@ export class CommitteeComponent {
     lastUpdated: string;
     homeUnits: any = [];
     reviewTypes: any = [];
+    scheduleStatus: any = [];
     result: any = {};
     homeUnitInput: any = [];
     editDetails: boolean = false;
@@ -61,6 +62,7 @@ export class CommitteeComponent {
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         this.homeUnitInput.unitName = this.result.committee.homeUnitName;
                         this.reviewTypes = this.result.reviewTypes;
+                        this.scheduleStatus = this.result.scheduleStatus;
                         this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' );
                         this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
                     }
@@ -87,6 +89,7 @@ export class CommitteeComponent {
                         this.committeeConfigurationService.changeCommmitteeData( this.result );
                         this.homeUnitInput.unitName = this.result.committee.homeUnitName;
                         this.reviewTypes = this.result.reviewTypes;
+                        this.scheduleStatus = this.result.scheduleStatus;
                         this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' );
                         this.dataServiceHomeUnit = this.completerService.local( this.homeUnits, 'unitName', 'unitName' );
                     }

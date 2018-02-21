@@ -77,6 +77,7 @@
 				(editFlag)="recieveFlag($event)" (modeFlag)="recievemode($event)"
 				[unitName]="result.committee.homeUnitName"
 				[reviewTypes]="result.reviewTypes" [areaList]="areaList"
+				[scheduleStatus]="result.scheduleStatus"
 				#homeComponent></app-committee-home>
 		</div>
 		<div *ngIf="currentTab =='committee_members'">
