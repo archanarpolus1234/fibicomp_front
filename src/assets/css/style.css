@@ -1399,6 +1399,7 @@ a:hover {
 	padding: 0 5px;
 	border-radius: 30px;
 	opacity: 1 !important;
+	border: 1px #DEDEDE solid;
 }
 
 #scheduleAttachmentAddBtn:hover {
@@ -1545,13 +1546,14 @@ a:hover {
 
 /* styles by for committee home */
 .committeeBoxNotEditable {
-	width: 100%;
+	width: 90%;
 	line-height: 30px;
 	height: 30px;
 	padding: 0 5px;
 	border: none;
 	background: transparent;
 	opacity: 1 !important;
+	color: #424242;
 }
 
 .grid2>tbody>tr:nth-child(odd) td .committeeBoxNotEditable {
