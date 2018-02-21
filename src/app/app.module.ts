@@ -42,6 +42,11 @@ import { ScheduleHomeComponent } from './schedule/schedule-home/schedule-home.co
 import { MinutesComponent } from './schedule/minutes/minutes.component';
 import { CommitteeComponent } from './committee/committee.component';
 import { ScheduleComponent } from './schedule/schedule.component';
+import { ProtocolSubmittedComponent } from './schedule/schedule-home/protocol-submitted/protocol-submitted.component';
+import { ScheduleAttendanceComponent } from './schedule/schedule-home/schedule-attendance/schedule-attendance.component';
+import { ScheduleOtherActionsComponent } from './schedule/schedule-home/schedule-other-actions/schedule-other-actions.component';
+import { ScheduleAttachmentsComponent } from './schedule/schedule-home/schedule-attachments/schedule-attachments.component';
+
 
 import { LoginService } from './login/login.service';
 import { GoogleChartService } from './research_summary/google-chart.service';
@@ -66,6 +71,7 @@ import { CommitteeConfigurationService } from './common/committee-configuration.
 import { CommitteeMemberEmployeeElasticService } from './elasticSearch/committee-members-employees-elastic-search.service';
 import { CommitteeMemberNonEmployeeElasticService } from './elasticSearch/committee-members-nonEmployee-elastic-search.service';
 import { ScheduleService } from './schedule/schedule.service';
+import {ScheduleConfigurationService} from './common/schedule-configuration.service';
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -114,6 +120,10 @@ let appRoutes = [
         MinutesComponent,
         CommitteeComponent,
         ScheduleComponent,
+        ProtocolSubmittedComponent,
+        ScheduleAttendanceComponent,
+        ScheduleOtherActionsComponent,
+        ScheduleAttachmentsComponent
     ],
     imports: [
         BrowserModule,
@@ -135,7 +145,7 @@ let appRoutes = [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
-        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService],
+        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService,ScheduleConfigurationService],
     bootstrap: [AppComponent]
 } )
 
