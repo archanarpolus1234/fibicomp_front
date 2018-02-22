@@ -7,43 +7,50 @@
 					<i class="fa fa-plus"></i>	
 					</button>
                 </h4>
-                  <div>
-                     <table class="table table-responsive tableSkin" >
-                     <tr id="addMinutesRow" *ngIf="addMinutesEntry">
-        		<td>
-        			Minutes
-        		</td>
-        		<td>
-        		 <input type="text" class="committeeBox">
-        		</td>
-        		<td>
-        			 <button class="btnSkin btnSkinPrimary">Add</button>
-        		</td>
-        	</tr>
-			<tr>
-				<th title="">Sl Number</th>
-				<th title="">Entry Type</th>
-				<th title="">Entry</th>
-				<th title="">Private</th>
-				<th title="">Final</th>
-			</tr>
-			<tr >
-                    <td>1</td>
-                    <td >General Comments</td>
-                    <td >Meeting gathered on time</td>
-                    <td>True</td>
-                    <td>True</td>
-                </tr>
-                 <tr >
-                    <td>2</td>
-                    <td >Protocol 1000911157</td>
-                    <td >Protocol submitted to committee</td>
-                    <td>True</td>
-                    <td>False</td>
-                </tr>
-            </table>   
-           </div>
-          </div>
+				<div>
+					<table class="table table-responsive tableSkin">
+						<tr>
+							<th title="">Sl Number</th>
+							<th title="">Entry Type</th>
+							<th title="">Entry</th>
+							<th title="">Private</th>
+							<th title="">Final</th>
+							<th title="">Action</th>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>General Comments</td>
+							<td><input type="text" [ngClass]="(!isEditMinuteItem == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" [disabled]="!isEditMinuteItem == true" value="Meeting gathered on time">
+							</td>
+							<td><i class="fa fa-check-square-o fa-large" aria-hidden="true"></i></td>
+							<td><i class="fa fa-check-square-o fa-large" aria-hidden="true"></i></td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li title="edit"><a href="#" *ngIf="!isEditMinuteItem == true" (click)="editMinuteItem($event)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+									<li title="delete"><a href="#" *ngIf="!isEditMinuteItem == true" (click)="deleteMinuteItem($event)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+									<li title="save"><a href="#" *ngIf="!isEditMinuteItem == false" (click)="saveMinuteItem($event)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+									<li title="cancel"><a href="#" *ngIf="!isEditMinuteItem == false" (click)="cancelEditMinuteItem($event)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<td>2</td>
+							<td>Protocol 1000911157</td>
+							<td><input type="text" [ngClass]="(!isEditMinuteItem == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" [disabled]="!isEditMinuteItem == true" value="Protocol submitted to committee"></td>
+							<td><i class="fa fa-check-square-o fa-large" aria-hidden="true"></i></td>
+							<td><i class="fa fa-times fa-large" aria-hidden="true"></i></td>
+							<td>
+								<ul class="actionButtonGroup">
+									<li title="edit"><a href="#" *ngIf="!isEditMinuteItem == true" (click)="editMinuteItem($event)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+									<li title="delete"><a href="#" *ngIf="!isEditMinuteItem == true" (click)="deleteMinuteItem($event)"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+									<li title="save"><a href="#" *ngIf="!isEditMinuteItem == false" (click)="saveMinuteItem($event)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+									<li title="cancel"><a href="#" *ngIf="!isEditMinuteItem == false" (click)="cancelEditMinuteItem($event)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+								</ul>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
         </div>
         
         <!-- Minute Entry Modal -->
@@ -62,34 +69,117 @@
 						<div class="modal-body">
 							<div class="inputTxtCover">
 								<div class="row">
-									<div class="col-xl-8 col-lg-8 col-md-4 col-sm-12 col-12">
+									<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12">
 										<label><span class="mandatory">*&nbsp;</span>Entity Type</label>
-										<select name="entityType" class="forEntityType" >
-											<option [value]="generalComments">General Comments</option>
-											<option [value]="adverseEvents">Adverse Events</option>
-											<option [value]="attendance">Attendance</option>
-											<option [value]="otherBusiness">Other Business</option>
-											<option [value]="protocol">Protocol</option>
-											<option [value]="protocolReviewerComment">Protocol Reviewer Comment</option>
+										<select name="entityType" class="forEntityType" (ngModelChange)="onEntityTypeChange($event)" [(ngModel)]="selectedOptionEntityType">
+											<option *ngFor="let type of entityType" [value]="type.value">{{type.name}}</option>
 										</select>
 									</div>
-									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
+									<div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-12">
+										<input type="checkbox" name="final" />
 										<label>Final</label>
-										<input type="checkbox" name="final" />
 									</div>
-									<div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
+									<div class="col-xl-2 col-lg-2 col-md-12 col-sm-12 col-12">
+										<input type="checkbox" name="private" />
 										<label>Private</label>
-										<input type="checkbox" name="final" />
 									</div>
 								</div>
 								<br/>
 								<div class="tab-content" id="myTabContent">
-									<div class="tab-pane fade show active" id="AdverseEvents">
+									<div id="generalComments" *ngIf="selectedOptionEntityType == 'generalComments' ">
 										<div class="tabCover">
 											<ul class="tablelayout">
-												<li><label><span class="mandatory">*&nbsp;</span>Entry</label>
-													<input type="textarea" name="description" />
+												<li><label><span class="mandatory">*&nbsp;</span>Entry</label></li>
+												<li><textarea name="description" class="scheduleBoxes forTextAreaEntry" rows="4"></textarea></li>
+											</ul>
+										</div>
+									</div>
+									<div id="adverseEvents" *ngIf="selectedOptionEntityType == 'adverseEvents' ">
+										<div class="tabCover">
+											<ul class="tablelayout">
+												<li><label><span class="mandatory">*&nbsp;</span>Entry</label></li>
+												<li><textarea name="description" class="scheduleBoxes forTextAreaEntry" rows="4"></textarea></li>
+											</ul>
+										</div>
+									</div>
+									<div id="attendance" *ngIf="selectedOptionEntityType == 'attendance' ">
+										<div class="tabCover">
+											<ul class="tablelayout">
+												<li class="text-right"><button type="button" class="btnSkin btnSkinPrimary" (click)="generateAttendance()">Gen. Attendance</button></li>
+											</ul>
+											<ul class="tablelayout">
+												<li><label><span class="mandatory">*&nbsp;</span>Entry</label></li>
+												<li><textarea name="description" class="scheduleBoxes forTextAreaEntry" rows="4"></textarea></li>
+											</ul>
+										</div>
+									</div>
+									<div id="otherBusiness" *ngIf="selectedOptionEntityType == 'otherBusiness' ">
+										<div class="tabCover">
+											<ul class="tablelayout">
+												<li><label><span class="mandatory">*&nbsp;</span>Other Business Item</label></li>
+												<li><select name="otherBusinessItems"(ngModelChange)="onOtherItemSelect($event)" [(ngModel)]="selectedItem">
+														<!-- <option *ngFor="let type of entityType" [value]="type.value">{{type.name}}</option> -->
+														<option>Other Business Item 1</option>
+														<option>Other Business Item 2</option>
+														<option>Other Business Item 3</option>
+														<option>Other Business Item 4</option>
+														<option>Other Business Item 5</option>
+													</select></li>
+											</ul>
+											<ul class="tablelayout">
+												<li><label><span class="mandatory">*&nbsp;</span>Entry</label></li>
+												<li><textarea name="description" class="scheduleBoxes forTextAreaEntry" rows="4"></textarea></li>
+											</ul>
+										</div>
+									</div>
+									<div id="protocol" *ngIf="selectedOptionEntityType == 'protocol' ">
+										<div class="tabCover">
+											<ul class="tablelayout">
+												<li><label><span class="mandatory">*&nbsp;</span>Protocols</label>
+													<select name="protocol" class="half-width" (ngModelChange)="onProtocolSelect($event)" [(ngModel)]="selectedProtocol">
+														<!-- <option *ngFor="let type of entityType" [value]="type.value">{{type.name}}</option> -->
+														<option>Protocol 1</option>
+														<option>Protocol 2</option>
+														<option>Protocol 3</option>
+														<option>Protocol 4</option>
+														<option>Protocol 5</option>
+													</select>
 												</li>
+												<li class="text-right"><label>Contingency Code:</label></li>
+												<li><input type="text" class="half-width" disabled="disabled"/>
+													<button class="searchBtn" id="searchContingency1" (click)="searchContigency()" data-target="#contigencyModal" data-toggle="modal">
+														&nbsp;<i class="fa fa-search"></i>
+													</button></li>
+											</ul>
+											<ul class="tablelayout">
+												<li><label><span class="mandatory">*&nbsp;</span>Entry</label></li>
+												<li><textarea name="description" class="scheduleBoxes forTextAreaEntry" rows="4"></textarea></li>
+											</ul>
+										</div>
+									</div>
+									<div id="protocolReviewerComment" *ngIf="selectedOptionEntityType == 'protocolReviewerComment' ">
+										<div class="tabCover">
+											<ul class="tablelayout">
+												<li>
+													<label><span class="mandatory">*&nbsp;</span>Protocols</label>
+													<select name="protocol" class="half-width" (ngModelChange)="onProtocolSelect($event)" [(ngModel)]="selectedProtocol">
+														<!-- <option *ngFor="let type of entityType" [value]="type.value">{{type.name}}</option> -->
+														<option>Protocol 1</option>
+														<option>Protocol 2</option>
+														<option>Protocol 3</option>
+														<option>Protocol 4</option>
+														<option>Protocol 5</option>
+													</select>
+												</li>
+												<li class="text-right"><label>Contingency Code:</label></li>
+												<li><input type="text" class="half-width" disabled="disabled"/>
+													<button class="searchBtn" id="searchContingency2" (click)="searchContigency()" data-target="#contigencyModal" data-toggle="modal">
+														&nbsp;<i class="fa fa-search"></i>
+													</button></li>
+											</ul>
+											<ul class="tablelayout">
+												<li><label><span class="mandatory">*&nbsp;</span>Entry</label></li>
+												<li><textarea name="description" class="scheduleBoxes forTextAreaEntry" rows="4"></textarea></li>
 											</ul>
 										</div>
 									</div>
@@ -105,7 +195,43 @@
 				</div>
 			</div>
         <!-- modal ends -->
-        
+        <!-- Modal for contigency list -->
+        <div class="modal fade mySkinDialog fallback" *ngIf="isContigencyPoppedUp" id="contigencyModal" tabindex="-1" role="dialog"
+				aria-labelledby="contigencyModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-lg modal-dialog-centered"
+					role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="contigencyModalLongTitle">Contigency LookUp</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<table class="table table-responsive tableSkin">
+								<tr>
+									<th title="">Code</th>
+									<th title="">Description</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>General Comments Meeting gathered on time</td>
+								</tr>
+								<tr>
+									<td>2</td>
+									<td>Protocol 1000911157 Protocol submitted to committee</td>
+								</tr>
+							</table>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btn-secondary" data-dismiss="modal">Cancel</button>
+							<button type="button" class="btnSkin btnSkinPrimary" (click)="selectContigencyItem()">Select</button>
+						</div>
+					</div>
+				</div>
+			</div>
+        <!-- ends contigency modal -->
         
 	</div>
 </div>

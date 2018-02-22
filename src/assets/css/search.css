@@ -153,6 +153,7 @@ ul.sb-results-dropdown-menu > li:last-child {
     text-decoration: none;
     cursor: pointer;
 }
+
 .demo-class {
 	cursor: pointer;
 }
@@ -164,21 +165,26 @@ ul.sb-results-dropdown-menu > li:last-child {
 #pichart_award{
 	cursor:pointer;
 }
+
 #pichart_divEvolution{
 	cursor:pointer;
 }
+
 .forSkipSchedule {
 	font-size: 0.8em;
 	padding: 0 1em;
 }
+
 .forSkipSchedule li {
 	color: #444444;
 	text-align: center;
 	margin: 1rem auto;
 }
+
 .sp-color {
 	color: #00bcd4 !important;
 }
+
 input[type=number]::-webkit-inner-spin-button, 
 input[type=number]::-webkit-outer-spin-button { 
     -webkit-appearance: none;
@@ -190,10 +196,37 @@ input[type=number]::-webkit-outer-spin-button {
 /* style for minutes*/
 .fallback {
 	background-color: rgba(0, 0, 0, 0.2);
-	z-index: 998;
+	z-index: 900;
+	overflow-y: auto;
 }
+
 .forEntityType {
 	width: 60% !important;
 	margin-left: 10px !important;
-	font-size: 0.8em;
+	font-size: 0.85em;
+}
+
+.forTextAreaEntry {
+	color: #5F5F5F !important;
+	font-size: 0.85em !important;
+	height: auto !important;
+}
+
+.searchBtn {
+	border: 0;
+	background: transparent;
+	font-size: 1.2em;
+	padding: 0;
+	cursor: pointer;
+	color: #5e5e5e;
+}
+
+.searchBtn:hover {
+	color: #17BFBF;
+}
+
+#contigencyModal {
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: 950;
+	overflow-y: auto;
 }
