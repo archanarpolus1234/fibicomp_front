@@ -53,6 +53,7 @@ body {
 .modalFallBack {
 	background-color: rgba(0, 0, 0, 0.4);
 	z-index: 998;
+	overflow-y: auto;
 }
 
 .modal-session {
@@ -1470,6 +1471,7 @@ a:hover {
 	display: table-cell;
 	padding: 10px 5px;
 	text-align: left;
+	vertical-align: middle;
 }
 
 .tablelayout>li td {

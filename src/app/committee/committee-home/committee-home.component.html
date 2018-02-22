@@ -252,7 +252,7 @@
 							<div class="inputTxtCover">
 								<div class="row">
 									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
-										<label><span class="mandatory">*&nbsp;</span>Date</label> <input
+										<label><span class="mandatory">*&nbsp;</span>Start Date</label> <input
 											[owlDateTimeTrigger]="strdt" [owlDateTime]="strdt"
 											[min]="today"
 											[(ngModel)]="result.scheduleData.scheduleStartDate"
@@ -268,7 +268,7 @@
 											[owlDateTime]="strTime" [(ngModel)]="displayTime"
 											class="committeeBox text-border-padding" /> <span
 											class="fa fa-clock-o fa-large" [owlDateTimeTrigger]="strTime"></span>
-										<owl-date-time #strTime [pickerType]="'timer'"
+										<owl-date-time #strTime [pickerType]="'timer'" [hour12Timer]=true
 											[pickerMode]="'dialog'"></owl-date-time>
 									</div>
 									<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">

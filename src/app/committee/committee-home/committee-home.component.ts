@@ -687,7 +687,7 @@ export class CommitteeHomeComponent implements OnInit {
     filterSchedule() {
         if ( this.result.scheduleData.filterStartDate > this.result.scheduleData.filerEndDate ) {
             this.isFilterDatePrevious = true;
-            this.filterValidationMessage = "* Filter can not be applied with a start date after the end date";
+            this.filterValidationMessage = "* Please ensure that the To : Date is greater than or equal to the From : Date.";
         } else {
             this.isFilterDatePrevious = false;
         }
