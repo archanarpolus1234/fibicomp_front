@@ -1,27 +1,27 @@
-<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+<div  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 	<div class="row">
 		<div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 		</div>
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+		<div *ngIf="result" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 			<div>
 				<h4 class="borderBoxHeading">
 					<div class="row">
-						<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-							KC IRB 1 #91 Meeting 07/20/2010</div>
+						<div  class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
+							{{this.result.committeeSchedule.committeeName}} #{{this.result.committeeSchedule.committeeId}} Meeting {{this.result.committeeSchedule.meetingDate}}</div>
 						<div
 							class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
-							Last Agenda Generated : 05/15/2010</div>
+							Last Agenda Generated : 01/15/2017</div>
 					</div>
 				</h4>
 				<div class="borderBox">
 					<table class="table tableSkin grid2">
 						<tbody>
 							<tr>
-								<td><label> Schedule Date</label><br>07/20/2010</td>
-								<td><label>Meeting Date</label><br></td>
-								<td><label>Status</label><br>Scheduled</td>
-								<td><label>Place</label><br>EHOB 341</td>
-								<td><label>Time</label><br>01:00 PM</td>
+								<td><label> Schedule Date</label><br>{{this.result.committeeSchedule.scheduledDate}}</td>
+								<td><label>Meeting Date</label><br>{{this.result.committeeSchedule.meetingDate}}</td>
+								<td><label>Status</label><br>{{this.result.committeeSchedule.scheduleStatus.description}}</td>
+								<td><label>Place</label><br>{{this.result.committeeSchedule.place}}</td>
+								<td><label>Time</label><br>{{this.result.committeeSchedule.time}}</td>
 
 							</tr>
 							<tr>

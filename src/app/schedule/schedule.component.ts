@@ -7,7 +7,6 @@ import { ScheduleConfigurationService } from '../common/schedule-configuration.s
 @Component( {
     selector: 'app-schedule-component',
     templateUrl: './schedule.component.html',
-    providers: [ScheduleService, ScheduleConfigurationService],
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
 } )
 export class ScheduleComponent implements OnInit {
@@ -23,7 +22,7 @@ export class ScheduleComponent implements OnInit {
         this.scheduleService.loadScheduleData( this.scheduleId ).
             subscribe( data => {
                 this.result = data;
-                this.scheduleConfigurationService.changeSceduleData( this.result );
+                this.scheduleConfigurationService.changeScheduleData( this.result );
             } );
     }
 
