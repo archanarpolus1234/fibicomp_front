@@ -11,21 +11,21 @@
                           <th title="">Submission Date</th>
                           <th title="">Action</th>
                       </tr>
-                      <tr >
-                          <td>1000911157</td>
-                          <td>PAULETTE SMOCK</td>
-                          <td>Test Protocol Title</td>
-                          <td>Initial Protocol Application for Approval</td>
-                          <td>Complaint</td>
-                          <td>Full</td>
-                          <td>Submitted to Committee</td>
-                          <td>01/02/2019</td>
+                      <tr *ngFor="let protocolsubm of this.result?.committeeSchedule?.protocolSubmissions">
+                          <td>{{protocolsubm.protocolNumber}}</td>
+                          <td>{{protocolsubm.piPersonName}}</td>
+                          <td>{{protocolsubm.protocolTitle}}</td>
+                          <td>{{protocolsubm.protocolSubmissionType.description}}</td>
+                          <td>{{protocolsubm.qualifierType.description}}</td>
+                          <td>{{protocolsubm.protocolReviewType.description}}</td>
+                          <td>{{protocolsubm.submissionStatus.description}}</td>
+                          <td>{{protocolsubm.submissionDate}}</td>
                           <td>
                           <ul class="actionButtonGroup"><li>
-                          &nbsp;&nbsp;<a title="Open Protocol" href="#"><i class="fa fa-eye"></i></a>
+                          &nbsp;&nbsp;<a title="Open {{protocolsubm.protocolNumber}}" [href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+protocolsubm.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i class="fa fa-eye"></i></a>
                           </li></ul>
                           </td>
                       </tr>
-
                   </table>
               </div>
+              

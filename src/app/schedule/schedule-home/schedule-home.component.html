@@ -7,7 +7,7 @@
 				<h4 class="borderBoxHeading">
 					<div class="row">
 						<div  class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
-							{{this.result.committeeSchedule.committeeName}} #{{this.result.committeeSchedule.committeeId}} Meeting {{this.result.committeeSchedule.meetingDate}}</div>
+							{{this.result?.committeeSchedule?.committeeName}} # {{this.result?.committeeSchedule?.committeeId}} Meeting {{this.result?.committeeSchedule?.meetingDate}}</div>
 						<div
 							class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
 							Last Agenda Generated : 01/15/2017</div>
@@ -17,20 +17,20 @@
 					<table class="table tableSkin grid2">
 						<tbody>
 							<tr>
-								<td><label> Schedule Date</label><br>{{this.result.committeeSchedule.scheduledDate}}</td>
-								<td><label>Meeting Date</label><br>{{this.result.committeeSchedule.meetingDate}}</td>
-								<td><label>Status</label><br>{{this.result.committeeSchedule.scheduleStatus.description}}</td>
-								<td><label>Place</label><br>{{this.result.committeeSchedule.place}}</td>
-								<td><label>Time</label><br>{{this.result.committeeSchedule.time}}</td>
-
+								<td><label> Schedule Date</label><br>{{this.result?.committeeSchedule?.scheduledDate}}</td>
+								<td><label>Meeting Date</label><br>{{this.result?.committeeSchedule?.meetingDate}}</td>
+								<td><label>Status</label><br>{{this.result?.committeeSchedule?.scheduleStatus?.description}}</td>
+								<td><label>Place</label><br>{{this.result?.committeeSchedule?.place}}</td>
+								<td><label>Time</label><br>{{this.result?.committeeSchedule?.time | date:'shortTime'}}</td>
+								
 							</tr>
 							<tr>
-								<td><label>Submission Deadline</label><br>07/17/2010</td>
-								<td><label>Max Protocols</label><br>22</td>
+								<td><label>Submission Deadline</label><br>{{this.result?.committeeSchedule?.protocolSubDeadline}}</td>
+								<td><label>Max Protocols</label><br>{{this.result?.committeeSchedule?.maxProtocols}}</td>
 
-								<td><label>Start Time</label><br>12:00 AM</td>
-								<td><label>End Time</label><br>12:00 AM</td>
-								<td><label>Available to reviewers</label><br>No</td>
+								<td><label>Start Time</label><br>{{this.result?.committeeSchedule?.startTime | date:'shortTime'}}</td>
+								<td><label>End Time</label><br>{{this.result?.committeeSchedule?.endTime | date:'shortTime'}}</td>
+								<td><label>Available to reviewers</label><br>{{this.result?.committeeSchedule?.availableToReviewers}}</td>
 							</tr>
 							<tr>
 								<td colspan="8"><label>Comments</label><br></td>
