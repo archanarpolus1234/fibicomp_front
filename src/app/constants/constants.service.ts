@@ -39,6 +39,8 @@ export class Constants {
     saveCommitteeMembersExpertise:string;
     updateMemberRoles:string;
     loadScheduleData: string;
+    addOtherActions: string;
+    deleteOtherActions: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -168,6 +170,14 @@ export class Constants {
         this.loadScheduleData = '/loadScheduleById';
       //this.loadScheduleData = 'http://demo.fibiweb.com/fibi-comp/loadScheduleById';
         //this.loadScheduleData = 'http://192.168.1.76:8080/fibi-comp/loadScheduleById';
+        
+        this.addOtherActions = '/addOtherActions';
+        //this.addOtherActions = 'http://demo.fibiweb.com/fibi-comp/addOtherActions';
+          //this.addOtherActions = 'http://192.168.1.76:8080/fibi-comp/addOtherActions';
+        
+        this.deleteOtherActions = '/deleteOtherActions';
+        //this.deleteOtherActions = 'http://demo.fibiweb.com/fibi-comp/deleteOtherActions';
+          //this.deleteOtherActions = 'http://192.168.1.76:8080/fibi-comp/deleteOtherActions';
         
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
