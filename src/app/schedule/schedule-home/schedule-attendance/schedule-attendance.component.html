@@ -46,43 +46,20 @@
                        <th id="scheduleCommentHeader">Comments</th>
                    </tr>
                </thead>
-               <tbody>                   
-                   <tr>
-                       <td>1</td>
-                       <td> Della Woods</td>
-                       <td></td>
-                       <td>
-                           <ul class="actionButtonGroup statusIndicator">
-                               <li><a href="#" class="present current" title="Present"><i class="fa fa-check-circle"></i></a></li>
-                               <li><a><i id="dellaComment" class="fa fa-comment-o" aria-hidden="true"></i></a></li>
+               <tbody>  
+               <tr *ngFor="let member of this.result?.memberAbsents;let i = index;">
+               		<td>{{i+1}}</td>
+               		<td>{{member.personName}}</td>
+               		<td>{{member.alternateFor}}</td>
+               		<td>
+               			<ul class="actionButtonGroup statusIndicator">
+                               <li><a href="#" (click)="markAttendance($event,i)" [ngClass]="{'present':(presentFlag == true && attendanceIndex == i), 'absent':(presentFlag == false && attendanceIndex == i)}" class="current" title="Absent"><i class="fa fa-check-circle"></i></a></li>
+                               <li><a href="#" (click)="showComment($event,i)"><i id="dellaComment" class="fa fa-comment-o" aria-hidden="true"></i></a></li>
                            </ul>
-                       </td>
-                       <td id="dellaCommentBox">Dellas comment</td>
-                   </tr>
-                   <tr>
-                       <td>2</td>
-                       <td><i class="fa fa-user-o" aria-hidden="true"></i>  Peter Sam</td>
-                       <td></td>
-                       <td>
-                           <ul class="actionButtonGroup statusIndicator">
-                               <li><a href="#" class="present " title="Present"><i class="fa fa-check-circle"></i></a></li>
-                               <li><a><i id="peterSamComment" class="fa fa-comment-o" aria-hidden="true"></i></a></li>
-                           </ul>
-                       </td>
-                       <td id="peterSamCommentBox">Peter's comments</td>
-                   </tr>
-                   <tr>
-                       <td>3</td>
-                       <td><i class="fa fa-user-circle" aria-hidden="true"></i>  Inez Chew</td>
-                       <td>Peter Sam</td>
-                       <td>
-                           <ul class="actionButtonGroup statusIndicator">
-                               <li><a href="#" class="present current" title="Present"><i class="fa fa-check-circle"></i></a></li>
-                               <li><a><i id="InezChewComment" class="fa fa-comment-o" aria-hidden="true"></i></a></li> 
-                           </ul>
-                       </td>
-                       <td id="InezChewCommentBox">Member was present from the begining.</td>
-                   </tr>
+               		</td>
+               		<!-- <td>{{member.comments}}</td> -->
+               		<td *ngIf="(showCommentFlag == true && commentsIndex == i)">Comments</td>
+               </tr>  
                </tbody>
            </table>
        </div>

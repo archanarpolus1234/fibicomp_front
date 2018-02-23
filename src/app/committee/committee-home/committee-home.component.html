@@ -208,8 +208,8 @@
 								</td>
 								<td>
 									<ul class="actionButtonGroup">
-										<li><a title="Open" *ngIf="!editSchedule[i] == true"
-											href="#" routerLink='/schedule'><i class="fa fa-eye"></i></a></li>
+										<li><a title="Open {{committeScheduleData.scheduleId}}" *ngIf="!editSchedule[i] == true"
+											href="#" routerLink='/schedule' [queryParams]="{'scheduleId':committeScheduleData.scheduleId}"><i class="fa fa-eye"></i></a></li>
 										<li><a href="#" *ngIf="!editSchedule[i] == true"
 											(click)="editScheduleData($event, committeScheduleData.scheduledDate, committeScheduleData.scheduleStatus.description, committeScheduleData.place, committeScheduleData.time, i)"><i
 												class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
