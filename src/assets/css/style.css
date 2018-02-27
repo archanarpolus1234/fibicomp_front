@@ -1620,18 +1620,22 @@ a:hover {
 	color: red;
 }
 
-:host> >> .completer-dropdown {
+:host>>> .completer-dropdown {
 	width: 100%;
 	max-height: 150px !important;
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
 
-:host> >> .completer-input {
+:host>>> .completer-input {
 	border-radius: 20px;
 	border: 1px #DEDEDE solid;
 	width: 100%;
 	padding-right: 35px;
 	line-height: 27px;
 	padding-left: 10px;
+}
+:host>>> .drop-zone {
+	height:200px !important;
+	border: 2px dotted #00bcd4 !important;
 }

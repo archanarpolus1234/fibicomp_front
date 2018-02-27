@@ -3,6 +3,7 @@ import { AwardSummaryService } from './award-home/award-summary.service';
 import { ActivatedRoute } from '@angular/router';
 import { AwardHierarchyService } from '../award/award-hierarchy/award-hierarchy.service';
 import { Constants } from '../constants/constants.service';
+import {AwardconfigurationService} from '../award/awardconfiguration.service';
 
 @Component( {
     templateUrl: 'award.component.html',
@@ -22,7 +23,7 @@ export class AwardComponent {
     outputPath: string;
     userName: string;
 
-    constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants ) {
+    constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, private awardconfigurationService: AwardconfigurationService ) {
         this.outputPath = this.constant.outputPath;
     }
 
@@ -34,7 +35,12 @@ export class AwardComponent {
         this.awardId = this.route.snapshot.queryParams['awardId'];
         this.awardSummaryService.loadAwardSummary( this.awardId ).subscribe( data => {
             this.result = data || [];
+            console.log("calling backend ");
             if ( this.result != null ) {
+                this.awardconfigurationService.changeAwardData(this.result);
+                this.awardconfigurationService.currentAwardData.subscribe(data=>{
+                    console.log("passing data:",data);
+                });
                 this.userName = this.result.awardPersons[0].user_name;
                 this.awardNumber = this.result.awardDetails[0].award_number;
                 this.accountNumber = this.result.awardDetails[0].account_number;

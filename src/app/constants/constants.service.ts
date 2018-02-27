@@ -40,6 +40,8 @@ export class Constants {
     updateMemberRoles:string;
     loadScheduleData: string;
     addOtherActions: string;
+    addScheduleAttachment: string;
+    deleteScheduleAttachment: string;
     deleteOtherActions: string;
     updateSchedule: string;
     addScheduleMinuteUrl: string;
@@ -193,6 +195,14 @@ export class Constants {
         this.deleteScheduleMinuteUrl = '/deleteScheduleMinute';
         //this.deleteScheduleMinuteUrl = 'http://demo.fibiweb.com/fibi-comp/deleteScheduleMinute';
           //this.deleteScheduleMinuteUrl = 'http://192.168.1.76:8080/fibi-comp/deleteScheduleMinute';
+        
+        this.addScheduleAttachment = '/addScheduleAttachment';
+        //this.addScheduleAttachment = 'http://demo.fibiweb.com/fibi-comp/addScheduleAttachment';
+          //this.addScheduleAttachment = 'http://192.168.1.76:8080/fibi-comp/addScheduleAttachment';
+        
+        this.deleteScheduleAttachment = '/deleteScheduleAttachment';
+        //this.deleteScheduleAttachment = 'http://demo.fibiweb.com/fibi-comp/deleteScheduleAttachment';
+          //this.deleteScheduleAttachment = 'http://192.168.1.76:8080/fibi-comp/deleteScheduleAttachment';
         
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';

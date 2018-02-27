@@ -15,6 +15,8 @@ export class ScheduleOtherActionsComponent implements OnInit {
     committeeScheduleActItemsObject: any = {};
     otherActionsDescription: string = '';
     scheduleId: number;
+    tempOtherAction:any={};
+    showPopup:boolean=false;
     currentUser = localStorage.getItem( "currentUser" );
 
     constructor( public scheduleOtherActionsService: ScheduleOtherActionsService, public activatedRoute: ActivatedRoute, public scheduleService: ScheduleService, public scheduleConfigurationService: ScheduleConfigurationService ) { }
@@ -69,12 +71,17 @@ export class ScheduleOtherActionsComponent implements OnInit {
         this.otherActionsDescription = ' ';
     }
 
-    deleteOtherActions( event: any, otherAction ) {
-        event.preventDefault();
-        this.scheduleOtherActionsService.deleteOtherActions( this.result.committee.committeeId, this.scheduleId, otherAction.commScheduleActItemsId ).subscribe( data => {
+    deleteOtherActions(  ) {
+        this.scheduleOtherActionsService.deleteOtherActions( this.result.committee.committeeId, this.scheduleId, this.tempOtherAction.commScheduleActItemsId ).subscribe( data => {
             var temp: any = {};
             temp = data;
             this.result.committeeSchedule.committeeScheduleActItems = temp.committeeSchedule.committeeScheduleActItems;
         });
+    }
+    
+    tempSave(event: any, otherAction) {
+        event.preventDefault();
+        this.showPopup=true;
+        this.tempOtherAction=otherAction;
     }
 }

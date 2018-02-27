@@ -14,6 +14,7 @@ import { Ng2CompleterModule } from 'ng2-completer';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DatePipe } from '@angular/common';
+import { FileDropModule } from 'ngx-file-drop';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -74,6 +75,8 @@ import { ScheduleService } from './schedule/schedule.service';
 import { ScheduleConfigurationService } from './common/schedule-configuration.service';
 import { ScheduleOtherActionsService } from './schedule/schedule-home/schedule-other-actions/schedule-other-actions.service';
 import { ScheduleHomeService } from './schedule/schedule-home/schedule-home.service';
+import { AwardconfigurationService } from '../app/award/awardconfiguration.service';
+import { ScheduleAttachmentsService } from '../app/schedule/schedule-home/schedule-attachments/schedule-attachments.service';
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -141,14 +144,15 @@ let appRoutes = [
         Ng2CompleterModule,
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
+        FileDropModule
     ],
     providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
-        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService,ScheduleConfigurationService,ScheduleOtherActionsService,
-	    ScheduleHomeService],
+        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService, ScheduleConfigurationService, ScheduleOtherActionsService,
+        ScheduleHomeService, AwardconfigurationService, ScheduleAttachmentsService],
     bootstrap: [AppComponent]
 } )
 
