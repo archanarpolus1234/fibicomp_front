@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AwardSummaryService } from './award-summary.service';
 import { ActivatedRoute } from '@angular/router';
 import { AwardComponent } from '../award.component';
+
+import {AwardconfigurationService} from '../../award/awardconfiguration.service';
+
 @Component( {
     selector: 'app-award-home',
     templateUrl: './award-home.component.html',
@@ -43,13 +46,12 @@ export class AwardHomeComponent implements OnInit {
     public pi_coiTrigger = false;
     public kpTrigger = false;
 
-    constructor( public awardComponent: AwardComponent, public awardSummaryService: AwardSummaryService, public route: ActivatedRoute ) {
+    constructor( public awardComponent: AwardComponent, public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, private awardconfigurationService: AwardconfigurationService ) {
     }
 
     ngOnInit() {
-        this.awardComponent.ngOnInit();
         this.awardId = this.route.snapshot.queryParams['awardId'];
-        this.awardSummaryService.loadAwardSummary( this.awardId ).subscribe( data => {
+            this.awardconfigurationService.currentAwardData.subscribe(data=>{
             this.result = data || [];
             if ( this.result != null ) {
                 if ( this.result.awardDetails.length == 0 ) {
@@ -70,7 +72,6 @@ export class AwardHomeComponent implements OnInit {
                 if ( this.result.awardSpecialReviews.length == 0 ) {
                     this.noAwardSpecialReviews = true;
                 }
-
                 this.activityType = this.result.awardDetails[0].activity_type;
                 this.awardNumber = this.result.awardDetails[0].award_number;
                 this.awardType = this.result.awardDetails[0].award_type;
@@ -94,7 +95,6 @@ export class AwardHomeComponent implements OnInit {
                         this.pi_coiTrigger = true;
                     }
                     else if ( this.awardPersons[i].contact_role_code == 'KP' ) {
-
                         this.kpTrigger = true;
                     }
                 }
