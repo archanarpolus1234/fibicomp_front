@@ -73,6 +73,7 @@ import { CommitteeMemberNonEmployeeElasticService } from './elasticSearch/commit
 import { ScheduleService } from './schedule/schedule.service';
 import { ScheduleConfigurationService } from './common/schedule-configuration.service';
 import { ScheduleOtherActionsService } from './schedule/schedule-home/schedule-other-actions/schedule-other-actions.service';
+import { ScheduleHomeService } from './schedule/schedule-home/schedule-home.service';
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -146,7 +147,8 @@ let appRoutes = [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
-        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService,ScheduleConfigurationService,ScheduleOtherActionsService],
+        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService,ScheduleConfigurationService,ScheduleOtherActionsService,
+	    ScheduleHomeService],
     bootstrap: [AppComponent]
 } )
 

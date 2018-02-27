@@ -13,6 +13,7 @@ export class ScheduleService {
     constructor( private http: Http, private constant: Constants ) {
 
     }
+
     public loadScheduleData( scheduleId: number ): Observable<JSON> {
         var params = {
                 scheduleId:scheduleId
@@ -23,5 +24,25 @@ export class ScheduleService {
                     console.error( error.message || error );
                     return Observable.throw( error.message || error )
                 } );
+    }
+
+    saveMinuteData( minuteData: Object ): Observable<JSON> {
+        return this.http.post( this.constant.addScheduleMinuteUrl, minuteData )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+    
+    deleteMinuteData( minuteData: Object ): Observable<JSON> {
+        return this.http.post( this.constant.deleteScheduleMinuteUrl, minuteData )
+            .map( res => res.json()
+            )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
     }
 }

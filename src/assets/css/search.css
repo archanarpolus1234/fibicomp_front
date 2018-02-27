@@ -208,7 +208,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 .forTextAreaEntry {
 	color: #5F5F5F !important;
-	font-size: 0.85em !important;
 	height: auto !important;
 }
 
@@ -228,5 +227,11 @@ input[type=number]::-webkit-outer-spin-button {
 #contigencyModal {
 	background-color: rgba(0, 0, 0, 0.2);
 	z-index: 950;
+	overflow-y: scroll;
+}
+
+#skippedSchedules {
+	background-color: rgba(0, 0, 0, 0.2);
+	z-index: 960;
 	overflow-y: auto;
 }

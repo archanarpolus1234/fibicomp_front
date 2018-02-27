@@ -201,10 +201,11 @@
 									[ngClass]="(!editSchedule[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
 									[disabled]="!editSchedule[i] == true"
 									[(ngModel)]="committeScheduleData.place"></td>
-								<td><span>{{ committeScheduleData.time |
-										date:'shortTime' }}</span> <!-- <input *ngIf="!editSchedule[i] == false" [owlDateTimeTrigger]="schdlTm" [owlDateTime]="schdlTm"
-											[(ngModel)]="committeScheduleData.time" class="committeeBox text-border-padding" />
-										<owl-date-time #schdlTm [pickerType]="'timer'" [pickerMode]="'dialog'"></owl-date-time> -->
+								<td><span *ngIf="!editSchedule[i] == true">{{ committeScheduleData.time | date:'shortTime' }}</span>
+									<span *ngIf="!editSchedule[i] == false"> <input *ngIf="!editSchedule[i] == false" [owlDateTimeTrigger]="schdlTm" [owlDateTime]="schdlTm"
+											[(ngModel)]="scheduleTime" class="committeeBox text-border-padding" />
+										<owl-date-time #schdlTm [pickerType]="'timer'" [pickerMode]="'dialog'" [hour12Timer]=true></owl-date-time>
+									</span>
 								</td>
 								<td>
 									<ul class="actionButtonGroup">
@@ -329,9 +330,7 @@
 													</li>
 												</ul>
 												<ul class="tablelayout">
-													<li><span *ngIf="isDatePrevious" class="mandatory">
-															{{scheduleValidationMessage}}</span> <span
-														*ngIf="isMandatoryFilled == false" class="mandatory">
+													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
 															{{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
@@ -363,9 +362,7 @@
 															[pickerMode]="'dialog'"></owl-date-time></li>
 												</ul>
 												<ul class="tablelayout">
-													<li><span *ngIf="isDatePrevious" class="mandatory">
-															{{scheduleValidationMessage}}</span> <span
-														*ngIf="isMandatoryFilled == false" class="mandatory">
+													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
 															{{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
@@ -416,9 +413,7 @@
 															[pickerMode]="'dialog'"></owl-date-time></li>
 												</ul>
 												<ul class="tablelayout">
-													<li><span *ngIf="isDatePrevious" class="mandatory">
-															{{scheduleValidationMessage}}</span> <span
-														*ngIf="isMandatoryFilled == false" class="mandatory">
+													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
 															{{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
@@ -479,9 +474,7 @@
 															[pickerMode]="'dialog'"></owl-date-time></li>
 												</ul>
 												<ul class="tablelayout">
-													<li><span *ngIf="isDatePrevious" class="mandatory">
-															{{scheduleValidationMessage}}</span> <span
-														*ngIf="isMandatoryFilled == false" class="mandatory">
+													<li><span *ngIf="isDatePrevious || isStartDateBeforeToday || !isMandatoryFilled" class="mandatory">
 															{{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
@@ -493,8 +486,7 @@
 													<li>Do not repeat this event.</li>
 												</ul>
 												<ul class="tablelayout">
-													<li><span *ngIf="isMandatoryFilled == false"
-														class="mandatory"> {{scheduleValidationMessage}}</span></li>
+													<li><span *ngIf="isStartDateBeforeToday || !isMandatoryFilled" class="mandatory"> {{scheduleValidationMessage}}</span></li>
 												</ul>
 											</div>
 										</div>
@@ -507,7 +499,7 @@
 								data-dismiss="modal">Close</button>
 							<button type="button" class="btnSkin btnSkinPrimary"
 								data-toggle="modal"
-								(click)="generateSchedule()">Generate Schedules</button>
+								(click)="generateSchedule($event)">Generate Schedules</button>
 						</div>
 					</div>
 				</div>

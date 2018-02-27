@@ -119,10 +119,11 @@ export class CommitteeHomeComponent implements OnInit {
     conflictDates: any = [];
     filterStartDate: string;
     filerEndDate: string;
-    today: any = new Date();
+    today: any;
     scheduleValidationMessage: string;
     filterValidationMessage: string;
     isDatePrevious: boolean = true;
+    isStartDateBeforeToday: boolean = false;
     dateTime: { time: string, meridiem: string };
     displayTime: any = {};
     isMandatoryFilterFilled: boolean = true;
@@ -135,6 +136,7 @@ export class CommitteeHomeComponent implements OnInit {
     isCommitteeDetailsEditMode = false;
     isAreaOfResearchEditMode = false;
     scheduleEditModeIndex: number;
+    scheduleTime: any;
 
     constructor( public route: ActivatedRoute, private datePipe: DatePipe, public router: Router, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, private committeeConfigurationService: CommitteeConfigurationService ) {
         this.committeeConfigurationService.currentMode.subscribe( data => {
@@ -415,6 +417,11 @@ export class CommitteeHomeComponent implements OnInit {
         if ( this.showGenerateSchedule == false ) {
             this.showGenerateSchedule = true;
         }
+        var q = new Date();
+        var m = q.getMonth();
+        var d = q.getDate();
+        var y = q.getFullYear();
+        this.today = new Date(y,m,d);
         this.result.scheduleData = {};
         this.result.scheduleData.time = {};
         this.result.scheduleData.dailySchedule = {};
@@ -431,6 +438,7 @@ export class CommitteeHomeComponent implements OnInit {
         this.displayTime = null;
         this.isDatePrevious = false;
         this.isMandatoryFilled = true;
+        this.isStartDateBeforeToday = false;
         this.optionDay = 'XDAY';
     }
 
@@ -493,7 +501,8 @@ export class CommitteeHomeComponent implements OnInit {
         }, 100 );
     }
 
-    generateSchedule() {
+    generateSchedule(e) {
+        e.preventDefault();
         this.result.scheduleData.time.time = this.datePipe.transform( this.displayTime, 'hh:mm' );
         this.result.scheduleData.time.meridiem = this.datePipe.transform( this.displayTime, 'aa' );
         this.sendScheduleRequestData = {};
@@ -502,19 +511,25 @@ export class CommitteeHomeComponent implements OnInit {
         this.sendScheduleRequestData.scheduleData.monthlySchedule = {};
         this.sendScheduleRequestData.scheduleData.yearlySchedule = {};
         this.sendScheduleRequestData.currentUser = localStorage.getItem( "currentUser" );
-        this.sendScheduleRequestData.committee = this.result.committee;
+        this.sendScheduleRequestData.committee = this.result.committee; 
+        if ( this.result.scheduleData.scheduleStartDate < this.today ) {
+            this.isStartDateBeforeToday = true;
+            this.scheduleValidationMessage = "* Please ensure start date is today or upcomming days"
+        } else {
+            this.isStartDateBeforeToday = false;
+        }
         switch ( this.result.scheduleData.recurrenceType ) {
             case 'DAILY': this.result.scheduleData.dailySchedule.dayOption = this.optionDay;
                 this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
                 if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.dailySchedule.scheduleEndDate ) {
                     this.isDatePrevious = true;
-                    this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
+                    this.scheduleValidationMessage = "* Please ensure the end date is after the start date";
                 } else {
                     this.isDatePrevious = false;
                 }
                 if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.dailySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
                     this.isMandatoryFilled = false;
-                    this.scheduleValidationMessage = "Please fill the mandatory fields.";
+                    this.scheduleValidationMessage = "* Please fill the mandatory fields.";
                 } else {
                     this.isMandatoryFilled = true;
                 }
@@ -523,13 +538,13 @@ export class CommitteeHomeComponent implements OnInit {
                 this.sendScheduleRequestData.scheduleData.weeklySchedule.daysOfWeek = this.selectedOptions;
                 if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.weeklySchedule.scheduleEndDate ) {
                     this.isDatePrevious = true;
-                    this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
+                    this.scheduleValidationMessage = "* Please ensure the end date is after the start date";
                 } else {
                     this.isDatePrevious = false;
                 }
                 if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.weeklySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
                     this.isMandatoryFilled = false;
-                    this.scheduleValidationMessage = "Please fill the mandatory fields.";
+                    this.scheduleValidationMessage = "* Please fill the mandatory fields.";
                 } else {
                     this.isMandatoryFilled = true;
                 }
@@ -538,13 +553,13 @@ export class CommitteeHomeComponent implements OnInit {
                 this.sendScheduleRequestData.scheduleData.monthlySchedule.monthOption = this.monthOptionDay;
                 if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.monthlySchedule.scheduleEndDate ) {
                     this.isDatePrevious = true;
-                    this.scheduleValidationMessage = "You can not enter a start date previous to the end date";
+                    this.scheduleValidationMessage = "* Please ensure the end date is after the start date";
                 } else {
                     this.isDatePrevious = false;
                 }
                 if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.monthlySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
                     this.isMandatoryFilled = false;
-                    this.scheduleValidationMessage = "Please fill the mandatory fields.";
+                    this.scheduleValidationMessage = "* Please fill the mandatory fields.";
                 } else {
                     this.isMandatoryFilled = true;
                 }
@@ -553,7 +568,7 @@ export class CommitteeHomeComponent implements OnInit {
                 this.sendScheduleRequestData.scheduleData.yearlySchedule.yearOption = this.yearOption;
                 if ( this.result.scheduleData.scheduleStartDate > this.result.scheduleData.yearlySchedule.scheduleEndDate ) {
                     this.isDatePrevious = true;
-                    this.scheduleValidationMessage = "* You can not enter a start date previous to the end date";
+                    this.scheduleValidationMessage = "* Please ensure the end date is after the start date";
                 } else {
                     this.isDatePrevious = false;
                 }
@@ -574,8 +589,7 @@ export class CommitteeHomeComponent implements OnInit {
                 break;
         }
 
-        if ( this.isDatePrevious == false && this.showGenerateSchedule == true && this.isMandatoryFilled == true ) {
-            this.showGenerateSchedule = false;
+        if ( this.isDatePrevious == false && this.isStartDateBeforeToday == false  && this.isMandatoryFilled == true ) {
             this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).subscribe( data => {
                 this.result = data || [];
                 this.filterStartDate = this.result.scheduleData.filterStartDate;
@@ -589,9 +603,12 @@ export class CommitteeHomeComponent implements OnInit {
                 this.result.scheduleData.yearlySchedule = {};
                 this.result.scheduleData.filterStartDate = this.filterStartDate;
                 this.result.scheduleData.filerEndDate = this.filerEndDate;
+                /*if ( this.conflictDates.length != 0 || this.conflictDates != undefined || this.isConflictDates == false ) {
+                    this.isConflictDates = true;
+                } intentionally commented for future use Shaji P*/
+                this.showGenerateSchedule = false;
             } );
         }
-
     }
 
     editScheduleData( e, date, status, place, time, i ) {
@@ -599,6 +616,7 @@ export class CommitteeHomeComponent implements OnInit {
         if ( this.isScheduleListItemEditMode == true ) {
             alert( "You are editing a schedule data with serial number : " + (this.scheduleEditModeIndex+1) );
         } else {
+            this.scheduleTime = new Date(time);
             this.scheduleEditModeIndex = parseInt(i);
             this.isScheduleListItemEditMode = true;
             this.editSchedule[i] = !this.editSchedule[i];
@@ -648,14 +666,17 @@ export class CommitteeHomeComponent implements OnInit {
         this.editSchedule[i] = !this.editSchedule[i];
         this.sendScheduleRequestData = {};
         scheduleObject.viewTime = {};
-        scheduleObject.viewTime.time = this.datePipe.transform( scheduleObject.time, 'hh:mm' );
-        scheduleObject.viewTime.meridiem = this.datePipe.transform( scheduleObject.time, 'aa' );
+        scheduleObject.viewTime.time = this.datePipe.transform( this.scheduleTime, 'hh:mm' );
+        scheduleObject.viewTime.meridiem = this.datePipe.transform( this.scheduleTime, 'aa' );
         scheduleObject.scheduleStatus.updateTimestamp = new Date();
         scheduleObject.scheduleStatus.updateUser = localStorage.getItem( "currentUser" );
         this.scheduleStatus.forEach(( value, index ) => {
             if ( value.description == scheduleObject.scheduleStatus.description ) {
+                value.updateTimestamp = new Date();
+                value.updateUser = localStorage.getItem('currentUser');
                 scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
-                scheduleObject.scheduleStatus.scheduleStatusCode = value.scheduleStatusCode;
+                scheduleObject.scheduleStatus = value;
+                this.result.committee.committeeSchedules[i].scheduleStatus.description = value.description;
             }
         } );
         this.sendScheduleRequestData.committeeSchedule = scheduleObject;
