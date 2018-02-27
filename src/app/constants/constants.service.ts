@@ -41,6 +41,9 @@ export class Constants {
     loadScheduleData: string;
     addOtherActions: string;
     deleteOtherActions: string;
+    updateSchedule: string;
+    addScheduleMinuteUrl: string;
+    deleteScheduleMinuteUrl: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -178,6 +181,18 @@ export class Constants {
         this.deleteOtherActions = '/deleteOtherActions';
         //this.deleteOtherActions = 'http://demo.fibiweb.com/fibi-comp/deleteOtherActions';
           //this.deleteOtherActions = 'http://192.168.1.76:8080/fibi-comp/deleteOtherActions';
+        
+        this.updateSchedule = '/updateSchedule';
+        //this.updateSchedule = 'http://demo.fibiweb.com/fibi-comp/updateSchedule';
+        //this.updateSchedule = 'http://192.168.1.76:8080/fibi-comp/updateSchedule';
+
+        this.addScheduleMinuteUrl = '/addCommitteeScheduleMinute';
+        //this.addScheduleMinuteUrl = 'http://demo.fibiweb.com/fibi-comp/addCommitteeScheduleMinute';
+          //this.addScheduleMinuteUrl = 'http://192.168.1.76:8080/fibi-comp/addCommitteeScheduleMinute';
+        
+        this.deleteScheduleMinuteUrl = '/deleteScheduleMinute';
+        //this.deleteScheduleMinuteUrl = 'http://demo.fibiweb.com/fibi-comp/deleteScheduleMinute';
+          //this.deleteScheduleMinuteUrl = 'http://192.168.1.76:8080/fibi-comp/deleteScheduleMinute';
         
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
