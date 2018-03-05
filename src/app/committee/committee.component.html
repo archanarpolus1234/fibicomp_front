@@ -4,7 +4,6 @@
 		<!-- Session handling component -->
 		<app-sessiontimeout> </app-sessiontimeout>
 		<section class="row">
-
 			<div id="myawa"
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
@@ -12,7 +11,6 @@
 			</div>
 			<div
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
-
 				<div class="row">
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label><span class="mandatory">*</span> Id</label> <span><input
@@ -77,13 +75,11 @@
 				(editFlag)="recieveFlag($event)" (modeFlag)="recievemode($event)"
 				[unitName]="result.committee.homeUnitName"
 				[reviewTypes]="result.reviewTypes" [areaList]="areaList"
-				[scheduleStatus]="result.scheduleStatus"
-				#homeComponent></app-committee-home>
+				[scheduleStatus]="result.scheduleStatus" #homeComponent></app-committee-home>
 		</div>
 		<div *ngIf="currentTab =='committee_members'">
 			<app-committee-members></app-committee-members>
 		</div>
-
 		<!-- modal for showing warnings -->
 		<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
 			id="warningModalMain" tabindex="-1" role="dialog"

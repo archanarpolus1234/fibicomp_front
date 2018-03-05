@@ -15,7 +15,7 @@ import { ExpandedViewDataService } from './expanded-view-data-service';
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css']
 } )
 
-export class ExpandedviewComponent implements OnInit/*, OnDestroy*/ {
+export class ExpandedviewComponent implements OnInit {
     awardsheading: string;
     proposalheading: string;
     donutAwardHeading: string;
@@ -80,7 +80,8 @@ export class ExpandedviewComponent implements OnInit/*, OnDestroy*/ {
         if ( this.adminStatus == 'true' ) {
             this.isAdmin = true;
         }
-        if ( localStorage.getItem( 'piechartIndex' ) != null ) {
+        
+        if ( this.piechartIndex != "null" ) { 
             this.expandedViewService.loadExpandedView( localStorage.getItem( 'sponsorCode' ), localStorage.getItem( 'personId' ), localStorage.getItem( 'piechartIndex' ) ).subscribe(
                 data => {
                     this.piechartResult = data || [];
@@ -98,7 +99,7 @@ export class ExpandedviewComponent implements OnInit/*, OnDestroy*/ {
                     }
                 } );
         }
-        if ( localStorage.getItem( 'researchSummaryIndex' ) != null ) {
+        if ( this.summaryIndex != "null" ) { 
             this.expandedViewService.loadExpandedSummaryView( localStorage.getItem( 'personId' ), localStorage.getItem( 'researchSummaryIndex' ) ).subscribe(
                 data => {
                     this.summaryResult = data || [];
@@ -122,7 +123,7 @@ export class ExpandedviewComponent implements OnInit/*, OnDestroy*/ {
                     }
                 } );
         }
-        if ( localStorage.getItem( 'donutChartIndex' ) != null ) {
+        if ( this.donutchartIndex != "null" ) { 
             this.expandedViewService.loadDonutExpandedView( localStorage.getItem( 'sponsorCode' ), localStorage.getItem( 'personId' ), localStorage.getItem( 'donutChartIndex' ) ).subscribe(
                 data => {
                     this.piechartResult = data || [];

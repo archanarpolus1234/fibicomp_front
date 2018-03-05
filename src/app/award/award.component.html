@@ -7,16 +7,12 @@
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<span> MY AWARD</span>
 			</div>
-
 			<div
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
-
 				<div class="row">
 					<div class="col-xl-3 col-lg-6 col-md-10 col-sm-10 col-10">
 						<label>Award#:Account</label> <span>{{awardNumber}}:{{accountNumber}}</span>
 					</div>
-
-
 					<div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
 						<label>Lead Unit</label> <span>{{leadUnitName}}</span>
 					</div>
@@ -51,16 +47,13 @@
 								href="#" (click)="show_current_tab($event,'award_commitments');"><i
 									class="fa fa-handshake-o"></i><span>Commitments</span></a></li>
 							<a class="view_external_link" title="Open {{awardNumber}}"
-								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+result.awardDetails[0].document_number+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">
+								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+this.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">
 								<i class="fa fa-external-link"></i> Open Award
 							</a>
 						</ul>
-
 					</div>
-
 				</div>
 			</div>
-
 		</section>
 		<div *ngIf="currentTab =='award_home'">
 			<app-award-home></app-award-home>

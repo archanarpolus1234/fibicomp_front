@@ -5,8 +5,8 @@ import { CommitteCreateEditService } from '../committee-create-edit.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommitteeConfigurationService } from '../../common/committee-configuration.service'
-import { CommitteeMemberEmployeeElasticService } from '../../elasticSearch/committee-members-employees-elastic-search.service';
-import { CommitteeMemberNonEmployeeElasticService } from '../../elasticSearch/committee-members-nonEmployee-elastic-search.service';
+import { CommitteeMemberEmployeeElasticService } from '../../elastic-search/committee-members-employees-elastic-search.service';
+import { CommitteeMemberNonEmployeeElasticService } from '../../elastic-search/committee-members-nonEmployee-elastic-search.service';
 
 @Component( {
     selector: 'app-committee-members',
@@ -18,7 +18,11 @@ import { CommitteeMemberNonEmployeeElasticService } from '../../elasticSearch/co
 
 export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     memberType;
+    modalMessage=' ';
+    modalTitle=' ';
+    showPopup;
     memberAdded: boolean = false;
+    temptermStartDate='';
     addRole: boolean = false;
     memberRoleCode;
     editRole: boolean = false;
@@ -27,25 +31,26 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     addExpertise: boolean = false;
     editExpertise: boolean = false;
     showMembers: boolean = false;
+    showNonEmployeeMembers: boolean = false;
     showAddMember: boolean = false;
     roleAdded = 0;
-    committeeId;
-    editDetails: boolean = false;
+    committeeId: string;
+    editDetails: boolean = true;
     editClass = "committeeBoxNotEditable";
-    mode;
+    mode: string;
     memberSearchInput: any = {};
     roleSearchInput: any = {};
     expertiseSearchInput: any = {};
-    employeeId;
-    personId;
-    personIdFromService;
-    rolodexIdFromService;
+    employeeId: string;
+    personId: string;
+    personIdFromService: string;
+    rolodexIdFromService: string;
     memberList: any = {};
     memberListtoView: any = {};
     membershipRoleList: any = {};
     membershipRoleListtoView: any = {};
     memberListLoaded: any = {};
-    employeeFlag;
+    employeeFlag: boolean;
     dataServiceMemberList: any = {};
     dataServiceRoleList: any = {};
     dataServiceExpertiseList: any = {};
@@ -60,17 +65,17 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     saveResult: any = {};
     memberRoleObject: any = {};
     memberExpertiseObject: any = {};
-    selectedExpertise;
+    selectedExpertise: string;
     nonEmployeeFlag: boolean = false;
 
-    selectedRole;
-    searchString;
-    hits_source;
-    hits_highlight;
-    first_name;
-    middle_name;
-    last_name;
-    organization;
+    selectedRole: string;
+    searchString: string;
+    hits_source: any[];
+    hits_highlight: string;
+    first_name: string;
+    middle_name: string;
+    last_name: string;
+    organization: string;
     elasticSearchresults: any = [];
     searchTextModel: string;
     changePersonDetails: boolean = false;
@@ -246,14 +251,16 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
     employeeRadioChecked() {
         this.nonEmployeeFlag = false;
+        this.searchTextModel=' ';
     }
 
     nonEmployeeRadioChecked() {
         this.nonEmployeeFlag = true;
+        this.searchTextModel=' ';
     }
 
     showEditDetails() {
-        this.editDetails = !this.editDetails;
+        this.editDetails = true;
         if ( this.editDetails ) {
             this.editClass = 'committeeBox';
         }
@@ -272,22 +279,36 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         }
     }
 
-    saveDetails() {
-        this.editDetails = false;
-        this.memberAdded = false;
-        this.editClass = 'committeeBoxNotEditable';
-        var currentDate = new Date();
-        var currentTime = currentDate.getTime();
-        for ( let member of this.resultLoadedById.committee.committeeMemberships ) {
-            member.updateUser = this.currentUser;
-            member.updateTimestamp = currentTime;
+    saveDetails(member) {
+        if(member.termStartDate==null || member.termEndDate==null) {
+            this.showPopup=true;
+            this.editDetails=true;
+            this.modalMessage="Term starting and ending date must be filled";
+            this.modalTitle="Unfilled fields";
+        } else {
+            this.showPopup=false;
+            this.editDetails = false;
+            this.memberAdded = false;
+            this.editClass = 'committeeBoxNotEditable';
+            var currentDate = new Date();
+            var currentTime = currentDate.getTime();
+            for ( let member of this.resultLoadedById.committee.committeeMemberships ) {
+                member.updateUser = this.currentUser;
+                member.updateTimestamp = currentTime;
+            }
+            this.sendMemberObject = {};
+            this.sendMemberObject.committee = this.resultLoadedById.committee;
+            this.committeCreateEditService.saveCommitteeMembers( this.sendMemberObject ).subscribe( data => {
+                this.saveResult = data;
+                this.resultLoadedById.committee = this.saveResult.committee;
+            } );
         }
-        this.sendMemberObject = {};
-        this.sendMemberObject.committee = this.resultLoadedById.committee;
-        this.committeCreateEditService.saveCommitteeMembers( this.sendMemberObject ).subscribe( data => {
-            this.saveResult = data;
-            this.resultLoadedById.committee = this.saveResult.committee;
-        } );
+       
+    }
+    
+    public dateFilter = (d: Date,member): boolean => {
+        member.termStartDate = d.getDay();
+        return ;
     }
 
     cancelEditDetails() {
@@ -299,8 +320,19 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
     addRoles( event: any ) {
         event.preventDefault();
-        this.addRole = true;
-        this.editClassRole = 'committeeBox';
+        if(this.editDetails==true) {
+            console.log(this.editDetails)
+            this.showPopup=true;
+            this.modalMessage="Save member details before proceeding";
+            this.modalTitle="Member not saved";
+                
+            
+        }
+        else {
+            this.addRole = !this.addRole;
+            this.editClassRole = 'committeeBox';
+        }
+       
     }
 
     saveRole( event: any, role, member ) {
@@ -329,15 +361,19 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
     addExpertises( event: any ) {
         event.preventDefault();
-        this.addExpertise = true;
-        this.editExpertise = true;
-        this.editClass = 'committeeBox';
+        if(this.editDetails==true) {
+            this.showPopup=true;
+            this.modalMessage="Save member details before proceeding";
+            this.modalTitle="Member not saved";     
+        } else {
+            this.addExpertise = !this.addExpertise;
+        }
     }
 
     cancelExpertise() {
         this.addExpertise = false;
         this.editExpertise = false;
-        this.editClass = 'committeeBoxNotEditable';
+        
     }
     editRoles( event: any, role ) {
         event.preventDefault();
@@ -349,8 +385,16 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     }
 
     editExpertises() {
-        this.editExpertise = true;
-        this.editClass = 'committeeBox';
+        if(this.editDetails==true) {
+            this.showPopup=true;
+            this.modalMessage="Save member details before proceeding";
+            this.modalTitle="Member not saved";
+                
+            
+        } else {
+            this.editExpertise = true;
+            this.editClass = 'committeeBox';
+        }        
     }
 
     roleAddtoTable( member ) {
@@ -416,14 +460,24 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     showMembersNonEmployeesTab( event: any, rolodexIdFromService ) {
         event.preventDefault();
         this.personId = null;
-        this.showMembers = !this.showMembers;
+        this.showMembers=false;
+        this.showNonEmployeeMembers = !this.showNonEmployeeMembers;
+        if(this.showNonEmployeeMembers) {
+            this.editDetails=true;
+            this.editClass="committeeBox";
+        }
         this.rolodexId = rolodexIdFromService;
     }
 
     showMembersTab( event: any, personIdFromService ) {
         event.preventDefault();
         this.rolodexId = null;
+        this.showNonEmployeeMembers=false;
         this.showMembers = !this.showMembers;
+        if(this.showMembers) {
+            this.editDetails=true;
+            this.editClass="committeeBox";
+        }
         this.personId = personIdFromService;
     }
 
@@ -450,6 +504,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
             this.resultLoadedById.committee.committeeMemberships = this.memberList.committee.committeeMemberships;
             this.memberExist = true;
         } );
+        this.searchTextModel=' ';
     }
 
     areaChangeFunction( unitName ) {

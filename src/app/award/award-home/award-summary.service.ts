@@ -1,6 +1,5 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-
 import { Injectable } from '@angular/core';
 import { Http, HttpModule } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
@@ -10,7 +9,6 @@ import { Constants } from '../../constants/constants.service';
 
 @Injectable()
 export class AwardSummaryService {
-
     constructor( private http: Http, private constant: Constants ) {
 
     }

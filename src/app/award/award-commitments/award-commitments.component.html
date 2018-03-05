@@ -51,10 +51,8 @@
 											[ngClass]="(showRates == true)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
 									</div>
 									<div class="setBody"
-										*ngIf="(noRateData == false && showRates == true)">
-										<!-- <p> -->
+										*ngIf="(result?.fAndADetails && showRates == true)">
 										<label>F&A Rates</label>
-										<!-- </p> -->
 										<table class="table tableSkin subHeads">
 											<thead>
 												<tr>
@@ -66,7 +64,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr *ngFor="let fandaDetails of result.fAndADetails">
+												<tr *ngFor="let fandaDetails of result?.fAndADetails">
 													<td>{{fandaDetails.applicable_idc_rate}}</td>
 													<td>{{fandaDetails.idc_rate_type}}</td>
 													<td>{{fandaDetails.fiscal_year}}</td>
@@ -76,9 +74,7 @@
 											</tbody>
 
 										</table>
-										<!--  <p> -->
 										<label>Benefits Rates</label>
-										<!--  </p> -->
 										<table class="table tableSkin subHeads">
 											<thead>
 												<tr>
@@ -88,7 +84,7 @@
 												</tr>
 											</thead>
 											<tbody>
-												<tr *ngFor="let benefitsRates of result.benefitsRates">
+												<tr *ngFor="let benefitsRates of result?.benefitsRates">
 													<td>{{benefitsRates.on_campus}}</td>
 													<td>{{benefitsRates.off_campus}}</td>
 													<td>{{benefitsRates.comments}}</td>

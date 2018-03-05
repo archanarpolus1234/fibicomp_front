@@ -43,7 +43,7 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService {
       setTimeout(() => {
       localStorage.setItem('donutChartIndex', null);
           this.resultPie = this.dashboardData.getDashboardPieChartData();
-          if ( this.resultPie != null ){
+          if ( this.resultPie != null && this.resultPie.summaryProposalDonutChart !== undefined){
               this.proposalList = this.resultPie.summaryProposalDonutChart;
               this.proposalStateList.push( [ 'Task', 'Hours per Day' ] );
               this.proposalLength = this.proposalList.length;        
@@ -91,6 +91,8 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService {
     }
     
     onResize(event) {
-        this.proposalChart.draw(this.proposalData, this.proposalOptions);
+       if( this.resultPie != null && this.resultPie.summaryProposalDonutChart !== undefined){
+           this.proposalChart.draw(this.proposalData, this.proposalOptions);   
+       }
     }
 } 

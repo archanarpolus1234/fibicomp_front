@@ -3,7 +3,6 @@
 		<section class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<div class="row">
-
 					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 						<div class="set">
 							<div class="setHead">
@@ -13,7 +12,7 @@
 							</div>
 							<div class="setBody" *ngIf="showReports">
 								<table class="table tableSkin subHeads"
-									*ngIf="(noReports== false && result != null)">
+									*ngIf="result?.awardReport">
 									<thead>
 										<tr>
 											<th>TYPE</th>
@@ -26,7 +25,7 @@
 									<tbody *ngFor="let key of awardReportKeyList">
 										<tr>
 											<td colspan="4"><label>{{key}}
-													({{result.awardReport[key].length}})</label></td>
+													({{result?.awardReport[key]?.length}})</label></td>
 										</tr>
 										<tr *ngFor="let awardreport of result.awardReport[key]">
 											<td class="report_type">{{awardreport.report}}</td>
@@ -52,7 +51,7 @@
 							</div>
 							<div class="setBody" *ngIf="showApprovedSpecialItems">
 								<table class="table tableSkin"
-									*ngIf="(noApprovedEquipment == false && result != null)">
+									*ngIf="result?.awardApprovdEquipment">
 									<p>
 										<label>Equipment</label>
 									</p>
@@ -65,7 +64,7 @@
 										</tr>
 									</thead>
 									<tbody>
-										<tr *ngFor="let equipment of result.awardApprovdEquipment">
+										<tr *ngFor="let equipment of result?.awardApprovdEquipment">
 											<td>{{equipment.item}}</td>
 											<td>{{equipment.vendor}}</td>
 											<td>{{equipment.model}}</td>
@@ -73,9 +72,8 @@
 										</tr>
 									</tbody>
 								</table>
-
 								<table class="table  tableSkin"
-									*ngIf="(noApprovedTravel== false && result != null)">
+									*ngIf="result?.approvedTravel">
 									<p>
 										<label>Foreign Travel</label>
 									</p>
@@ -105,9 +103,7 @@
 								</div>
 							</div>
 						</div>
-
 					</div>
-
 					<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 							<div class="set">
@@ -121,9 +117,9 @@
 										<tbody *ngFor="let key of awardTermsKeyList">
 											<tr>
 												<td colspan="4"><label>{{key}}
-														({{result.awardTerms[key].length}})</label></td>
+														({{result?.awardTerms[key]?.length}})</label></td>
 											</tr>
-											<tr *ngFor="let terms of result.awardTerms[key]">
+											<tr *ngFor="let terms of result?.awardTerms[key]">
 												<td>{{terms.sponsor_term}}</td>
 											</tr>
 										</tbody>
@@ -136,25 +132,24 @@
 								</div>
 							</div>
 							<div class="set">
-
 								<div class="setHead">
 									<span>Payment & Invoice</span><a href="#"
 										(click)="showPaymentAndInvoiceTab($event)"><i
 										[ngClass]="(showPaymentAndInvoice == true)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
 								</div>
 								<div class="setBody"
-									*ngIf="(showPaymentAndInvoice == true && (noPayment == false) && result != null)">
+									*ngIf="showPaymentAndInvoice == true && result?.awardPaymntInvoice">
 									<div class="row">
 										<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
 											<p>
 												<label>Payment Basis</label><br>
-												{{result.awardPayment[0].payment_basis}}
+												{{result?.awardPayment[0]?.payment_basis}}
 											</p>
 										</div>
 										<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">
 											<p id="paymethod">
 												<label>Payment Method</label><br>
-												{{result.awardPayment[0].payment_method}}
+												{{result?.awardPayment[0]?.payment_method}}
 											</p>
 										</div>
 									</div>
@@ -172,14 +167,13 @@
 										</thead>
 										<tbody>
 											<tr
-												*ngFor="let awardPaymntInvoice of result.awardPaymntInvoice">
+												*ngFor="let awardPaymntInvoice of result?.awardPaymntInvoice">
 												<td class="report_type">{{awardPaymntInvoice.report}}</td>
 												<td>{{awardPaymntInvoice.frequency}}</td>
 												<td>{{awardPaymntInvoice.frequency_base}}</td>
 												<td>{{awardPaymntInvoice.osp_distribution}}</td>
 												<td>{{awardPaymntInvoice.due_date}}</td>
 											</tr>
-
 										</tbody>
 										</p>
 									</table>
@@ -206,7 +200,6 @@
 												<td>{{awardPaymntSchedule.comments}}</td>
 												<td>{{awardPaymntSchedule.amount}}</td>
 											</tr>
-
 										</tbody>
 										</p>
 									</table>

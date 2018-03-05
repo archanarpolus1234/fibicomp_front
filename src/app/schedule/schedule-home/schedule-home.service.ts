@@ -17,5 +17,4 @@ export class ScheduleHomeService {
               return Observable.throw( error.message || error )
           } );
   }
-
 }

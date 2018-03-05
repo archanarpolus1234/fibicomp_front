@@ -13,6 +13,7 @@ export class AwardCommitmentsComponent implements OnInit {
     noCostsharingData: boolean = true;
     awardId: string;
     result: any = {};
+
     constructor( private awardCommitmentsService: AwardCommitmentsService, private route: ActivatedRoute ) { }
 
     ngOnInit() {
@@ -20,11 +21,13 @@ export class AwardCommitmentsComponent implements OnInit {
         this.awardCommitmentsService.loadCostsharingDetails( this.awardId )
             .subscribe( data => {
                 this.result = data;
-                if ( this.result.costShareDetails.length != 0 ) {
-                    this.noCostsharingData = false;
-                }
-                if ( this.result.fAndADetails.length != 0 || this.result.benefitsRates.length != 0 ) {
-                    this.noRateData = false;
+                if(this.result.costShareDetails !== undefined && this.result.fAndADetails !== undefined){
+                    if ( this.result.costShareDetails.length != 0 ) {
+                        this.noCostsharingData = false;
+                    }
+                    if ( this.result.fAndADetails.length != 0 || this.result.benefitsRates.length != 0 ) {
+                        this.noRateData = false;
+                    }
                 }
             } )
     }
@@ -38,5 +41,4 @@ export class AwardCommitmentsComponent implements OnInit {
         event.preventDefault();
         this.showCostsharing = !this.showCostsharing;
     }
-
 }

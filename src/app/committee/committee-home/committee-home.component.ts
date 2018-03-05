@@ -47,7 +47,7 @@ export class CommitteeHomeComponent implements OnInit {
     @Output() modeFlag = new EventEmitter<String>();
     @Input() reviewTypes: any[];
     @Input() areaList: any = [];
-    @Input() scheduleStatus: any [];
+    @Input() scheduleStatus: any[];
 
     result: any = {};
     resultTemp: any = {};
@@ -129,14 +129,16 @@ export class CommitteeHomeComponent implements OnInit {
     isMandatoryFilterFilled: boolean = true;
     isFilterDatePrevious: boolean = true;
     listDate: string;
-    listStatus:string;
+    listStatus: string;
     listTime: string;
-    listPlace:string;
+    listPlace: string;
     isScheduleListItemEditMode = false;
-    isCommitteeDetailsEditMode = false;
+    saveCommitteeFlag = false;
     isAreaOfResearchEditMode = false;
     scheduleEditModeIndex: number;
     scheduleTime: any;
+    isEditDetailsModalOpen = false;
+    isScheduleEditWarningModalOpen = false;
 
     constructor( public route: ActivatedRoute, private datePipe: DatePipe, public router: Router, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, private committeeConfigurationService: CommitteeConfigurationService ) {
         this.committeeConfigurationService.currentMode.subscribe( data => {
@@ -151,7 +153,7 @@ export class CommitteeHomeComponent implements OnInit {
     loadTempData() {
         this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
             this.resultTemp = data;
-            if ( this.resultTemp.length != 0 ) {
+            if ( this.resultTemp.committee !== undefined ) {
                 this.name = this.resultTemp.committee.committeeName;
                 this.unit = this.resultTemp.committee.homeUnitNumber;
                 this.unitname = this.resultTemp.committee.homeUnitName;
@@ -165,8 +167,7 @@ export class CommitteeHomeComponent implements OnInit {
     initialLoadChild() {
         this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
             this.result = data;
-            if ( this.result != null ) {
-
+            if ( this.result.committee !== undefined ) {
                 if ( this.result.committee == null || this.result.committee == undefined ) {
                     this.result.committee = {};
                 }
@@ -203,7 +204,7 @@ export class CommitteeHomeComponent implements OnInit {
                     this.minMembers = this.result.committee.minimumMembersRequired;
                     this.advSubDays = this.result.committee.advSubmissionDaysReq;
                     this.maxProtocols = this.result.committee.maxProtocols;
-                    this.isCommitteeDetailsEditMode = true;
+                    this.saveCommitteeFlag = true;
                 }
                 else {
                     this.editClass = 'scheduleBoxes';
@@ -216,7 +217,10 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     showaddAreaOfResearch() {
-        if ( this.isCommitteeDetailsEditMode ) {
+        if ( this.editDetails == true ) {
+            this.isEditDetailsModalOpen = true;
+        }
+        if ( this.saveCommitteeFlag ) {
             this.addResearch = !this.addResearch;
             this.editResearch = !this.editResearch;
             if ( this.editResearch ) {
@@ -225,9 +229,15 @@ export class CommitteeHomeComponent implements OnInit {
         }
     }
 
+    closeEditDetailsModalOpen() {
+        this.isEditDetailsModalOpen = false;
+        this.showGenerateSchedule = false;
+        this.deleteConfirmation = false;
+    }
+
     showEditDetails() {
         this.editDetails = !this.editDetails;
-        this.isCommitteeDetailsEditMode = false;
+        this.saveCommitteeFlag = false;
         if ( this.editDetails ) {
             this.editClass = 'scheduleBoxes';
         }
@@ -240,6 +250,9 @@ export class CommitteeHomeComponent implements OnInit {
             this.error = 'Please fill all the mandatory fileds marked';
         }
         else {
+            this.isEditDetailsModalOpen = false;
+            this.showGenerateSchedule = false;
+            this.deleteConfirmation = false;
             this.error = '';
             this.errorFlag = false;
             this.result.committee.committeeId = this.Id;
@@ -273,7 +286,7 @@ export class CommitteeHomeComponent implements OnInit {
                 this.result = data || [];
                 if ( this.result != null ) {
                     this.committeeConfigurationService.changeCommmitteeData( this.result );
-                    this.isCommitteeDetailsEditMode = true;
+                    this.saveCommitteeFlag = true;
                     if ( this.mode == 'view' ) {
                         this.initialLoadChild();
                     }
@@ -295,13 +308,15 @@ export class CommitteeHomeComponent implements OnInit {
 
     cancelEditDetails() {
         this.errorFlag = false;
+        this.isEditDetailsModalOpen = false;
+        this.showGenerateSchedule = false;
         if ( this.mode == 'view' ) {
             this.editDetails = !this.editDetails;
             this.editFlag.emit( this.editDetails );
             if ( !this.editDetails ) {
                 this.editClass = 'committeeBoxNotEditable';
             }
-            this.isCommitteeDetailsEditMode = true;
+            this.saveCommitteeFlag = true;
             this.result.committee.committeeId = this.Id;
             this.result.committee.committeeType.description = 'IRB';
             this.result.committee.committeeName = this.name;
@@ -379,11 +394,16 @@ export class CommitteeHomeComponent implements OnInit {
 
     deleteAreaOfResearchConfirmation( $event, Object ) {
         event.preventDefault();
-        this.showPopup = true;
-        this.deleteConfirmation = true;
-        this.areaOfResearchToDelete = Object;
-        this.deleteMsg = 'Are you sure you want to delete this area of research ..?';
+        if ( this.editDetails == true ) {
+            this.isEditDetailsModalOpen = true;
+        } else {
+            this.showPopup = true;
+            this.deleteConfirmation = true;
+            this.areaOfResearchToDelete = Object;
+            this.deleteMsg = 'Are you sure you want to delete this area of research ..?';
+        }
     }
+
     clear() {
         this.showPopup = false;
         this.deleteConfirmation = false;
@@ -395,6 +415,7 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     deleteAreaOfResearch( Object ) {
+
         if ( this.result.committee.researchAreas.length != null && Object.commResearchAreasId != undefined ) {
             this.committeeSaveService.deleteAreaOfResearch( Object.commResearchAreasId, this.result.committee.committeeId ).subscribe( data => {
                 this.result = data || [];
@@ -414,32 +435,36 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     showSchedulePopUp() {
-        if ( this.showGenerateSchedule == false ) {
-            this.showGenerateSchedule = true;
+        if ( this.editDetails == true ) {
+            this.isEditDetailsModalOpen = true;
+        } else {
+            if ( this.showGenerateSchedule == false ) {
+                this.showGenerateSchedule = true;
+            }
+            var q = new Date();
+            var m = q.getMonth();
+            var d = q.getDate();
+            var y = q.getFullYear();
+            this.today = new Date( y, m, d );
+            this.result.scheduleData = {};
+            this.result.scheduleData.time = {};
+            this.result.scheduleData.dailySchedule = {};
+            this.result.scheduleData.weeklySchedule = {};
+            this.result.scheduleData.monthlySchedule = {};
+            this.result.scheduleData.yearlySchedule = {};
+            this.result.scheduleData.scheduleStartDate = this.today;
+            this.result.scheduleData.dailySchedule.scheduleEndDate = this.today;
+            this.result.scheduleData.weeklySchedule.scheduleEndDate = this.today;
+            this.result.scheduleData.monthlySchedule.scheduleEndDate = this.today;
+            this.result.scheduleData.yearlySchedule.scheduleEndDate = this.today;
+            this.result.scheduleData.recurrenceType = 'DAILY';
+            this.result.scheduleData.dailySchedule.day = 1;
+            this.displayTime = null;
+            this.isDatePrevious = false;
+            this.isMandatoryFilled = true;
+            this.isStartDateBeforeToday = false;
+            this.optionDay = 'XDAY';
         }
-        var q = new Date();
-        var m = q.getMonth();
-        var d = q.getDate();
-        var y = q.getFullYear();
-        this.today = new Date(y,m,d);
-        this.result.scheduleData = {};
-        this.result.scheduleData.time = {};
-        this.result.scheduleData.dailySchedule = {};
-        this.result.scheduleData.weeklySchedule = {};
-        this.result.scheduleData.monthlySchedule = {};
-        this.result.scheduleData.yearlySchedule = {};
-        this.result.scheduleData.scheduleStartDate = this.today;
-        this.result.scheduleData.dailySchedule.scheduleEndDate = this.today;
-        this.result.scheduleData.weeklySchedule.scheduleEndDate = this.today;
-        this.result.scheduleData.monthlySchedule.scheduleEndDate = this.today;
-        this.result.scheduleData.yearlySchedule.scheduleEndDate = this.today;
-        this.result.scheduleData.recurrenceType = 'DAILY';
-        this.result.scheduleData.dailySchedule.day = 1;
-        this.displayTime = null;
-        this.isDatePrevious = false;
-        this.isMandatoryFilled = true;
-        this.isStartDateBeforeToday = false;
-        this.optionDay = 'XDAY';
     }
 
     showTab( recurrenceType ) {
@@ -501,7 +526,7 @@ export class CommitteeHomeComponent implements OnInit {
         }, 100 );
     }
 
-    generateSchedule(e) {
+    generateSchedule( e ) {
         e.preventDefault();
         this.result.scheduleData.time.time = this.datePipe.transform( this.displayTime, 'hh:mm' );
         this.result.scheduleData.time.meridiem = this.datePipe.transform( this.displayTime, 'aa' );
@@ -511,7 +536,7 @@ export class CommitteeHomeComponent implements OnInit {
         this.sendScheduleRequestData.scheduleData.monthlySchedule = {};
         this.sendScheduleRequestData.scheduleData.yearlySchedule = {};
         this.sendScheduleRequestData.currentUser = localStorage.getItem( "currentUser" );
-        this.sendScheduleRequestData.committee = this.result.committee; 
+        this.sendScheduleRequestData.committee = this.result.committee;
         if ( this.result.scheduleData.scheduleStartDate < this.today ) {
             this.isStartDateBeforeToday = true;
             this.scheduleValidationMessage = "* Please ensure start date is today or upcomming days"
@@ -589,7 +614,7 @@ export class CommitteeHomeComponent implements OnInit {
                 break;
         }
 
-        if ( this.isDatePrevious == false && this.isStartDateBeforeToday == false  && this.isMandatoryFilled == true ) {
+        if ( this.isDatePrevious == false && this.isStartDateBeforeToday == false && this.isMandatoryFilled == true ) {
             this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).subscribe( data => {
                 this.result = data || [];
                 this.filterStartDate = this.result.scheduleData.filterStartDate;
@@ -603,9 +628,6 @@ export class CommitteeHomeComponent implements OnInit {
                 this.result.scheduleData.yearlySchedule = {};
                 this.result.scheduleData.filterStartDate = this.filterStartDate;
                 this.result.scheduleData.filerEndDate = this.filerEndDate;
-                /*if ( this.conflictDates.length != 0 || this.conflictDates != undefined || this.isConflictDates == false ) {
-                    this.isConflictDates = true;
-                } intentionally commented for future use Shaji P*/
                 this.showGenerateSchedule = false;
             } );
         }
@@ -614,11 +636,14 @@ export class CommitteeHomeComponent implements OnInit {
     editScheduleData( e, date, status, place, time, i ) {
         e.preventDefault();
         if ( this.isScheduleListItemEditMode == true ) {
-            alert( "You are editing a schedule data with serial number : " + (this.scheduleEditModeIndex+1) );
+            this.alertMsg = "You are editing a schedule data with serial number : " + ( this.scheduleEditModeIndex + 1 );
+            this.isScheduleEditWarningModalOpen = true;
         } else {
-            this.scheduleTime = new Date(time);
-            this.scheduleEditModeIndex = parseInt(i);
+            this.alertMsg = "";
+            this.isScheduleEditWarningModalOpen = false;
             this.isScheduleListItemEditMode = true;
+            this.scheduleTime = new Date( time );
+            this.scheduleEditModeIndex = parseInt( i );
             this.editSchedule[i] = !this.editSchedule[i];
             this.listDate = date;
             this.listStatus = status;
@@ -629,11 +654,18 @@ export class CommitteeHomeComponent implements OnInit {
 
     showDeleteModal( e, scheduleId, committeeId, scheduledDate ) {
         e.preventDefault();
-        this.scheduledDate = scheduledDate;
-        this.scheduleId = scheduleId;
-        this.committeeId = committeeId;
-        if ( this.isTodelete == false ) {
-            this.isTodelete = true;
+        if ( this.isScheduleListItemEditMode == true ) {
+            this.alertMsg = "You are editing a schedule data with serial number : " + ( this.scheduleEditModeIndex + 1 );
+            this.isScheduleEditWarningModalOpen = true;
+        } else {
+            this.alertMsg = "";
+            this.isScheduleEditWarningModalOpen = false;
+            this.scheduledDate = scheduledDate;
+            this.scheduleId = scheduleId;
+            this.committeeId = committeeId;
+            if ( this.isTodelete == false ) {
+                this.isTodelete = true;
+            }
         }
     }
 
@@ -673,7 +705,7 @@ export class CommitteeHomeComponent implements OnInit {
         this.scheduleStatus.forEach(( value, index ) => {
             if ( value.description == scheduleObject.scheduleStatus.description ) {
                 value.updateTimestamp = new Date();
-                value.updateUser = localStorage.getItem('currentUser');
+                value.updateUser = localStorage.getItem( 'currentUser' );
                 scheduleObject.scheduleStatusCode = value.scheduleStatusCode;
                 scheduleObject.scheduleStatus = value;
                 this.result.committee.committeeSchedules[i].scheduleStatus.description = value.description;
@@ -718,7 +750,7 @@ export class CommitteeHomeComponent implements OnInit {
         } else {
             this.isMandatoryFilterFilled = true;
         }
-        if( this.isMandatoryFilterFilled == true && this.isFilterDatePrevious == false ) {
+        if ( this.isMandatoryFilterFilled == true && this.isFilterDatePrevious == false ) {
             this.sendScheduleRequestData = {};
             if ( this.result.scheduleData == null || this.result.scheduleData == undefined ) {
                 this.sendScheduleRequestData.scheduleData = {};
@@ -728,7 +760,9 @@ export class CommitteeHomeComponent implements OnInit {
             this.sendScheduleRequestData.committee = this.result.committee;
             this.committeeSaveService.filterScheduleData( this.sendScheduleRequestData ).subscribe( data => {
                 this.result = data || [];
+                this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
+            this.initialLoadChild();
         }
     }
 
@@ -749,9 +783,16 @@ export class CommitteeHomeComponent implements OnInit {
             this.sendScheduleRequestData.committee = this.result.committee;
             this.committeeSaveService.resetFilterSchedule( this.sendScheduleRequestData ).subscribe( data => {
                 this.result = data || [];
+                this.committeeConfigurationService.changeCommmitteeData( this.result );
                 this.result.scheduleData.filterStartDate = null;
                 this.result.scheduleData.filerEndDate = null;
             } );
+            this.initialLoadChild();
         }
+    }
+
+    cancelEditScheduleItem() {
+        this.isScheduleEditWarningModalOpen = !this.isScheduleEditWarningModalOpen;
+        this.isTodelete = false;
     }
 }

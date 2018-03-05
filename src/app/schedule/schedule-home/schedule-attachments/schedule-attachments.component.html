@@ -1,6 +1,5 @@
 
 <div>
-
 	<!--  DELETE WARNING MODAL -->
 	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
 		id="deleteAttachment" tabindex="-1" role="dialog"
@@ -23,7 +22,6 @@
 					<button type="button" class="btnSkin btnSkinPrimary"
 						(click)="deleteAttachments($event)" data-dismiss="modal">Yes</button>
 				</div>
-
 			</div>
 		</div>
 	</div>
@@ -63,8 +61,8 @@
 					<file-drop headertext="Drop files here"
 						(onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
 						(onFileLeave)="fileLeave($event)"> <input type="file"
-						#file (change)="onChange(file.files)" multiple /> OR
-					&nbsp;&nbsp; </file-drop>
+						#file (change)="onChange(file.files)" multiple /> OR &nbsp;&nbsp;
+					</file-drop>
 					<ul *ngFor="let item of uploadedFile; let i=index">
 						<li><strong>{{ item.name }}</strong> <i class="fa fa-trash-o"
 							(click)="deleteFromUploadedFileList(item)"></i></li>
@@ -104,15 +102,19 @@
 			<th title="">Action</th>
 		</tr>
 		<tr
-			*ngFor="let attachment of result?.committeeSchedule?.committeeScheduleAttachments;let i=index">
+			*ngFor="let attachments of result?.committeeSchedule?.committeeScheduleAttachments;let i=index">
 			<td>{{i+1}}</td>
-			<td>{{attachment.attachmentType.description}}</td>
-			<td>{{attachment.description}}</td>
-			<td>{{attachment.fileName}}</td>
+			<td>{{attachments.attachmentType.description}}</td>
+			<td>{{attachments.description}}</td>
+			<td>{{attachments.fileName}}</td>
 			<td><ul class="actionButtonGroup">
-					<li><a (click)="tempSave($event,attachment)"
+					<li><a (click)="tempSave($event,attachments)"
 						data-toggle="modal" data-target="#deleteAttachment"><i
 							class="fa fa-trash-o"></i></a></li>
+					<li><a
+						(click)="downloadAttachements($event,attachments.attachment, attachments)"
+						title="Open{{attachments.commScheduleAttachId}}"> <i
+							class="fa fa-download" aria-hidden="true"></i></a></li>
 				</ul></td>
 		</tr>
 	</table>

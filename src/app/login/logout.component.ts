@@ -20,10 +20,23 @@ export class LogoutComponent {
                 data => {
                     if(data != null){ 
                         if (data == 'SUCCESS') {
-                            localStorage.removeItem('currentUser');
-                            localStorage.removeItem('personId');
-                            localStorage.removeItem('userFullname');
-                            localStorage.removeItem('isAdmin');
+                            localStorage.removeItem( 'currentUser' );
+                            localStorage.removeItem( 'personId' );
+                            localStorage.removeItem( 'userFullname' );
+                            localStorage.removeItem( 'isAdmin' );
+                            localStorage.removeItem( 'exapandedViewProposalHeading' );
+                            localStorage.removeItem( 'piechartIndex' );
+                            localStorage.removeItem( 'exapandedDonutViewAwardHeading' );
+                            localStorage.removeItem( 'donutChartIndex' );
+                            localStorage.removeItem( 'exapandedViewAwardHeading' );
+                            localStorage.removeItem( 'sponsorCode' );
+                            localStorage.removeItem( 'researchSummaryIndex' );
+                            localStorage.removeItem( 'dashboardproposalBySponsorTypesWidget' );
+                            localStorage.removeItem( 'dashboardinProgressproposalBySponsorWidget' );
+                            localStorage.removeItem( 'dashboardAwardBysponsorTypesWidget' );
+                            localStorage.removeItem( 'dashboardawardedProposalBySponsorWidget' );
+                            localStorage.removeItem( 'dashboardResearchSummaryWidget' );
+                            localStorage.removeItem( 'dashboardExpenditureVolumeWidget' );
                             this.loginCheckService.logout();
                             this.router.navigate( ['/loginpage'] );
                         }

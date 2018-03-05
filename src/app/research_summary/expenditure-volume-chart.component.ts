@@ -29,12 +29,11 @@ export class ExpenditureVolumeChartComponent extends GoogleChartService {
     drawGraph() {
         setTimeout(() => {
             this.researchSummaryList = this.dashboardData.getdashboardAreaChartData();
-            if(this.researchSummaryList != null){
+            if(this.researchSummaryList != null && this.researchSummaryList !== undefined){
                 this.areachartLength = this.researchSummaryList.length;
                 if(this.areachartLength == 0){
                     this.noData = true;
                 }
-
                 this.areaChartList.push( [ 'Year', 'Direct', 'FA' ] );
                 for (let i = 0; i < this.areachartLength; i++){
                     this.areaChartList.push([this.researchSummaryList[i][0], this.researchSummaryList[i][1], this.researchSummaryList[i][2]]);

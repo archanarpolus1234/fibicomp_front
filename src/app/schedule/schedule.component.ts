@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ScheduleService } from '../schedule/schedule.service';
 import { ScheduleConfigurationService } from '../common/schedule-configuration.service';
+import { SessionManagementService } from "../session/session-management.service";
 
 @Component( {
     selector: 'app-schedule-component',
     templateUrl: './schedule.component.html',
-    styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
+    styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css'],
+    providers: [SessionManagementService]
 } )
 export class ScheduleComponent implements OnInit {
 
@@ -15,7 +17,11 @@ export class ScheduleComponent implements OnInit {
     scheduleId: number;
     result: any = {};
 
-    constructor( private scheduleService: ScheduleService, private activatedRoute: ActivatedRoute, private scheduleConfigurationService: ScheduleConfigurationService ) { }
+    constructor( private scheduleService: ScheduleService, private router: Router, private sessionService: SessionManagementService, private activatedRoute: ActivatedRoute, private scheduleConfigurationService: ScheduleConfigurationService ) { 
+        if ( !sessionService.canActivate() ) {
+            this.router.navigate( ['/loginpage'] );
+        }
+    }
 
     ngOnInit() {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];

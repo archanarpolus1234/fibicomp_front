@@ -26,7 +26,7 @@ import { WarningModalComponent } from './session/warning-modal.component';
 import { TimeoutModalComponent } from './session/timeout-modal.component';
 import { SessionTimeoutComponent } from './session/session-timeout.component';
 import { ExpandedviewComponent } from './research_summary/expanded-view.component';
-import { ElasticSearchComponent } from './elasticSearch/elastic-search.component';
+import { ElasticSearchComponent } from './elastic-search/elastic-search.component';
 import { FooterComponent } from './common/footer-tpl.component';
 import { HeaderComponent } from './common/header-tpl.component';
 import { LogoutComponent } from './login/logout.component';
@@ -53,11 +53,11 @@ import { LoginService } from './login/login.service';
 import { GoogleChartService } from './research_summary/google-chart.service';
 import { SessionManagementService } from './session/session-management.service';
 import { DashboardService } from './dashboard/dashboard.service';
-import { AwardElasticsearchService } from './elasticSearch/award-elastic-search.service';
-import { DisclosureElasticsearchService } from './elasticSearch/disclosure-elastic-search.service';
-import { IacucElasticsearchService } from './elasticSearch/iacuc-elastic-search.service';
-import { IrbElasticsearchService } from './elasticSearch/irb-elastic-search.service';
-import { ProposalElasticsearchService } from './elasticSearch/proposal-elastic-search.service';
+import { AwardElasticsearchService } from './elastic-search/award-elastic-search.service';
+import { DisclosureElasticsearchService } from './elastic-search/disclosure-elastic-search.service';
+import { IacucElasticsearchService } from './elastic-search/iacuc-elastic-search.service';
+import { IrbElasticsearchService } from './elastic-search/irb-elastic-search.service';
+import { ProposalElasticsearchService } from './elastic-search/proposal-elastic-search.service';
 import { Constants } from './constants/constants.service';
 import { ExpandedViewDataService } from './research_summary/expanded-view-data-service';
 import { ExpandedviewService } from './research_summary/expanded-view.service';
@@ -69,14 +69,16 @@ import { AwardHierarchyService } from './award/award-hierarchy/award-hierarchy.s
 import { AwardReportsAndTermsService } from './award/award-reports-and-tabs/award-reports-and-terms.service';
 import { AwardCommitmentsService } from './award/award-commitments/award-commitments.service';
 import { CommitteeConfigurationService } from './common/committee-configuration.service';
-import { CommitteeMemberEmployeeElasticService } from './elasticSearch/committee-members-employees-elastic-search.service';
-import { CommitteeMemberNonEmployeeElasticService } from './elasticSearch/committee-members-nonEmployee-elastic-search.service';
+import { CommitteeMemberEmployeeElasticService } from './elastic-search/committee-members-employees-elastic-search.service';
+import { CommitteeMemberNonEmployeeElasticService } from './elastic-search/committee-members-nonEmployee-elastic-search.service';
 import { ScheduleService } from './schedule/schedule.service';
 import { ScheduleConfigurationService } from './common/schedule-configuration.service';
 import { ScheduleOtherActionsService } from './schedule/schedule-home/schedule-other-actions/schedule-other-actions.service';
 import { ScheduleHomeService } from './schedule/schedule-home/schedule-home.service';
 import { AwardconfigurationService } from '../app/award/awardconfiguration.service';
 import { ScheduleAttachmentsService } from '../app/schedule/schedule-home/schedule-attachments/schedule-attachments.service';
+import { ScheduleAttendanceService } from "./schedule/schedule-home/schedule-attendance/schedule-attendance.service";
+import { MinutesService } from '../app/schedule/minutes/minutes.service';
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -152,7 +154,8 @@ let appRoutes = [
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
         AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService, ScheduleConfigurationService, ScheduleOtherActionsService,
-        ScheduleHomeService, AwardconfigurationService, ScheduleAttachmentsService],
+        ScheduleHomeService, AwardconfigurationService, ScheduleAttachmentsService, ScheduleAttendanceService,
+        MinutesService],
     bootstrap: [AppComponent]
 } )
 
