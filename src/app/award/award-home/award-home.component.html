@@ -8,7 +8,7 @@
 							<h4 class="borderBoxHeading">Details</h4>
 							<div class="pullSide">
 								<table class="table tableSkin grid2"
-									*ngIf="noAwardDetails == false">
+									*ngIf="result?.awardDetails?.length >0">
 									<tbody>
 										<tr>
 											<td><label>Activity Type</label><br>{{activityType}}</td>
@@ -22,7 +22,7 @@
 
 									</tbody>
 								</table>
-								<div *ngIf="noAwardDetails">
+								<div *ngIf="result?.awardDetails?.length == 0">
 									<p class="noDataOnChart">No award details found.</p>
 								</div>
 							</div>
@@ -44,6 +44,7 @@
 											<td><label>Notice Date</label><br>{{noticeDate}}</td>
 											<td><label>Obligated Amount</label><br>{{obligatedAmount}}
 
+
 											
 											<td><label>Anticipated Amount</label><br>{{anticipatedAmount}}</td>
 										</tr>
@@ -57,7 +58,7 @@
 							<h4 class="borderBoxHeading">Personnel</h4>
 							<div class="pullSide">
 								<table class="table tableSkin grid2"
-									*ngIf="noAwardPersons == false">
+									*ngIf="result?.awardPersons?.length >0">
 									<tr>
 										<td><label *ngIf="pi_coiTrigger==true">Investigators</label><br>
 											<div *ngFor="let person of awardPersons">
@@ -74,7 +75,7 @@
 											</div></td>
 									</tr>
 								</table>
-								<div *ngIf="noAwardPersons">
+								<div *ngIf="result?.awardPersons?.length == 0">
 									<p class="noDataOnChart">No personnel details associated
 										with this award.</p>
 								</div>
@@ -89,7 +90,7 @@
 									<tbody>
 										<tr>
 											<td>
-												<div *ngIf="noAwardSponsorContacts == false">
+												<div *ngIf="result?.awardSponsorContact?.length >0">
 													<label>Sponsor</label><br>
 													<ng-container>
 													<div
@@ -104,7 +105,7 @@
 													</div>
 													</ng-container>
 												</div>
-												<div *ngIf="noAwardUnitContacts == false">
+												<div *ngIf="result?.awardUnitContact?.length >0">
 
 													<label>Unit</label><br>
 													<ng-container>
@@ -116,7 +117,7 @@
 													</ng-container>
 												</div>
 												<div
-													*ngIf="(noAwardUnitContacts == true && noAwardSponsorContacts== true)">
+													*ngIf="result?.awardUnitContact?.length == 0 || result?.awardSponsorContact?.length == 0">
 													<p align="center">No contact data associated with this
 														award.</p>
 												</div>
@@ -132,7 +133,7 @@
 				<div class="borderBox col-12">
 					<h4 class="borderBoxHeading">Funded Proposals</h4>
 					<table class="table table-responsive tableSkin"
-						*ngIf="noAwardFundedProposal == false">
+						*ngIf="result?.awardFundedProposals?.length > 0">
 						<tr>
 							<th title="Click to sort by Proposal">Proposal#</th>
 							<th title="Click to sort by Title">PI</th>
@@ -155,7 +156,7 @@
 						</tr>
 
 					</table>
-					<div *ngIf="noAwardFundedProposal">
+					<div *ngIf="result?.awardFundedProposals?.length == 0">
 						<p class="noDataOnChart">No funded proposals are associated
 							with this award.</p>
 					</div>
@@ -165,7 +166,7 @@
 
 					<h4 class="borderBoxHeading">Special Review</h4>
 					<table class="table table-responsive tableSkin"
-						*ngIf="noAwardSpecialReviews == false">
+						*ngIf="result?.awardSpecialReviews?.length >0">
 						<tr>
 							<th title="Click to sort by Proposal">Protocol#</th>
 							<th title="Click to sort by Title">Type</th>
@@ -187,12 +188,11 @@
 						<tr>
 						</tr>
 					</table>
-					<div *ngIf="noAwardSpecialReviews">
+					<div *ngIf="result?.awardSpecialReviews?.length == 0">
 						<p class="noDataOnChart">No special reviews are associated
 							with this award.</p>
 					</div>
 				</div>
-
 			</div>
 		</section>
 		<div class="footerPush"></div>

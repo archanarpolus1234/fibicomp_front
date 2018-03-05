@@ -43,7 +43,7 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService {
       setTimeout(() => {
       localStorage.setItem('piechartIndex', null);
           this.resultPie = this.dashboardData.getDashboardPieChartData(); 
-          if ( this.resultPie != null ){
+          if ( this.resultPie != null && this.resultPie.summaryAwardPieChart !== undefined){
               this.awardList = this.resultPie.summaryAwardPieChart;
               this.awardStateList.push( [ 'Task', 'Hours per Day' ] );
               this.awardLength = this.awardList.length;

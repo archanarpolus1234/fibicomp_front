@@ -9,7 +9,6 @@ import { TreeModel, TreeNode, TREE_ACTIONS, KEYS, IActionMapping, ITreeOptions }
     selector: 'app-award-hierarchy',
     templateUrl: './award-hierarchy.component.html',
     styleUrls: ['../../../assets/css/bootstrap.min.css', '../../../assets/css/font-awesome.min.css', '../../../assets/css/style.css', '../../../assets/css/search.css'],
-
 } )
 
 export class AwardHierarchyComponent implements AfterViewInit {
@@ -51,7 +50,7 @@ export class AwardHierarchyComponent implements AfterViewInit {
                     node.setActiveAndVisible();
                     this.awardSummaryService.loadAwardSummary( node.id ).subscribe( data => {
                         this.result = data || [];
-                        if ( this.result != null ) {
+                        if ( this.result.awardDetails !== undefined) {
                             this.awardNumber = this.result.awardDetails[0].award_number;
                             this.activityType = this.result.awardDetails[0].activity_type;
                             this.awardType = this.result.awardDetails[0].award_type;
@@ -98,7 +97,7 @@ export class AwardHierarchyComponent implements AfterViewInit {
         } );
     }
 
-    @ViewChild( 'tree' ) tree;
+    @ViewChild('tree') tree;
     ngAfterViewInit() {
         setTimeout(() => {
             this.tree.treeModel.expandAll();

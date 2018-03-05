@@ -16,6 +16,7 @@ export class ScheduleHomeComponent implements OnInit {
     showOtherActions: boolean = false;
     showAttachment: boolean = false;
     result: any = {};
+    committeeSchedule: any = {};
     editDetails: boolean = false;
     isCommitteeDetailsEditMode = false;
     editClass: string;
@@ -32,7 +33,7 @@ export class ScheduleHomeComponent implements OnInit {
     subDeadline: string;
     startTimeTemp: any;
     endTimeTemp: any;
-    isToDisplayHomeData = false;
+    isToDisplayHomeData = true;
     scheduleTime: any;
     scheduleStartTime: any;
     scheduleEndTime: any;
@@ -40,16 +41,13 @@ export class ScheduleHomeComponent implements OnInit {
     scheduleStatus: any = [];
 
     constructor( public scheduleConfigurationService: ScheduleConfigurationService, private datePipe: DatePipe, public router: Router, private scheduleHomeService: ScheduleHomeService ) {
-        this.initialLoad();
+        this.result.committeeSchedule = {};
     }
 
-    ngOnInit() { }
-
-    initialLoad() {
+    ngOnInit() {
         this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
-            this.result = data || [];
-            if ( this.result != null ) {
-                this.isToDisplayHomeData = true;
+            this.result = data;
+            if ( this.result.length !== undefined && this.result.committeeSchedule !== undefined ) {
                 this.scheduleTime = new Date( this.result.committeeSchedule.time );
                 this.scheduleStartTime = new Date( this.result.committeeSchedule.startTime );
                 this.scheduleEndTime = new Date( this.result.committeeSchedule.endTime );
@@ -109,7 +107,7 @@ export class ScheduleHomeComponent implements OnInit {
         this.scheduleStatus.forEach(( value, index ) => {
             if ( value.description == this.scheduleStatusSelected ) {
                 value.updateTimestamp = new Date();
-                value.updateUser = localStorage.getItem('currentUser');
+                value.updateUser = localStorage.getItem( 'currentUser' );
                 this.result.committeeSchedule.scheduleStatus = value;
                 this.result.committeeSchedule.scheduleStatusCode = value.scheduleStatusCode;
                 this.scheduleStatusSelected = value.description;
@@ -117,7 +115,6 @@ export class ScheduleHomeComponent implements OnInit {
         } );
         this.scheduleHomeService.saveScheduleData( this.result ).subscribe( data => {
             this.result = data;
-            this.initialLoad();
         } );
     }
 
@@ -138,5 +135,4 @@ export class ScheduleHomeComponent implements OnInit {
         this.result.committeeSchedule.availableToReviewers = this.availableToReviewers;
         this.result.committeeSchedule.comments = this.comments;
     }
-
 }

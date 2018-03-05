@@ -73,11 +73,6 @@ export class DisclosureElasticsearchService {
                             ]
                         }
                     },
-                    /*filter: {
-                        term: {
-                            person_id: personId
-                        }
-                    },*/
                     sort: [{
                         _score: {
                             order: 'desc'

@@ -1,39 +1,37 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 import {Observable} from 'rxjs';
 import {Client, SearchResponse} from 'elasticsearch';
-
 import { Constants } from '../constants/constants.service';
 
 @Injectable()
-export class ProposalElasticsearchService {
-    
+export class IacucElasticsearchService {
   private _client: Client;
 
   constructor( private constant: Constants ) {
     if (!this._client) {
-        this._connect();
+      this._connect();
     }
   }
 
   private _connect() {
     this._client = new Client({
-        host: this.constant.index_url,
+        host: this.constant.index_url
     });
   }
   
-  search( value, personId ): any {
-    if ( value) {
+  search(value, personId): any { 
+    if ( value ) {
       return this._client.search({
-        index: 'pdfibi',
+        index: 'iacucfibi',
         size: 20 ,
-        type: 'devproposal',
+        type: 'iacuc',
         body: {
                 query: {
                   bool: {
                     should: [
                       {
                         match: {
-                            proposal_number: {
+                            protocol_number: {
                             query: value,
                             operator: 'or'
                           }
@@ -65,35 +63,30 @@ export class ProposalElasticsearchService {
                       },
                       {
                         match: {
-                            sponsor: {
-                            query: value,
-                            operator: 'or'
-                          }
-                        }
-                      },
-                      {
-                        match: {
-                            person_name: {
-                            query: value,
-                            operator: 'or'
-                          }
-                        }
-                      },
-                      {
-                        match: {
                             status: {
                             query: value,
                             operator: 'or'
                           }
                         }
-                      }]
+                      },
+                      {
+                          match: {
+                              person_name: {
+                              query: value,
+                              operator: 'or'
+                            }
+                          }
+                        },
+                      {
+                          match: {
+                              protocol_type: {
+                              query: value,
+                              operator: 'or'
+                            }
+                          }
+                        }]
                   }
                 } ,
-                /*filter: {
-                    term: { 
-                        person_id: personId
-                    }
-                  },*/
               sort: [{
                   _score: {
                     order: 'desc'
@@ -103,16 +96,16 @@ export class ProposalElasticsearchService {
                   pre_tags: ['<b>'],
                   post_tags: ['</b>'],
                   fields: {
-                      proposal_number: {},
+                      protocol_number: {},
                       title: {},
                       lead_unit_number: {},
                       lead_unit_name: {},
-                      sponsor: {},
+                      status: {},
                       person_name: {},
-                      status: {}
+                      protocol_type: {}
                   }
                 } 
-                        }
+              }
         });
     } else {
       return Promise.resolve({});
@@ -120,7 +113,7 @@ export class ProposalElasticsearchService {
   }
 
   addToIndex( value ): any {
-    return this._client.create(value);
+    return this._client.create( value );
   }
 
   isAvailable(): any {
@@ -129,5 +122,4 @@ export class ProposalElasticsearchService {
           hello: 'elasticsearch!'
     });
   }
-
 }

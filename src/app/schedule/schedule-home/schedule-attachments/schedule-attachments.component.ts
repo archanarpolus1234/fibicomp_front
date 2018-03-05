@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ScheduleService } from '../../schedule.service';
 import { ScheduleConfigurationService } from '../../../common/schedule-configuration.service';
 import { ActivatedRoute } from '@angular/router';
@@ -10,6 +10,7 @@ import { ScheduleAttachmentsService } from './schedule-attachments.service';
     selector: 'app-schedule-attachments',
     templateUrl: './schedule-attachments.component.html',
     styleUrls: ['../../../../assets/css/bootstrap.min.css', '../../../../assets/css/font-awesome.min.css', '../../../../assets/css/style.css', '../../../../assets/css/search.css'],
+    changeDetection: ChangeDetectionStrategy.Default
 } )
 export class ScheduleAttachmentsComponent implements OnInit {
 
@@ -26,7 +27,8 @@ export class ScheduleAttachmentsComponent implements OnInit {
     attachmentList: any[] = [];
     tempSaveAttachment: any = {};
     currentUser = localStorage.getItem( "currentUser" );
-
+    fileName: string;
+    
     constructor( public scheduleAttachmentsService: ScheduleAttachmentsService, public scheduleConfigurationService: ScheduleConfigurationService, public scheduleService: ScheduleService, public activatedRoute: ActivatedRoute ) { }
 
     ngOnInit() {
@@ -52,10 +54,8 @@ export class ScheduleAttachmentsComponent implements OnInit {
                 this.attachmentObject.description = attachmentType.description;
                 this.attachmentObject.updateTimestamp = timestamp;
                 this.attachmentObject.updateUser = this.currentUser;
-
             }
         }
-
     }
 
     public dropped( event: UploadEvent ) {
@@ -63,21 +63,11 @@ export class ScheduleAttachmentsComponent implements OnInit {
         for ( let file of this.files ) {
             this.attachmentList.push( file );
         }
-
-
-
         for ( const file of event.files ) {
             file.fileEntry.file( info => {
                 this.uploadedFile.push( info );
             } );
         }
-    }
-
-    public fileOver( event ) {
-
-    }
-
-    public fileLeave( event ) {
     }
 
     deleteFromUploadedFileList( item ) {
@@ -89,7 +79,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
     }
 
     addAttachments() {
-        if ( this.attachmentTypeDescription.trim().length != 0 && this.uploadedFile.length > 0 ) {
+        if ( this.attachmentTypeDescription.trim().length == 0 && this.uploadedFile.length == 0 ) {
         } else {
             this.showAddAttachment = false;
             var d = new Date();
@@ -101,6 +91,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
             this.newCommitteeScheduleAttachment.updateUser = this.currentUser;
             this.result.newCommitteeScheduleAttachment = this.newCommitteeScheduleAttachment;
             this.scheduleAttachmentsService.addAttachments( this.result.committeeSchedule.scheduleId, this.result.newCommitteeScheduleAttachment, this.result.newCommitteeScheduleAttachment.attachmentTypeCode, this.uploadedFile, this.attachmentTypeDescription, this.currentUser ).subscribe( data => {
+            
                 this.uploadedFile = [];
                 var temp = {};
                 temp = data;
@@ -112,6 +103,11 @@ export class ScheduleAttachmentsComponent implements OnInit {
         }
     }
 
+    tempSave( event, attachment ) {
+        this.showPopup = true;
+        this.tempSaveAttachment = attachment;
+    }
+    
     deleteAttachments( event ) {
         event.preventDefault();
         this.showPopup = false;
@@ -121,9 +117,13 @@ export class ScheduleAttachmentsComponent implements OnInit {
             this.result = data;
         } );
     }
-
-    tempSave( event, attachment ) {
-        this.showPopup = true;
-        this.tempSaveAttachment = attachment;
+    
+    downloadAttachements(event, attachment, attachments){ 
+        event.preventDefault();
+        var blob = new Blob([attachment], { type: attachments.mimeType});
+        var a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = attachments.fileName;
+        a.click();
     }
 }

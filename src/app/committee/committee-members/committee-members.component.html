@@ -1,3 +1,20 @@
+<!-- MODAL FOR WARNING MESSAGE -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
+	id="modalWarning" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">{{modalTitle}}</h5>
+			</div>
+			<div class="modal-body">{{modalMessage}}</div>
+			<div class="modal-footer">
+
+				<button type="button" class="btnSkin btnSkinPrimary"
+					data-dismiss="modal" (click)="showPopup=false">Ok</button>
+			</div>
+		</div>
+	</div>
+</div>
 <section class="row">
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 		<div class="row">
@@ -66,7 +83,8 @@
 									</span>
 								</div>
 								<div class="col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
-									<button class="btnSkin btnSkinPrimary" [disabled]="memberAdded==true" (click)="addMember()">Add</button>
+									<button class="btnSkin btnSkinPrimary"
+										[disabled]="memberAdded==true" (click)="addMember()">Add</button>
 								</div>
 
 							</div>
@@ -76,7 +94,8 @@
 				<div *ngIf="memberExist">
 					<div
 						*ngFor="let member of resultLoadedById.committee.committeeMemberships">
-						<div class="set" *ngIf="member.active && activeMembers">
+						<div class="set"
+							*ngIf="member.active && activeMembers || !member.active && activeMembers && !inactiveMembers && member.updateTimestamp==null">
 
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
@@ -88,28 +107,28 @@
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
-									href="#"
+									( {{member.termStartDate |date:'yyyy-MM-dd'}} to
+									{{member.termEndDate |date:'yyyy-MM-dd'}} )</span><a href="#"
 									(click)="showMembersNonEmployeesTab($event,member.rolodexId)"><i
-									[ngClass]="(showMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
+									[ngClass]="(showNonEmployeeMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
 									(click)="deleteMember($event,member.commMembershipId)"><i
 										class="fa fa-trash-o"></i></a></span>
 							</div>
 
 							<div class="setBody" style="display: block;"
-								*ngIf="member.personId == personId && showMembers==true ">
+								*ngIf="member.personId == personId && showMembers==true || member.rolodexId == rolodexId && showNonEmployeeMembers == true ">
 								<div class="row">
 									<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 										<div class="borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Person Details
-												<button [disabled]="addExpertise || editRole ||addRole"
-													class="editBtn" *ngIf="editDetails ==false"
+												<button class="editBtn" *ngIf="editDetails==false"
 													(click)="showEditDetails()">
 													<i class="fa fa-pencil"></i>
 												</button>
 												<button class="addBtn" *ngIf="editDetails"
-													(click)="saveDetails()">
+													data-target="#modalWarning" data-toggle="modal"
+													(click)="saveDetails(member)">
 													<i class="fa fa-floppy-o"></i>
 												</button>
 												<button class="editBtn" *ngIf="editDetails"
@@ -170,8 +189,8 @@
 												Roles
 
 												<button id="rolesAddBtn" class="addBtn"
-													*ngIf="!addRole && !editRole" (click)="addRoles($event)"
-													[disabled]="editDetails ||addExpertise">
+													data-target="#modalWarning" data-toggle="modal"
+													(click)="addRoles($event)">
 													<i class="fa fa-plus"></i>
 												</button>
 
@@ -222,18 +241,20 @@
 														<td>{{role.membershipRoleDescription}}</td>
 														<td><input [owlDateTimeTrigger]="dt7"
 															[owlDateTime]="dt7" [(ngModel)]="role.startDate"
-															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode" [ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
+															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode"
+															[ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
 															[min]="member.termStartDate" [max]="member.termEndDate"
 															#dateTime="ngModel" /> <owl-date-time #dt7
 																[pickerType]="'calendar'"></owl-date-time></td>
 														<td><input [owlDateTimeTrigger]="dt8"
 															[owlDateTime]="dt8" [(ngModel)]="role.endDate"
-															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode" [ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
+															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode"
+															[ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
 															[min]="member.termStartDate" [max]="member.termEndDate" />
 															<owl-date-time #dt8 [pickerType]="'calendar'"></owl-date-time>
 														</td>
 														<td>
-														<ul class="actionButtonGroup">
+															<ul class="actionButtonGroup">
 																<li><a href="#"
 																	(click)="deleteRole($event,role.commMemberRolesId,member.commMembershipId)">
 																		<i class="fa fa-trash-o"></i>
@@ -242,11 +263,13 @@
 																	*ngIf="!editRole" id="roleEditBtn"> <i
 																		class="fa fa-pencil"></i>
 																</a></li>
-																<li><a href="#" *ngIf="editRole && role.membershipRoleCode==memberRoleCode"
+																<li><a href="#"
+																	*ngIf="editRole && role.membershipRoleCode==memberRoleCode"
 																	(click)="saveRole($event, role,member)"> <i
 																		class="fa fa-floppy-o"></i>
 																</a></li>
-																<li><a href="#" *ngIf="editRole && role.membershipRoleCode==memberRoleCode"
+																<li><a href="#"
+																	*ngIf="editRole && role.membershipRoleCode==memberRoleCode"
 																	(click)="cancelEditRoles($event,role)"><i
 																		class="fa fa-times" aria-hidden="true"></i></a></li>
 															</ul>
@@ -281,17 +304,14 @@
 												</div>
 											</div>
 										</div>
-
 										<!-- EXPERTISE -->
 										<div class=" borderBox col-12">
 
 											<h4 class="borderBoxHeading">
 												Expertise
 
-												<button id="rolesAddBtn" class="addBtn"
-													*ngIf="!addExpertise && !editExpertise"
-													[disabled]="editDetails || editRole ||addRole"
-													(click)="addExpertises($event)">
+												<button class="addBtn" data-target="#modalWarning"
+													data-toggle="modal" (click)="addExpertises($event)">
 													<i class="fa fa-plus"></i>
 												</button>
 											</h4>
@@ -323,13 +343,12 @@
 														<td>{{expertise.researchAreaCode}}</td>
 														<td>{{expertise.researchAreaDescription}}</td>
 														<td class="expertiseEditingActions">
-														<ul class="actionButtonGroup">
-															<li>
-																<a href="#" (click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)">
-																<i class="fa fa-trash-o"></i>
-																</a>
-															</li>
-														</ul>
+															<ul class="actionButtonGroup">
+																<li><a href="#"
+																	(click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)">
+																		<i class="fa fa-trash-o"></i>
+																</a></li>
+															</ul>
 														</td>
 													</tr>
 												</table>
@@ -339,16 +358,14 @@
 								</div>
 							</div>
 						</div>
-
-
 						<!-- INACTIVE MEMBERS -->
-
 						<div class="set" *ngIf="!member.active && inactiveMembers">
 
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
-									href="#" (click)="showMembersTab($event,member.personId)"><i
+									( {{member.termStartDate |date:'yyyy-MM-dd'}} to
+									{{member.termEndDate |date:'yyyy-MM-dd'}} )</span><a href="#"
+									(click)="showMembersTab($event,member.personId)"><i
 									[ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
 									(click)="deleteMember($event,member.commMembershipId)"><i
 										class="fa fa-trash-o"></i></a></span>
@@ -358,25 +375,25 @@
 									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
 									href="#"
 									(click)="showMembersNonEmployeesTab($event,member.rolodexId)"><i
-									[ngClass]="(showMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
+									[ngClass]="(showNonEmployeeMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
 									(click)="deleteMember($event,member.commMembershipId)"><i
 										class="fa fa-trash-o"></i></a></span>
 							</div>
 
 							<div class="setBody" style="display: block;"
-								*ngIf="member.personId == personId && showMembers==true ">
+								*ngIf="member.personId == personId && showMembers==true || member.rolodexId == rolodexId && showNonEmployeeMembers == true">
 								<div class="row">
 									<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
 										<div class="borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Person Details
-												<button [disabled]="addExpertise || editRole ||addRole"
-													class="editBtn" *ngIf="editDetails ==false"
+												<button class="editBtn" *ngIf="editDetails ==false"
 													(click)="showEditDetails()">
 													<i class="fa fa-pencil"></i>
 												</button>
 												<button class="addBtn" *ngIf="editDetails"
-													(click)="saveDetails()">
+													data-target="#modalWarning" data-toggle="modal"
+													(click)="saveDetails(member)">
 													<i class="fa fa-floppy-o"></i>
 												</button>
 												<button class="editBtn" *ngIf="editDetails"
@@ -431,13 +448,13 @@
 												</table>
 											</div>
 										</div>
-										<div class=" borderBox col-12">
+										<div class="borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Roles
 
 												<button id="rolesAddBtn" class="addBtn"
-													*ngIf="!addRole && !editRole" (click)="addRoles($event)"
-													[disabled]="editDetails ||addExpertise">
+													data-target="#modalWarning" data-toggle="modal"
+													(click)="addRoles($event)">
 													<i class="fa fa-plus"></i>
 												</button>
 
@@ -488,18 +505,20 @@
 														<td>{{role.membershipRoleDescription}}</td>
 														<td><input [owlDateTimeTrigger]="dt9"
 															[owlDateTime]="dt9" [(ngModel)]="role.startDate"
-															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode" [ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
+															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode"
+															[ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
 															[min]="member.termStartDate" [max]="member.termEndDate"
 															#dateTime="ngModel" /> <owl-date-time #dt9
 																[pickerType]="'calendar'"></owl-date-time></td>
 														<td><input [owlDateTimeTrigger]="dt10"
 															[owlDateTime]="dt10" [(ngModel)]="role.endDate"
-															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode" [ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
+															[disabled]="editRole==false || role.membershipRoleCode!=memberRoleCode"
+															[ngClass]="{'committeeBox' :role.membershipRoleCode==memberRoleCode,'committeeBoxNotEditable':role.membershipRoleCode!=memberRoleCode}"
 															[min]="member.termStartDate" [max]="member.termEndDate" />
 															<owl-date-time #dt10 [pickerType]="'calendar'"></owl-date-time>
 														</td>
 														<td>
-														<ul class="actionButtonGroup">
+															<ul class="actionButtonGroup">
 																<li><a href="#"
 																	(click)="deleteRole($event,role.commMemberRolesId,member.commMembershipId)">
 																		<i class="fa fa-trash-o"></i>
@@ -508,11 +527,13 @@
 																	*ngIf="!editRole" id="roleEditBtn"> <i
 																		class="fa fa-pencil"></i>
 																</a></li>
-																<li><a href="#" *ngIf="editRole && role.membershipRoleCode==memberRoleCode"
+																<li><a href="#"
+																	*ngIf="editRole && role.membershipRoleCode==memberRoleCode"
 																	(click)="saveRole($event, role,member)"> <i
 																		class="fa fa-floppy-o"></i>
 																</a></li>
-																<li><a href="#" *ngIf="editRole && role.membershipRoleCode==memberRoleCode"
+																<li><a href="#"
+																	*ngIf="editRole && role.membershipRoleCode==memberRoleCode"
 																	(click)="cancelEditRoles($event,role)"><i
 																		class="fa fa-times" aria-hidden="true"></i></a></li>
 															</ul>
@@ -549,22 +570,15 @@
 												</div>
 											</div>
 										</div>
-
 										<!-- EXPERTISE -->
 										<div class=" borderBox col-12">
-
 											<h4 class="borderBoxHeading">
 												Expertise
-
 												<button id="rolesAddBtn" class="addBtn"
 													*ngIf="!addExpertise && !editExpertise"
-													[disabled]="editDetails || editRole ||addRole"
+													data-target="#modalWarning" data-toggle="modal"
 													(click)="addExpertises($event)">
 													<i class="fa fa-plus"></i>
-												</button>
-												<button class="addBtn" *ngIf="editExpertise"
-													(click)="saveExpertise(member)">
-													<i class="fa fa-floppy-o"></i>
 												</button>
 
 											</h4>
@@ -596,13 +610,12 @@
 														<td>{{expertise.researchAreaCode}}</td>
 														<td>{{expertise.researchAreaDescription}}</td>
 														<td class="expertiseEditingActions">
-														<ul class="actionButtonGroup">
-															<li>
-																<a href="#" (click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)">
-																<i class="fa fa-trash-o"></i>
-																</a>
-															</li>
-														</ul>
+															<ul class="actionButtonGroup">
+																<li><a href="#"
+																	(click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)">
+																		<i class="fa fa-trash-o"></i>
+																</a></li>
+															</ul>
 														</td>
 													</tr>
 

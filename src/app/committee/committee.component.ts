@@ -6,12 +6,13 @@ import { CommitteCreateEditService } from './committee-create-edit.service';
 import { CommitteeSaveService } from './committee-save.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { CommitteeConfigurationService } from '../common/committee-configuration.service';
+import { SessionManagementService } from "../session/session-management.service";
 
 
 @Component( {
     selector: 'app-committee',
     templateUrl: './committee.component.html',
-    providers: [CommitteCreateEditService, CommitteeSaveService],
+    providers: [CommitteCreateEditService, CommitteeSaveService, SessionManagementService],
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
 } )
 
@@ -37,13 +38,16 @@ export class CommitteeComponent {
     areaList: any = [];
     showPopup = false;
     middleOfEdit = false;
-    middleOfSave= false;
+    middleOfSave = false;
     alertMsgNotSaved: string = '';
     alertMsgMiddleOfEdit: string = '';
-    @ViewChild('homeComponent') committeeHome;
+    @ViewChild( 'homeComponent' ) committeeHome;
     public dataServiceHomeUnit: CompleterData;
 
-    constructor( public route: ActivatedRoute, public router: Router, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
+    constructor( public route: ActivatedRoute, public router: Router, private sessionService: SessionManagementService, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
+        if ( !sessionService.canActivate() ) {
+            this.router.navigate( ['/loginpage'] );
+        }
         this.result.committee = {};
         this.result.committee.committeeType = {};
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
@@ -117,16 +121,16 @@ export class CommitteeComponent {
                     this.alertMsgNotSaved = 'You have to save the committee to proceed!';
                 }
             }
-            else{
+            else {
                 this.currentTab = current_tab;
             }
         }
-        else{
+        else {
             this.currentTab = current_tab;
         }
     }
 
-    saveAndContinue(){
+    saveAndContinue() {
         this.editFlag = !this.editFlag;
         this.class = "committeeBoxNotEditable";
         this.currentTab = 'committee_members';
@@ -134,10 +138,10 @@ export class CommitteeComponent {
         this.committeeHome.saveDetails();
     }
 
-    clear(){
+    clear() {
         this.showPopup = false;
         this.middleOfEdit = false;
-        this.alertMsgMiddleOfEdit = ''; 
+        this.alertMsgMiddleOfEdit = '';
         this.middleOfSave = false;
         this.alertMsgNotSaved = '';
     }
@@ -172,8 +176,8 @@ export class CommitteeComponent {
         this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
             this.result = data;
             this.id = this.result.committee.committeeId;
-        });
-        
+        } );
+
         if ( this.mode == 'view' ) {
             this.initLoadParent();
             this.editDetails = false;

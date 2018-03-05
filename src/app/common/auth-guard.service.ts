@@ -8,7 +8,6 @@ import { LoginCheckService } from './login-check.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-
     constructor( private logincheckService: LoginCheckService, private router: Router ) { }
 
     canActivate( next: ActivatedRouteSnapshot, state: RouterStateSnapshot ): Observable<boolean> {

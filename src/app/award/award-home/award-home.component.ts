@@ -3,7 +3,7 @@ import { AwardSummaryService } from './award-summary.service';
 import { ActivatedRoute } from '@angular/router';
 import { AwardComponent } from '../award.component';
 
-import {AwardconfigurationService} from '../../award/awardconfiguration.service';
+import { AwardconfigurationService } from '../../award/awardconfiguration.service';
 
 @Component( {
     selector: 'app-award-home',
@@ -19,13 +19,6 @@ export class AwardHomeComponent implements OnInit {
     awardUnitContacts: any[] = [];
     awardSpecialReviews: any[] = [];
     awardFundedProposals: any[] = [];
-
-    noAwardDetails: boolean = false;
-    noAwardPersons: boolean = false;
-    noAwardSponsorContacts: boolean = false;
-    noAwardUnitContacts: boolean = false;
-    noAwardSpecialReviews: boolean = false;
-    noAwardFundedProposal: boolean = false;
 
     public lastUpdate: any;
     public activityType: string;
@@ -46,32 +39,14 @@ export class AwardHomeComponent implements OnInit {
     public pi_coiTrigger = false;
     public kpTrigger = false;
 
-    constructor( public awardComponent: AwardComponent, public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, private awardconfigurationService: AwardconfigurationService ) {
+    constructor( public awardComponent: AwardComponent, public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardconfigurationService: AwardconfigurationService ) {
     }
 
     ngOnInit() {
         this.awardId = this.route.snapshot.queryParams['awardId'];
-            this.awardconfigurationService.currentAwardData.subscribe(data=>{
-            this.result = data || [];
-            if ( this.result != null ) {
-                if ( this.result.awardDetails.length == 0 ) {
-                    this.noAwardDetails = true;
-                }
-                if ( this.result.awardPersons.length == 0 ) {
-                    this.noAwardPersons = true;
-                }
-                if ( this.result.awardSponsorContact.length == 0 ) {
-                    this.noAwardSponsorContacts = true;
-                }
-                if ( this.result.awardUnitContact.length == 0 ) {
-                    this.noAwardUnitContacts = true;
-                }
-                if ( this.result.awardFundedProposals.length == 0 ) {
-                    this.noAwardFundedProposal = true;
-                }
-                if ( this.result.awardSpecialReviews.length == 0 ) {
-                    this.noAwardSpecialReviews = true;
-                }
+        this.awardconfigurationService.currentAwardData.subscribe( data => {
+            this.result = data;
+            if ( this.result.length !== 0 && this.result.awardDetails != null ) {
                 this.activityType = this.result.awardDetails[0].activity_type;
                 this.awardNumber = this.result.awardDetails[0].award_number;
                 this.awardType = this.result.awardDetails[0].award_type;
@@ -89,7 +64,6 @@ export class AwardHomeComponent implements OnInit {
                 this.awardUnitContacts = this.result.awardUnitContact;
                 this.awardSpecialReviews = this.result.awardSpecialReviews;
                 this.awardFundedProposals = this.result.awardFundedProposals;
-
                 for ( let i = 0; i < this.awardPersons.length; i++ ) {
                     if ( this.awardPersons[i].contact_role_code == 'PI' || this.awardPersons[i].contact_role_code == 'COI' ) {
                         this.pi_coiTrigger = true;
@@ -101,4 +75,6 @@ export class AwardHomeComponent implements OnInit {
             }
         } );
     }
+
+    ngOnChanges() { }
 }

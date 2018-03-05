@@ -28,25 +28,28 @@ export class AwardReportsAndTerms {
         this.awardreportsandtermsService.getAwardReportsAndTerms().subscribe(
             data => {
                 this.result = data;
-                this.awardReportKeyList = Object.keys( this.result.awardReport );
-                this.awardTermsKeyList = Object.keys( this.result.awardTerms );
-                if ( this.result.awardReport == null || this.result.awardReport.length == 0 ) {
-                    this.noReports = true;
-                }
-                if ( this.result.awardApprovdEquipment == null || this.result.awardApprovdEquipment.length == 0 ) {
-                    this.noApprovedEquipment = true;
-                }
-                if ( this.result.approvedTravel == null || this.result.approvedTravel.length == 0 ) {
-                    this.noApprovedTravel = true;
-                }
-                if ( this.result.awardTerms == null || this.result.awardTerms.length == 0 ) {
-                    this.noTerms = true;
-                }
-                if ( this.result.awardPaymntInvoice == null || this.result.awardPaymntInvoice.length == 0 ) {
-                    this.noPayment = true;
+                if ( this.result.awardPaymntSchedule !== undefined && this.result.awardTerms !== undefined && this.result.awardPaymntInvoice !== undefined && this.result.approvedTravel !== undefined ) {
+                    this.awardReportKeyList = Object.keys( this.result.awardReport );
+                    this.awardTermsKeyList = Object.keys( this.result.awardTerms );
+                    if ( this.result.awardReport == null || this.result.awardReport.length == 0 ) {
+                        this.noReports = true;
+                    }
+                    if ( this.result.awardApprovdEquipment == null || this.result.awardApprovdEquipment.length == 0 ) {
+                        this.noApprovedEquipment = true;
+                    }
+                    if ( this.result.approvedTravel == null || this.result.approvedTravel.length == 0 ) {
+                        this.noApprovedTravel = true;
+                    }
+                    if ( this.result.awardTerms == null || this.result.awardTerms.length == 0 ) {
+                        this.noTerms = true;
+                    }
+                    if ( this.result.awardPaymntInvoice == null || this.result.awardPaymntInvoice.length == 0 ) {
+                        this.noPayment = true;
+                    }
                 }
             } );
     }
+    
     showReportingTab( event: any ) {
         event.preventDefault();
         this.showReports = !this.showReports;

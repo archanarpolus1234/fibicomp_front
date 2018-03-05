@@ -22,8 +22,9 @@ export class AwardComponent {
     result: any = {};
     outputPath: string;
     userName: string;
-
-    constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, private awardconfigurationService: AwardconfigurationService ) {
+    documentNumber: string;
+    
+    constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, public awardconfigurationService: AwardconfigurationService ) {
         this.outputPath = this.constant.outputPath;
     }
 
@@ -35,12 +36,8 @@ export class AwardComponent {
         this.awardId = this.route.snapshot.queryParams['awardId'];
         this.awardSummaryService.loadAwardSummary( this.awardId ).subscribe( data => {
             this.result = data || [];
-            console.log("calling backend ");
-            if ( this.result != null ) {
+            if ( this.result.length !== 0 && this.result.awardDetails !== undefined && this.result.awardPersons !== undefined) {
                 this.awardconfigurationService.changeAwardData(this.result);
-                this.awardconfigurationService.currentAwardData.subscribe(data=>{
-                    console.log("passing data:",data);
-                });
                 this.userName = this.result.awardPersons[0].user_name;
                 this.awardNumber = this.result.awardDetails[0].award_number;
                 this.accountNumber = this.result.awardDetails[0].account_number;
@@ -48,7 +45,7 @@ export class AwardComponent {
                 this.awardStatus = this.result.awardDetails[0].award_status;
                 this.sponsorName = this.result.awardDetails[0].sponsor_name;
                 this.lastUpdate = this.result.awardDetails[0].last_update;
-
+                this.documentNumber = this.result.awardDetails[0].document_number;
             }
         } );
     }

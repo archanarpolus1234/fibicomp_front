@@ -25,24 +25,4 @@ export class ScheduleService {
                     return Observable.throw( error.message || error )
                 } );
     }
-
-    saveMinuteData( minuteData: Object ): Observable<JSON> {
-        return this.http.post( this.constant.addScheduleMinuteUrl, minuteData )
-            .map( res => res.json()
-            )
-            .catch( error => {
-                console.error( error.message || error );
-                return Observable.throw( error.message || error )
-            } );
-    }
-    
-    deleteMinuteData( minuteData: Object ): Observable<JSON> {
-        return this.http.post( this.constant.deleteScheduleMinuteUrl, minuteData )
-            .map( res => res.json()
-            )
-            .catch( error => {
-                console.error( error.message || error );
-                return Observable.throw( error.message || error )
-            } );
-    }
 }

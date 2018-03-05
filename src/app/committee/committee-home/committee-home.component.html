@@ -1,6 +1,4 @@
-
 <!-- COMMITTEE HOME -->
-
 <section class="row">
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 		<div class="row">
@@ -24,7 +22,7 @@
 						<span>{{error}}<span class="mandatory">*</span></span>
 					</p>
 					<div class="pullSide">
-						<table class="table tableSkin grid2">
+						<table class="table tableSkin grid2" *ngIf="result?.committee">
 							<tbody>
 								<tr>
 									<td><label><span class="mandatory">*</span> Review
@@ -43,7 +41,6 @@
 										type="text" [disabled]="editDetails==false"
 										[ngClass]="editClass"
 										[(ngModel)]="result.committee.description"></td>
-									<!--  <td ><label>Schedule Description</label><br>Meets monthly</td> -->
 								</tr>
 								<tr>
 									<td><label><span class="mandatory">*</span> Min
@@ -59,31 +56,26 @@
 										[disabled]="editDetails==false" min="1" [ngClass]="editClass"
 										[(ngModel)]="result.committee.maxProtocols" /></td>
 								</tr>
-
-
-
 							</tbody>
 						</table>
-
 					</div>
 				</div>
 			</div>
-
 			<div class=" col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 				<div class="borderBox col-12">
 					<h4 class="borderBoxHeading ">
 						Area of Research
-						<button id="areaOfResearchAddBtn" class="addBtn"
+						<button id="areaOfResearchAddBtn" class="addBtn" data-target="#editDetailsModal" data-toggle="modal"
 							(click)="showaddAreaOfResearch()">
 							<i class="fa fa-plus"></i>
 						</button>
 					</h4>
 					<div class="pullSide">
-						<table class="table table-responsive tableSkin ">
+						<table class="table table-responsive tableSkin " *ngIf="result?.committee">
 							<tr id="addAreaOfResearchRow"
-								*ngIf="addResearch && isCommitteeDetailsEditMode">
+								*ngIf="addResearch && saveCommitteeFlag">
 								<td>Area of Research</td>
-								<td>
+								<td colspan="2">
 									<div>
 										<ng2-completer title="Add area of research"
 											[inputClass]="completerID"
@@ -104,20 +96,19 @@
 								<th title="">Research Area Code</th>
 								<th title="">Code/Description</th>
 								<th title="">Action</th>
-
 							</tr>
 							<tr
 								*ngFor="let area of result.committee.researchAreas; let i=index">
-								<td><input type="text" class="committeeBoxNotEditable"
+								<td><input type="text" class="committeeBoxNotEditable" [disabled]="true"
 									value="{{i+1}}" /></td>
-								<td><input type="text" class="committeeBoxNotEditable"
+								<td><input type="text" class="committeeBoxNotEditable" [disabled]="true"
 									value="{{ area.researchAreaCode}}" /></td>
-								<td><input type="text" class="committeeBoxNotEditable"
+								<td><input type="text" class="committeeBoxNotEditable" [disabled]="true"
 									value="{{ area.researchAreaDescription }}" /></td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a href="#" data-toggle="modal"
-											data-target="#warningModal"
+											data-target="#warningModal, #editDetailsModal"
 											(click)="deleteAreaOfResearchConfirmation($event,area)"><i
 												class="fa fa-trash-o" aria-hidden="true"></i></a></li>
 									</ul>
@@ -127,23 +118,20 @@
 					</div>
 				</div>
 			</div>
-
-
 			<div class="container-fluid">
 				<div class="borderBox col-12">
 
 					<h4 class="borderBoxHeading">
 						Schedule
 						<button class="editBtn" (click)="showSchedulePopUp()"
-							data-toggle="modal" data-target="#exampleModalCenter"
+							data-toggle="modal" data-target="#exampleModalCenter, #editDetailsModal"
 							style="position: static; float: right;">
 							<i class="fa fa-plus">&nbsp;Generate Schedule</i>
 						</button>
 						<!-- Generate Schedules -->
-
 					</h4>
 					<div class="pullSide">
-						<table class="table table-responsive tableSkin">
+						<table class="table table-responsive tableSkin" *ngIf="result?.committee">
 							<tr class="scheduleFilterBoxes">
 								<td class="noDataOnChart">From :</td>
 								<td><input [owlDateTimeTrigger]="fltrStrDt"
@@ -181,7 +169,7 @@
 								<th title="Click to sort by Status">Action</th>
 							</tr>
 							<tr
-								*ngFor="let committeScheduleData of result.committee.committeeSchedules; let i = index;">
+								*ngFor="let committeScheduleData of result?.committee?.committeeSchedules; let i = index;">
 								<ng-container *ngIf="committeScheduleData.filter">
 								<td>{{ i + 1 }}</td>
 								<td><input [owlDateTimeTrigger]="schdlDt"
@@ -211,11 +199,11 @@
 									<ul class="actionButtonGroup">
 										<li><a title="Open {{committeScheduleData.scheduleId}}" *ngIf="!editSchedule[i] == true"
 											href="#" routerLink='/schedule' [queryParams]="{'scheduleId':committeScheduleData.scheduleId}"><i class="fa fa-eye"></i></a></li>
-										<li><a href="#" *ngIf="!editSchedule[i] == true"
+										<li><a href="#" *ngIf="!editSchedule[i] == true" data-toggle="modal" data-target="#warningModal"
 											(click)="editScheduleData($event, committeScheduleData.scheduledDate, committeScheduleData.scheduleStatus.description, committeScheduleData.place, committeScheduleData.time, i)"><i
 												class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
 										<li><a href="#" *ngIf="!editSchedule[i] == true"
-											data-toggle="modal" data-target="#deleteModal"
+											data-toggle="modal" data-target="#deleteModal, #warningModal"
 											(click)="showDeleteModal($event, committeScheduleData.scheduleId, result.committee.committeeId, committeScheduleData.scheduledDate)"><i
 												class="fa fa-trash-o" aria-hidden="true"></i></a></li>
 										<li><a href="#" *ngIf="!editSchedule[i] == false"
@@ -235,7 +223,7 @@
 
 			<!-- Modal for generate schedule-->
 			<div class="modal fade mySkinDialog modalFallBack"
-				*ngIf="showGenerateSchedule && isCommitteeDetailsEditMode"
+				*ngIf="showGenerateSchedule && saveCommitteeFlag"
 				id="exampleModalCenter" tabindex="-1" role="dialog"
 				aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
 				<div class="modal-dialog modal-lg modal-dialog-centered"
@@ -538,10 +526,8 @@
 					</div>
 				</div>
 			</div>
-
 			<!-- Modal for Show Warning-->
-
-			<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
+			<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup || isScheduleEditWarningModalOpen"
 				id="warningModal" tabindex="-1" role="dialog"
 				aria-labelledby="deleteModalTitle" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
@@ -553,6 +539,7 @@
 							<h5 class="modal-title"
 								*ngIf="duplicateAreaOfResearch || emptyAreaOfResearch">Cannot
 								Add!</h5>
+								<h5 class="modal-title" *ngIf="isScheduleEditWarningModalOpen">Cannot edit/delete!</h5>
 							<button type="button" class="close" data-dismiss="modal"
 								aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -560,8 +547,7 @@
 						</div>
 						<div class="modal-body">
 							<p *ngIf="deleteConfirmation">{{ this.deleteMsg }}</p>
-							<p
-								*ngIf="duplicateIdFlag || duplicateAreaOfResearch || emptyAreaOfResearch">
+							<p *ngIf="duplicateIdFlag || duplicateAreaOfResearch || emptyAreaOfResearch || isScheduleEditWarningModalOpen">
 								{{ this.alertMsg }}</p>
 						</div>
 						<div class="modal-footer" *ngIf="deleteConfirmation">
@@ -576,13 +562,16 @@
 							<button type="button" class="btnSkin btnSkinPrimary"
 								(click)="duplicateId()" data-dismiss="modal">Ok</button>
 						</div>
+						<div class="modal-footer" *ngIf="isScheduleEditWarningModalOpen">
+							<button type="button" class="btnSkin btnSkinPrimary"
+								(click)="cancelEditScheduleItem()" data-dismiss="modal">Ok</button>
+						</div>
 					</div>
 				</div>
 			</div>
 			<!-- end of modal showing warnings -->
-
+			
 			<!-- Modal for Show Warning on Delete Schedule from List -->
-
 			<div class="modal fade mySkinDialog modalFallBack" *ngIf="isTodelete"
 				id="deleteModal" tabindex="-1" role="dialog"
 				aria-labelledby="deleteModalTitle" aria-hidden="true">
@@ -613,8 +602,33 @@
 				</div>
 			</div>
 			<!-- End of Modal for Show Warning on Delete Schedule from List -->
+			
+			<!-- Modal for editCommittee Details warning -->
+			<div class="modal fade mySkinDialog modalFallBack"
+				*ngIf="isEditDetailsModalOpen" id="editDetailsModal" tabindex="-1"
+				role="dialog" aria-labelledby="editDetailsModalTitle"
+				aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="skippedSchedulesLongTitle">Warning !!!</h5>
+							<button type="button" class="close" data-dismiss="modal"
+								aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+						<div class="modal-body">
+							<p class="forSkipSchedule">You are in the middle of editing/creating Committee Details, please save/cancel to proceed on Committee Details</p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btnSkin btnSkinPrimary"
+								data-dismiss="modal" (click)="closeEditDetailsModalOpen()">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- end of edit comittee details modal -->
 			<!-- All Modal ends -->
-
 		</div>
 	</div>
 </section>

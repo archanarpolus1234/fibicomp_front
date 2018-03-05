@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import {ScheduleConfigurationService} from '../../common/schedule-configuration.service';
-import { ScheduleService } from "../schedule.service";
+import { MinutesService } from "../minutes/minutes.service";
 
 @Component({
   selector: 'app-minutes',
@@ -33,7 +33,7 @@ export class MinutesComponent implements OnInit {
     committeeId: string;
     scheduleId: number;
 
-    constructor( public scheduleConfigurationService: ScheduleConfigurationService, public scheduleService: ScheduleService ) {
+    constructor( public scheduleConfigurationService: ScheduleConfigurationService, public minutesService: MinutesService ) {
         this.initialLoad();
     }
 
@@ -165,6 +165,7 @@ export class MinutesComponent implements OnInit {
         if ( this.selectedProtocol == 'Select' ) {
             this.selectedProtocol = null;
         }
+        this.result.committeeId = this.result.committeeSchedule.committeeId;
         this.result.newCommitteeScheduleMinute.protocolNumber = this.selectedProtocol;
         this.result.newCommitteeScheduleMinute.commScheduleActItemsId = this.selectedOtherBusItem.commScheduleActItemsId;
         this.result.newCommitteeScheduleMinute.privateCommentFlag = this.privateCommentFlag;
@@ -175,7 +176,7 @@ export class MinutesComponent implements OnInit {
         this.result.newCommitteeScheduleMinute.createTimestamp = new Date();
         this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
         if ( this.isMandatoryFilled == true ) {
-            this.scheduleService.saveMinuteData( this.result ).subscribe( data => {
+            this.minutesService.saveMinuteData( this.result ).subscribe( data => {
                 this.result = data || [];
             } );
             this.initialLoad();
@@ -216,7 +217,7 @@ export class MinutesComponent implements OnInit {
         if ( this.isToDelete == true ) {
             this.isToDelete = false;
         }
-        this.scheduleService.deleteMinuteData( deleteRequestData ).subscribe( data => {
+        this.minutesService.deleteMinuteData( deleteRequestData ).subscribe( data => {
             this.result = data || [];
         } );
         this.initialLoad();
@@ -225,6 +226,17 @@ export class MinutesComponent implements OnInit {
     updateMinuteItem( e, i, minuteItem ) {
         e.preventDefault();
         this.isEditMinuteItem[i] = !this.isEditMinuteItem[i];
+        if(minuteItem.minuteEntry != "") {
+            this.result.newCommitteeScheduleMinute = minuteItem;
+            this.result.committeeId = this.result.committeeSchedule.committeeId;
+            this.result.scheduleId = this.result.committeeSchedule.scheduleId;
+            this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
+            this.result.newCommitteeScheduleMinute.updateUser = localStorage.getItem('currentUser');
+            this.minutesService.updateMinuteData( this.result ).subscribe( data => {
+                this.result = data || [];
+            } );
+            this.initialLoad();
+        }
     }
 
     cancelEditMinuteItem( e, i, minuteItem ) {

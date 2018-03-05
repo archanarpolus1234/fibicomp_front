@@ -94,9 +94,8 @@ export class ElasticSearchComponent implements AfterViewInit {
                         var disclosure_disposition: string;
                         var disclosure_status: string;
                         var module_item_key: string;
-
+                        
                         /*ELASTIC SEARCH FOR AWARDS*/
-
                         if ( this.tabPosition == 'AWARD' ) {
                             this.es.search( searchString, this.personId )
                                 .then(( searchResult ) => {
@@ -171,7 +170,6 @@ export class ElasticSearchComponent implements AfterViewInit {
                         }
 
                         /*ELASTIC SEARCH FOR PROPOSALS*/
-
                         if ( this.tabPosition == 'PROPOSAL' ) {
                             this.ps.search( searchString, this.personId )
                                 .then(( searchResult ) => {
@@ -241,7 +239,6 @@ export class ElasticSearchComponent implements AfterViewInit {
                         }
 
                         /*ELASTIC SEARCH FOR IRB*/
-
                         if ( this.tabPosition == 'IRB' ) {
                             this.irb.search( searchString, this.personId )
                                 .then(( searchResult ) => {
@@ -310,7 +307,6 @@ export class ElasticSearchComponent implements AfterViewInit {
                         }
 
                         /*ELASTIC SEARCH FOR IACUC*/
-
                         if ( this.tabPosition == 'IACUC' ) {
                             this.iacuc.search( searchString, this.personId )
                                 .then(( searchResult ) => {
@@ -379,7 +375,6 @@ export class ElasticSearchComponent implements AfterViewInit {
                         }
 
                         /*ELASTIC SEARCH FOR DISCLOSURE*/
-
                         if ( this.tabPosition == 'DISCLOSURE' ) {
                             this.dis.search( searchString, this.personId )
                                 .then(( searchResult ) => {

@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef} from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { SlicePipe } from '@angular/common';
-import { Router,ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { SessionManagementService } from '../session/session-management.service';
-import { ElasticSearchComponent } from '../elasticSearch/elastic-search.component';
+import { ElasticSearchComponent } from '../elastic-search/elastic-search.component';
 import { Constants } from '../constants/constants.service';
 import { ExpandedViewDataService } from '../research_summary/expanded-view-data-service';
 import { DashboardData } from '../dashboard/dashboard-data.service';
@@ -19,8 +19,8 @@ import { DashboardConfigurationService } from '../common/dashboard-configuration
 } )
 
 export class DashboardComponent implements OnInit {
-    nullScheduleData: boolean =false;
-    nullCommitteeData: boolean=false;
+    nullScheduleData: boolean = false;
+    nullCommitteeData: boolean = false;
     advanceSearchCriteria = {
         property1: '',
         property2: '',
@@ -99,49 +99,49 @@ export class DashboardComponent implements OnInit {
     private sponsorType: string;
     private proposalType: string;
     private isLoginPage: boolean = true;
-    private nullAwardData : boolean = false;
-    private nullProposalData : boolean = false;
-    private nullIrbData : boolean = false;
-    private nullIacucData : boolean = false;
-    private nullDisclosureData : boolean = false;
-    private dashboardHeaderData : any[];
-    
-    public dashboardExpenditureVolumeWidget : boolean = true;
-    public dashboardResearchSummaryWidget : boolean = true;
-    public dashboardawardedProposalBySponsorWidget : boolean = true;
-    public dashboardAwardBysponsorTypesWidget : boolean = true;
-    public dashboardproposalBySponsorTypesWidget : boolean = true;
-    public dashboardinProgressproposalBySponsorWidget : boolean = true;
-    public message : string;
-    
-	constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData,private dashboardConfigurationService: DashboardConfigurationService) {
+    private nullAwardData: boolean = false;
+    private nullProposalData: boolean = false;
+    private nullIrbData: boolean = false;
+    private nullIacucData: boolean = false;
+    private nullDisclosureData: boolean = false;
+    private dashboardHeaderData: any[];
+
+    public dashboardExpenditureVolumeWidget: boolean = true;
+    public dashboardResearchSummaryWidget: boolean = true;
+    public dashboardawardedProposalBySponsorWidget: boolean = true;
+    public dashboardAwardBysponsorTypesWidget: boolean = true;
+    public dashboardproposalBySponsorTypesWidget: boolean = true;
+    public dashboardinProgressproposalBySponsorWidget: boolean = true;
+    public message: string;
+
+    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService ) {
         this.outputPath = this.constant.outputPath;
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         }
         this.getResearchSummaryData();
     }
-    
+
     ngOnInit() {
-        this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.subscribe(status=>{
+        this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.subscribe( status => {
             this.dashboardExpenditureVolumeWidget = status;
-        });
-        this.dashboardConfigurationService.currentdashboardResearchSummaryWidget.subscribe(status=>{
+        } );
+        this.dashboardConfigurationService.currentdashboardResearchSummaryWidget.subscribe( status => {
             this.dashboardResearchSummaryWidget = status;
-        });
-        this.dashboardConfigurationService.currentdashboardawardedProposalBySponsorWidget.subscribe(status=>{
+        } );
+        this.dashboardConfigurationService.currentdashboardawardedProposalBySponsorWidget.subscribe( status => {
             this.dashboardawardedProposalBySponsorWidget = status;
-        });
-        this.dashboardConfigurationService.currentdashboardAwardBysponsorTypesWidget.subscribe(status=>{
+        } );
+        this.dashboardConfigurationService.currentdashboardAwardBysponsorTypesWidget.subscribe( status => {
             this.dashboardAwardBysponsorTypesWidget = status;
-        });
-        this.dashboardConfigurationService.currentdashboardproposalBySponsorTypesWidget.subscribe(status=>{
+        } );
+        this.dashboardConfigurationService.currentdashboardproposalBySponsorTypesWidget.subscribe( status => {
             this.dashboardproposalBySponsorTypesWidget = status;
-        });
-        this.dashboardConfigurationService.currentdashboardinProgressproposalBySponsorWidget.subscribe(status=>{
+        } );
+        this.dashboardConfigurationService.currentdashboardinProgressproposalBySponsorWidget.subscribe( status => {
             this.dashboardinProgressproposalBySponsorWidget = status;
-        });
-        
+        } );
+
         localStorage.setItem( 'researchSummaryIndex', null );
         this.adminStatus = localStorage.getItem( 'isAdmin' );
         this.userName = localStorage.getItem( 'currentUser' );
@@ -152,52 +152,52 @@ export class DashboardComponent implements OnInit {
     }
 
     initialLoad( currentPage ) {
-        this.constval = this.constant.index_url; 
+        this.constval = this.constant.index_url;
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
             .subscribe(
             data => {
                 this.result = data || [];
-                if ( this.result != null ) {
+                if ( this.result.awardViews !== undefined && this.result.proposalViews !== undefined && this.result.protocolViews && this.result.disclosureViews !== undefined && this.result.committees!== undefined && this.result.committeeSchedules !== undefined) {
                     this.totalPage = this.result.totalServiceRequest;
                     if ( this.currentPosition == "AWARD" ) {
                         this.serviceRequestList = this.result.awardViews;
-                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                        if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullAwardData = true;
                         }
                     }
                     if ( this.currentPosition == "PROPOSAL" ) {
                         this.serviceRequestList = this.result.proposalViews;
-                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                        if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullProposalData = true;
                         }
                     }
                     if ( this.currentPosition == "IRB" ) {
                         this.serviceRequestList = this.result.protocolViews;
-                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                        if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullIrbData = true;
                         }
                     }
                     if ( this.currentPosition == "IACUC" ) {
                         this.serviceRequestList = this.result.iacucViews;
-                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                        if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullIacucData = true;
                         }
                     }
                     if ( this.currentPosition == "DISCLOSURE" ) {
                         this.serviceRequestList = this.result.disclosureViews;
-                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                        if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullDisclosureData = true;
                         }
                     }
                     if ( this.currentPosition == "COMMITTEE" ) {
                         this.serviceRequestList = this.result.committees;
-                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                        if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullCommitteeData = true;
                         }
                     }
                     if ( this.currentPosition == "SCHEDULE" ) {
                         this.serviceRequestList = this.result.committeeSchedules;
-                        if (this.serviceRequestList == null || this.serviceRequestList.length == 0){
+                        if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullScheduleData = true;
                         }
                     }
@@ -210,7 +210,7 @@ export class DashboardComponent implements OnInit {
     }
 
     showTab( currentTabPosition ) {
-        this.personId = localStorage.getItem( 'personId' ); 
+        this.personId = localStorage.getItem( 'personId' );
         this.result = null;
         this.resultAward = false;
         this.serviceRequestList = [];
@@ -224,11 +224,11 @@ export class DashboardComponent implements OnInit {
         this.pageNumber = 20;
         this.propertyName = '';
         this.currentPosition = currentTabPosition;
-        
+
         this.pagedItems = null;
-        if(currentTabPosition === 'COMMITTEE' || currentTabPosition === 'SCHEDULE'){
+        if ( currentTabPosition === 'COMMITTEE' || currentTabPosition === 'SCHEDULE' ) {
             this.sortBy = 'updateTimestamp';
-        } else{
+        } else {
             this.sortBy = 'updateTimeStamp';
         }
         this.adminStatus = localStorage.getItem( 'isAdmin' );
@@ -287,7 +287,7 @@ export class DashboardComponent implements OnInit {
         if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
-        
+
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
             .subscribe( data => {
                 this.result = data || [];
@@ -441,13 +441,13 @@ export class DashboardComponent implements OnInit {
     receiveResultCard( $event ) {
         this.resultAward = $event;
     }
-    
+
     expandedView( summaryView ) {
         if ( summaryView == 'Submitted Proposal' ) {
             localStorage.setItem( 'researchSummaryIndex', "PROPOSALSSUBMITTED" );
             localStorage.setItem( 'expandedViewHeading', summaryView );
         }
-		if ( summaryView == 'In Progress Proposal' ) {
+        if ( summaryView == 'In Progress Proposal' ) {
             localStorage.setItem( 'researchSummaryIndex', "PROPOSALSINPROGRESS" );
             localStorage.setItem( 'expandedViewHeading', summaryView );
         }

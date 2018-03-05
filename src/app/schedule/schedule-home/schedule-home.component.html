@@ -2,7 +2,7 @@
 	<div class="row">
 		<div id="myawa" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 		</div>
-		<div *ngIf="isToDisplayHomeData"
+		<div *ngIf="result?.committeeSchedule"
 			class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 			<div>
 				<h4 class="borderBoxHeading">
@@ -10,11 +10,14 @@
 						<div class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12">
 							{{result?.committeeSchedule?.committeeName}} #
 							{{result?.committeeSchedule?.committeeId}} Meeting
-							{{result?.committeeSchedule?.meetingDate}}
-						</div>
-						<div
-							class="col-xl-6 col-lg-12 col-md-12 col-sm-12 col-12 ">
+							{{result?.committeeSchedule?.meetingDate}}</div>
+						<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 ">
 							Last Agenda Generated : 01/15/2017</div>
+						<div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 col-12 ">
+							<a id="returnToCommiteeLink" routerLink='/committee'
+								[queryParams]="{mode:'view','id':this.result?.committeeSchedule?.committeeId}">Return
+								to Committee</a>
+						</div>
 						<div class="text-right">
 							<button class="editBtn" *ngIf="editDetails == false"
 								(click)="showEditDetails(result.committeeSchedule)">
@@ -32,97 +35,84 @@
 					</div>
 				</h4>
 				<div class="borderBox">
-						
 					<table class="table tableSkin grid2">
 						<tbody>
 							<tr>
 								<td><label> Schedule Date</label><br>{{result?.committeeSchedule?.scheduledDate}}</td>
-								<td><label>Meeting Date</label><br>
-								<input [owlDateTimeTrigger]="meetingDt"
-									[owlDateTime]="meetingDt"
+								<td><label>Meeting Date</label><br> <input
+									[owlDateTimeTrigger]="meetingDt" [owlDateTime]="meetingDt"
 									[(ngModel)]="result.committeeSchedule.meetingDate"
 									[disabled]="!editDetails == true"
 									[ngClass]="(editDetails == true)? 'scheduleBoxes' : 'committeeBoxNotEditable'" />
 									<owl-date-time #meetingDt [pickerType]="'calendar'"
-										[pickerMode]="'dialog'"></owl-date-time>
-								</td>
-								<td><label>Status</label><br>
-								<select [ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
-										[disabled]="!editDetails == true" name="SelectType"
-										[(ngModel)]="scheduleStatusSelected" >
-										<option *ngFor="let status of result.scheduleStatus" >{{ status.description }}</option>
-									</select></td>
-								<td><label>Place</label><br>
-								<input type="text"
+										[pickerMode]="'dialog'"></owl-date-time></td>
+								<td><label>Status</label><br> <select
+									[ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
+									[disabled]="!editDetails == true" name="SelectType"
+									[(ngModel)]="scheduleStatusSelected">
+										<option *ngFor="let status of result.scheduleStatus">{{
+											status.description }}</option>
+								</select></td>
+								<td><label>Place</label><br> <input type="text"
 									[ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
 									[disabled]="!editDetails == true"
-									[(ngModel)]="result.committeeSchedule.place">
-								</td>
-								<td><label>Time</label><br>
-								<input [owlDateTimeTrigger]="time"
-									[owlDateTime]="time"
+									[(ngModel)]="result.committeeSchedule.place"></td>
+								<td><label>Time</label><br> <input
+									[owlDateTimeTrigger]="time" [owlDateTime]="time"
 									[ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
-									[disabled]="!editDetails == true"
-									[(ngModel)]="scheduleTime">
+									[disabled]="!editDetails == true" [(ngModel)]="scheduleTime">
 									<owl-date-time #time [pickerType]="'timer'" [hour12Timer]=true
-										[pickerMode]="'dialog'"></owl-date-time>
-								</td>
+										[pickerMode]="'dialog'"></owl-date-time></td>
 
 							</tr>
 							<tr>
-								<td><label>Submission Deadline</label><br>
-								<input [owlDateTimeTrigger]="deadlineDt"
-									[owlDateTime]="deadlineDt"
+								<td><label>Submission Deadline</label><br> <input
+									[owlDateTimeTrigger]="deadlineDt" [owlDateTime]="deadlineDt"
 									[(ngModel)]="result.committeeSchedule.protocolSubDeadline"
 									[disabled]="!editDetails == true"
 									[ngClass]="(editDetails == true)? 'scheduleBoxes' : 'committeeBoxNotEditable'" />
 									<owl-date-time #deadlineDt [pickerType]="'calendar'"
-										[pickerMode]="'dialog'"></owl-date-time>
-							    </td>
-								<td><label>Max Protocols</label><br>
-								<input type="text"
+										[pickerMode]="'dialog'"></owl-date-time></td>
+								<td><label>Max Protocols</label><br> <input
+									type="text"
 									[ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
 									[disabled]="!editDetails == true"
-									[(ngModel)]="result.committeeSchedule.maxProtocols">
-								</td>
+									[(ngModel)]="result.committeeSchedule.maxProtocols"></td>
 
-								<td><label>Start Time</label><br>
-								<input [owlDateTimeTrigger]="startTime"
-									[owlDateTime]="startTime"
+								<td><label>Start Time</label><br> <input
+									[owlDateTimeTrigger]="startTime" [owlDateTime]="startTime"
 									[ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
 									[disabled]="!editDetails == true"
-									[(ngModel)]="scheduleStartTime"/>
-									<owl-date-time  #startTime [pickerType]="'timer'" [hour12Timer]=true
-										[pickerMode]="'dialog'"></owl-date-time>
-								</td>
-								<td><label>End Time</label><br>
-								<input [owlDateTimeTrigger]="endTime"
-									[owlDateTime]="endTime"
+									[(ngModel)]="scheduleStartTime" /> <owl-date-time #startTime
+										[pickerType]="'timer'" [hour12Timer]=true
+										[pickerMode]="'dialog'"></owl-date-time></td>
+								<td><label>End Time</label><br> <input
+									[owlDateTimeTrigger]="endTime" [owlDateTime]="endTime"
 									[ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
-									[disabled]="!editDetails == true"
-									[(ngModel)]="scheduleEndTime">
-									<owl-date-time #endTime [pickerType]="'timer'" [hour12Timer]=true
-										[pickerMode]="'dialog'"></owl-date-time>
-								</td>
-								<td><label>Available to reviewers</label><br>
-									<input *ngIf="(!editDetails == false)" type="checkbox" [checked]="result.committeeSchedule.availableToReviewers" (change)="result.committeeSchedule.availableToReviewers = !result.committeeSchedule.availableToReviewers" name="availableToReviewer" />
-									<i *ngIf="(!editDetails == true)" [ngClass]="(result.committeeSchedule.availableToReviewers == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' " aria-hidden="true"></i>
-								 </td>
+									[disabled]="!editDetails == true" [(ngModel)]="scheduleEndTime">
+									<owl-date-time #endTime [pickerType]="'timer'"
+										[hour12Timer]=true [pickerMode]="'dialog'"></owl-date-time></td>
+								<td><label>Available to reviewers</label><br> <input
+									*ngIf="(!editDetails == false)" type="checkbox"
+									[checked]="result.committeeSchedule.availableToReviewers"
+									(change)="result.committeeSchedule.availableToReviewers = !result.committeeSchedule.availableToReviewers"
+									name="availableToReviewer" /> <i
+									*ngIf="(!editDetails == true)"
+									[ngClass]="(result.committeeSchedule.availableToReviewers == true) ? 'fa fa-check-square-o fa-large':'fa fa-times fa-large' "
+									aria-hidden="true"></i></td>
 							</tr>
 							<tr>
-								<td colspan="8"><label>Comments</label><br>
-								<input type="text"
+								<td colspan="8"><label>Comments</label><br> <input
+									type="text"
 									[ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
 									[disabled]="!editDetails == true"
-									[(ngModel)]="result.committeeSchedule.comments">
-								 </td>
+									[(ngModel)]="result.committeeSchedule.comments"></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
 			</div>
 		</div>
-
 		<div class="container-fluid">
 			<div>
 				<div>
