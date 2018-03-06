@@ -157,7 +157,7 @@ export class DashboardComponent implements OnInit {
             .subscribe(
             data => {
                 this.result = data || [];
-                if ( this.result.awardViews !== undefined && this.result.proposalViews !== undefined && this.result.protocolViews && this.result.disclosureViews !== undefined && this.result.committees!== undefined && this.result.committeeSchedules !== undefined) {
+                if ( this.result !== null) {
                     this.totalPage = this.result.totalServiceRequest;
                     if ( this.currentPosition == "AWARD" ) {
                         this.serviceRequestList = this.result.awardViews;

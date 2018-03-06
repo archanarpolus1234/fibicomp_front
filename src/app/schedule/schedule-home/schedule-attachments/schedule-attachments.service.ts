@@ -45,11 +45,12 @@ export class ScheduleAttachmentsService {
                 return Observable.throw( error.message || error )
             } );
     }
-    
-    downloadAttachment(commScheduleAttachId: number): Observable<any>{
-        var params={
-                commScheduleAttachId:commScheduleAttachId
-        }
-      return this.http.post(this.constant.downloadAttachments, params);
+
+    downloadAttachment( commScheduleAttachId: string ): Observable<any> {
+        let myHeaders = new Headers();
+        myHeaders.append( 'Content-Type', 'application/json' );
+        myHeaders.append( 'commScheduleAttachId', commScheduleAttachId );
+        let options = new RequestOptions( { headers: myHeaders } );
+        return this.http.get( this.constant.downloadAttachments, options );
     }
 }

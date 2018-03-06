@@ -174,7 +174,6 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
                                         }
                                         );
                                         if ( this.elasticSearchresults.length > 0 ) {
-                                            //this.message = '';
                                         } else {
                                             if ( this.searchTextModel && this.searchTextModel.trim() ) {
                                                 this.message = '';
@@ -321,18 +320,15 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     addRoles( event: any ) {
         event.preventDefault();
         if(this.editDetails==true) {
-            console.log(this.editDetails)
             this.showPopup=true;
             this.modalMessage="Save member details before proceeding";
             this.modalTitle="Member not saved";
                 
             
-        }
-        else {
+        } else {
             this.addRole = !this.addRole;
             this.editClassRole = 'committeeBox';
         }
-       
     }
 
     saveRole( event: any, role, member ) {
