@@ -28,6 +28,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
     tempSaveAttachment: any = {};
     currentUser = localStorage.getItem( "currentUser" );
     fileName: string;
+    nullAttachmentData: boolean = false;
     
     constructor( public scheduleAttachmentsService: ScheduleAttachmentsService, public scheduleConfigurationService: ScheduleConfigurationService, public scheduleService: ScheduleService, public activatedRoute: ActivatedRoute ) { }
 
@@ -35,6 +36,9 @@ export class ScheduleAttachmentsComponent implements OnInit {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
         this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
             this.result = data;
+            if(this.result !== null ){
+                this.nullAttachmentData = true;
+            }
         } );
     }
 
@@ -120,7 +124,11 @@ export class ScheduleAttachmentsComponent implements OnInit {
     
     downloadAttachements(event, attachment, attachments){ 
         event.preventDefault();
-        var blob = new Blob([attachment], { type: attachments.mimeType});
+        let bytes = new Uint8Array(attachment.length);
+        for (let i = 0; i < bytes.length; i++) {
+            bytes[i] = attachment.charCodeAt(i);
+        }
+        let blob = new Blob([bytes], { type: attachments.mimeType });
         var a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
         a.download = attachments.fileName;

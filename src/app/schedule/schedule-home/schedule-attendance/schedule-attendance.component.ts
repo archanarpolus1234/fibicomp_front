@@ -69,7 +69,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
 
     constructor( private scheduleConfigurationService: ScheduleConfigurationService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, private _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, private scheduleAttendanceService: ScheduleAttendanceService, private activatedRoute: ActivatedRoute ) {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
-        this.currentUser = localStorage.getItem( 'currentUser' )
+        this.currentUser = localStorage.getItem( 'currentUser' );
     }
 
     ngOnInit() {
@@ -255,7 +255,6 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
 
     markAttendance( event: any, memberObj, index ) {
         event.preventDefault();
-        alert( this.editFlagEnabled[index] );
         if ( memberObj.memberPresent == true ) {
             memberObj.memberPresent = false;
         } else {
