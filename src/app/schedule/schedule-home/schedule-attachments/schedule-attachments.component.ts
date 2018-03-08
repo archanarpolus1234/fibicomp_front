@@ -26,17 +26,19 @@ export class ScheduleAttachmentsComponent implements OnInit {
     uploadedFile: any[] = [];
     attachmentList: any[] = [];
     tempSaveAttachment: any = {};
-    currentUser = localStorage.getItem( "currentUser" );
+    currentUser: string;
     fileName: string;
     nullAttachmentData: boolean = false;
-    
-    constructor( public scheduleAttachmentsService: ScheduleAttachmentsService, public scheduleConfigurationService: ScheduleConfigurationService, public scheduleService: ScheduleService, public activatedRoute: ActivatedRoute ) { }
+
+    constructor( public scheduleAttachmentsService: ScheduleAttachmentsService, public scheduleConfigurationService: ScheduleConfigurationService, public scheduleService: ScheduleService, public activatedRoute: ActivatedRoute ) {
+        this.currentUser = localStorage.getItem( "currentUser" );
+    }
 
     ngOnInit() {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
         this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
             this.result = data;
-            if(this.result !== null ){
+            if ( this.result !== null ) {
                 this.nullAttachmentData = true;
             }
         } );
@@ -95,7 +97,6 @@ export class ScheduleAttachmentsComponent implements OnInit {
             this.newCommitteeScheduleAttachment.updateUser = this.currentUser;
             this.result.newCommitteeScheduleAttachment = this.newCommitteeScheduleAttachment;
             this.scheduleAttachmentsService.addAttachments( this.result.committeeSchedule.scheduleId, this.result.newCommitteeScheduleAttachment, this.result.newCommitteeScheduleAttachment.attachmentTypeCode, this.uploadedFile, this.attachmentTypeDescription, this.currentUser ).subscribe( data => {
-            
                 this.uploadedFile = [];
                 var temp = {};
                 temp = data;
@@ -111,7 +112,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
         this.showPopup = true;
         this.tempSaveAttachment = attachment;
     }
-    
+
     deleteAttachments( event ) {
         event.preventDefault();
         this.showPopup = false;
@@ -121,17 +122,16 @@ export class ScheduleAttachmentsComponent implements OnInit {
             this.result = data;
         } );
     }
-    
-    downloadAttachements(event, attachment, attachments){ 
+
+    downloadAttachements( event, attachment, attachments ) {
         event.preventDefault();
-        let bytes = new Uint8Array(attachment.length);
-        for (let i = 0; i < bytes.length; i++) {
-            bytes[i] = attachment.charCodeAt(i);
-        }
-        let blob = new Blob([bytes], { type: attachments.mimeType });
-        var a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = attachments.fileName;
-        a.click();
+        this.scheduleAttachmentsService.downloadAttachment( attachments.commScheduleAttachId, attachments.mimeType ).subscribe(
+            data => {
+                var a = document.createElement( "a" );
+                a.href = URL.createObjectURL( data );
+                a.download = attachments.fileName;
+                a.click();
+            } );
+        return false;
     }
 }

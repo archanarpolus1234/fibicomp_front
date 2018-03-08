@@ -2,7 +2,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import { Injectable } from '@angular/core';
-import { Http, HttpModule, RequestOptions, Headers } from '@angular/http';
+import { Http, HttpModule, RequestOptions, Headers, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs';
 import { Constants } from '../../../constants/constants.service';
 
@@ -46,11 +46,14 @@ export class ScheduleAttachmentsService {
             } );
     }
 
-    downloadAttachment( commScheduleAttachId: string ): Observable<any> {
+    downloadAttachment( commScheduleAttachId: string, mimeType ): Observable<any> {
         let myHeaders = new Headers();
         myHeaders.append( 'Content-Type', 'application/json' );
         myHeaders.append( 'commScheduleAttachId', commScheduleAttachId );
-        let options = new RequestOptions( { headers: myHeaders } );
-        return this.http.get( this.constant.downloadAttachments, options );
+        let options = new RequestOptions( { headers: myHeaders, responseType: ResponseContentType.Blob } );
+        return this.http.get( this.constant.downloadAttachments, options )
+            .map( res => {
+                return new Blob( [res.blob()], { type: mimeType } )
+            } );
     }
 }

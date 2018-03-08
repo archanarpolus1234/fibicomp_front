@@ -28,7 +28,9 @@ export class ScheduleComponent implements OnInit {
         this.scheduleService.loadScheduleData( this.scheduleId ).
             subscribe( data => {
                 this.result = data;
-                this.scheduleConfigurationService.changeScheduleData( this.result );
+                if(this.result !== null){
+                    this.scheduleConfigurationService.changeScheduleData( this.result );
+                }
             } );
     }
 
