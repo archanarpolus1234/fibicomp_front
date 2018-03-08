@@ -81,7 +81,7 @@ export class ExpandedviewComponent implements OnInit {
             this.isAdmin = true;
         }
         
-        if ( this.piechartIndex != "null" ) { 
+         if ( this.piechartIndex != "null" ) {
             this.expandedViewService.loadExpandedView( localStorage.getItem( 'sponsorCode' ), localStorage.getItem( 'personId' ), localStorage.getItem( 'piechartIndex' ) ).subscribe(
                 data => {
                     this.piechartResult = data || [];
@@ -99,8 +99,8 @@ export class ExpandedviewComponent implements OnInit {
                     }
                 } );
         }
-        if ( this.summaryIndex != "null" ) { 
-            this.expandedViewService.loadExpandedSummaryView( localStorage.getItem( 'personId' ), localStorage.getItem( 'researchSummaryIndex' ) ).subscribe(
+        if ( this.summaryIndex != "null" ) {
+			this.expandedViewService.loadExpandedSummaryView( localStorage.getItem( 'personId' ), localStorage.getItem( 'researchSummaryIndex' ) ).subscribe(
                 data => {
                     this.summaryResult = data || [];
                     if ( localStorage.getItem( 'researchSummaryIndex' ) == "PROPOSALSSUBMITTED" ) {
@@ -123,7 +123,7 @@ export class ExpandedviewComponent implements OnInit {
                     }
                 } );
         }
-        if ( this.donutchartIndex != "null" ) { 
+        if ( this.donutchartIndex != "null" ) {
             this.expandedViewService.loadDonutExpandedView( localStorage.getItem( 'sponsorCode' ), localStorage.getItem( 'personId' ), localStorage.getItem( 'donutChartIndex' ) ).subscribe(
                 data => {
                     this.piechartResult = data || [];

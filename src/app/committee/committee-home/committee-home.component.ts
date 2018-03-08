@@ -247,7 +247,7 @@ export class CommitteeHomeComponent implements OnInit {
     saveDetails() {
         if ( ( this.result.committee.minimumMembersRequired == undefined || this.result.committee.advSubmissionDaysReq == undefined || this.result.committee.maxProtocols == undefined || this.Type == undefined || this.Name == undefined || this.unitName == undefined || this.unitName == '' ) || ( this.result.committee.reviewTypeDescription == 'Select' || this.result.committee.reviewTypeDescription == '' ) ) {
             this.errorFlag = true;
-            this.error = 'Please fill all the mandatory fileds marked';
+            this.error = '*Please fill all the mandatory fileds marked';
         }
         else {
             this.isEditDetailsModalOpen = false;

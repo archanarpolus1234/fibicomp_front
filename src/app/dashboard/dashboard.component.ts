@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit {
     };
     currentPosition: string = 'SUMMARY';
     pageNumber: number;
-    sortBy: string;
+    sortBy: string = 'updateTimeStamp';
     sortOrder: string = "DESC";
     result: any = {};
     serviceRequestList: any[];
@@ -268,12 +268,16 @@ export class DashboardComponent implements OnInit {
     }
 
     getResearchSummaryData() {
+        this.dashboardData.setDashboardAreaChartData1([]);
+        this.dashboardData.setDashboardPieChartData1({});
         this.dashboardService.getResearchSummaryData()
             .subscribe( data => {
                 this.result = data || [];
                 if ( this.result != null ) {
                     this.dashboardData.setdashboardAreaChartData( this.result.expenditureVolumes );
+					this.dashboardData.setDashboardAreaChartData1(this.result.expenditureVolumes);
                     this.dashboardData.setDashboardPieChartData( this.result );
+					this.dashboardData.setDashboardPieChartData1(this.result);
                     this.summaryViews = this.result.summaryViews;
                 }
             } );
