@@ -1,4 +1,3 @@
-
 <div>
 	<!--  DELETE WARNING MODAL -->
 	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
@@ -93,7 +92,8 @@
 			</div>
 		</div>
 	</div>
-	<table class="table table-responsive tableSkin" *ngIf="result?.committeeSchedule?.committeeScheduleAttachments">
+	<table class="table table-responsive tableSkin"
+		*ngIf="result?.committeeSchedule?.committeeScheduleAttachments !== null">
 		<tr>
 			<th title="">Sl Number</th>
 			<th title="">Attachment Type</th>
@@ -118,4 +118,7 @@
 				</ul></td>
 		</tr>
 	</table>
+	<div
+		*ngIf="result?.committeeSchedule?.committeeScheduleAttachments == null"
+		class="noDataOnChart">No attachment to Show</div>
 </div>
