@@ -18,9 +18,9 @@ import { CommitteeMemberNonEmployeeElasticService } from '../../elastic-search/c
 
 export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     memberType;
-    modalMessage=' ';
-    modalTitle=' ';
-    showPopup;
+    modalMessage: string = '';
+    modalTitle: string = '';
+    showPopup: boolean = false;;
     memberAdded: boolean = false;
     temptermStartDate='';
     addRole: boolean = false;
@@ -100,6 +100,9 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     inactiveMembers;
     currentUser = localStorage.getItem( 'currentUser' );
     searchText: FormControl = new FormControl( '' );
+    placeHolderText: string = 'Search an employee';
+    roleFieldsFilled: boolean = true;
+    roleWarningMessage: string;
 
     constructor( public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, private _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public committeeConfigurationService: CommitteeConfigurationService, public route: ActivatedRoute, public completerService: CompleterService, public committeCreateEditService: CommitteCreateEditService ) {
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
@@ -131,7 +134,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         this.iconClass = 'fa fa-times';
     }
     
-    setInActiveAndchangeIconSearch() {
+    setInactiveAndchangeIconSearch() {
         this.searchActive = false;
         this.iconClass = 'fa fa-search';
     }
@@ -243,19 +246,23 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
             this.editDetails = true;
         }
     }
+
     selected( value ) {
-        this.searchTextModel = value.label
+        this.searchTextModel = value.label;
         this.selectedMember = value;
+        this.iconClass = 'fa fa-times';
     }
 
     employeeRadioChecked() {
         this.nonEmployeeFlag = false;
-        this.searchTextModel=' ';
+        this.searchTextModel = '';
+        this.placeHolderText = 'Search an employee';
     }
 
     nonEmployeeRadioChecked() {
         this.nonEmployeeFlag = true;
-        this.searchTextModel=' ';
+        this.searchTextModel = '';
+        this.placeHolderText = 'Search a non-employee';
     }
 
     showEditDetails() {
@@ -278,7 +285,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         }
     }
 
-    saveDetails(member) {
+    saveDetails( member) {
         if(member.termStartDate==null || member.termEndDate==null) {
             this.showPopup=true;
             this.editDetails=true;
@@ -321,13 +328,16 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         event.preventDefault();
         if(this.editDetails==true) {
             this.showPopup=true;
-            this.modalMessage="Save member details before proceeding";
-            this.modalTitle="Member not saved";
+            this.modalMessage="You are in the middle of editing Person Details, please save the data once to proceed";
+            this.modalTitle="Warning!!!";
                 
             
         } else {
             this.addRole = !this.addRole;
             this.editClassRole = 'committeeBox';
+            if(this.roleFieldsFilled == false) {
+                this.roleFieldsFilled = true;
+            }
         }
     }
 
@@ -359,8 +369,8 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         event.preventDefault();
         if(this.editDetails==true) {
             this.showPopup=true;
-            this.modalMessage="Save member details before proceeding";
-            this.modalTitle="Member not saved";     
+            this.modalMessage="You are in the middle of editing Person Details, please save the data once to proceed";
+            this.modalTitle="Warning!!!";    
         } else {
             this.addExpertise = !this.addExpertise;
         }
@@ -383,8 +393,8 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     editExpertises() {
         if(this.editDetails==true) {
             this.showPopup=true;
-            this.modalMessage="Save member details before proceeding";
-            this.modalTitle="Member not saved";
+            this.modalMessage="You are in the middle of editing Person Details, please save the data once to proceed";
+            this.modalTitle="Warning!!!";
                 
             
         } else {
@@ -394,16 +404,31 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     }
 
     roleAddtoTable( member ) {
-        var flag: boolean = false;
-        this.memberAdded = false;
-        this.committeCreateEditService.saveCommMemberRole( member.commMembershipId, this.committeeId, this.memberRoleObject ).subscribe( data => {
-            this.memberRoleObject.startDate = '';
-            this.memberRoleObject.endDate = '';
-            this.membershipRoles.description = '';
-            var temp: any = {};
-            temp = data;
-            this.resultLoadedById.committee = temp.committee;
-        } );
+        var termStartDate = new Date(member.termStartDate);
+        var termEndDate = new Date(member.termEndDate);
+        if ( this.membershipRoles.description == null || this.membershipRoles.description == undefined || this.memberRoleObject.startDate == null || this.memberRoleObject.endDate == null ) {
+            this.roleFieldsFilled = false;
+            this.roleWarningMessage = '* Please fill the mandatory fileds.'
+        } else if(this.memberRoleObject.startDate > this.memberRoleObject.endDate) {
+            this.roleFieldsFilled = false;
+            this.roleWarningMessage = '* Role end date must be after role start date.'
+        } else if( this.memberRoleObject.startDate < termStartDate || this.memberRoleObject.startDate > termEndDate || this.memberRoleObject.endDate < termStartDate || this.memberRoleObject.endDate > termEndDate) {
+            this.roleFieldsFilled = false;
+            this.roleWarningMessage = '* Role start date and role end date must be between term start date and term end date.'
+        } else {
+            this.roleFieldsFilled = true;
+            this.roleWarningMessage = '';
+            var flag: boolean = false;
+            this.memberAdded = false;
+            this.committeCreateEditService.saveCommMemberRole( member.commMembershipId, this.committeeId, this.memberRoleObject ).subscribe( data => {
+                this.memberRoleObject.startDate = null;
+                this.memberRoleObject.endDate = null;
+                this.membershipRoles.description = null;
+                var temp: any = {};
+                temp = data;
+                this.resultLoadedById.committee = temp.committee;
+            } );
+        }
     }
 
     expertiseAddtoTable( member ) {

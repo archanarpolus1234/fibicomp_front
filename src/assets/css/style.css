@@ -1328,7 +1328,7 @@ a:hover {
 }
 
 .filterRadioBtns {
-	font-size: .8em;
+	font-size: .8em !important;
 	font-weight: bold;
 	color: #5F5F5F;
 }

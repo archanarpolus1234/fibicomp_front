@@ -13,12 +13,14 @@ export class GoogleChartService implements OnInit{
         return google;
     }
     
-    ngOnInit() {
-      if ( !GoogleChartService.googleLoaded ) {
+    ngOnInit() { }
+
+    googleChartFunction() {
+    if ( !GoogleChartService.googleLoaded ) {
           GoogleChartService.googleLoaded = true;
         google.charts.load( 'current',  {packages: [ 'corechart', 'bar' ]} );
       }
-      google.charts.setOnLoadCallback( () => this.drawGraph());
+        google.charts.setOnLoadCallback( () => this.drawGraph());
     }
 
     drawGraph(){ }
@@ -28,7 +30,7 @@ export class GoogleChartService implements OnInit{
     }
 
     createDataTable( array:any[] ):any {
-        return google.visualization.arrayToDataTable(array);
+        return new google.visualization.arrayToDataTable(array);
     }
     
     createPiChart( element: any ): any {

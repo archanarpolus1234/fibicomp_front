@@ -19,7 +19,7 @@
 						</button>
 					</h4>
 					<p *ngIf="errorFlag">
-						<span>{{error}}<span class="mandatory">*</span></span>
+						<span class="mandatory">{{error}}</span>
 					</p>
 					<div class="pullSide">
 						<table class="table tableSkin grid2" *ngIf="result?.committee">
@@ -486,7 +486,7 @@
 							<button type="button" class="btnSkin btn-secondary"
 								data-dismiss="modal">Close</button>
 							<button type="button" class="btnSkin btnSkinPrimary"
-								data-toggle="modal"
+								data-toggle="modal" data-target="#skippedSchedules"
 								(click)="generateSchedule($event)">Generate Schedules</button>
 						</div>
 					</div>

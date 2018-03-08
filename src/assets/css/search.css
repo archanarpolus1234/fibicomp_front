@@ -170,3 +170,7 @@ input[type=number]::-webkit-outer-spin-button {
 	z-index: 960;
 	overflow-y: auto;
 }
+
+#member_search {
+	padding-left: 10px;
+}

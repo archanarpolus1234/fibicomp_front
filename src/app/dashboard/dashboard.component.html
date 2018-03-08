@@ -762,34 +762,36 @@
 					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click)="sortResult('committeeId',currentPosition)"
-									title="Click to sort by Committee Id">Committee Id<span
+								<th (click)="sortResult('awardNumber',currentPosition)"
+									title="Click to sort by Award">Committee Id<span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'committeeId')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
 								</th>
-								<th (click)="sortResult('committeeName',currentPosition)"
-									title="Click to sort by Committee Name">Committee Name<span
+								<th (click)="sortResult('accountNumber',currentPosition)"
+									title="Click to sort by Account">Committee Name<span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'committeeName')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
 								</th>
-								<th (click)="sortResult('committeeTypeCode',currentPosition)"
-									title="Click to sort by Committee Type Code">Committee
-									Type Code <span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'committeeTypeCode')}"></span>
+								<th (click)="sortResult('title',currentPosition)"
+									title="Click to sort by Title">Committee Type Code <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
 								</th>
-								<th (click)="sortResult('homeUnitNumber',currentPosition)"
-									title="Click to sort by Home Unit Number">Home Unit Number
-									<span class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
+								<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Home Unit Number <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
 								</th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullCommitteeData; else noNullCommitteeData">
+							<tr *ngIf="nullAwardData; else noAwardNullData">
+
 								<td colspan=6>No Requests Found !</td>
 							</tr>
-							<tr #noNullCommitteeData
+							<tr #noAwardNullData
+
 								*ngFor="let coommitteeDetails of serviceRequestList | slice:begin:end">
 								<td width="8%">{{coommitteeDetails.committeeId}}</td>
 								<td>{{coommitteeDetails.committeeName}}</td>
@@ -816,40 +818,40 @@
 					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click)="sortResult('scheduleId',currentPosition)"
-									title="Click to sort by Schedule Id">Schedule Id<span
+								<th (click)="sortResult('awardNumber',currentPosition)"
+									title="Click to sort by Award">Schedule Id<span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduleId')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
 								</th>
-								<th (click)="sortResult('scheduledDate',currentPosition)"
-									title="Click to sort by Schedule Date">Schedule Date<span
+								<th (click)="sortResult('accountNumber',currentPosition)"
+									title="Click to sort by Account">Schedule Date<span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduledDate')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
 								</th>
-								<th (click)="sortResult('place',currentPosition)"
-									title="Click to sort by Place">Place <span
+								<th (click)="sortResult('title',currentPosition)"
+									title="Click to sort by Title">Place  <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'place')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
 								</th>
-								<th (click)="sortResult('protocolSubDeadline',currentPosition)"
-									title="Click to sort by Deadline">Deadline <span
+								<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Deadline <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolSubDeadline')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
 								</th>
-								<th (click)="sortResult('',currentPosition)"
-									title="Click to sort by Schedule Status">Schedule Status <span
+								<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Schedule Status <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == '')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
 								</th>
-								<th (click)="sortResult('',currentPosition)"
-									title="Click to sort by Committee Id">Committee Id <span
+									<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Committee Id <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == '')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
 								</th>
-								<th (click)="sortResult('',currentPosition)"
-									title="Click to sort by committeeName">Committee Name <span
+									<th (click)="sortResult('unitName',currentPosition)"
+									title="Click to sort by Lead Unit">Committee Name <span
 									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == '')}"></span>
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
 								</th>
 								<th>Action</th>
 							</tr>

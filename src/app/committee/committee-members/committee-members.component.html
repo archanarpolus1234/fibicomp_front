@@ -6,9 +6,10 @@
 			<div class="modal-header">
 				<h5 class="modal-title">{{modalTitle}}</h5>
 			</div>
-			<div class="modal-body">{{modalMessage}}</div>
+			<div class="modal-body">
+				<p>{{modalMessage}}</p>
+			</div>
 			<div class="modal-footer">
-
 				<button type="button" class="btnSkin btnSkinPrimary"
 					data-dismiss="modal" (click)="showPopup=false">Ok</button>
 			</div>
@@ -19,60 +20,54 @@
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 		<div class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-				<div
-					class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 row filterRadioBtns">
-					<span>Filter Members : &nbsp;</span> <input type="checkbox"
-						name="filterMember" value="active" id="activeMembers"
-						[checked]="activeMembers"
-						(change)="activeMembers = !activeMembers">&nbsp;Active
-					&nbsp;&nbsp; <input type="checkbox" name="filterMember"
-						value="inactive" id="inactiveMembers" [checked]="inactiveMembers"
-						(change)="inactiveMembers = !inactiveMembers">&nbsp;Inactive
+				<div class="row">
+					<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 filterRadioBtns">
+						<span>Filter Members : &nbsp;</span> <input type="checkbox"
+							name="filterMember" value="active" id="activeMembers"
+							[checked]="activeMembers"
+							(change)="activeMembers = !activeMembers">&nbsp;Active
+						&nbsp;&nbsp; <input type="checkbox" name="filterMember"
+							value="inactive" id="inactiveMembers" [checked]="inactiveMembers"
+							(change)="inactiveMembers = !inactiveMembers">&nbsp;Inactive
+					</div>
+					<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 filterRadioBtns text-right">
+					<button class="searchBtn" (click)="addMemberDiv($event)">
+						<i class="fa fa-plus"></i>&nbsp;<span class="filterRadioBtns">Add
+							Member</span>
+					</button></div>
 				</div>
-
-				<button class="addBtn" (click)="addMemberDiv($event)">
-					<i class="fa fa-plus"></i>&nbsp;<span class="filterRadioBtns">Add
-						Member</span>
-				</button>
 				<br>
 				<div *ngIf="showAddMember==true"
 					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
 					<div class="row">
-						<div
-							class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
 							<div class="row">
-								<div
-									class="col-xl-4 col-lg-4 col-md-2 col-sm-2 col-2 text-right">
-
-								</div>
-								<div class="col-xl-6 col-lg-2 col-md-2 col-sm-2 col-2 text-left">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
 									<label class="containerCheckBox">Employee <input
 										type="radio" name="member" id="employeeRadio"
 										(change)="employeeRadioChecked()" checked> <span
 										class="checkmark"></span>
-									</label> <label class="containerCheckBox"
-										(change)="nonEmployeeRadioChecked()">Non Employee <input
+									</label> 
+									<label class="containerCheckBox">Non Employee <input 
+										(change)="nonEmployeeRadioChecked()"
 										type="radio" name="member" id="nonEmployeeRadio"> <span
 										class="checkmark"></span>
 									</label>
 								</div>
 							</div>
-							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2"></div>
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2"></div>
-
-								<div class="col-xl-5 col-lg-5 col-md-2 col-sm-4 col-2">
-									<span>
+							<div class="row text-center">
+								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-0 col-0"></div>
+								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
 										<div class="searchBox ">
-											<input type="text" placeholder="Search"
+											<input type="text" placeholder="{{placeHolderText}}"
 												[(ngModel)]="searchTextModel"
-												(blur)="setInActiveAndchangeIconSearch()"
+												(blur)="setInactiveAndchangeIconSearch()"
 												(focus)="setActiveAndchangeIconSearch()" id="member_search"
 												[formControl]="searchText" /> <a href="#"
 												class="searchButton" (click)="clearsearchBox($event)"><i
 												[ngClass]="iconClass"></i></a>
 											<div class="sb-seachresults">
-												<ul class="sb-results-dropdown-menu" *ngIf="searchActive">
+												<ul class="sb-results-dropdown-menu text-left" *ngIf="searchActive">
 													<li *ngFor="let result of this.elasticSearchresults "
 														(mousedown)="selected(result)"><span
 														[innerHTML]="result.label"></span></li>
@@ -80,9 +75,8 @@
 											</div>
 											<div>{{message}}</div>
 										</div>
-									</span>
 								</div>
-								<div class="col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
+								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
 									<button class="btnSkin btnSkinPrimary"
 										[disabled]="memberAdded==true" (click)="addMember()">Add</button>
 								</div>
@@ -198,7 +192,7 @@
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin">
 													<tr id="roleAddingRow" *ngIf="addRole">
-														<td align="justify">Role :</td>
+														<td align="justify">Role:</td>
 
 														<td><ng2-completer title="Enter Role"
 																[(ngModel)]="membershipRoles.description"
@@ -209,14 +203,12 @@
 															[owlDateTime]="dt5"
 															[(ngModel)]="memberRoleObject.startDate"
 															[disabled]="addRole==false" [ngClass]="editClassRole"
-															[min]="member.termStartDate" [max]="member.termEndDate"
 															#dateTime="ngModel" /> <owl-date-time #dt5
 																[pickerType]="'calendar'"></owl-date-time></td>
 														<td><input [owlDateTimeTrigger]="dt6"
 															[owlDateTime]="dt6"
 															[(ngModel)]="memberRoleObject.endDate"
-															[disabled]="addRole==false" [ngClass]="editClassRole"
-															[min]="member.termStartDate" [max]="member.termEndDate" />
+															[disabled]="addRole==false" [ngClass]="editClassRole" />
 															<owl-date-time #dt6 [pickerType]="'calendar'"></owl-date-time>
 														</td>
 
@@ -225,6 +217,9 @@
 																(click)="roleAddtoTable(member)">Add</button>
 														</td>
 
+													</tr>
+													<tr *ngIf="!roleFieldsFilled"> 
+														<td colspan="5"><span class="mandatory">{{roleWarningMessage}}</span></td>
 													</tr>
 													<tr>
 														<th title="">Sl No</th>
