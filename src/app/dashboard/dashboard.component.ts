@@ -19,6 +19,12 @@ import { DashboardConfigurationService } from '../common/dashboard-configuration
 } )
 
 export class DashboardComponent implements OnInit {
+
+    filterStartDate: Date;
+    filterEndDate: Date;
+    isFilterDatePrevious: boolean = false;
+    isMandatoryFilterFilled: boolean = true;
+    filterValidationMessage: string; 
     nullScheduleData: boolean = false;
     nullCommitteeData: boolean = false;
     advanceSearchCriteria = {
@@ -153,7 +159,7 @@ export class DashboardComponent implements OnInit {
 
     initialLoad( currentPage ) {
         this.constval = this.constant.index_url;
-        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
+        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage, this.filterStartDate, this.filterEndDate )
             .subscribe(
             data => {
                 this.result = data || [];
@@ -254,6 +260,13 @@ export class DashboardComponent implements OnInit {
             this.initialLoad( this.currentPage );
             this.adminClear = false;
         }
+        if ( currentTabPosition == 'SCHEDULE' ) {
+            this.filterStartDate = null;
+            this.filterEndDate = null;
+            this.filterValidationMessage = "";
+            this.isFilterDatePrevious = false;
+            this.isMandatoryFilterFilled = true; 
+        }
     }
 
     sortResult( sortFieldBy, current_Position ) {
@@ -292,7 +305,7 @@ export class DashboardComponent implements OnInit {
             this.adminAdvanceSearch = true;
         }
 
-        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage )
+        this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage, this.filterStartDate, this.filterEndDate )
             .subscribe( data => {
                 this.result = data || [];
                 if ( this.result != null ) {
@@ -460,5 +473,41 @@ export class DashboardComponent implements OnInit {
             localStorage.setItem( 'expandedViewHeading', summaryView );
         }
         this.router.navigate( ['/expandedview'] );
+    }
+
+    filterSchedule() {
+        if ( this.filterStartDate > this.filterEndDate ) {
+            this.isFilterDatePrevious = true;
+            this.filterValidationMessage = "* Please ensure that the To : Date is greater than or equal to the From : Date.";
+        } else {
+            this.isFilterDatePrevious = false;
+        }
+        if ( this.filterStartDate == null || this.filterEndDate == null ) {
+            this.isMandatoryFilterFilled = false;
+            this.filterValidationMessage = "* Please enter the necessary dates to apply filter.";
+        } else {
+            this.isMandatoryFilterFilled = true;
+        }
+        if ( this.isMandatoryFilterFilled == true && this.isFilterDatePrevious == false ) {
+            this.initialLoad( this.currentPage );
+        }
+    }
+
+    resetFilterSchedule() {
+        if ( this.isFilterDatePrevious == true || this.isMandatoryFilterFilled == false ) {
+            this.isFilterDatePrevious = false;
+            this.isMandatoryFilterFilled = true;
+            this.filterStartDate = null;
+            this.filterEndDate = null;
+        } else if ( this.filterStartDate == null || this.filterEndDate == null ) {
+            this.isFilterDatePrevious = false;
+            this.isMandatoryFilterFilled = true;
+        } else {
+            this.filterStartDate = null;
+            this.filterEndDate = null;
+            this.isFilterDatePrevious = false;
+            this.isMandatoryFilterFilled = true;
+            this.initialLoad( this.currentPage );
+        }
     }
 }

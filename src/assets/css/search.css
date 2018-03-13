@@ -174,3 +174,14 @@ input[type=number]::-webkit-outer-spin-button {
 #member_search {
 	padding-left: 10px;
 }
+
+.filterElement {
+	border-top: none !important;
+	border-bottom: 1px solid #e9ecef;
+	font-size: 0.8em;
+	vertical-align: middle;
+}
+
+#filterWarning {
+	font-size: 0.85em;
+}

@@ -135,7 +135,6 @@ export class CommitteeHomeComponent implements OnInit {
     isScheduleListItemEditMode = false;
     saveCommitteeFlag = false;
     isAreaOfResearchEditMode = false;
-    scheduleEditModeIndex: number;
     scheduleTime: any;
     isEditDetailsModalOpen = false;
     isScheduleEditWarningModalOpen = false;
@@ -633,17 +632,16 @@ export class CommitteeHomeComponent implements OnInit {
         }
     }
 
-    editScheduleData( e, date, status, place, time, i ) {
+    editScheduleData( e, date, status, place, time, i, scheduleId ) {
         e.preventDefault();
         if ( this.isScheduleListItemEditMode == true ) {
-            this.alertMsg = "You are editing a schedule data with serial number : " + ( this.scheduleEditModeIndex + 1 );
+            this.alertMsg = "You are editing a schedule data with serial number : " + ( scheduleId );
             this.isScheduleEditWarningModalOpen = true;
         } else {
             this.alertMsg = "";
             this.isScheduleEditWarningModalOpen = false;
             this.isScheduleListItemEditMode = true;
             this.scheduleTime = new Date( time );
-            this.scheduleEditModeIndex = parseInt( i );
             this.editSchedule[i] = !this.editSchedule[i];
             this.listDate = date;
             this.listStatus = status;
@@ -655,7 +653,7 @@ export class CommitteeHomeComponent implements OnInit {
     showDeleteModal( e, scheduleId, committeeId, scheduledDate ) {
         e.preventDefault();
         if ( this.isScheduleListItemEditMode == true ) {
-            this.alertMsg = "You are editing a schedule data with serial number : " + ( this.scheduleEditModeIndex + 1 );
+            this.alertMsg = "You are editing a schedule data with serial number : " + ( scheduleId );
             this.isScheduleEditWarningModalOpen = true;
         } else {
             this.alertMsg = "";
