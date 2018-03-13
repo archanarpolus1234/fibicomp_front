@@ -137,7 +137,7 @@
 								<td><input [owlDateTimeTrigger]="fltrStrDt"
 									[owlDateTime]="fltrStrDt"
 									[(ngModel)]="result.scheduleData.filterStartDate"
-									class="committeeBox text-border-padding" /> <span
+									class="committeeBox text-border-padding" />&nbsp;<span
 									class="fa fa-calendar fa-large"
 									[owlDateTimeTrigger]="fltrStrDt"></span> <owl-date-time
 										#fltrStrDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time>
@@ -146,7 +146,7 @@
 								<td><input [owlDateTimeTrigger]="fltrEndDt"
 									[owlDateTime]="fltrEndDt"
 									[(ngModel)]="result.scheduleData.filerEndDate"
-									class="committeeBox text-border-padding" /> <span
+									class="committeeBox text-border-padding" />&nbsp;<span
 									class="fa fa-calendar fa-large"
 									[owlDateTimeTrigger]="fltrEndDt"></span> <owl-date-time
 										#fltrEndDt [pickerType]="'calendar'" [pickerMode]="'dialog'"></owl-date-time></td>
@@ -159,19 +159,19 @@
 								<td colspan="8" ><span *ngIf="isFilterDatePrevious || isMandatoryFilterFilled == false" class="mandatory">{{filterValidationMessage}}</span></td>
 							</tr>
 							<tr>
-								<th title="Click to sort by Proposal">Sl No</th>
-								<th title="Click to sort by Title">Schedule Date</th>
-								<th title="Click to sort by Lead Unit">Day of Week</th>
-								<th title="Click to sort by Sponsor">Deadline</th>
-								<th title="Click to sort by Deadline">Status</th>
-								<th title="Click to sort by Status">Place</th>
-								<th title="Click to sort by Status">Time</th>
-								<th title="Click to sort by Status">Action</th>
+								<th title="">Schedule Id</th>
+								<th title="">Schedule Date</th>
+								<th title="">Day of Week</th>
+								<th title="">Deadline</th>
+								<th title="">Status</th>
+								<th title="">Place</th>
+								<th title="">Time</th>
+								<th title="">Action</th>
 							</tr>
 							<tr
 								*ngFor="let committeScheduleData of result?.committee?.committeeSchedules; let i = index;">
 								<ng-container *ngIf="committeScheduleData.filter">
-								<td>{{ i + 1 }}</td>
+								<td>{{ committeScheduleData.scheduleId }}</td>
 								<td><input [owlDateTimeTrigger]="schdlDt"
 									[owlDateTime]="schdlDt"
 									[(ngModel)]="committeScheduleData.scheduledDate"
@@ -200,7 +200,7 @@
 										<li><a title="Open {{committeScheduleData.scheduleId}}" *ngIf="!editSchedule[i] == true"
 											href="#" routerLink='/schedule' [queryParams]="{'scheduleId':committeScheduleData.scheduleId}"><i class="fa fa-eye"></i></a></li>
 										<li><a href="#" *ngIf="!editSchedule[i] == true" data-toggle="modal" data-target="#warningModal"
-											(click)="editScheduleData($event, committeScheduleData.scheduledDate, committeScheduleData.scheduleStatus.description, committeScheduleData.place, committeScheduleData.time, i)"><i
+											(click)="editScheduleData($event, committeScheduleData.scheduledDate, committeScheduleData.scheduleStatus.description, committeScheduleData.place, committeScheduleData.time, i, committeScheduleData.scheduleId)"><i
 												class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
 										<li><a href="#" *ngIf="!editSchedule[i] == true"
 											data-toggle="modal" data-target="#deleteModal, #warningModal"

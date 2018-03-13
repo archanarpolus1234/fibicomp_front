@@ -18,7 +18,7 @@ export class DashboardService {
         this.personId = localStorage.getItem( 'personId' );
     }
 
-    loadDashBoard( property1: string, property2: string, property3: string, property4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number ): Observable<JSON> {
+    loadDashBoard( property1: string, property2: string, property3: string, property4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number, filterStartDate: Date, filterEndDate: Date ): Observable<JSON> {
         this.personId = localStorage.getItem( 'personId' );
         var params = {
             property1: property1,
@@ -31,7 +31,9 @@ export class DashboardService {
             tabIndex: tabIndex,
             userName: this.username,
             personId: this.personId,
-            currentPage: currentPage
+            currentPage: currentPage,
+            filterStartDate: filterStartDate,
+            filterEndDate: filterEndDate
         };
         return this.http.post( this.constant.dashboardUrl, params )
             .map( res => res.json()
