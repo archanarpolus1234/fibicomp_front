@@ -43,5 +43,4 @@ export class MinutesService {
             return Observable.throw( error.message || error )
         } );
     }
-
 }

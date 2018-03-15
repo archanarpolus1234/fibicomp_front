@@ -782,6 +782,21 @@
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
 								</th>
+								<th (click)="sortResult('homeUnitName',currentPosition)"
+									title="Click to sort by Lead Unit">Home Unit Name <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
+								</th>
+								<th (click)="sortResult('reviewTypeDescription',currentPosition)"
+									title="Click to sort by Lead Unit">Review Type Description <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
+								</th>
+								<th (click)="sortResult('description',currentPosition)"
+									title="Click to sort by Lead Unit">Description <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
+								</th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -796,6 +811,9 @@
 								<td>{{coommitteeDetails.committeeName}}</td>
 								<td>{{coommitteeDetails.committeeTypeCode}}</td>
 								<td>{{coommitteeDetails.homeUnitNumber}}</td>
+								<td>{{coommitteeDetails.homeUnitName}}</td>
+								<td>{{coommitteeDetails.reviewTypeDescription}}</td>
+								<td>{{coommitteeDetails.description}}</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open" routerLink='/committee'

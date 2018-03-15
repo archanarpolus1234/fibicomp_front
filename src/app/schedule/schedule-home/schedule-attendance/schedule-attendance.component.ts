@@ -66,6 +66,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     currentmember: string;
     showPopup: boolean;
     deletingMeberObj;
+    commentFlgEnabled = {};
 
     constructor( private scheduleConfigurationService: ScheduleConfigurationService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, private _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, private scheduleAttendanceService: ScheduleAttendanceService, private activatedRoute: ActivatedRoute ) {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
@@ -97,7 +98,6 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
             .switchMap( searchString => {
                 return new Promise<Array<String>>(( resolve, reject ) => {
                     if ( this.nonEmployeeFlag == false ) {
-
                         this._ngZone.runOutsideAngular(() => {
                             this.committeeMemberEmployeeElasticService.search( searchString )
                                 .then(( searchResult ) => {
@@ -132,7 +132,6 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
                                         }
                                         resolve( this.elasticSearchresults );
                                     } );
-
                                 } )
                                 .catch(( error ) => {
                                     alert( "catch error" );
@@ -246,8 +245,65 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.attendanceShowFlag = !this.attendanceShowFlag;
         this.showCommentFlag = !this.showCommentFlag;
         this.commentsIndex = commentIndex;
+        if((!this.commentFlgEnabled[commentIndex]) == true){
+            this.commentFlgEnabled[commentIndex] = true;
+        }
+        
     }
 
+    editAttendanceData( event: any, index: number, memberObj ) {
+        event.preventDefault();
+        if((!this.editFlagEnabled[index]) == true){
+            this.editFlagEnabled[index]= true;
+        }
+        
+        const indexofAttendanceArray: number = this.membersinAttendance.indexOf( memberObj );
+        if ( indexofAttendanceArray !== -1 ) {
+            this.membersinAttendance.splice( indexofAttendanceArray, 1 );
+        }
+        this.tempAlternateFor = memberObj.alternateFor;
+        this.tempComment = memberObj.comments;
+        this.tempMemberPresent = memberObj.memberPresent;
+    }
+
+    saveAttendanceEditedData( event: any, index: number, memberObj ) {
+        event.preventDefault();
+        if((!this.editFlagEnabled[index]) == false){
+            this.editFlagEnabled[index] = false;
+        }
+        if((!this.commentFlgEnabled[index]) == false){
+            this.commentFlgEnabled[index] = false;
+        }
+        const indexofattendanceInBackupArray: number = this.backupMemberInAttendance.indexOf( memberObj );
+        if ( indexofattendanceInBackupArray !== -1 ) {
+            this.membersinAttendance.push( memberObj );
+        }
+        this.committeeId = this.result.committeeSchedule.committeeId;
+        this.updatingMemberObj.alternateFor = memberObj.alternateFor;
+        this.updatingMemberObj.committeeScheduleAttendanceId = memberObj.committeeScheduleAttendanceId;
+        this.updatingMemberObj.memberPresent = memberObj.memberPresent;
+        this.updatingMemberObj.comments = memberObj.comments;
+        this.updatingMemberObj.updateUser = this.currentUser;
+        this.updatingMemberObj.updateTimestamp = new Date().getTime();
+        this.scheduleAttendanceService.updateMemberattendanceDate( this.committeeId, this.scheduleId, this.updatingMemberObj )
+            .subscribe( data => {
+                this.result = data;
+                this.membersinAttendance.splice(memberObj.alternateFor, 1);
+            } );
+    }
+
+    cancelEditAttenfance( event: any, index: number, memberObj ) {
+        event.preventDefault();
+        this.editFlagEnabled[index] = !this.editFlagEnabled[index];
+        const indexofcurrentMemberinbackup: number = this.backupMemberInAttendance.indexOf( memberObj );
+        if ( indexofcurrentMemberinbackup !== -1 ) {
+            this.membersinAttendance.push( memberObj );
+        }
+        memberObj.alternateFor = this.tempAlternateFor;
+        memberObj.comments = this.tempComment;
+        memberObj.memberPresent = this.tempMemberPresent;
+    }
+    
     hideComment( event: any, commentIndex: number ) {
         this.showCommentFlag = false;
         this.commentsIndex = commentIndex;
@@ -275,50 +331,6 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
             .subscribe( data => {
                 this.result = data;
             } );
-    }
-
-    editAttendanceData( event: any, index: number, memberObj ) {
-        event.preventDefault();
-        this.editFlagEnabled[index] = !this.editFlagEnabled[index];
-        const indexofAttendanceArray: number = this.membersinAttendance.indexOf( memberObj );
-        if ( indexofAttendanceArray !== -1 ) {
-            this.membersinAttendance.splice( indexofAttendanceArray, 1 );
-        }
-        this.tempAlternateFor = memberObj.alternateFor;
-        this.tempComment = memberObj.comments;
-        this.tempMemberPresent = memberObj.memberPresent;
-    }
-
-    saveAttendanceEditedData( event: any, index: number, memberObj ) {
-        event.preventDefault();
-        this.editFlagEnabled[index] = !this.editFlagEnabled[index];
-        const indexofattendanceInBackupArray: number = this.backupMemberInAttendance.indexOf( memberObj );
-        if ( indexofattendanceInBackupArray !== -1 ) {
-            this.membersinAttendance.push( memberObj );
-        }
-        this.committeeId = this.result.committeeSchedule.committeeId;
-        this.updatingMemberObj.alternateFor = memberObj.alternateFor;
-        this.updatingMemberObj.committeeScheduleAttendanceId = memberObj.committeeScheduleAttendanceId;
-        this.updatingMemberObj.memberPresent = memberObj.memberPresent;
-        this.updatingMemberObj.comments = memberObj.comments;
-        this.updatingMemberObj.updateUser = this.currentUser;
-        this.updatingMemberObj.updateTimestamp = new Date().getTime();
-        this.scheduleAttendanceService.updateMemberattendanceDate( this.committeeId, this.scheduleId, this.updatingMemberObj )
-            .subscribe( data => {
-                this.result = data;
-            } );
-    }
-
-    cancelEditAttenfance( event: any, index: number, memberObj ) {
-        event.preventDefault();
-        this.editFlagEnabled[index] = !this.editFlagEnabled[index];
-        const indexofcurrentMemberinbackup: number = this.backupMemberInAttendance.indexOf( memberObj );
-        if ( indexofcurrentMemberinbackup !== -1 ) {
-            this.membersinAttendance.push( memberObj );
-        }
-        memberObj.alternateFor = this.tempAlternateFor;
-        memberObj.comments = this.tempComment;
-        memberObj.memberPresent = this.tempMemberPresent;
     }
 
     showDeleteModal( event: any, memberObj ) {

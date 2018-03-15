@@ -25,6 +25,7 @@ export class ScheduleOtherActionsComponent implements OnInit {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
         this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
             this.result = data;
+            console.log('other actions: ',this.result.committeeSchedule.committeeScheduleActItems);
         } );
     }
 

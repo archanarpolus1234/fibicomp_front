@@ -44,6 +44,7 @@ export class Constants {
     addScheduleAttachment: string;
     deleteScheduleAttachment: string;
     downloadAttachments: string;
+    updateScheduleAttachments: string;
     deleteOtherActions: string;
     addScheduleMinuteUrl: string;
     deleteScheduleMinuteUrl: string;
@@ -200,18 +201,26 @@ export class Constants {
         this.deleteScheduleMinuteUrl = '/deleteScheduleMinute';
         //this.deleteScheduleMinuteUrl = 'http://demo.fibiweb.com/fibi-comp/deleteScheduleMinute';
           //this.deleteScheduleMinuteUrl = 'http://192.168.1.76:8080/fibi-comp/deleteScheduleMinute';
+
+        this.updateScheduleMinuteUrl ='/updateCommitteeScheduleMinute';
+        //this.updateScheduleMinuteUrl = 'http://demo.fibiweb.com/fibi-comp/updateCommitteeScheduleMinute';
+       // this.updateScheduleMinuteUrl = 'http://192.168.1.76:8080/fibi-comp/updateCommitteeScheduleMinute';
         
         this.addScheduleAttachment = '/addScheduleAttachment';
         //this.addScheduleAttachment = 'http://demo.fibiweb.com/fibi-comp/addScheduleAttachment';
           //this.addScheduleAttachment = 'http://192.168.1.76:8080/fibi-comp/addScheduleAttachment';
         
-        this.updateScheduleMinuteUrl = '/updateCommitteeScheduleMinute';
-        //this.updateScheduleMinuteUrl = 'http://demo.fibiweb.com/fibi-comp/updateCommitteeScheduleMinute';
-        //this.updateScheduleMinuteUrl = 'http://192.168.1.76:8080/fibi-comp/updateCommitteeScheduleMinute';
-        
         this.deleteScheduleAttachment = '/deleteScheduleAttachment';
         //this.deleteScheduleAttachment = 'http://demo.fibiweb.com/fibi-comp/deleteScheduleAttachment';
           //this.deleteScheduleAttachment = 'http://192.168.1.76:8080/fibi-comp/deleteScheduleAttachment';
+
+         this.downloadAttachments = '/downloadScheduleAttachment';
+        //this.downloadAttachments = 'http://demo.fibiweb.com/fibi-comp/downloadScheduleAttachment';
+        //this.downloadAttachments = 'http://192.168.1.76:8080/fibi-comp/downloadScheduleAttachment';
+         
+         this.updateScheduleAttachments ='/updateScheduleAttachment';
+       //this.updateScheduleAttachments = 'http://demo.fibiweb.com/fibi-comp/updateScheduleAttachment';
+         //this.updateScheduleAttachments = 'http://192.168.1.76:8080/fibi-comp/updateScheduleAttachment';
         
         this.addGuestMember = '/addOthersPresent';
         //this.addGuestMember = 'http://demo.fibiweb.com/fibi-comp/addOthersPresent';
@@ -224,10 +233,6 @@ export class Constants {
         this.deleteGuestMenberScheduleAttendance = '/deleteScheduleAttendance';
         //this.deleteGuestMenberScheduleAttendance = 'http://demo.fibiweb.com/fibi-comp/deleteScheduleAttendance';
         //this.deleteGuestMenberScheduleAttendance = 'http://192.168.1.76:8080/fibi-comp/deleteScheduleAttendance';
-        
-        this.downloadAttachments = '/downloadScheduleAttachment';
-        //this.downloadAttachments = 'http://demo.fibiweb.com/fibi-comp/downloadScheduleAttachment';
-        //this.downloadAttachments = 'http://192.168.1.76:8080/fibi-comp/downloadScheduleAttachment';
         
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';

@@ -25,6 +25,26 @@
 		</div>
 	</div>
 
+<!-- No attachment warning modal -->
+	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showWarn"
+		id="warnNoattachment" tabindex="-1" role="dialog"
+		aria-labelledby="deleteModalTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Warning!!!</h5>
+				</div>
+				<div class="modal-body">
+					<br>
+					<p class="text-center">Please select atleast one file to add the attachment</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btnSkinPrimary"
+						data-dismiss="modal" (click)="showWarn == false">Ok</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- ADD ATTACHMENT MODAL -->
 	<div class="modal fade mySkinDialog modalFallBack" id="addAttachment"
@@ -45,7 +65,8 @@
 					<table class="table table-responsive tableSkin">
 						<tr *ngIf="showAddAttachment">
 							<td class="noData">Add :</td>
-							<td><select
+							<td><span class="mandatory">*</span> 
+							<select
 								(change)="attachmentTypeChange($event.target.value)"
 								class="committeeBox">
 									<option>--Select--</option>
@@ -69,9 +90,8 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btnSkinPrimary"
-						data-dismiss="modal" (click)="showAddAttachment=false">Close</button>
-					<input type="button" value="Add" class="btnSkin btnSkinPrimary"
-						data-dismiss="modal" (click)="addAttachments()">
+						data-dismiss="modal" (click)="closeAttachments()">Close</button>
+					<input type="button" value="Add" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#warnNoattachment" (click)="addAttachments()">
 				</div>
 			</div>
 		</div>
@@ -105,17 +125,24 @@
 			*ngFor="let attachments of result?.committeeSchedule?.committeeScheduleAttachments;let i=index">
 			<td>{{i+1}}</td>
 			<td>{{attachments.attachmentType.description}}</td>
-			<td>{{attachments.description}}</td>
+			<td> <input type="text" [ngClass]="(!editScheduleattachment[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" 
+			[disabled]="!editScheduleattachment[i] == true" [(ngModel)]="attachments.description"></td>
 			<td>{{attachments.fileName}}</td>
 			<td><ul class="actionButtonGroup">
 					<li><a (click)="tempSave($event,attachments)"
 						data-toggle="modal" data-target="#deleteAttachment"><i
 							class="fa fa-trash-o"></i></a></li>
 					<li><a
-						(click)="downloadAttachements($event,attachments.attachment, attachments)"
+						(click)="downloadAttachements($event, attachments)"
 						title="Open{{attachments.commScheduleAttachId}}"> <i
 							class="fa fa-download" aria-hidden="true"></i></a></li>
-				</ul></td>
+					<li>
+						<a *ngIf="!editScheduleattachment[i] == true" (click)="editAttachments($event,i, attachments)"><i class="fa fa-edit"></i></a>
+					</li>
+					<li><a *ngIf="!editScheduleattachment[i] == false" href="#" (click)="saveEditedattachments($event,i, attachments)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+					<li><a *ngIf="!editScheduleattachment[i] == false" href="#" (click)="cancelEditedattachments($event,i, attachments)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+				</ul>
+			</td>
 		</tr>
 	</table>
 	<div
