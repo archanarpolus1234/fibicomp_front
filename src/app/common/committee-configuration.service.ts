@@ -9,6 +9,8 @@ export class CommitteeConfigurationService {
     currentAreaOfResearch = this.committeeAreaOfResearch.asObservable();
     private committeeData = new BehaviorSubject<any[]>([]);
     currentCommitteeData = this.committeeData.asObservable();
+    private currentMember = new BehaviorSubject<any[]>([]);
+    currentMemberData = this.currentMember.asObservable();
     
     constructor() {
         
@@ -24,5 +26,9 @@ export class CommitteeConfigurationService {
     
     changeCommmitteeData(data :any[]){
         this.committeeData.next(data);
+    }
+    
+    changeMemberData(data :any[]){
+        this.currentMember.next(data);
     }
 }

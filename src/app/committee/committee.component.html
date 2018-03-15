@@ -53,7 +53,7 @@
 				<section class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 						<ul class="tabsIcon" style="margin-top: 10px;">
-							<li class="active"
+							<li class="active" data-toggle="modal" data-target="#warningModalMain"
 								[ngClass]="{'active':currentTab=='committee_home'}"><a
 								style="padding-top: -5px;" href="#"
 								(click)="show_current_tab($event,'committee_home');"><i
@@ -78,7 +78,7 @@
 				[scheduleStatus]="result.scheduleStatus" #homeComponent></app-committee-home>
 		</div>
 		<div *ngIf="currentTab =='committee_members'">
-			<app-committee-members></app-committee-members>
+			<app-committee-members (isOnEditMembers) = "recieveEditmembersFlag($event)"></app-committee-members>
 		</div>
 		<!-- modal for showing warnings -->
 		<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
@@ -87,7 +87,7 @@
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" *ngIf="middleOfEdit || middleOfSave"
+						<h5 class="modal-title" *ngIf="middleOfEdit || middleOfSave || isOnEditMembers"
 							id="exampleModalLongTitle">Alert!</h5>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-label="Close">
@@ -97,6 +97,7 @@
 					<div class="modal-body">
 						<p *ngIf="middleOfEdit">{{ alertMsgMiddleOfEdit }}</p>
 						<p *ngIf="middleOfSave">{{ alertMsgNotSaved }}</p>
+						<p *ngIf="isOnEditMembers">{{ alertMsgMemberMiddleOfEdit }}</p>
 					</div>
 					<div class="modal-footer" *ngIf="middleOfEdit">
 						<button type="button" class="btnSkin btn-secondary"
@@ -108,6 +109,12 @@
 					<div class="modal-footer" *ngIf="alertMsgNotSaved">
 						<button type="button" class="btnSkin btnSkinPrimary"
 							data-dismiss="modal">Ok</button>
+					</div>
+					<div class="modal-footer" *ngIf="isOnEditMembers">
+						<button type="button" class="btnSkin btn-secondary"
+							(click)="saveMemberAndContinue(memberData)">Cancel and Exit</button>
+						<button type="button" class="btnSkin btnSkinPrimary"
+							data-dismiss="modal" (click)="stayOnPage()">Yes</button>
 					</div>
 				</div>
 			</div>

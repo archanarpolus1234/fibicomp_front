@@ -7,6 +7,7 @@ import { CommitteeSaveService } from './committee-save.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { CommitteeConfigurationService } from '../common/committee-configuration.service';
 import { SessionManagementService } from "../session/session-management.service";
+import { CommitteeMembersComponent } from "./committee-members/committee-members.component";
 
 
 @Component( {
@@ -42,7 +43,11 @@ export class CommitteeComponent {
     alertMsgNotSaved: string = '';
     alertMsgMiddleOfEdit: string = '';
     @ViewChild( 'homeComponent' ) committeeHome;
+    @ViewChild(CommitteeMembersComponent) committeeMembers: CommitteeMembersComponent;
     public dataServiceHomeUnit: CompleterData;
+    isOnEditMembers: boolean = false;
+    memberData: any =[];
+    alertMsgMemberMiddleOfEdit; string;
 
     constructor( public route: ActivatedRoute, public router: Router, private sessionService: SessionManagementService, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
         if ( !sessionService.canActivate() ) {
@@ -124,6 +129,15 @@ export class CommitteeComponent {
             else {
                 this.currentTab = current_tab;
             }
+        } else if ( current_tab == 'committee_home') {
+            if ( this.isOnEditMembers ) {
+                this.showPopup = true;
+                this.committeeConfigurationService.currentMemberData.subscribe( data => {
+                    this.memberData = data;
+                } );
+                this.alertMsgMemberMiddleOfEdit = 'You are in the middle of editing a Member Details, Do you want to stay on the page..?';
+            }
+            else this.currentTab = current_tab;
         }
         else {
             this.currentTab = current_tab;
@@ -184,5 +198,22 @@ export class CommitteeComponent {
             this.class = 'committeeBoxNotEditable';
             this.constantClass = 'committeeBoxNotEditable';
         }
+    }
+
+    recieveEditmembersFlag( $event ) {
+        this.isOnEditMembers = $event;
+    }
+
+    saveMemberAndContinue(Object) {
+        this.isOnEditMembers = false;
+        this.showPopup = false;
+        this.class = "committeeBoxNotEditable";
+        this.currentTab = 'committee_home';
+        this.clear();
+        this.committeeMembers.saveDetails( Object);
+    }
+
+    stayOnPage() {
+        this.committeeMembers.expandMemberToSave();
     }
 }
