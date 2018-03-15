@@ -9,9 +9,19 @@
 			<div class="modal-body">
 				<p>{{modalMessage}}</p>
 			</div>
-			<div class="modal-footer">
-				<button type="button" class="btnSkin btnSkinPrimary"
-					data-dismiss="modal" (click)="showPopup=false">Ok</button>
+			<div class="modal-footer" *ngIf="!memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
+				<button type="button" class="btnSkin btnSkinPrimary" (click)="showPopup=false">Ok</button>
+			</div>
+			<div class="modal-footer" *ngIf="memberAdded && !IsToDeleteRole && !IsToDeleteExpertise">
+				<button type="button" class="btnSkin btnSkinPrimary"  (click)="expandMemberToSave()">Ok</button>
+			</div>
+			<div class="modal-footer" *ngIf="IsToDeleteRole">
+				<button type="button" class="btnSkin btn-secondary" (click)="modalFooterClear()" >No</button>
+				<button type="button" class="btnSkin btnSkinPrimary" (click)="deleteRole()">Yes</button>
+			</div>
+			<div class="modal-footer" *ngIf="IsToDeleteExpertise">
+				<button type="button" class="btnSkin btn-secondary" (click)="modalFooterClear()" >No</button>
+				<button type="button" class="btnSkin btnSkinPrimary" (click)="deleteExpertise()">Yes</button>
 			</div>
 		</div>
 	</div>
@@ -58,52 +68,52 @@
 							<div class="row text-center">
 								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-0 col-0"></div>
 								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-										<div class="searchBox ">
+										<div class="searchBox">
 											<input type="text" placeholder="{{placeHolderText}}"
-												[(ngModel)]="searchTextModel"
-												(blur)="setInactiveAndchangeIconSearch()"
-												(focus)="setActiveAndchangeIconSearch()" id="member_search"
-												[formControl]="searchText" /> <a href="#"
+												[(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+												[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
 												class="searchButton" (click)="clearsearchBox($event)"><i
 												[ngClass]="iconClass"></i></a>
-											<div class="sb-seachresults">
-												<ul class="sb-results-dropdown-menu text-left" *ngIf="searchActive">
+											<div class="sb-seachresults"  *ngIf="searchActive">
+												<ul class="sb-results-dropdown-menu text-left">
 													<li *ngFor="let result of this.elasticSearchresults "
 														(mousedown)="selected(result)"><span
 														[innerHTML]="result.label"></span></li>
 												</ul>
 											</div>
-											<div>{{message}}</div>
+											<div><p class="searchMessage text-left">{{message}}</p></div>
 										</div>
 								</div>
 								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
-									<button class="btnSkin btnSkinPrimary"
-										[disabled]="memberAdded==true" (click)="addMember()">Add</button>
+									<button class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#modalWarning"
+										(click)="addMember()">Add</button>
 								</div>
 
 							</div>
 						</div>
 					</div>
 				</div>
+
+				<!-- All Members Display-->
+
 				<div *ngIf="memberExist">
-					<div
-						*ngFor="let member of resultLoadedById.committee.committeeMemberships">
+					<div *ngFor="let member of resultLoadedById.committee.committeeMemberships">
 						<div class="set"
 							*ngIf="member.active && activeMembers || !member.active && activeMembers && !inactiveMembers && member.updateTimestamp==null">
 
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
-									href="#" (click)="showMembersTab($event,member.personId)"><i
+									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate}} to {{member.termEndDate}} )</span></span><a
+									href="#" (click)="showMembersTab($event,member.personId, member)"><i
 									[ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
 									(click)="deleteMember($event,member.commMembershipId)"><i
 										class="fa fa-trash-o"></i></a></span>
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									( {{member.termStartDate |date:'yyyy-MM-dd'}} to
-									{{member.termEndDate |date:'yyyy-MM-dd'}} )</span><a href="#"
-									(click)="showMembersNonEmployeesTab($event,member.rolodexId)"><i
+									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'yyyy-MM-dd'}} to
+									{{member.termEndDate |date:'yyyy-MM-dd'}} )</span></span><a href="#"
+									(click)="showMembersNonEmployeesTab($event,member.rolodexId, member)"><i
 									[ngClass]="(showNonEmployeeMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
 									(click)="deleteMember($event,member.commMembershipId)"><i
 										class="fa fa-trash-o"></i></a></span>
@@ -136,7 +146,7 @@
 														<tr>
 															<td><label>Person Name</label><br> <span
 																*ngIf="!member.nonEmployeeFlag">{{member.personDetails.fullName
-																	}}</span> <span *ngIf="member.nonEmployeeFlag">{{member.rolodex.fullName}}</span>
+																	}}</span> <span *ngIf="member.nonEmployeeFlag">{{member.rolodex.fullName}}</span></td>
 															<td><label>Membership Type</label><br> <select
 																id="membershipType" [disabled]="editDetails==false"
 																(change)="memberTypeChange(member,$event.target.value)"
@@ -184,7 +194,7 @@
 
 												<button id="rolesAddBtn" class="addBtn"
 													data-target="#modalWarning" data-toggle="modal"
-													(click)="addRoles($event)">
+													(click)="addRoles($event, member)">
 													<i class="fa fa-plus"></i>
 												</button>
 
@@ -250,8 +260,8 @@
 														</td>
 														<td>
 															<ul class="actionButtonGroup">
-																<li><a href="#"
-																	(click)="deleteRole($event,role.commMemberRolesId,member.commMembershipId)">
+																<li><a href="#" data-target="#modalWarning" data-toggle="modal"
+																	(click)="showWarning($event,role.commMemberRolesId,member.commMembershipId)">
 																		<i class="fa fa-trash-o"></i>
 																</a></li>
 																<li><a href="#" (click)="editRoles($event,role)"
@@ -306,7 +316,7 @@
 												Expertise
 
 												<button class="addBtn" data-target="#modalWarning"
-													data-toggle="modal" (click)="addExpertises($event)">
+													data-toggle="modal" (click)="addExpertises($event, member)">
 													<i class="fa fa-plus"></i>
 												</button>
 											</h4>
@@ -339,8 +349,8 @@
 														<td>{{expertise.researchAreaDescription}}</td>
 														<td class="expertiseEditingActions">
 															<ul class="actionButtonGroup">
-																<li><a href="#"
-																	(click)="deleteExpertise($event,expertise.commMemberExpertiseId,member.commMembershipId)">
+																<li><a href="#" data-target="#modalWarning" data-toggle="modal"
+																	(click)="showExpertiseDeleteWarning($event, expertise.commMemberExpertiseId, member.commMembershipId)">
 																		<i class="fa fa-trash-o"></i>
 																</a></li>
 															</ul>
@@ -358,18 +368,18 @@
 
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									( {{member.termStartDate |date:'yyyy-MM-dd'}} to
-									{{member.termEndDate |date:'yyyy-MM-dd'}} )</span><a href="#"
-									(click)="showMembersTab($event,member.personId)"><i
+									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate |date:'yyyy-MM-dd'}} to
+									{{member.termEndDate |date:'yyyy-MM-dd'}} )</span></span><a href="#"
+									(click)="showMembersTab($event,member.personId, member)"><i
 									[ngClass]="(showMembers == true && member.personId == personId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
 									(click)="deleteMember($event,member.commMembershipId)"><i
 										class="fa fa-trash-o"></i></a></span>
 							</div>
 							<div class="setHead" *ngIf="member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
-									( {{member.termStartDate}} to {{member.termEndDate}} )</span><a
+									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate}} to {{member.termEndDate}} )</span></span><a
 									href="#"
-									(click)="showMembersNonEmployeesTab($event,member.rolodexId)"><i
+									(click)="showMembersNonEmployeesTab($event,member.rolodexId, member)"><i
 									[ngClass]="(showNonEmployeeMembers == true && member.rolodexId == rolodexId)?'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a><span><a
 									(click)="deleteMember($event,member.commMembershipId)"><i
 										class="fa fa-trash-o"></i></a></span>
