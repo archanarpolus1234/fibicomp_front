@@ -85,15 +85,23 @@
 					aria-hidden="true"></i> <i *ngIf="member.guestFlag"
 					class="fa fa-user-o" aria-hidden="true"></i>&nbsp;&nbsp;
 					{{member.personName}}</td>
-				<td><select [(ngModel)]="member.alternateFor"
-					*ngIf="!member.guestFlag"
-					[ngClass]="(!editFlagEnabled[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
-					(ngModelChange)="changes(member.alternateFor)"
-					[disabled]="(editFlagEnabled[i] !== true)">
-						<option selected>Select alternate User</option>
-						<option *ngFor="let  member of this.membersinAttendance"
-							[ngValue]="member.personName">{{member.personName}}</option>
-				</select></td>
+				<td>
+					<select [(ngModel)]="member.alternateFor"
+						*ngIf="member.alternateFlag"
+						[ngClass]="(!editFlagEnabled[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
+						(ngModelChange)="changes(member.alternateFor)"
+						[disabled]="(editFlagEnabled[i] !== true)">
+							<option selected>Select alternate User</option>
+							<ng-container *ngFor="let  memberAtt of this.result.committeeSchedule.committeeScheduleAttendances">
+							<ng-template [ngIf]="member !== memberAtt && memberAtt.memberPresent == false && memberAtt.guestFlag !== true">
+							<option 
+								[ngValue]="memberAtt.personName">
+								 <span>{{memberAtt.personName}}</span>
+							</option>
+							</ng-template>
+							</ng-container>
+					</select>
+				</td>
 				<td>
 					<ul class="actionButtonGroup statusIndicator">
 						<li><a href="#" (click)="markAttendance($event,member,i)"
@@ -102,16 +110,16 @@
 								class="fa fa-check-circle"></i></a></li>
 						<li><a href="#" (click)="showComment($event,i)"><i
 								class="fa fa-comment-o" aria-hidden="true"></i></a></li>
-						<li><a href="#" *ngIf="!editFlagEnabled[i] == true"
+						<li><a href="#" *ngIf="(!editFlagEnabled[i] == true || !commentFlgEnabled[i] == false) && member.alternateFlag"
 							(click)="editAttendanceData($event,i,member)"><i
 								class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
 						<li><a *ngIf="member.guestFlag" href="#"
 							(click)="showDeleteModal($event,member)" data-toggle="modal" data-target="#deleteGuestAttendance"><i
 								class="fa fa-trash-o" aria-hidden="true"></i></a></li>
-						<li><a href="#" *ngIf="!editFlagEnabled[i] == false"
+						<li><a href="#" *ngIf="(!editFlagEnabled[i] == false) || (!commentFlgEnabled[i] == false)"
 							(click)="saveAttendanceEditedData($event, i, member)"><i
 								class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
-						<li><a href="#" *ngIf="!editFlagEnabled[i] == false"
+						<li><a href="#" *ngIf="(!editFlagEnabled[i] == false && member.alternateFlag)"
 							(click)="cancelEditAttenfance($event, i, member)"><i
 								class="fa fa-times" aria-hidden="true"></i></a></li>
 					</ul>
@@ -133,7 +141,6 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Want to delete?</h5>
-
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
 						<span aria-hidden="true">&times;</span>
@@ -147,7 +154,6 @@
 					<button type="button" class="btnSkin btnSkinPrimary"
 						(click)="deleteAttendance($event)" data-dismiss="modal">Yes</button>
 				</div>
-
 			</div>
 		</div>
 	</div>

@@ -16,6 +16,7 @@ export class ProtocolSubmittedComponent implements OnInit {
     ngOnInit() {
         this.scheduleConf.currentScheduleData.subscribe( data => {
             this.result = data;
+            console.log('protocol submitted: ', this.result.committeeSchedule.protocolSubmissions)
             this.outputPath = this.consts.outputPath;
             this.userName = localStorage.getItem( 'currentUser' );
         } );

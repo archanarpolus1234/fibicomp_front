@@ -1,5 +1,5 @@
                 <div>
-                  <table class="table table-responsive tableSkin" >
+                  <table class="table table-responsive tableSkin" *ngIf="result?.committeeSchedule?.protocolSubmissions?.length !== 0">
                       <tr>
                           <th title="">Protocol Number</th>
                           <th title="">PI</th>
@@ -27,5 +27,8 @@
                           </td>
                       </tr>
                   </table>
+                  <div class="noDataOnChart" *ngIf="result?.committeeSchedule?.protocolSubmissions?.length == 0">
+                  		No protocols associated with this schedule
+                  </div>
               </div>
               

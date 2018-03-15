@@ -56,4 +56,18 @@ export class ScheduleAttachmentsService {
                 return new Blob( [res.blob()], { type: mimeType } )
             } );
     }
+
+    updateScheduleAttachments(committeeId: string,scheduleId: number,newCommitteeScheduleAttachment: Object): Observable<JSON> {
+        var params = {
+                committeeId: committeeId,
+                scheduleId: scheduleId,
+                newCommitteeScheduleAttachment: newCommitteeScheduleAttachment
+        };
+        return this.http.post( this.constant.updateScheduleAttachments, params )
+            .map( res => res.json() )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
 }
