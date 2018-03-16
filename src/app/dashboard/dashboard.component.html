@@ -394,7 +394,8 @@
 				</div>
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin">
+					<table class="table table-responsive tableSkin"
+						*ngIf="this.result?.awardViews?.length !== 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('awardNumber',currentPosition)"
@@ -430,10 +431,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullAwardData; else noAwardNullData">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
-							<tr #noAwardNullData
+							<tr
 								*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
 								<td width="8%">{{awardDetails.awardNumber}}</td>
 								<td>{{awardDetails.accountNumber}}</td>
@@ -452,6 +450,8 @@
 							</tr>
 						</tbody>
 					</table>
+					<div *ngIf="this.result?.awardViews?.length == 0"
+						class="noDataOnChart">No awards Found</div>
 				</div>
 			</div>
 			<!-- Proposal -->
@@ -469,7 +469,8 @@
 				</div>
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin">
+					<table class="table table-responsive tableSkin"
+						*ngIf="this.result?.proposalViews?.length !== 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('proposalNumber',currentPosition)"
@@ -506,11 +507,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullProposalData; else noNullProposalData;">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
 							<tr
-								#noNullProposalData;
 								*ngFor="let proposalDetails of serviceRequestList | slice:begin:end">
 								<td>{{proposalDetails.proposalNumber}}</td>
 								<td>{{proposalDetails.title}}</td>
@@ -528,6 +525,8 @@
 							</tr>
 						</tbody>
 					</table>
+					<div *ngIf="this.result?.proposalViews?.length == 0"
+						class="noDataOnChart">No proposals Found</div>
 				</div>
 			</div>
 			<!-- IRB -->
@@ -545,7 +544,8 @@
 
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin">
+					<table class="table table-responsive tableSkin"
+						*ngIf="this.result?.protocolViews?.length !== 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('protocolNumber',currentPosition)"
@@ -577,10 +577,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullIrbData; else noNullIrbData">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
-							<tr #noNullIrbData
+							<tr
 								*ngFor="let IRBDetails of serviceRequestList | slice:begin:end">
 								<td>{{IRBDetails.protocolNumber}}</td>
 								<td>{{IRBDetails.title}}</td>
@@ -597,6 +594,8 @@
 							</tr>
 						</tbody>
 					</table>
+					<div *ngIf="this.result?.protocolViews?.length == 0"
+						class="noDataOnChart">No IRB data Found</div>
 				</div>
 			</div>
 			<!-- IACUC -->
@@ -613,7 +612,8 @@
 				</div>
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin">
+					<table class="table table-responsive tableSkin"
+						*ngIf="this.result?.iacucViews?.length !== 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('protocolNumber',currentPosition)"
@@ -665,6 +665,8 @@
 							</tr>
 						</tbody>
 					</table>
+					<div *ngIf="this.result?.iacucViews?.length == 0"
+						class="noDataOnChart">No IACUC data Found</div>
 				</div>
 			</div>
 			<!-- DISCLOSURE -->
@@ -681,7 +683,8 @@
 				</div>
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin">
+					<table class="table table-responsive tableSkin"
+						*ngIf="this.result?.disclosureViews?.length !== 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('coiDisclosureNumber',currentPosition)"
@@ -719,11 +722,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullDisclosureData; else noNullDisclosureData">
-								<td colspan=7>No Requests Found !</td>
-							</tr>
-							<tr #noNullDisclosureData
-								*ngFor="let DisclosureDetails of serviceRequestList">
+							<tr *ngFor="let DisclosureDetails of serviceRequestList">
 								<td>{{DisclosureDetails.coiDisclosureNumber}}</td>
 								<td>{{DisclosureDetails.fullName}}</td>
 								<td>{{DisclosureDetails.disclosureDisposition}}</td>
@@ -741,6 +740,8 @@
 							</tr>
 						</tbody>
 					</table>
+					<div *ngIf="this.result?.disclosureViews?.length == 0"
+						class="noDataOnChart">No Disclosure data Found</div>
 				</div>
 			</div>
 
@@ -759,7 +760,8 @@
 				</div>
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear == false)">
-					<table class="table table-responsive tableSkin">
+					<table class="table table-responsive tableSkin"
+						*ngIf="this.result?.committees?.length !== 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('committeeId',currentPosition)"
@@ -772,28 +774,24 @@
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'committeeName')}"></span>
 								</th>
-								<th (click)="sortResult('committeeTypeCode',currentPosition)"
-									title="Click to sort by Type Code">Committee Type Code <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'committeeTypeCode')}"></span>
-								</th>
 								<th (click)="sortResult('homeUnitNumber',currentPosition)"
-									title="Click to sort by Lead Unit">Home Unit Number <span
+									title="Click to sort by Lead Unit">Home Unit <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
 								</th>
 								<th (click)="sortResult('homeUnitName',currentPosition)"
-									title="Click to sort by Lead Unit">Home Unit Name <span
+									title="Click to sort by Lead Unit">Unit Name <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
 								</th>
-								<th (click)="sortResult('reviewTypeDescription',currentPosition)"
-									title="Click to sort by Lead Unit">Review Type Description <span
+								<th
+									(click)="sortResult('reviewTypeDescription',currentPosition)"
+									title="Click to sort by Lead Unit">Review Type<span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
 								</th>
 								<th (click)="sortResult('description',currentPosition)"
-									title="Click to sort by Lead Unit">Description <span
+									title="Click to sort by Lead Unit">Committee Description <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'homeUnitNumber')}"></span>
 								</th>
@@ -801,15 +799,10 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullCommitteeData; else noCommitteeNullData">
-								<td colspan=6>No Requests Found !</td>
-							</tr>
-							<tr #noCommitteeNullData
-
+							<tr
 								*ngFor="let coommitteeDetails of serviceRequestList | slice:begin:end">
 								<td width="8%">{{coommitteeDetails.committeeId}}</td>
 								<td>{{coommitteeDetails.committeeName}}</td>
-								<td>{{coommitteeDetails.committeeTypeCode}}</td>
 								<td>{{coommitteeDetails.homeUnitNumber}}</td>
 								<td>{{coommitteeDetails.homeUnitName}}</td>
 								<td>{{coommitteeDetails.reviewTypeDescription}}</td>
@@ -824,6 +817,8 @@
 							</tr>
 						</tbody>
 					</table>
+					<div *ngIf="this.result?.committees?.length == 0"
+						class="noDataOnChart">No Committee data Found</div>
 				</div>
 			</div>
 
@@ -832,24 +827,35 @@
 				*ngIf="(currentPosition == 'SCHEDULE')">
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin">
+					<table class="table table-responsive tableSkin"
+						*ngIf="this.result?.committeeSchedules?.length !== 0">
 						<thead>
 							<tr>
 								<td class="noDataOnChart filterElement">From :</td>
-								<td class="filterElement">
-									<input [owlDateTimeTrigger]="fltrStrDt" [owlDateTime]="fltrStrDt" [(ngModel)]="filterStartDate"
-									class="committeeBox text-border-padding">&nbsp;<span class="fa fa-calendar fa-large" [owlDateTimeTrigger]="fltrStrDt"></span>
-									<owl-date-time #fltrStrDt [pickerType]="'calendar'" ></owl-date-time></td>
+								<td class="filterElement"><input
+									[owlDateTimeTrigger]="fltrStrDt" [owlDateTime]="fltrStrDt"
+									[(ngModel)]="filterStartDate"
+									class="committeeBox text-border-padding">&nbsp;<span
+									class="fa fa-calendar fa-large"
+									[owlDateTimeTrigger]="fltrStrDt"></span> <owl-date-time
+										#fltrStrDt [pickerType]="'calendar'"></owl-date-time></td>
 								<td class="noDataOnChart filterElement">To :</td>
-								<td class="filterElement">
-									<input [owlDateTimeTrigger]="fltrEndDt" [owlDateTime]="fltrEndDt" [(ngModel)]="filterEndDate"
-									class="committeeBox text-border-padding">&nbsp;<span class="fa fa-calendar fa-large" [owlDateTimeTrigger]="fltrEndDt"></span>
-									<owl-date-time #fltrEndDt [pickerType]="'calendar'" ></owl-date-time></td>
-								<td class="filterElement"><button type="button" class="btnSkin btnSkinPrimary" (click)="filterSchedule()">Filter</button></td>
-								<td class="filterElement"><button type="button" class="btnSkin btn-secondary" (click)="resetFilterSchedule()">Clear</button></td>
+								<td class="filterElement"><input
+									[owlDateTimeTrigger]="fltrEndDt" [owlDateTime]="fltrEndDt"
+									[(ngModel)]="filterEndDate"
+									class="committeeBox text-border-padding">&nbsp;<span
+									class="fa fa-calendar fa-large"
+									[owlDateTimeTrigger]="fltrEndDt"></span> <owl-date-time
+										#fltrEndDt [pickerType]="'calendar'"></owl-date-time></td>
+								<td class="filterElement"><button type="button"
+										class="btnSkin btnSkinPrimary" (click)="filterSchedule()">Filter</button></td>
+								<td class="filterElement"><button type="button"
+										class="btnSkin btn-secondary" (click)="resetFilterSchedule()">Clear</button></td>
 							</tr>
 							<tr>
-								<td id="filterWarning" colspan="6" ><span *ngIf="isFilterDatePrevious || isMandatoryFilterFilled == false" class="mandatory">{{filterValidationMessage}}</span></td>
+								<td id="filterWarning" colspan="6"><span
+									*ngIf="isFilterDatePrevious || isMandatoryFilterFilled == false"
+									class="mandatory">{{filterValidationMessage}}</span></td>
 							</tr>
 							<tr>
 								<th (click)="sortResult('scheduleId',currentPosition)"
@@ -863,7 +869,7 @@
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduledDate')}"></span>
 								</th>
 								<th (click)="sortResult('place',currentPosition)"
-									title="Click to sort by Place">Place  <span
+									title="Click to sort by Place">Place <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'place')}"></span>
 								</th>
@@ -879,11 +885,7 @@
 							</tr>
 						</thead>
 						<tbody>
-							<tr *ngIf="nullScheduleData; else noNullScheduledata">
-								<td colspan="8">No Requests Found !</td>
-							</tr>
-							<tr #noNullScheduledata
-								*ngFor="let schedule of serviceRequestList">
+							<tr *ngFor="let schedule of serviceRequestList">
 								<td>{{schedule.scheduleId}}</td>
 								<td>{{schedule.scheduledDate}}</td>
 								<td>{{schedule.place}}</td>
@@ -901,6 +903,8 @@
 							</tr>
 						</tbody>
 					</table>
+					<div *ngIf="this.result?.committeeSchedules?.length == 0"
+						class="noDataOnChart">No Schedule data Found</div>
 				</div>
 			</div>
 

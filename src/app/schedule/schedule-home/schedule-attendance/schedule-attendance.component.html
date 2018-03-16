@@ -110,7 +110,7 @@
 								class="fa fa-check-circle"></i></a></li>
 						<li><a href="#" (click)="showComment($event,i)"><i
 								class="fa fa-comment-o" aria-hidden="true"></i></a></li>
-						<li><a href="#" *ngIf="(!editFlagEnabled[i] == true || !commentFlgEnabled[i] == false) && member.alternateFlag"
+						<li><a href="#" *ngIf="(!editFlagEnabled[i] == true || !commentFlgEnabled[i] == true) && member.alternateFlag"
 							(click)="editAttendanceData($event,i,member)"><i
 								class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
 						<li><a *ngIf="member.guestFlag" href="#"
