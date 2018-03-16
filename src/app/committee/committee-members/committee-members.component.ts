@@ -614,6 +614,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     }
 
     expandMemberToSave() {
+        this.showPopup = false;
         this.resultLoadedById.committee.committeeMemberships.forEach(( value, index ) => {
             if ( value.updateTimestamp == null ) {
                 this.memberAdded = true;
