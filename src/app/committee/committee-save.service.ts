@@ -4,18 +4,17 @@ import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { Constants } from '../constants/constants.service';
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class CommitteeSaveService {
 
-    constructor( private http: Http, private constant: Constants ) {
+    constructor( private http: HttpClient, private constant: Constants ) {
 
     }
 
     saveCommitteeData( committeeObj: Object ): Observable<JSON> {
         return this.http.post( this.constant.committeeSaveUrl, committeeObj )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -28,8 +27,6 @@ export class CommitteeSaveService {
             committeeResearchArea: committeeObj
         };
         return this.http.post( this.constant.researchAreaSaveUrl, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -42,8 +39,6 @@ export class CommitteeSaveService {
             committeeId: committeeId
         };
         return this.http.post( this.constant.deleteResearchAreaUrl, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -52,8 +47,6 @@ export class CommitteeSaveService {
 
     saveScheduleData( scheduleData: Object ): Observable<JSON> {
         return this.http.post( this.constant.generateScheduleUrl, scheduleData )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -62,8 +55,6 @@ export class CommitteeSaveService {
 
     updateScheduleData( scheduleData: Object ): Observable<JSON> {
         return this.http.post( this.constant.updateScheduleUrl, scheduleData )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -72,8 +63,6 @@ export class CommitteeSaveService {
 
     deleteScheduleData( sendScheduleRequestData: Object ): Observable<JSON> {
         return this.http.post( this.constant.deleteScheduleUrl, sendScheduleRequestData )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -82,8 +71,6 @@ export class CommitteeSaveService {
 
     filterScheduleData( scheduleData: Object ): Observable<JSON> {
         return this.http.post( this.constant.filterScheduleUrl, scheduleData )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -92,8 +79,6 @@ export class CommitteeSaveService {
 
     resetFilterSchedule( scheduleData: Object ): Observable<JSON> {
         return this.http.post( this.constant.resetFilterScheduleUrl, scheduleData )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )

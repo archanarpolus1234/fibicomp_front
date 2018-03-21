@@ -5,26 +5,26 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import { Constants } from "../../../constants/constants.service";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class ScheduleAttendanceService {
 
-    constructor( private http: Http, private constants: Constants ) { }
+    constructor( private http: HttpClient, private constants: Constants ) { }
 
-    addGuestMember( guestMemberObj: Object, scheduleId: number ): Observable<JSON> {
+    addGuestMember( guestMemberObj: Object, scheduleId: number ){
         var params = {
             scheduleId: scheduleId,
             updatedAttendance: guestMemberObj
         };
         return this.http.post( this.constants.addGuestMember, params )
-            .map( res => res.json() )
             .catch( error => {
                 console.log( error || error )
                 return Observable.throw( error )
             } );
     }
 
-    updateMemberattendanceDate( committeeId: string, scheduleId: number, memberObj: Object ): Observable<JSON> {
+    updateMemberattendanceDate( committeeId: string, scheduleId: number, memberObj: Object ){
         var params = {
             committeeId: committeeId,
             scheduleId: scheduleId,
@@ -32,21 +32,19 @@ export class ScheduleAttendanceService {
         };
 
         return this.http.post( this.constants.updateScheduleAttendanceData, params )
-            .map( res => res.json() )
             .catch( error => {
                 console.log( error );
                 return Observable.throw( error )
             } );
     }
 
-    deleteScheduleMemberAttendance( committeeId: string, scheduleId: number, commScheduleAttendanceId: number ): Observable<JSON> {
+    deleteScheduleMemberAttendance( committeeId: string, scheduleId: number, commScheduleAttendanceId: number ) {
         var params = {
             committeeId: committeeId,
             scheduleId: scheduleId,
             commScheduleAttendanceId: commScheduleAttendanceId
         };
         return this.http.post( this.constants.deleteGuestMenberScheduleAttendance, params )
-            .map( res => res.json() )
             .catch( error => {
                 console.log( error );
                 return Observable.throw( error )

@@ -4,6 +4,7 @@ import { LoginService } from './login.service';
 import { DashboardService } from '../dashboard/dashboard.service';
 import { SessionManagementService } from '../session/session-management.service';
 import {LoginCheckService} from '../common/login-check.service';
+import { Http, HttpModule, Headers, Response } from '@angular/http';
 
 @Component( {
     selector: 'login-tpl',
@@ -29,7 +30,7 @@ export class LoginComponent implements AfterViewInit {
     firstName: string;
     lastName: string;
     isLoginPage: boolean= false;
-
+    res:Response;
     constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionManagementService, private renderer: Renderer, private loginCheck: LoginCheckService) {
      if ( !this.sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
@@ -46,9 +47,10 @@ export class LoginComponent implements AfterViewInit {
     @ViewChild( 'input' ) input: ElementRef;
     login() {
         this.loginService.login( this.credentials.username, this.credentials.password ).subscribe(
-            data => {
-                this.result = data || [];
+            data => { 
+                this.result = data.body; 
                 if(this.result != null){
+                    localStorage.setItem('authToken', data.headers.get("Authorization"));
                     if ( this.result.login == true ) {
                         this.fullName = this.result.fullName;
                         this.personId = this.result.personID;
@@ -66,13 +68,14 @@ export class LoginComponent implements AfterViewInit {
                     } else {
                         this.loginFail = true;
                         this.credentials.username = '';
+                        this.credentials.password = '';
                         this.renderer.invokeElementMethod( this.input.nativeElement, 'focus' );
                     }
                 }
             },
             error => {
                 console.log( error );
-            },
+            }
         );
     }
 }

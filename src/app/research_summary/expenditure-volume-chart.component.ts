@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ISubscription } from "rxjs/Subscription";
 
 import { GoogleChartService } from '../research_summary/google-chart.service';
@@ -10,7 +10,7 @@ import { DashboardData } from '../dashboard/dashboard-data.service';
     styleUrls: ['../../assets/css/style.css']
 } )
 
-export class ExpenditureVolumeChartComponent extends GoogleChartService implements AfterViewInit, OnInit {
+export class ExpenditureVolumeChartComponent extends GoogleChartService implements OnInit {
     private options;
     private data;
     private chart;
@@ -43,8 +43,6 @@ export class ExpenditureVolumeChartComponent extends GoogleChartService implemen
             this.subscription.unsubscribe();
         this.researchSummaryList = [];
     }
-
-    ngAfterViewInit() { }
 
     drawGraph() {
         this.researchSummaryList = this.dashboardData.getdashboardAreaChartData();

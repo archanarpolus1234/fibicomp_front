@@ -7,13 +7,15 @@ import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 import { SessionManagementService } from '../session/session-management.service';
 import { Constants } from '../constants/constants.service';
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class DashboardService {
     username: string;
     personId: string;
+    tokenValue: string;
 
-    constructor( private http: Http, private sessionService: SessionManagementService, private constant: Constants ) {
+    constructor( private http: HttpClient, private sessionService: SessionManagementService, private constant: Constants ) {
         this.username = localStorage.getItem( 'currentUser' );
         this.personId = localStorage.getItem( 'personId' );
     }
@@ -36,8 +38,6 @@ export class DashboardService {
             filterEndDate: filterEndDate
         };
         return this.http.post( this.constant.dashboardUrl, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -49,8 +49,7 @@ export class DashboardService {
         var params = {
             personId: this.personId
         };
-        return this.http.post( this.constant.summaryUrl, params )
-            .map( res => res.json() )
+        return this.http.post( this.constant.summaryUrl, params)
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -62,7 +61,6 @@ export class DashboardService {
             personId: personId
         };
         return this.http.post( this.constant.notificationUrl, params )
-            .map( res => res.json() )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -71,7 +69,6 @@ export class DashboardService {
 
     logout(): Observable<string> {
         return this.http.get( this.constant.logoutUrl )
-            .map( res => res.text() )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error );

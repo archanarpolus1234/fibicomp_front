@@ -15,6 +15,7 @@ import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DatePipe } from '@angular/common';
 import { FileDropModule } from 'ngx-file-drop';
+import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -79,6 +80,7 @@ import { AwardconfigurationService } from '../app/award/awardconfiguration.servi
 import { ScheduleAttachmentsService } from '../app/schedule/schedule-home/schedule-attachments/schedule-attachments.service';
 import { ScheduleAttendanceService } from "./schedule/schedule-home/schedule-attendance/schedule-attendance.service";
 import { MinutesService } from '../app/schedule/minutes/minutes.service';
+import { AppHttpInterceptor } from "./common/http-interceptor";
 
 let appRoutes = [
     { path: '', component: LoginComponent },
@@ -147,9 +149,14 @@ let appRoutes = [
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
         BrowserAnimationsModule,
-        FileDropModule
+        FileDropModule,
+        HttpClientModule
     ],
-    providers: [DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
+    providers: [ {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AppHttpInterceptor,
+        multi: true},
+        DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,

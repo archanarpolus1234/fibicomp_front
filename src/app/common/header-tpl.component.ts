@@ -92,32 +92,29 @@ export class HeaderComponent implements OnInit {
     }
 
     logout() {
-        this.dashboardService.logout().subscribe(
-            data => {
-                if ( data != null ) {
-                    if ( data == 'SUCCESS' ) {
-                        localStorage.removeItem( 'currentUser' );
-                        localStorage.removeItem( 'personId' );
-                        localStorage.removeItem( 'userFullname' );
-                        localStorage.removeItem( 'isAdmin' );
-                        localStorage.removeItem( 'exapandedViewProposalHeading' );
-                        localStorage.removeItem( 'piechartIndex' );
-                        localStorage.removeItem( 'exapandedDonutViewAwardHeading' );
-                        localStorage.removeItem( 'donutChartIndex' );
-                        localStorage.removeItem( 'exapandedViewAwardHeading' );
-                        localStorage.removeItem( 'sponsorCode' );
-                        localStorage.removeItem( 'researchSummaryIndex' );
-                        localStorage.removeItem( 'dashboardproposalBySponsorTypesWidget' );
-                        localStorage.removeItem( 'dashboardinProgressproposalBySponsorWidget' );
-                        localStorage.removeItem( 'dashboardAwardBysponsorTypesWidget' );
-                        localStorage.removeItem( 'dashboardawardedProposalBySponsorWidget' );
-                        localStorage.removeItem( 'dashboardResearchSummaryWidget' );
-                        localStorage.removeItem( 'dashboardExpenditureVolumeWidget' );
-                        this.loginCheckService.logout();
-                        this.router.navigate( ['/loginpage'] );
-                    }
-                }
-            } );
+        localStorage.removeItem( 'currentUser' );
+        localStorage.removeItem( 'authToken' );
+        localStorage.removeItem( 'exapandedDonutViewProposalHeading' );
+        localStorage.removeItem( 'firstName' );
+        localStorage.removeItem( 'lastName' );
+        localStorage.removeItem( 'personId' );
+        localStorage.removeItem( 'userFullname' );
+        localStorage.removeItem( 'isAdmin' );
+        localStorage.removeItem( 'exapandedViewProposalHeading' );
+        localStorage.removeItem( 'piechartIndex' );
+        localStorage.removeItem( 'exapandedDonutViewAwardHeading' );
+        localStorage.removeItem( 'donutChartIndex' );
+        localStorage.removeItem( 'exapandedViewAwardHeading' );
+        localStorage.removeItem( 'sponsorCode' );
+        localStorage.removeItem( 'researchSummaryIndex' );
+        localStorage.removeItem( 'dashboardproposalBySponsorTypesWidget' );
+        localStorage.removeItem( 'dashboardinProgressproposalBySponsorWidget' );
+        localStorage.removeItem( 'dashboardAwardBysponsorTypesWidget' );
+        localStorage.removeItem( 'dashboardawardedProposalBySponsorWidget' );
+        localStorage.removeItem( 'dashboardResearchSummaryWidget' );
+        localStorage.removeItem( 'dashboardExpenditureVolumeWidget' );
+        this.loginCheckService.logout();
+        this.router.navigate( ['/loginpage'] );
     }
 
     userNotification( event: any ) {
@@ -165,27 +162,27 @@ export class HeaderComponent implements OnInit {
         localStorage.setItem( 'dashboardExpenditureVolumeWidget', String( value ) );
         this.dashboardConfigurationService.changeDashboardExpenditureVolumeWidget( value );
     }
-    
+
     public onChangeOfresearchSummaryWidget( value: boolean ) {
         localStorage.setItem( 'dashboardResearchSummaryWidget', String( value ) );
         this.dashboardConfigurationService.changeDashboardResearchSummaryWidgett( value );
     }
-    
+
     public onChangeOfawardedProposalBySponsorWidget( value: boolean ) {
         localStorage.setItem( 'dashboardawardedProposalBySponsorWidget', String( value ) );
         this.dashboardConfigurationService.changeDashboardawardedProposalBySponsorWidget( value );
     }
-    
+
     public onChangeOfawardBysponsorTypesWidget( value: boolean ) {
         localStorage.setItem( 'dashboardAwardBysponsorTypesWidget', String( value ) );
         this.dashboardConfigurationService.changeDashboardAwardBysponsorTypesWidget( value );
     }
-    
+
     public onChangeOfinProgressproposalBySponsorWidget( value: boolean ) {
         localStorage.setItem( 'dashboardinProgressproposalBySponsorWidget', String( value ) );
         this.dashboardConfigurationService.changeDashboardinProgressproposalBySponsorWidget( value );
     }
-    
+
     public onChangeOfproposalBySponsorTypesWidget( value: boolean ) {
         localStorage.setItem( 'dashboardproposalBySponsorTypesWidget', String( value ) );
         this.dashboardConfigurationService.changeDashboardproposalBySponsorTypesWidget( value );
