@@ -4,10 +4,11 @@ import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
 
 import { Constants } from '../constants/constants.service';
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class CommitteCreateEditService {
-    constructor( private http: Http, private constant: Constants ) {
+    constructor( private http: HttpClient, private constant: Constants ) {
 
     }
 
@@ -16,8 +17,6 @@ export class CommitteCreateEditService {
             committeeTypeCode: committeeTypeCode,
         };
         return this.http.post( this.constant.committeeCreateUrl, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -29,8 +28,6 @@ export class CommitteCreateEditService {
             committeeId: committeeId,
         };
         return this.http.post( this.constant.committeeViewUrl, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -57,8 +54,6 @@ export class CommitteCreateEditService {
 
         }
         return this.http.post( this.constant.addCommitteeMembership, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -67,8 +62,6 @@ export class CommitteCreateEditService {
 
     saveCommitteeMembers( CommiteeeObj: Object ): Observable<JSON> {
         return this.http.post( this.constant.saveCommitteeMembers, CommiteeeObj )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -83,8 +76,6 @@ export class CommitteCreateEditService {
 
         };
         return this.http.post( this.constant.deleteMemberRoles, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -99,8 +90,6 @@ export class CommitteCreateEditService {
             commMembershipId: commMembershipId
         };
         return this.http.post( this.constant.deleteMemberExpertise, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -113,8 +102,6 @@ export class CommitteCreateEditService {
             commMembershipId: commMembershipId
         };
         return this.http.post( this.constant.deleteCommitteeMembers, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -128,8 +115,6 @@ export class CommitteCreateEditService {
             committeeMemberRole: committeeMemberRole
         };
         return this.http.post( this.constant.saveCommitteeMembersRole, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -143,8 +128,6 @@ export class CommitteCreateEditService {
             committeeMemberExpertise: committeeMemberExpertise
         };
         return this.http.post( this.constant.saveCommitteeMembersExpertise, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -160,8 +143,6 @@ export class CommitteCreateEditService {
 
         };
         return this.http.post( this.constant.updateMemberRoles, params )
-            .map( res => res.json()
-            )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )

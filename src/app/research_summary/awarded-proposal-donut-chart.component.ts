@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { GoogleChartService } from '../research_summary/google-chart.service';
@@ -16,7 +16,7 @@ declare var google: any;
   <div id="donut_award_chart" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6" (window:resize)="onResize($event)"></div>`,
 } )
 
-export class AwardedProposalDonutChartComponent extends GoogleChartService implements AfterViewInit, OnInit {
+export class AwardedProposalDonutChartComponent extends GoogleChartService implements OnInit {
     private proposalOptions;
     private awardOptions;
     private proposalData;
@@ -56,8 +56,6 @@ export class AwardedProposalDonutChartComponent extends GoogleChartService imple
             this.subscription.unsubscribe();
         this.resultPie = {};
     }
-
-    ngAfterViewInit() { }
 
     drawGraph() {
         localStorage.setItem( 'donutChartIndex', null );

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef} from '@angular/core';
 import { Router } from '@angular/router';
 
 import { GoogleChartService } from '../research_summary/google-chart.service';
@@ -15,7 +15,7 @@ declare var google:any;
   template: ` <div id="pichart_divEvolution" class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6" (window:resize)="onResize($event)"></div>`,
 })
 
-export class ProposalBySponsorPieChartComponent extends GoogleChartService implements AfterViewInit, OnInit {
+export class ProposalBySponsorPieChartComponent extends GoogleChartService implements OnInit {
     private proposalOptions;
     private awardOptions;
     private proposalData;
@@ -50,8 +50,6 @@ export class ProposalBySponsorPieChartComponent extends GoogleChartService imple
             this.ref.detectChanges();
         } );
     }
-
-    ngAfterViewInit() { }
 
     ngOnDestroy() {
         if ( this.subscription )

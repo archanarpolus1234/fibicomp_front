@@ -5,11 +5,12 @@ import { Injectable } from '@angular/core';
 import { Http, HttpModule, RequestOptions, Headers, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs';
 import { Constants } from '../../../constants/constants.service';
+import { HttpClient, HttpHeaders, HttpRequest, HttpClientModule } from "@angular/common/http";
 
 @Injectable()
 export class ScheduleAttachmentsService {
     formData = new FormData();
-    constructor( private http: Http, private constant: Constants ) {
+    constructor( private http: HttpClient, private constant: Constants, private httpReq: Http ) {
 
     }
 
@@ -25,7 +26,6 @@ export class ScheduleAttachmentsService {
         }
         this.formData.append( 'formDataJson', JSON.stringify( sendObject ) );
         return this.http.post( this.constant.addScheduleAttachment, this.formData )
-            .map( res => res.json() )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -39,7 +39,6 @@ export class ScheduleAttachmentsService {
             commScheduleAttachId: commScheduleAttachId
         }
         return this.http.post( this.constant.deleteScheduleAttachment, params )
-            .map( res => res.json() )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -47,14 +46,10 @@ export class ScheduleAttachmentsService {
     }
 
     downloadAttachment( commScheduleAttachId: string, mimeType ): Observable<any> {
-        let myHeaders = new Headers();
-        myHeaders.append( 'Content-Type', 'application/json' );
-        myHeaders.append( 'commScheduleAttachId', commScheduleAttachId );
-        let options = new RequestOptions( { headers: myHeaders, responseType: ResponseContentType.Blob } );
-        return this.http.get( this.constant.downloadAttachments, options )
-            .map( res => {
-                return new Blob( [res.blob()], { type: mimeType } )
-            } );
+        return this.http.get( this.constant.downloadAttachments, { 
+            headers: new HttpHeaders().set('commScheduleAttachId', commScheduleAttachId.toString()),
+            responseType:'blob'
+        } );
     }
 
     updateScheduleAttachments(committeeId: string,scheduleId: number,newCommitteeScheduleAttachment: Object): Observable<JSON> {
@@ -64,7 +59,6 @@ export class ScheduleAttachmentsService {
                 newCommitteeScheduleAttachment: newCommitteeScheduleAttachment
         };
         return this.http.post( this.constant.updateScheduleAttachments, params )
-            .map( res => res.json() )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
