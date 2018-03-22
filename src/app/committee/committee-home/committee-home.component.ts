@@ -551,7 +551,7 @@ export class CommitteeHomeComponent implements OnInit {
                 } else {
                     this.isDatePrevious = false;
                 }
-                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.dailySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null ) {
+                if ( this.result.scheduleData.scheduleStartDate == null || this.result.scheduleData.dailySchedule.scheduleEndDate == null || this.displayTime == null || this.result.scheduleData.place == null || this.result.scheduleData.place == "" || this.result.scheduleData.place == undefined ) {
                     this.isMandatoryFilled = false;
                     this.scheduleValidationMessage = "* Please fill the mandatory fields.";
                 } else {

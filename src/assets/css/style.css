@@ -281,6 +281,7 @@ header a:hover {
 	font-size: .8em;
 	border-color: #E9E9E9;
 	color: #424242;
+	vertical-align: middle;
 }
 
 .tableSkin>tbody>tr>td>label {

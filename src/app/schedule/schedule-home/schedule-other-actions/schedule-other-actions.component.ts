@@ -10,14 +10,17 @@ import { ScheduleOtherActionsService } from './schedule-other-actions.service';
     templateUrl: './schedule-other-actions.component.html',
     styleUrls: ['../../../../assets/css/bootstrap.min.css', '../../../../assets/css/font-awesome.min.css', '../../../../assets/css/style.css', '../../../../assets/css/search.css']
 } )
+
 export class ScheduleOtherActionsComponent implements OnInit {
     result: any = {};
     committeeScheduleActItemsObject: any = {};
     otherActionsDescription: string = '';
     scheduleId: number;
-    tempOtherAction:any={};
-    showPopup:boolean=false;
+    tempOtherAction: any = {};
+    showPopup: boolean = false;
     currentUser = localStorage.getItem( "currentUser" );
+    isMandatoryFilled: boolean = true;
+    mandatoryMessage: string;
 
     constructor( public scheduleOtherActionsService: ScheduleOtherActionsService, public activatedRoute: ActivatedRoute, public scheduleService: ScheduleService, public scheduleConfigurationService: ScheduleConfigurationService ) { }
 
@@ -57,6 +60,8 @@ export class ScheduleOtherActionsComponent implements OnInit {
             }
         }
         if ( this.otherActionsDescription.trim().length != 0 && this.otherActionsDescription != '' && this.otherActionsDescription != null ) {
+            this.isMandatoryFilled = true;
+            this.mandatoryMessage = '';
             this.committeeScheduleActItemsObject.itemDescription = this.otherActionsDescription;
             this.result.committeeScheduleActItems = this.committeeScheduleActItemsObject;
             this.scheduleOtherActionsService.addOtherActions( this.result.committee.committeeId, this.scheduleId, this.result.committeeScheduleActItems ).subscribe( data => {
@@ -65,7 +70,8 @@ export class ScheduleOtherActionsComponent implements OnInit {
                 this.result.committeeSchedule.committeeScheduleActItems = temp.committeeSchedule.committeeScheduleActItems;
             } );
         } else {
-            alert( "Description is mandatory" );
+            this.isMandatoryFilled = false;
+            this.mandatoryMessage = '* Please fill mandatory fields';
         }
         this.committeeScheduleActItemsObject = {};
         this.otherActionsDescription = ' ';
@@ -79,9 +85,9 @@ export class ScheduleOtherActionsComponent implements OnInit {
         });
     }
     
-    tempSave(event: any, otherAction) {
+    tempSave( event: any, otherAction ) {
         event.preventDefault();
-        this.showPopup=true;
-        this.tempOtherAction=otherAction;
+        this.showPopup = true;
+        this.tempOtherAction = otherAction;
     }
 }

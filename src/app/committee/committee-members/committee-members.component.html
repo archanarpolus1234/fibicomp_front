@@ -50,7 +50,7 @@
 				<div *ngIf="showAddMember==true"
 					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
 					<div class="row">
-						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard" style="padding:0px">
 							<div class="row">
 								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
 									<label class="containerCheckBox">Employee <input
@@ -66,23 +66,23 @@
 								</div>
 							</div>
 							<div class="row text-center">
-								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-0 col-0"></div>
+								<div class="col-xl-3 col-lg-3 col-md-3 hidden-sm"></div>
 								<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-										<div class="searchBox">
-											<input type="text" placeholder="{{placeHolderText}}"
-												[(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
-												[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
-												class="searchButton" (click)="clearsearchBox($event)"><i
-												[ngClass]="iconClass"></i></a>
-											<div class="sb-seachresults"  *ngIf="searchActive">
-												<ul class="sb-results-dropdown-menu text-left">
-													<li *ngFor="let result of this.elasticSearchresults "
-														(mousedown)="selected(result)"><span
-														[innerHTML]="result.label"></span></li>
-												</ul>
-											</div>
-											<div><p class="searchMessage text-left">{{message}}</p></div>
+									<div class="searchBox">
+										<input type="text" placeholder="{{placeHolderText}}"
+											[(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+											[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
+											class="searchButton" (click)="clearsearchBox($event)"><i
+											[ngClass]="iconClass"></i></a>
+										<div class="sb-seachresults"  *ngIf="searchActive">
+											<ul class="sb-results-dropdown-menu text-left">
+												<li *ngFor="let result of this.elasticSearchresults "
+													(mousedown)="selected(result)"><span
+													[innerHTML]="result.label"></span></li>
+											</ul>
 										</div>
+										<div><p class="searchMessage text-left">{{message}}</p></div>
+									</div>
 								</div>
 								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
 									<button class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#modalWarning"
@@ -94,13 +94,12 @@
 					</div>
 				</div>
 
-				<!-- All Members Display-->
+				<!-- ACTIVE Members Display-->
 
 				<div *ngIf="memberExist">
 					<div *ngFor="let member of resultLoadedById.committee.committeeMemberships">
 						<div class="set"
-							*ngIf="member.active && activeMembers || !member.active && activeMembers && !inactiveMembers && member.updateTimestamp==null">
-
+							*ngIf="member.active && activeMembers || !member.active && activeMembers && !inactiveMembers && ( member.committeeMemberRoles.length == 0 || member.committeeMemberExpertises.length == 0 )">
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">
 								<span>{{member.personName}}({{member.active?'Active':'Inactive'}})
 									<span *ngIf="member.updateTimestamp != null">( {{member.termStartDate}} to {{member.termEndDate}} )</span></span><a
@@ -183,6 +182,9 @@
 																	[(ngModel)]="member.trainingNotes"
 																	[ngClass]="editClass"></textarea></td>
 														</tr>
+													<tr *ngIf="isTermDateFilled == false"> 
+														<td colspan="4"><span class="mandatory">{{roleWarningMessage}}</span></td>
+													</tr>
 													</tbody>
 												</table>
 											</div>
@@ -191,7 +193,6 @@
 										<div class=" borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Roles
-
 												<button id="rolesAddBtn" class="addBtn"
 													data-target="#modalWarning" data-toggle="modal"
 													(click)="addRoles($event, member)">
@@ -228,7 +229,7 @@
 														</td>
 
 													</tr>
-													<tr *ngIf="!roleFieldsFilled"> 
+													<tr *ngIf="roleFieldsFilled == false"> 
 														<td colspan="5"><span class="mandatory">{{roleWarningMessage}}</span></td>
 													</tr>
 													<tr>
@@ -237,7 +238,6 @@
 														<th title="">Start Date</th>
 														<th title="">End Date</th>
 														<th title="" class="text-left">Action</th>
-
 													</tr>
 
 													<tr
@@ -449,6 +449,9 @@
 																	[(ngModel)]="member.trainingNotes"
 																	[ngClass]="editClass"></textarea></td>
 														</tr>
+														<tr *ngIf="isTermDateFilled == false"> 
+															<td colspan="4"><span class="mandatory">{{roleWarningMessage}}</span></td>
+														</tr>
 													</tbody>
 												</table>
 											</div>
@@ -456,7 +459,6 @@
 										<div class="borderBox col-12">
 											<h4 class="borderBoxHeading">
 												Roles
-
 												<button id="rolesAddBtn" class="addBtn"
 													data-target="#modalWarning" data-toggle="modal"
 													(click)="addRoles($event)">
@@ -478,22 +480,21 @@
 															[owlDateTime]="dt3"
 															[(ngModel)]="memberRoleObject.startDate"
 															[disabled]="addRole==false" [ngClass]="editClassRole"
-															[min]="member.termStartDate" [max]="member.termEndDate"
 															#dateTime="ngModel" /> <owl-date-time #dt3
 																[pickerType]="'calendar'"></owl-date-time></td>
 														<td><input [owlDateTimeTrigger]="dt4"
 															[owlDateTime]="dt4"
 															[(ngModel)]="memberRoleObject.endDate"
-															[disabled]="addRole==false" [ngClass]="editClassRole"
-															[min]="member.termStartDate" [max]="member.termEndDate" />
+															[disabled]="addRole==false" [ngClass]="editClassRole" />
 															<owl-date-time #dt4 [pickerType]="'calendar'"></owl-date-time>
 														</td>
-
 														<td>
 															<button class="btnSkin btnSkinPrimary"
 																(click)="roleAddtoTable(member)">Add</button>
 														</td>
-
+													</tr>
+													<tr *ngIf="roleFieldsFilled == false"> 
+														<td colspan="5"><span class="mandatory">{{roleWarningMessage}}</span></td>
 													</tr>
 													<tr>
 														<th title="">Sl No</th>
@@ -501,9 +502,7 @@
 														<th title="">Start Date</th>
 														<th title="">End Date</th>
 														<th title="" class="text-left">Action</th>
-
 													</tr>
-
 													<tr
 														*ngFor="let role of  member.committeeMemberRoles;let i=index">
 														<td>{{i+1}}</td>
@@ -580,7 +579,6 @@
 											<h4 class="borderBoxHeading">
 												Expertise
 												<button id="rolesAddBtn" class="addBtn"
-													*ngIf="!addExpertise && !editExpertise"
 													data-target="#modalWarning" data-toggle="modal"
 													(click)="addExpertises($event)">
 													<i class="fa fa-plus"></i>

@@ -64,6 +64,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     showPopup: boolean;
     deletingMeberObj;
     commentFlgEnabled = {};
+    placeHolderText: string = 'Search an employee';
 
     constructor( private scheduleConfigurationService: ScheduleConfigurationService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, private _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, private scheduleAttendanceService: ScheduleAttendanceService, private activatedRoute: ActivatedRoute ) {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
@@ -153,7 +154,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
                                             this.message = '';
                                         } else {
                                             if ( this.searchTextModel && this.searchTextModel.trim() ) {
-                                                this.message = 'nothing was found';
+                                                this.message = '';
                                             }
                                         }
                                         resolve( this.elasticSearchresults );
@@ -179,21 +180,13 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     employeeRadioChecked() {
         this.nonEmployeeFlag = false;
         this.searchTextModel = '';
+        this.placeHolderText = 'Search an employee';
     }
 
     nonEmployeeRadioChecked() {
         this.nonEmployeeFlag = true;
         this.searchTextModel = '';
-    }
-
-    setInActiveAndchangeIconSearch() {
-        this.searchActive = false;
-        this.iconClass = 'fa fa-search';
-    }
-
-    setActiveAndchangeIconSearch() {
-        this.searchActive = true;
-        this.iconClass = 'fa fa-times';
+        this.placeHolderText = 'Search a non-employee';
     }
 
     clearsearchBox( e: any ) {
@@ -324,5 +317,10 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     }
 
     changes( mebrObj ) {
+    }
+
+    onSearchValueChange() {
+        this.iconClass = this.searchTextModel ? 'fa fa-times' : 'fa fa-search';
+        this.elasticSearchresults = [];
     }
 }
