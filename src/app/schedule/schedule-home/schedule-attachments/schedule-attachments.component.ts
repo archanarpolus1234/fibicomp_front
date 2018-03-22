@@ -31,7 +31,10 @@ export class ScheduleAttachmentsComponent implements OnInit {
     attachmentEditIndex: number;
     editScheduleattachment: any={};
     tempEditObject : any ={};
-    showWarn: boolean = false;
+    ismandatoryFilled: boolean = true;
+    attachmentWarningMsg: string;
+    attachment: any = {};
+
     constructor( public scheduleAttachmentsService: ScheduleAttachmentsService, public scheduleConfigurationService: ScheduleConfigurationService, public scheduleService: ScheduleService, public activatedRoute: ActivatedRoute ) {
         this.currentUser = localStorage.getItem( "currentUser" );
     }
@@ -48,6 +51,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
 
     onChange( files: FileList ) {
         this.fil = files;
+        this.ismandatoryFilled = true;
         for ( var i = 0; i < this.fil.length; i++ ) {
             this.uploadedFile.push( this.fil[i] );
         }
@@ -60,6 +64,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
             if ( attachmentType.description == type ) {
                 this.attachmentObject.attachmentTypecode = attachmentType.attachmentTypecode;
                 this.attachmentObject.description = attachmentType.description;
+                this.attachment.description = attachmentType.description;
                 this.attachmentObject.updateTimestamp = timestamp;
                 this.attachmentObject.updateUser = this.currentUser;
             }
@@ -68,6 +73,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
 
     public dropped( event: UploadEvent ) {
         this.files = event.files;
+        this.ismandatoryFilled = true;
         for ( let file of this.files ) {
             this.attachmentList.push( file );
         }
@@ -86,11 +92,24 @@ export class ScheduleAttachmentsComponent implements OnInit {
         }
     }
 
+    showAddAttachmentPopUp( e ) {
+        e.preventDefault();
+        this.showAddAttachment = true;
+        this.ismandatoryFilled = true;
+        this.uploadedFile = [];
+        this.attachmentTypeDescription = '';
+        this.attachment.description = 'Select';
+    }
+
     addAttachments() {
-        if (this.uploadedFile.length == 0 ) {
-            //alert('You need to include atleast one file to add attachments');
-            this.showWarn = true;
+        if ( this.attachment.description == 'Select' ) {
+            this.ismandatoryFilled = false;
+            this.attachmentWarningMsg = '* Please select an attachment type';
+        } else if (this.uploadedFile.length == 0 ) {
+            this.ismandatoryFilled = false;
+            this.attachmentWarningMsg = '* Please choose at least one file to attach';
         } else {
+            this.ismandatoryFilled = true;
             this.showAddAttachment = false;
             var d = new Date();
             var timestamp = d.getTime();
@@ -164,7 +183,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
         this.editScheduleattachment[index] = !this.editScheduleattachment[index];
         attachments.description = this.tempEditObject.description;
     }
-    
+
     closeAttachments(){
         this.showAddAttachment=false;
         this.uploadedFile = [];

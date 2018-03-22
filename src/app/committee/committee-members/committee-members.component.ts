@@ -101,6 +101,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     IsToDeleteRole: boolean = false;
     commMemberExpertiseId: number;
     IsToDeleteExpertise: boolean = false;
+    isTermDateFilled: boolean = true;
 
     constructor( public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, private _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public committeeConfigurationService: CommitteeConfigurationService, public route: ActivatedRoute, public completerService: CompleterService, public committeCreateEditService: CommitteCreateEditService ) {
         this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
@@ -244,10 +245,12 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
     showEditDetails() {
         this.editDetails = true;
+        this.isOnEditMembers.emit( this.editDetails );
         if ( this.editDetails ) {
             this.editClass = 'committeeBox';
         }
-        this.isOnEditMembers.emit( this.editDetails );
+        this.addRole = false;
+        this.addExpertise = false;
     }
 
     memberTypeChange( member, types ) {
@@ -265,24 +268,27 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
     saveDetails( member ) {
         if ( member.termStartDate == null || member.termEndDate == null ) {
-            this.showPopup = true;
+            this.isTermDateFilled = false;
+            this.roleWarningMessage = '* Term start date and term end date are mandatory';
             this.editDetails = true;
             this.isOnEditMembers.emit( this.editDetails );
-            this.modalMessage = "Term starting and ending date must be filled";
-            this.modalTitle = "Unfilled fields!";
-        } else if ( member.committeeMemberExpertises.length == 0 ) {
-            this.showPopup = true;
-            this.editDetails = true;
-            this.isOnEditMembers.emit( this.editDetails );
-            this.modalMessage = "Please add atleast one expertise";
-            this.modalTitle = "No Expertise added!";
-        } else if ( member.committeeMemberRoles.length == 0 ) {
-            this.editDetails = true;
-            this.isOnEditMembers.emit( this.editDetails );
-            this.modalMessage = "Please add atleast one role";
-            this.modalTitle = "No Roles added!";
+        } else if ( member.termStartDate > member.termEndDate ) {
+            this.isTermDateFilled = false;
+            this.roleWarningMessage = '* Term start date must be after term start date.';
         } else {
-            this.showPopup = false;
+            this.isTermDateFilled = true;
+            if ( member.committeeMemberRoles.length == 0 ) {
+                this.showPopup = true;
+                this.modalMessage = "Please add atleast one role";
+                this.modalTitle = "No Roles added!";
+            } else if ( member.committeeMemberExpertises.length == 0 ) {
+                this.showPopup = true;
+                this.modalMessage = "Please add atleast one expertise";
+                this.modalTitle = "No Expertise added!";
+            } else {
+                this.showPopup = false;
+                this.isOnEditMembers.emit( this.editDetails );
+            }
             this.editDetails = false;
             this.isOnEditMembers.emit( this.editDetails );
             this.memberAdded = false;
@@ -314,20 +320,25 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
             this.editClass = 'committeeBoxNotEditable';
         }
         this.isOnEditMembers.emit( this.editDetails );
+        this.isTermDateFilled = true;
     }
 
     addRoles( event: any, member: any ) {
         event.preventDefault();
-        if ( this.editDetails == true && member.committeeMemberRoles.length > 0 ) {
+        if ( this.editDetails == true ) {
             this.showPopup = true;
             this.modalMessage = "You are in the middle of editing Person Details, please save the data once to proceed";
             this.modalTitle = "Warning!!!";
         } else {
             this.addRole = !this.addRole;
+            this.addExpertise = false;
             this.editClassRole = 'committeeBox';
             if ( this.roleFieldsFilled == false ) {
                 this.roleFieldsFilled = true;
             }
+            this.membershipRoles.description = '';
+            this.memberRoleObject.startDate = null;
+            this.memberRoleObject.endDate = null;
         }
     }
 
@@ -342,6 +353,9 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
             var temp: any = {};
             temp = data;
             this.resultLoadedById.committee = temp.committee;
+            if ( member.committeeMemberExpertises.length == 0 ) {
+                
+            }
         } );
     }
 
@@ -357,12 +371,13 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
     addExpertises( event: any, member: any ) {
         event.preventDefault();
-        if ( this.editDetails == true && member.committeeMemberExpertises.length > 0 ) {
+        if ( this.editDetails == true ) {
             this.showPopup = true;
             this.modalMessage = "You are in the middle of editing Person Details, please save the data once to proceed";
             this.modalTitle = "Warning!!!";
         } else {
             this.addExpertise = !this.addExpertise;
+            this.addRole = false;
         }
     }
 
@@ -396,13 +411,13 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         var termEndDate = new Date( member.termEndDate );
         if ( this.membershipRoles.description == null || this.membershipRoles.description == undefined || this.memberRoleObject.startDate == null || this.memberRoleObject.endDate == null ) {
             this.roleFieldsFilled = false;
-            this.roleWarningMessage = '* Please fill the mandatory fileds.'
+            this.roleWarningMessage = '* Please fill the mandatory fileds.';
         } else if ( this.memberRoleObject.startDate > this.memberRoleObject.endDate ) {
             this.roleFieldsFilled = false;
-            this.roleWarningMessage = '* Role end date must be after role start date.'
+            this.roleWarningMessage = '* Role end date must be after role start date.';
         } else if ( this.memberRoleObject.startDate < termStartDate || this.memberRoleObject.startDate > termEndDate || this.memberRoleObject.endDate < termStartDate || this.memberRoleObject.endDate > termEndDate ) {
             this.roleFieldsFilled = false;
-            this.roleWarningMessage = '* Role start date and role end date must be between term start date and term end date.'
+            this.roleWarningMessage = '* Role start date and role end date must be between term start date and term end date.';
         } else {
             this.roleFieldsFilled = true;
             this.roleWarningMessage = '';
@@ -416,6 +431,12 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
                 temp = data;
                 this.resultLoadedById.committee = temp.committee;
             } );
+            if ( member.committeeMemberExpertises.length == 0 ) {
+                this.showPopup = true;
+                this.isOnEditMembers.emit( this.editDetails );
+                this.modalMessage = "Please add atleast one expertise";
+                this.modalTitle = "No Expertise added!";
+            }
         }
     }
 
@@ -486,15 +507,16 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         } );
     }
 
-    showMembersNonEmployeesTab( event: any, rolodexIdFromService, Object ) {
+    showMembersNonEmployeesTab( event: any, rolodexIdFromService, member ) {
         event.preventDefault();
+        this.isTermDateFilled = true;
         this.personId = null;
         this.showMembers = false;
-        if ( Object.updateTimestamp == null ) {
+        if ( member.updateTimestamp == null ) {
             this.memberAdded = true;
             this.showEditDetails();
         }
-        this.committeeConfigurationService.changeMemberData( Object );
+        this.committeeConfigurationService.changeMemberData( member );
         this.showNonEmployeeMembers = !this.showNonEmployeeMembers;
         if ( this.showNonEmployeeMembers ) {
             this.editDetails = false;
@@ -504,16 +526,17 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
         this.rolodexId = rolodexIdFromService;
     }
 
-    showMembersTab( event: any, personIdFromService, Object ) {
+    showMembersTab( event: any, personIdFromService, member ) {
         event.preventDefault();
+        this.isTermDateFilled = true;
         this.rolodexId = null;
         this.showNonEmployeeMembers = false;
-        if ( Object.updateTimestamp == null ) {
+        if ( member.updateTimestamp == null ) {
             this.memberAdded = true;
             this.showEditDetails();
         }
         this.showMembers = !this.showMembers;
-        this.committeeConfigurationService.changeMemberData( Object );
+        this.committeeConfigurationService.changeMemberData( member );
         if ( this.showMembers ) {
             this.editDetails = false;
             this.isOnEditMembers.emit( this.editDetails );
@@ -616,7 +639,7 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
     expandMemberToSave() {
         this.showPopup = false;
         this.resultLoadedById.committee.committeeMemberships.forEach(( value, index ) => {
-            if ( value.updateTimestamp == null ) {
+            if ( value.updateTimestamp == null || value.committeeMemberRoles.length == 0 || value.committeeMemberExpertises.length == 0) {
                 this.memberAdded = true;
                 this.showEditDetails();
                 if ( value.personId == null ) {

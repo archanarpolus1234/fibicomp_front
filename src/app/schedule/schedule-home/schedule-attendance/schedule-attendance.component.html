@@ -1,12 +1,18 @@
 <div>
 	<div class="row">
-		<div
-			class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
 			<div class="row">
-				<div class="col-xl-6 col-lg-2 col-md-2 col-sm-2 col-2 text-right">
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-left">
 					<label>Add Guest</label>
 				</div>
-				<div class="col-xl-3 col-lg-2 col-md-2 col-sm-2 col-2 text-left">
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-right">
+					<i class="fa fa-user-o" aria-hidden="true"> &nbsp;Guest</i> &nbsp;
+					<i class="fa fa-user-circle" aria-hidden="true">&nbsp;
+						Alternate</i>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-center">
 					<label class="containerCheckBox">Employee <input
 						type="radio" name="member" id="employeeRadio"
 						(change)="employeeRadioChecked()" checked> <span
@@ -17,51 +23,28 @@
 						class="checkmark"></span>
 					</label>
 				</div>
-				<div class="col-xl-3 col-lg-2 col-md-2 col-sm-2 col-2 text-right">
-					<i class="fa fa-user-o" aria-hidden="true"> &nbsp;Guest</i> &nbsp;
-					<i class="fa fa-user-circle" aria-hidden="true">&nbsp;
-						Alternate</i>
-				</div>
 			</div>
-			<div class="row">
-				<div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-2"></div>
-				<br>
-				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
-					<div class="row">
-						<div
-							class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode">
-							<div class="row">
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2"></div>
-								<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2"></div>
-
-								<div class="col-xl-5 col-lg-5 col-md-2 col-sm-4 col-2">
-									<span>
-										<div class="searchBox ">
-											<input type="text" placeholder="Search"
-												[(ngModel)]="searchTextModel"
-												(blur)="setInActiveAndchangeIconSearch()"
-												(focus)="setActiveAndchangeIconSearch()" id="member_search"
-												[formControl]="searchText" /> <a href="#"
-												class="searchButton" (click)="clearsearchBox($event)"><i
-												[ngClass]="iconClass"></i></a>
-											<div class="sb-seachresults">
-												<ul class="sb-results-dropdown-menu" *ngIf="searchActive">
-													<li *ngFor="let result of this.elasticSearchresults "
-														(mousedown)="selected(result)"><span
-														[innerHTML]="result.label"></span></li>
-												</ul>
-											</div>
-											<div>{{message}}</div>
-										</div>
-									</span>
-								</div>
-								<div class="col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3">
-									<button class="btnSkin btnSkinPrimary"  (click)="addMember()">Add</button>
-								</div>
-
-							</div>
+			<div class="row text-center">
+				<div class="col-xl-3 col-lg-3 col-md-3 hidden-sm"></div>
+				<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+					<div class="searchBox">
+						<input type="text" placeholder="{{placeHolderText}}"
+							[(ngModel)]="searchTextModel"
+							(blur)="this.searchActive = false" (ngModelChange)="onSearchValueChange()"
+							(focus)="this.searchActive = true" id="member_search"
+							[formControl]="searchText" />
+							<a href="#" class="searchButton" (click)="clearsearchBox($event)"><i [ngClass]="iconClass"></i></a>
+						<div class="sb-seachresults">
+							<ul class="sb-results-dropdown-menu text-left" *ngIf="searchActive">
+								<li *ngFor="let result of this.elasticSearchresults "
+									(mousedown)="selected(result)"><span [innerHTML]="result.label"></span></li>
+							</ul>
 						</div>
+						<div><p class="searchMessage text-left">{{message}}</p></div>
 					</div>
+				</div>
+				<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-12">
+					<button class="btnSkin btnSkinPrimary" (click)="addMember()">Add</button>
 				</div>
 			</div>
 		</div>
@@ -124,8 +107,8 @@
 								class="fa fa-times" aria-hidden="true"></i></a></li>
 					</ul>
 				</td>
-				<td *ngIf="(showCommentFlag == true && commentsIndex == i)"><input
-					type="text" [(ngModel)]="member.comments"></td>
+				<td *ngIf="(showCommentFlag == true && commentsIndex == i)">
+				<input type="text" [(ngModel)]="member.comments" class="committeeBox"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -146,8 +129,10 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">Are you sure you want to delete this
-					item?</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete this
+					item?</p>
+				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btn-secondary"
 						data-dismiss="modal" data-toggle="modal" (click)="showPopup=false">No</button>

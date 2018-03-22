@@ -14,14 +14,13 @@
 							</button>
 						</div>
 						<div class="modal-body">
-							Are you sure you want to delete this item?
+							<p>Are you sure you want to delete this item?</p>
 						</div>
 						<div class="modal-footer" >
 							<button type="button" class="btnSkin btn-secondary"
-								data-dismiss="modal" data-toggle="modal" (click)="showPopup=false">No</button>
+								data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
 							<button type="button" class="btnSkin btnSkinPrimary"
-								(click)="deleteOtherActions()"
-								data-dismiss="modal">Yes</button>
+								(click)="deleteOtherActions()" data-dismiss="modal">Yes</button>
 						</div>
 						
 					</div>
@@ -30,33 +29,36 @@
 	<div>
 		<table class="table table-responsive tableSkin">
 			<tr>
-				<td class="noData">Add :</td>
-				<td><select
+				<td class="noData filterElement text-right">Type :</td>
+				<td class="noData filterElement"><select
 					(change)="OtherActionsTypeChange($event.target.value)"
 					class="committeeBox">
 						<option *ngFor="let type of result?.scheduleActItemTypes"
 							(value)="type">{{type.description}}</option>
 				</select></td>
-				<td><input type="text" id="desc"
+				<td class="noData filterElement text-right">Description :</td>
+				<td class="noData filterElement"><input type="text" id="desc"
 					[(ngModel)]="otherActionsDescription" class="scheduleBoxes"></td>
-				<td><input type="button" value="Add"
+				<td class="noData filterElement"><input type="button" value="Add"
 					class="btnSkin btnSkinPrimary" (click)="addOtherActions()"></td>
+			</tr>
+			<tr>
+				<td colspan="5" *ngIf="isMandatoryFilled == false"><span class="mandatory">{{mandatoryMessage}}</span></td>
 			</tr>
 			<tr *ngIf="result?.committeeSchedule?.committeeScheduleActItems?.length !== 0">
 				<th title="">Sl No</th>
 				<th title="">Type</th>
-				<th title="">Description</th>
+				<th title="" colspan="2">Description</th>
 				<th title="">Actions</th>
 			</tr>
 			<tr
 				*ngFor="let otherAction of result?.committeeSchedule?.committeeScheduleActItems;let i=index">
 				<td>{{i+1}}</td>
 				<td>{{otherAction.scheduleActItemTypeDescription}}</td>
-				<td>{{otherAction.itemDescription}}</td>
+				<td colspan="2">{{otherAction.itemDescription}}</td>
 				<td>
 					<ul class="actionButtonGroup">
-						<li><a data-target="#warningModal" data-toggle="modal"
-							aria-hidden="true"  (click)="tempSave($event,otherAction)"> <i class="fa fa-trash-o"></i>
+						<li><a href="#" data-target="#warningModal" data-toggle="modal" aria-hidden="true" (click)="tempSave($event,otherAction)"> <i class="fa fa-trash-o"></i>
 						</a></li>
 					</ul>
 				</td>

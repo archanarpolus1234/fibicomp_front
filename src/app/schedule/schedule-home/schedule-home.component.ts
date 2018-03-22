@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ScheduleConfigurationService } from '../../common/schedule-configuration.service';
 import { ScheduleHomeService } from "./schedule-home.service";
@@ -7,7 +7,8 @@ import { DatePipe } from '@angular/common';
 @Component( {
     selector: 'app-schedule-home',
     templateUrl: './schedule-home.component.html',
-    styleUrls: ['../../../assets/css/bootstrap.min.css', '../../../assets/css/font-awesome.min.css', '../../../assets/css/style.css', '../../../assets/css/search.css']
+    styleUrls: ['../../../assets/css/bootstrap.min.css', '../../../assets/css/font-awesome.min.css', '../../../assets/css/style.css', '../../../assets/css/search.css'],
+    changeDetection: ChangeDetectionStrategy.Default
 } )
 export class ScheduleHomeComponent implements OnInit {
 
@@ -47,7 +48,7 @@ export class ScheduleHomeComponent implements OnInit {
     ngOnInit() {
         this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
             this.result = data;
-            if ( this.result.length !== undefined && this.result.committeeSchedule !== undefined ) {
+            if ( this.result !== undefined && this.result.committeeSchedule !== undefined ) {
                 this.scheduleTime = new Date( this.result.committeeSchedule.time );
                 this.scheduleStartTime = new Date( this.result.committeeSchedule.startTime );
                 this.scheduleEndTime = new Date( this.result.committeeSchedule.endTime );

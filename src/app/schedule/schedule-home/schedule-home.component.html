@@ -14,17 +14,16 @@
 						<div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12 ">
 							Last Agenda Generated : 01/15/2017</div>
 						<div class="col-xl-2 col-lg-12 col-md-12 col-sm-12 col-12 ">
-							<a id="returnToCommiteeLink" routerLink='/committee'
-								[queryParams]="{mode:'view','id':this.result?.committeeSchedule?.committeeId}">Return
-								to Committee</a>
+							<a title="back to committee" id="returnToCommiteeLink" routerLink='/committee'
+								[queryParams]="{mode:'view','id':this.result?.committeeSchedule?.committeeId}">
+								<i class="fa fa-mail-reply">&nbsp;</i>Return to Committee</a>
 						</div>
 						<div class="text-right">
 							<button class="editBtn" *ngIf="editDetails == false"
 								(click)="showEditDetails(result.committeeSchedule)">
-								<i class="fa fa-pencil"></i>
+								<i title="edit schedule details" class="fa fa-pencil"></i>
 							</button>
-							<button class="addBtn" *ngIf="editDetails"
-								(click)="updateDetails()">
+							<button class="addBtn" *ngIf="editDetails" (click)="updateDetails()">
 								<i class="fa fa-floppy-o"></i>
 							</button>
 							<button class="editBtn" *ngIf="editDetails"
@@ -50,7 +49,7 @@
 									[ngClass]="(!editDetails == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'"
 									[disabled]="!editDetails == true" name="SelectType"
 									[(ngModel)]="scheduleStatusSelected">
-										<option *ngFor="let status of result.scheduleStatus">{{
+										<option *ngFor="let status of scheduleStatus" [value] = "status.description">{{
 											status.description }}</option>
 								</select></td>
 								<td><label>Place</label><br> <input type="text"

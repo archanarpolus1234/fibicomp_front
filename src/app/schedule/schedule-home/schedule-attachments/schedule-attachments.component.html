@@ -13,34 +13,14 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">Are you sure you want to delete this
-					item?</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete this item?</p>
+				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btn-secondary"
-						data-dismiss="modal" data-toggle="modal" (click)="showPopup=false">No</button>
+						data-dismiss="modal" data-toggle="modal" (click)="showPopup = false">No</button>
 					<button type="button" class="btnSkin btnSkinPrimary"
 						(click)="deleteAttachments($event)" data-dismiss="modal">Yes</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-<!-- No attachment warning modal -->
-	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showWarn"
-		id="warnNoattachment" tabindex="-1" role="dialog"
-		aria-labelledby="deleteModalTitle" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title">Warning!!!</h5>
-				</div>
-				<div class="modal-body">
-					<br>
-					<p class="text-center">Please select atleast one file to add the attachment</p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btnSkin btnSkinPrimary"
-						data-dismiss="modal" (click)="showWarn == false">Ok</button>
 				</div>
 			</div>
 		</div>
@@ -57,23 +37,20 @@
 					<h5 class="modal-title" id="skippedSchedulesLongTitle">Add
 						Attachment</h5>
 					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close" (click)="showAddAttachment=false">
+						aria-label="Close" (click)="showAddAttachment = false">
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
 				<div class="modal-body">
 					<table class="table table-responsive tableSkin">
 						<tr *ngIf="showAddAttachment">
-							<td class="noData">Add :</td>
-							<td><span class="mandatory">*</span> 
-							<select
-								(change)="attachmentTypeChange($event.target.value)"
-								class="committeeBox">
-									<option>--Select--</option>
-									<option *ngFor="let type of result?.attachmentTypes"
-										(value)="type">{{type.description}}</option>
+							<td class="noData filterElement">Add :</td>
+							<td class="filterElement"><span class="mandatory">*</span> 
+							<select (change)="attachmentTypeChange($event.target.value)" class="committeeBox" [(ngModel)]="attachment.description">
+								<option *ngFor="let type of result?.attachmentTypes"
+									(value)="type">{{type.description}}</option>
 							</select></td>
-							<td><textarea id="desc" placeholder="Description"
+							<td class="filterElement"><textarea id="desc" placeholder="Description"
 									[(ngModel)]="attachmentTypeDescription" class="scheduleBoxes"></textarea></td>
 						</tr>
 					</table>
@@ -83,37 +60,30 @@
 						(onFileLeave)="fileLeave($event)"> <input type="file"
 						#file (change)="onChange(file.files)" multiple /> OR &nbsp;&nbsp;
 					</file-drop>
-					<ul *ngFor="let item of uploadedFile; let i=index">
-						<li><strong>{{ item.name }}</strong> <i class="fa fa-trash-o"
-							(click)="deleteFromUploadedFileList(item)"></i></li>
+					<ul>
+						<li *ngFor="let item of uploadedFile; let i=index">
+						<span>{{ item.name }}----------------</span><i class="fa fa-trash-o" (click)="deleteFromUploadedFileList(item)"></i>
+						</li>
 					</ul>
+					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">{{attachmentWarningMsg}}</span></div>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btnSkin btnSkinPrimary"
-						data-dismiss="modal" (click)="closeAttachments()">Close</button>
-					<input type="button" value="Add" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#warnNoattachment" (click)="addAttachments()">
+					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
+					<button type="button" class="btnSkin btnSkinPrimary" (click)="addAttachments()">Add</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
-			<div class="row">
-				<div class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-2"></div>
-				<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-2"></div>
-				<div class="col-xl-1 col-lg-3 col-md-3 col-sm-3 col-3"></div>
-				<div class="col-xl-6 col-lg-3 col-md-3 col-sm-3 col-12 text-right">
-					<ul class="addAttachmentsIcon actionButtonGroup">
-						<li><a title="Open" (click)="showAddAttachment=true"
-							data-toggle="modal" data-target="#addAttachment"><i
-								class="fa fa-plus"></i>&nbsp;&nbsp;Add Attachment</a></li>
-					</ul>
-				</div>
-			</div>
+		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-right">
+			<a href="#" title="add new attachment" class="addTextBtn" (click)="showAddAttachmentPopUp($event)" data-toggle="modal" data-target="#addAttachment">
+				<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
+			</a>
 		</div>
 	</div>
+	<br>
 	<table class="table table-responsive tableSkin"
-		*ngIf="result?.committeeSchedule?.committeeScheduleAttachments !== null">
+		*ngIf="result?.committeeSchedule?.committeeScheduleAttachments?.length !== 0">
 		<tr>
 			<th title="">Sl Number</th>
 			<th title="">Attachment Type</th>
@@ -126,7 +96,7 @@
 			<td>{{i+1}}</td>
 			<td>{{attachments.attachmentType.description}}</td>
 			<td> <input type="text" [ngClass]="(!editScheduleattachment[i] == false)? 'scheduleBoxes' : 'committeeBoxNotEditable'" 
-			[disabled]="!editScheduleattachment[i] == true" [(ngModel)]="attachments.description"></td>
+				[disabled]="!editScheduleattachment[i] == true" [(ngModel)]="attachments.description"></td>
 			<td>{{attachments.fileName}}</td>
 			<td><ul class="actionButtonGroup">
 					<li><a (click)="tempSave($event,attachments)"
@@ -146,6 +116,6 @@
 		</tr>
 	</table>
 	<div
-		*ngIf="result?.committeeSchedule?.committeeScheduleAttachments == null"
+		*ngIf="result?.committeeSchedule?.committeeScheduleAttachments?.length == 0"
 		class="noDataOnChart">No attachment to Show</div>
 </div>
