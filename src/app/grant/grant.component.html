@@ -1,0 +1,438 @@
+<div class="push4slideMenu  pageMinHeight" id="scrollToTop">
+	<div class="container-fluid pushFixedHeaderFooter">
+        <div class="headerPush"></div>
+		<section class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<br>
+				<div class="row">
+					<div class="col-6 text-left"><span>Grant Call</span></div>
+					<div class="col-6 text-right"><i class="fa fa-clock-o fa-large"></i></div>
+				</div>
+				<br>
+				<div class="row">
+					<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+						<div class="borderBox">
+							<h4 class="borderBoxHeading">Overview</h4>
+							<div class="pullSide">
+								<table class="table tableSkin grid2">
+									<tbody>
+										<tr>
+											<td ><label>Type:</label><br><select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false">
+											<option *ngFor="let type of this.result?.grantCallTypes" value="type.description">
+												{{type.description}}
+											</option>
+											</select>
+											</td>
+											<td><label>Status:</label><br><input type="text" value="Open" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                            <td><label>Opening Date:</label><br><input type="text" value="2018-03-19" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/>&nbsp;<i *ngIf="mode != 'view'" class="fa fa-calendar fa-large"></i></td>
+                                            <td><label>Closing Date:</label><br><input type="text" value="2019-04-17" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/>&nbsp;<i *ngIf="mode != 'view'" class="fa fa-calendar fa-large"></i></td>
+										</tr>
+										<tr>
+											<td colspan="2"><label>Name:</label><br><input type="text" value="Research grant for lung cancer cure #2568" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+											<td colspan="2"><label>Description:</label><br><input type="text" value="Fund allocated from School OD Medicine and Oncology Institute" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td ><label>Max Budget (SGD):</label><br><input type="text" value="$5000" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                            <td ><label>Quantum:</label><br><input type="text" value="4" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                            <td colspan="2"><label>Keywords:</label><br><input type="text" style="width:40%"  value="Chlorine" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/>&nbsp;<button type="button" class="searchBtn"*ngIf="mode != 'view'"><i class="fa fa-plus"></i></button></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2"><label>Application Procedure:</label><br><input type="text" value="Fund allocated from School OD Medicine and Oncology Institute" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                            <td colspan="2"><label>Other Information:</label><br><input type="text" value="Fund allocated from School OD Medicine and Oncology Institute" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                        </tr>
+                                        <tr>
+                                        	<td colspan="8"><label>External Weblink:</label><br><input type="text" value="https://iits.smu.edu.sg/tender/GrantsAndIRB/queries" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td> 
+                                        </tr>
+
+									</tbody>
+								</table>
+								<div *ngIf="result?.awardDetails?.length == 0">
+									<p class="noDataOnChart">No award details found.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="borderBox col-12">
+					<h4 class="borderBoxHeading">Point of Contact</h4>
+					<button id="pointOfContactAddBtn" class="addBtn font hoverColor" (click)="showaddPointOfContact()" *ngIf="mode != 'view'">
+						<i class="fa fa-plus"></i>
+					</button>
+					<table class="table table-responsive tableSkin grid2">
+						<tr id="addPointOfContactRow" *ngIf="showAddPointOfContact">
+						<!-- 	<td colspan="2">
+								<div>
+									<ng2-completer title="Add area of research"
+										[inputClass]="completerID"
+										[(ngModel)]="areaInput.researchAreaDescription"
+										[datasource]="areaList" [minSearchLength]="0"
+										(ngModelChange)="areaChangeFunction(areaInput)"
+										(selected)="onAreaSelect()"></ng2-completer>
+										<input type="text" class="committeeBox"/>
+								</div>
+							</td> -->
+							<td>
+								<label>
+									Name:
+								</label> <br>
+								<input type="text" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false">
+							</td>
+							<td>
+								<label>
+									Designation:
+								</label> <br>
+								<input type="text" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false">
+							</td>
+							<td>
+								<label>
+									Email:
+								</label> <br>
+								<input type="text" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false">
+							</td>
+							<td>
+								<label>
+									Phone:
+								</label> <br>
+								<input type="text" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false">
+							</td>
+							<td>
+								<button class="btnSkin btnSkinPrimary" (click)="addPointOfContact(pointOfContact)">Add</button>
+							</td>
+						</tr>
+						<tr>
+							<th title="Click to sort by Sl no">Sl No</th>
+							<th title="Click to sort by Name">Name</th>
+							<th title="Click to sort by Designation">Designation</th>
+							<th title="Click to sort by Email">Email</th>
+							<th title="Click to sort by Phone">Phone</th>
+							<th title="" *ngIf="mode != 'view'">Action</th>
+
+						</tr>
+						<tr>
+                            <td>1</td>
+							<td><input type="text" value="Hsein Loong" class="committeeBoxNotEditable" disabled/></td>
+							<td><input type="text" value="Nuerosurgeon" class="committeeBoxNotEditable" disabled/></td>
+							<td><input type="text" value="loong@hotmail.com" class="committeeBoxNotEditable" disabled/></td>
+							<td><input type="text" value="6598369987" class="committeeBoxNotEditable" disabled/></td>
+							<td *ngIf="mode != 'view'">
+								<ul class="actionButtonGroup">
+									<li><a href="#" data-toggle="modal"
+										data-target="#warningModal, #editDetailsModal"
+										(click)="deletePointOfContactConfirmation($event,pointOfContact)"><i
+											class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+								</ul>
+							</td>
+							
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><input type="text" value="Hsein Loong" class="committeeBoxNotEditable" disabled/></td>
+                            <td><input type="text" value="Nuerosurgeon" class="committeeBoxNotEditable" disabled/></td>
+                            <td><input type="text" value="loong@hotmail.com" class="committeeBoxNotEditable" disabled/></td>
+                            <td><input type="text" value="6598369987" class="committeeBoxNotEditable" disabled/></td>
+                            <td *ngIf="mode != 'view'">
+								<ul class="actionButtonGroup">
+									<li><a href="#" data-toggle="modal"
+										data-target="#warningModal, #editDetailsModal"
+										(click)="deletePointOfContactConfirmation($event,pointOfContact)"><i
+											class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+								</ul>
+							</td>
+                        </tr>
+
+					</table>
+					<div *ngIf="result?.awardFundedProposals?.length == 0">
+						<p class="noDataOnChart">No funded proposals are associated
+							with this award.</p>
+					</div>
+                                </div>
+                                <div class="borderBox">
+                                                <h4 class="borderBoxHeading">Funding Agency</h4>
+                                                <div class="pullSide">
+                                                        <table class="table tableSkin grid2">
+                                                                <tbody>
+                                                                   <tr>
+                                                                          <td><label>Sponsor Type:</label><br>
+																				<select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false">
+																				<option *ngFor="let type of this.result?.grantCallTypes" value="type.description">
+																					{{type.description}}
+																				</option>
+																			</select>
+																				</td>
+																		 <td ><label>Sponsor Name:</label><br><input type="text" value="General Services Administration" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                                                          <td><label>Research Type:</label><br>
+								                                           <select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false">
+																			<option *ngFor="let type of this.result?.grantCallTypes" value="type.description">
+																				{{type.description}}
+																			</option>
+																			</select>
+																				</td>
+                                                                          <td><label>Funding Type:</label><br>
+                                                                         <select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false">
+																	<option *ngFor="let type of this.result?.grantCallTypes" value="type.description">
+																		{{type.description}}
+																	</option>
+																	</select>
+																		</td>
+                                                                   </tr>
+                                                                </tbody>
+                                                        </table>
+                                                        <div *ngIf="result?.awardDetails?.length == 0">
+                                                                <p class="noDataOnChart">No award details found.</p>
+                                                        </div>
+                                                </div>
+                                 </div>   
+                                 
+                                         <div class="row">
+                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                     <div class="borderBox">
+
+                                                                <h4 class="borderBoxHeading">Area of Research</h4>
+                                                                <button id="areaOfResearchAddBtn" class="addBtn font hoverColor" (click)="showaddAreaOfResearch()" *ngIf="mode != 'view'">
+																	<i class="fa fa-plus"></i>
+																</button>
+                                                                
+                                                                <table class="table table-responsive tableSkin">
+                                                                	<tr id="addAreaOfResearchRow" *ngIf="addResearch">
+																			<td>Area of Research</td>
+																			<td colspan="2">
+																				<div>
+																					<!-- <ng2-completer title="Add area of research"
+																						[inputClass]="completerID"
+																						[(ngModel)]="areaInput.researchAreaDescription"
+																						[datasource]="areaList" [minSearchLength]="0"
+																						(ngModelChange)="areaChangeFunction(areaInput)"
+																						(selected)="onAreaSelect()"></ng2-completer> -->
+																						<input type="text" class="committeeBox"/>
+																				</div>
+																			</td>
+																			<td>
+																				<button class="btnSkin btnSkinPrimary" (click)="addAreaOfResearch(areaInput)">Add</button>
+																			</td>
+																		</tr>
+                                                                
+                                                                        <tr>
+                                                                                <th title="Click to sort by Sl no">Sl no</th>
+                                                                                <th title="Click to sort by Research Area Code">Research Area Code</th>
+                                                                                <th title="Click to sort by Code/Description">Code/Description</th>
+                                                                                <th title="" *ngIf="mode != 'view'">Action</th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                                <td>1</td>
+                                                                                <td><input type="text" value="04." class="committeeBoxNotEditable" disabled/></td>
+                                                                                <td><input type="text" value="ARCHITECTURE AND R" class="committeeBoxNotEditable" disabled/></td>
+                                                                                <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																						<li><a href="#" data-toggle="modal"
+																							data-target="#warningModal, #editDetailsModal"
+																							(click)="deleteAreaOfResearchConfirmation($event,area)"><i
+																								class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																					</ul>
+																				</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                                <td>2</td>
+                                                                                <td><input type="text" value="04." class="committeeBoxNotEditable" disabled/></td>
+                                                                                <td><input type="text" value="ARCHITECTURE AND R" class="committeeBoxNotEditable" disabled/></td>
+                                                                        		<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																						<li><a href="#" data-toggle="modal"
+																							data-target="#warningModal, #editDetailsModal"
+																							(click)="deleteAreaOfResearchConfirmation($event,area)"><i
+																								class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																					</ul>
+																				</td>
+                                                                        </tr>
+                                                                </table>
+                                                                <div *ngIf="result?.awardSpecialReviews?.length == 0">
+                                                                        <p class="noDataOnChart">No special reviews are associated
+                                                                                with this award.</p>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                                        <div class="borderBox">
+                        
+                                                                        <h4 class="borderBoxHeading">Eligibility</h4>
+                                                                        <button id="areaOfResearchAddBtn" class="addBtn font hoverColor" (click)="showaddEligibility()" *ngIf="mode != 'view'">
+																			<i class="fa fa-plus"></i>
+																		</button>
+                                                                        <table class="table table-responsive tableSkin">
+                                                                        		<tr id="addEligibilityRow" *ngIf="isEligibleAddopen">
+																					<td><label>Criteria:</label></td>
+																					<td><select class="committeeBox">
+																								<option>Option 1</option>
+																								<option>Option 2</option>
+																								<option>Option 3</option>
+																						</select></td>
+																					<td><label>Type:</label></td>
+																					<td><select class="committeeBox">
+																								<option>Type 1</option>
+																								<option>Type 2</option>
+																								<option>Type 3</option>
+																								<option>Type 4</option>
+																						</select>
+																					</td>
+																					<td>
+																						<button class="btnSkin btnSkinPrimary" (click)="addEligibility(areaInput)">Add</button>
+																					</td>
+																				</tr>
+                                                                                <tr>
+                                                                                        <th title="Click to sort by Sl no">Sl no</th>
+                                                                                        <th title="Click to sort by Criteria">Criteria</th>
+                                                                                        <th title="Click to sort by Type" colspan="2">Type</th>
+                                                                                        <th title="" *ngIf="mode != 'view'">Action</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <td>1</td>
+                                                                                        <td><input type="text" value="Faculty Category" class="committeeBoxNotEditable" disabled/></td>
+                                                                                        <td colspan="2"><input type="text" value="Full Time" class="committeeBoxNotEditable" disabled/></td>
+                                                                                        <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																								<li><a href="#" data-toggle="modal"
+																									data-target="#warningModal, #editDetailsModal"
+																									(click)="deleteEligibilityConfirmation($event,area)"><i
+																										class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																							</ul>
+																						</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                         <td>2</td>
+                                                                                         <td><input type="text" value="Faculty Category" class="committeeBoxNotEditable" disabled/></td>
+                                                                                         <td colspan="2"><input type="text" value="Full Time" class="committeeBoxNotEditable" disabled/></td>
+                                                                                		 <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																								<li><a href="#" data-toggle="modal"
+																									data-target="#warningModal, #editDetailsModal"
+																									(click)="deleteEligibilityConfirmation($event,area)"><i
+																										class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																							</ul>
+																						</td>
+                                                                                </tr>
+                                                                        </table>
+                                                                        <div *ngIf="result?.awardSpecialReviews?.length == 0">
+                                                                                <p class="noDataOnChart">No special reviews are associated
+                                                                                        with this award.</p>
+                                                                        </div>
+                                                                </div>
+                                                                </div>
+                                                        </div>
+                                                        <div class="borderBox col-12">
+                                                                        <h4 class="borderBoxHeading">Attachments</h4>
+                                                                        <button title="add new attachment" class="addBtn font hoverColor" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
+																				<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
+																			</button>
+                                                                        <table class="table table-responsive tableSkin">
+                                                                                <tr>
+                                                                                        <th title="Click to sort by Sl no">Sl No</th>
+                                                                                        <th title="Click to sort by Name">Attachment Type</th>
+                                                                                        <th title="Click to sort by Designation">Description</th>
+                                                                                        <th title="Click to sort by Email">File Name</th>
+                                                                                        <th title="" *ngIf="mode != 'view'">Action</th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <td>1</td>
+                                                                                        <td><input type="text" value="Administrative Guidelines" class="committeeBoxNotEditable" disabled/></td>
+                                                                                        <td><input type="text" value="Administrative Description" class="committeeBoxNotEditable" disabled/></td>
+                                                                                        <td><input type="text" value="Administrative Guidelines.pdf" class="committeeBoxNotEditable" disabled/></td>
+	                                                                                    <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																								<li><a (click)="tempSave($event,attachments)" *ngIf="editScheduleattachment == true" 
+																									data-toggle="modal" data-target="#deleteAttachment"><i
+																										class="fa fa-trash-o"></i></a></li>
+																								<li><a *ngIf="editScheduleattachment == true" 
+																									(click)="downloadAttachements($event, attachments)"
+																									title="Open"> <i
+																										class="fa fa-download" aria-hidden="true"></i></a></li>
+																								<li>
+																									<a *ngIf="editScheduleattachment == true" (click)="editAttachments($event,i, attachments)"><i class="fa fa-edit"></i></a>
+																								</li>
+																								<li><a *ngIf="editScheduleattachment == false" href="#" (click)="saveEditedattachments($event,i, attachments)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+																								<li><a *ngIf="editScheduleattachment == false" href="#" (click)="cancelEditedattachments($event,i, attachments)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+																							</ul>
+                                                                                		</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                        <td>2</td>
+                                                                                        <td><input type="text" value="Administrative Guidelines" class="committeeBoxNotEditable" disabled/></td>
+                                                                                        <td><input type="text" value="Administrative Description" class="committeeBoxNotEditable" disabled/></td>
+                                                                                        <td><input type="text" value="Administrative Guidelines.pdf" class="committeeBoxNotEditable" disabled/></td>
+                                                                                		<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																								<li><a (click)="tempSave($event,attachments)" *ngIf="editScheduleattachment == true" 
+																									data-toggle="modal" data-target="#deleteAttachment"><i
+																										class="fa fa-trash-o"></i></a></li>
+																								<li><a *ngIf="editScheduleattachment == true" 
+																									(click)="downloadAttachements($event, attachments)"
+																									title="Open"> <i
+																										class="fa fa-download" aria-hidden="true"></i></a></li>
+																								<li>
+																									<a *ngIf="editScheduleattachment == true" (click)="editAttachments($event,i, attachments)"><i class="fa fa-edit"></i></a>
+																								</li>
+																								<li><a *ngIf="editScheduleattachment == false" href="#" (click)="saveEditedattachments($event,i, attachments)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+																								<li><a *ngIf="editScheduleattachment == false" href="#" (click)="cancelEditedattachments($event,i, attachments)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
+																							</ul>
+                                                                                		</td>
+                                                                                </tr>
+                                
+                                                                        </table>
+                                                                        <div *ngIf="result?.awardFundedProposals?.length == 0">
+                                                                                <p class="noDataOnChart">No funded proposals are associated
+                                                                                        with this award.</p>
+                                                                        </div>
+                                                                </div>
+                                                                <div class="col-12 text-right" *ngIf="mode != 'view'">
+                                                                	<button type="button" class="btnSkin btnPublish">Publish</button>
+																	<button type="button" class="btnSkin btnSkinPrimary">Save</button>
+                                                                </div>
+                              
+			</div>
+		</section>
+		<div class="footerPush"></div>
+	</div>
+</div>
+
+<!-- ADD ATTACHMENT MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" id="addAttachment"
+		tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle"
+		aria-hidden="true" *ngIf="showAddAttachment">
+		<div class="modal-dialog modal-lg modal-dialog-centered"
+			role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="skippedSchedulesLongTitle">Add
+						Attachment</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" (click)="showAddAttachment = false">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table table-responsive tableSkin">
+						<tr *ngIf="showAddAttachment">
+							<td class="noData filterElement">Add :</td>
+							<td class="filterElement"><span class="mandatory">*</span> 
+							<select class="committeeBox" >
+								<option>select</option>
+								<option *ngFor="let attachType of this.result.grantCallAttachTypes">
+									{{attachType.description}}
+								</option>
+							</select>
+							</td>
+							<td class="filterElement"><textarea id="desc" placeholder="Description" class="scheduleBoxes"></textarea></td>
+						</tr>
+					</table>
+
+					<file-drop headertext="Drop files here"
+						(onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
+						(onFileLeave)="fileLeave($event)"> <input type="file"
+						#file (change)="onChange(file.files)" multiple /> OR &nbsp;&nbsp;
+					</file-drop>
+					<ul>
+						<li *ngFor="let item of uploadedFile; let i=index">
+						<span>{{ item.name }}----------------</span><i class="fa fa-trash-o" (click)="deleteFromUploadedFileList(item)"></i>
+						</li>
+					</ul>
+					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">{{attachmentWarningMsg}}</span></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
+					<button type="button" class="btnSkin btnSkinPrimary" (click)="addAttachments()">Add</button>
+				</div>
+			</div>
+		</div>
+	</div>

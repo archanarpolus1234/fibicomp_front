@@ -4,8 +4,8 @@ import 'rxjs/add/operator/toPromise';
 import { Injectable } from '@angular/core';
 import { Http, HttpModule, RequestOptions, Headers, ResponseContentType } from '@angular/http';
 import { Observable } from 'rxjs';
-import { Constants } from '../../../constants/constants.service';
 import { HttpClient, HttpHeaders, HttpRequest, HttpClientModule } from "@angular/common/http";
+import { Constants } from "../../../../constants/constants.service";
 
 @Injectable()
 export class ScheduleAttachmentsService {

@@ -5,9 +5,8 @@ import { Injectable } from '@angular/core';
 import { Http, HttpModule } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
-
-import { Constants } from '../../constants/constants.service';
 import { HttpClient } from "@angular/common/http";
+import { Constants } from "../../../constants/constants.service";
 
 @Injectable()
 export class MinutesService {

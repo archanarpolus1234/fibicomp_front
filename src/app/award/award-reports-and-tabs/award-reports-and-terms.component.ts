@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AwardReportsAndTermsService } from '../award-reports-and-tabs/award-reports-and-terms.service';
 import { forEach } from '@angular/router/src/utils/collection';
+import { Subscription } from "rxjs/Subscription";
 
 @Component( {
     selector: 'award-reports-and-terms',
@@ -21,11 +22,12 @@ export class AwardReportsAndTerms {
     result: any = {};
     awardReportKeyList: any = [];
     awardTermsKeyList: any[] = [];
+public getReportadTermsSubscription : Subscription;
 
     constructor( private awardreportsandtermsService: AwardReportsAndTermsService ) { }
 
     ngOnInit() {
-        this.awardreportsandtermsService.getAwardReportsAndTerms().subscribe(
+        this.getReportadTermsSubscription =this.awardreportsandtermsService.getAwardReportsAndTerms().subscribe(
             data => {
                 this.result = data;
                 if ( this.result.awardPaymntSchedule !== undefined && this.result.awardTerms !== undefined && this.result.awardPaymntInvoice !== undefined && this.result.approvedTravel !== undefined ) {
@@ -68,5 +70,8 @@ export class AwardReportsAndTerms {
     showTermsTab( event: any ) {
         event.preventDefault();
         this.showTerms = !this.showTerms;
+    }
+    ngOnDestroy() {
+        this.getReportadTermsSubscription.unsubscribe();
     }
 }

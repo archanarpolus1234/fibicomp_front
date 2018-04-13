@@ -3,6 +3,7 @@ import { AwardHierarchyService } from './award-hierarchy.service';
 import { AwardSummaryService } from '../award-home/award-summary.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TreeModel, TreeNode, TREE_ACTIONS, KEYS, IActionMapping, ITreeOptions } from 'angular-tree-component';
+import { Subscription } from "rxjs/Subscription";
 
 @Component( {
 
@@ -38,6 +39,8 @@ export class AwardHierarchyComponent implements AfterViewInit {
     public accountNumber: string;
     piName: string;
     expandAllEnabled: boolean = false;
+    awardSummSubscription : Subscription;
+    loadAwardHierarchySubscription : Subscription;
     nodes: any = [];
     options: ITreeOptions = {
         displayField: 'name',
@@ -48,7 +51,7 @@ export class AwardHierarchyComponent implements AfterViewInit {
             mouse: {
                 click: ( tree, node, $event ) => {
                     node.setActiveAndVisible();
-                    this.awardSummaryService.loadAwardSummary( node.id ).subscribe( data => {
+                    this.awardSummSubscription =  this.awardSummaryService.loadAwardSummary( node.id ).subscribe( data => {
                         this.result = data || [];
                         if ( this.result.awardDetails !== undefined) {
                             this.awardNumber = this.result.awardDetails[0].award_number;
@@ -79,22 +82,7 @@ export class AwardHierarchyComponent implements AfterViewInit {
     }
 
     constructor( public awardHierarchyService: AwardHierarchyService, public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public router: Router ) {
-        this.awardId = this.route.snapshot.queryParams['awardId'];
-        this.awardSummaryService.loadAwardSummary( this.awardId ).subscribe( data => {
-            this.result = data || [];
-            if ( this.result != null ) {
-                this.awardNumber = this.result.awardDetails[0].award_number;
-                this.rootAwardNumber = this.result.awardDetails[0].root_award_number;
-                this.awardHierarchyService.loadAwardHierarchy( this.rootAwardNumber, this.awardNumber ).subscribe( data => {
-                    this.result = data || [];
-                    if ( this.result != null ) {
-                        this.nodes = Array.of( this.result.awardHierarchy );
-                        this.awardDetailsFetching( this.awardId );
-                    }
-                } );
-            }
-
-        } );
+            this.functionInConstructor();
     }
 
     @ViewChild('tree') tree;
@@ -113,6 +101,26 @@ export class AwardHierarchyComponent implements AfterViewInit {
         const currentNode = this.tree.treeModel.getNodeById( this.awardId );
         currentNode.setActiveAndVisible();
     }
+    
+    //function to be called in constructor
+    functionInConstructor() {
+        this.awardId = this.route.snapshot.queryParams['awardId'];
+       this.awardSummSubscription = this.awardSummaryService.loadAwardSummary( this.awardId ).subscribe( data => {
+            this.result = data || [];
+            if ( this.result != null ) {
+                this.awardNumber = this.result.awardDetails[0].award_number;
+                this.rootAwardNumber = this.result.awardDetails[0].root_award_number;
+               this.loadAwardHierarchySubscription= this.awardHierarchyService.loadAwardHierarchy( this.rootAwardNumber, this.awardNumber ).subscribe( data => {
+                    this.result = data || [];
+                    if ( this.result != null ) {
+                        this.nodes = Array.of( this.result.awardHierarchy );
+                        this.awardDetailsFetching( this.awardId );
+                    }
+                } );
+            }
+
+        } );
+    }
 
     collapseAllNodes( event: any ) {
         this.expandAllEnabled = true;
@@ -120,7 +128,7 @@ export class AwardHierarchyComponent implements AfterViewInit {
         this.tree.treeModel.collapseAll();
     }
     awardDetailsFetching( awardId: string ) {
-        this.awardSummaryService.loadAwardSummary( awardId ).subscribe( data => {
+       this.awardSummSubscription = this.awardSummaryService.loadAwardSummary( awardId ).subscribe( data => {
             this.result = data || [];
             if ( this.result.awardDetails[0] != null ) {
                 this.accountNumber = this.result.awardDetails[0].account_number;
@@ -142,9 +150,15 @@ export class AwardHierarchyComponent implements AfterViewInit {
         } );
     }
 
+    //change tab to award-home
     awardView( event: any, awardId: string ) {
         event.preventDefault();
         this.router.navigate( ['/award'], { queryParams: { awardId: awardId } } );
         this.awardHierarchyService.changeCurrenttab( 'award_home' );
+    }
+    ngOnDestroy() {
+        this.loadAwardHierarchySubscription.unsubscribe();
+        this.awardSummSubscription.unsubscribe();
+        
     }
 }

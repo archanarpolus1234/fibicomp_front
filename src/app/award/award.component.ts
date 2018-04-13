@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AwardHierarchyService } from '../award/award-hierarchy/award-hierarchy.service';
 import { Constants } from '../constants/constants.service';
 import {AwardconfigurationService} from '../award/awardconfiguration.service';
+import { Subscription } from "rxjs/Subscription";
 
 @Component( {
     templateUrl: 'award.component.html',
@@ -23,18 +24,19 @@ export class AwardComponent {
     outputPath: string;
     userName: string;
     documentNumber: string;
+    public currentValueSub : Subscription;
+    public loadAwardSub : Subscription;
     
     constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, public awardconfigurationService: AwardconfigurationService ) {
         this.outputPath = this.constant.outputPath;
     }
 
     ngOnInit() {
-        this.awardHierarchyService.currentvalue.subscribe( data => {
+       this.currentValueSub = this.awardHierarchyService.currentvalue.subscribe( data => {
             this.currentTab = data;
         } );
-
         this.awardId = this.route.snapshot.queryParams['awardId'];
-        this.awardSummaryService.loadAwardSummary( this.awardId ).subscribe( data => {
+        this.loadAwardSub = this.awardSummaryService.loadAwardSummary( this.awardId ).subscribe( data => {
             this.result = data || [];
             if ( this.result.length !== 0 && this.result.awardDetails !== undefined && this.result.awardPersons !== undefined) {
                 this.awardconfigurationService.changeAwardData(this.result);
@@ -53,5 +55,9 @@ export class AwardComponent {
     show_current_tab( e: any, current_tab ) {
         e.preventDefault();
         this.currentTab = current_tab;
+    }
+    ngOnDestroy() {
+        this.currentValueSub.unsubscribe();
+        this.loadAwardSub.unsubscribe();
     }
 }

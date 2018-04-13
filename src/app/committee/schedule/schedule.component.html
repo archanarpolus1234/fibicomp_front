@@ -38,8 +38,14 @@
                     <section class="row">
              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <ul class="tabsIcon" style="margin-top:10px;">
-                    <li class="active" [ngClass]="{'active':currentTab=='schedule_home'}" ><a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'schedule_home');"><i  class="fa fa-calendar"></i><span>Schedule</span></a></li>
-                    <li [ngClass]="{'active':currentTab=='minutes'}" ><a href="#" (click)="show_current_tab($event,'minutes');"><i class="fa fa-users"></i><span>Minutes</span></a></li>
+                    <li class="active" [ngClass]="{'active':currentTab=='schedule_home'}">
+	                    <a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'schedule_home');">
+	                    <i  class="fa fa-calendar"></i><span>Schedule</span></a>
+                    </li>
+                    <li [ngClass]="{'active':currentTab=='minutes'}">
+	                    <a href="#" (click)="show_current_tab($event,'minutes');">
+	                    <i class="fa fa-users"></i><span>Minutes</span></a>
+                    </li>
                 </ul>
             </div> 
 		</section>
@@ -51,6 +57,7 @@
    <div *ngIf="currentTab =='minutes'">
 	<app-minutes></app-minutes>
 	</div>
+	
 	<div class="footerPush"></div>
 	</div>
 </div>

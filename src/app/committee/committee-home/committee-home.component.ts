@@ -7,6 +7,8 @@ import { CommitteCreateEditService } from '../committee-create-edit.service';
 import { CommitteeSaveService } from '../committee-save.service';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { CommitteeConfigurationService } from '../../common/committee-configuration.service';
+import { Subject } from "rxjs/Subject";
+import 'rxjs/add/operator/takeUntil';
 
 @Component( {
     selector: 'app-committee-home',
@@ -38,16 +40,17 @@ export class CommitteeHomeComponent implements OnInit {
     public researchArea: any = {};
     public dataServiceArea: any = [];
 
-    @Input() Id: string;
-    @Input() Name: string;
-    @Input() Type: string;
-    @Input() Unit: string;
-    @Input() unitName: string;
-    @Output() editFlag = new EventEmitter<boolean>();
-    @Output() modeFlag = new EventEmitter<String>();
-    @Input() reviewTypes: any[];
-    @Input() areaList: any = [];
-    @Input() scheduleStatus: any[];
+
+    Id: string;
+    Name: string;
+    Type: string;
+    Unit: string;
+    unitName: string;
+    editFlag: boolean;
+    modeFlag: string;
+    reviewTypes: any[];
+    areaList: any = [];
+    scheduleStatus: any[];
 
     result: any = {};
     resultTemp: any = {};
@@ -138,10 +141,12 @@ export class CommitteeHomeComponent implements OnInit {
     scheduleTime: any;
     isEditDetailsModalOpen = false;
     isScheduleEditWarningModalOpen = false;
+    public onDestroy$ = new Subject<void>();
 
     constructor( public route: ActivatedRoute, private datePipe: DatePipe, public router: Router, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, private committeeConfigurationService: CommitteeConfigurationService ) {
-        this.committeeConfigurationService.currentMode.subscribe( data => {
+        this.committeeConfigurationService.currentMode.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.mode = data;
+        }, error => { }, () => {
         } );
         this.resultTemp = {};
         this.resultTemp.committee = {};
@@ -150,12 +155,22 @@ export class CommitteeHomeComponent implements OnInit {
     }
 
     loadTempData() {
-        this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
+        this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.resultTemp = data;
             if ( this.resultTemp.committee !== undefined ) {
                 this.name = this.resultTemp.committee.committeeName;
                 this.unit = this.resultTemp.committee.homeUnitNumber;
                 this.unitname = this.resultTemp.committee.homeUnitName;
+                this.Id = this.resultTemp.committee.committeeId;
+                this.Name = this.resultTemp.committee.committeeName;
+                this.Type = this.resultTemp.committee.committeeType.description;
+                this.Unit = this.resultTemp.committee.homeUnitNumber;
+                this.unitName = this.resultTemp.committee.homeUnitName;
+                this.reviewTypes = this.resultTemp.reviewTypes;
+                this.committeeConfigurationService.currentAreaOfResearch.subscribe( data => {
+                    this.areaList = data
+                } );
+                this.scheduleStatus = this.resultTemp.scheduleStatus;
             }
         } );
     }
@@ -163,8 +178,13 @@ export class CommitteeHomeComponent implements OnInit {
     ngOnInit() {
     }
 
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
+
     initialLoadChild() {
-        this.committeeConfigurationService.currentCommitteeData.subscribe( data => {
+        this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data;
             if ( this.result.committee !== undefined ) {
                 if ( this.result.committee == null || this.result.committee == undefined ) {
@@ -191,7 +211,7 @@ export class CommitteeHomeComponent implements OnInit {
                 if ( this.mode == 'view' ) {
                     this.errorFlag = false;
                     this.editDetails = false;
-                    this.editFlag.emit( this.editDetails );
+                    this.committeeConfigurationService.changeEditFlag( this.editDetails );
                     this.Id = this.result.committee.committeeId;
                     this.Name = this.result.committee.committeeName;
                     this.unitName = this.result.committee.homeUnitName;
@@ -240,10 +260,14 @@ export class CommitteeHomeComponent implements OnInit {
         if ( this.editDetails ) {
             this.editClass = 'scheduleBoxes';
         }
-        this.editFlag.emit( this.editDetails );
+        this.committeeConfigurationService.changeEditFlag( this.editDetails );
     }
 
-    saveDetails() {
+    saveDetails( dataObject ) {
+        if ( dataObject !== undefined ) {
+            this.result = dataObject.result;
+            this.committeeConfigurationService.changeCommmitteeData( this.result );
+        }
         if ( ( this.result.committee.minimumMembersRequired == undefined || this.result.committee.advSubmissionDaysReq == undefined || this.result.committee.maxProtocols == undefined || this.Type == undefined || this.Name == undefined || this.unitName == undefined || this.unitName == '' ) || ( this.result.committee.reviewTypeDescription == 'Select' || this.result.committee.reviewTypeDescription == '' ) ) {
             this.errorFlag = true;
             this.error = '*Please fill all the mandatory fields marked';
@@ -254,13 +278,13 @@ export class CommitteeHomeComponent implements OnInit {
             this.deleteConfirmation = false;
             this.error = '';
             this.errorFlag = false;
-            this.result.committee.committeeId = this.Id;
-            this.result.committee.committeeName = this.Name;
-            this.result.committee.committeeType.committeeTypeCode = '1';
-            this.result.committee.homeUnitNumber = this.Unit;
-            this.result.committee.homeUnitName = this.unitName;
+            this.committeeConfigurationService.changeCommmitteeData( this.result );
+            this.committeeConfigurationService.currentCommitteeData.takeUntil( this.onDestroy$ ).subscribe( data => {
+                this.result = data;
+            } );
             if ( this.mode == 'create' ) {
                 this.result.updateType = 'SAVE';
+                this.result.committee.committeeType.committeeTypeCode = '1';
                 this.result.committee.createUser = localStorage.getItem( "currentUser" );
                 this.result.committee.createTimestamp = new Date().getTime();
                 this.result.committee.updateUser = localStorage.getItem( "currentUser" );
@@ -281,7 +305,7 @@ export class CommitteeHomeComponent implements OnInit {
                     this.result.committee.reviewTypeDescription = value.description;
                 }
             } );
-            this.committeeSaveService.saveCommitteeData( this.result ).subscribe( data => {
+            this.committeeSaveService.saveCommitteeData( this.result ).takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 if ( this.result != null ) {
                     this.committeeConfigurationService.changeCommmitteeData( this.result );
@@ -291,12 +315,17 @@ export class CommitteeHomeComponent implements OnInit {
                     }
                     else {
                         this.editDetails = !this.editDetails;
-                        this.editFlag.emit( this.editDetails );
+                        this.committeeConfigurationService.changeEditFlag( this.editDetails );
                         this.mode = 'view';
                         this.initialLoadChild();
-                        this.modeFlag.emit( this.mode );
+                        this.committeeConfigurationService.changeMode( this.mode );
                     }
                 }
+                this.committeeConfigurationService.currentactivatedTab.subscribe( data => {
+                    if ( data === 'committee_members' ) {
+                        this.router.navigate( ['/committee/committeeMembers'], { queryParams: { 'mode': this.mode, 'id': this.Id } } );
+                    }
+                } );
             } );
         }
     }
@@ -311,7 +340,7 @@ export class CommitteeHomeComponent implements OnInit {
         this.showGenerateSchedule = false;
         if ( this.mode == 'view' ) {
             this.editDetails = !this.editDetails;
-            this.editFlag.emit( this.editDetails );
+            this.committeeConfigurationService.changeEditFlag( this.editDetails );
             if ( !this.editDetails ) {
                 this.editClass = 'committeeBoxNotEditable';
             }
@@ -360,7 +389,7 @@ export class CommitteeHomeComponent implements OnInit {
             this.alertMsg = 'Please select an Area of research to add!';
         }
         else {
-            this.committeeSaveService.saveResearchAreaCommitteeData( this.result.committee.committeeId, Object ).subscribe( data => {
+            this.committeeSaveService.saveResearchAreaCommitteeData( this.result.committee.committeeId, Object ).takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
@@ -416,7 +445,7 @@ export class CommitteeHomeComponent implements OnInit {
     deleteAreaOfResearch( Object ) {
 
         if ( this.result.committee.researchAreas.length != null && Object.commResearchAreasId != undefined ) {
-            this.committeeSaveService.deleteAreaOfResearch( Object.commResearchAreasId, this.result.committee.committeeId ).subscribe( data => {
+            this.committeeSaveService.deleteAreaOfResearch( Object.commResearchAreasId, this.result.committee.committeeId ).takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
@@ -614,7 +643,7 @@ export class CommitteeHomeComponent implements OnInit {
         }
 
         if ( this.isDatePrevious == false && this.isStartDateBeforeToday == false && this.isMandatoryFilled == true ) {
-            this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).subscribe( data => {
+            this.committeeSaveService.saveScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 this.filterStartDate = this.result.scheduleData.filterStartDate;
                 this.conflictDates = this.result.scheduleData.datesInConflict;
@@ -680,7 +709,7 @@ export class CommitteeHomeComponent implements OnInit {
         if ( this.isTodelete == true ) {
             this.isTodelete = false;
         }
-        this.committeeSaveService.deleteScheduleData( this.sendScheduleRequestData ).subscribe( data => {
+        this.committeeSaveService.deleteScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data || [];
             this.committeeConfigurationService.changeCommmitteeData( this.result );
         } );
@@ -711,7 +740,7 @@ export class CommitteeHomeComponent implements OnInit {
         } );
         this.sendScheduleRequestData.committeeSchedule = scheduleObject;
         this.sendScheduleRequestData.committeeId = this.result.committee.committeeId;
-        this.committeeSaveService.updateScheduleData( this.sendScheduleRequestData ).subscribe( data => {
+        this.committeeSaveService.updateScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data || [];
             this.committeeConfigurationService.changeCommmitteeData( this.result );
         } );
@@ -756,7 +785,7 @@ export class CommitteeHomeComponent implements OnInit {
                 this.sendScheduleRequestData.scheduleData = this.result.scheduleData;
             }
             this.sendScheduleRequestData.committee = this.result.committee;
-            this.committeeSaveService.filterScheduleData( this.sendScheduleRequestData ).subscribe( data => {
+            this.committeeSaveService.filterScheduleData( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 this.committeeConfigurationService.changeCommmitteeData( this.result );
             } );
@@ -779,7 +808,7 @@ export class CommitteeHomeComponent implements OnInit {
             this.sendScheduleRequestData = {};
             this.sendScheduleRequestData.scheduleData = {};
             this.sendScheduleRequestData.committee = this.result.committee;
-            this.committeeSaveService.resetFilterSchedule( this.sendScheduleRequestData ).subscribe( data => {
+            this.committeeSaveService.resetFilterSchedule( this.sendScheduleRequestData ).takeUntil( this.onDestroy$ ).subscribe( data => {
                 this.result = data || [];
                 this.committeeConfigurationService.changeCommmitteeData( this.result );
                 this.result.scheduleData.filterStartDate = null;
@@ -792,5 +821,10 @@ export class CommitteeHomeComponent implements OnInit {
     cancelEditScheduleItem() {
         this.isScheduleEditWarningModalOpen = !this.isScheduleEditWarningModalOpen;
         this.isTodelete = false;
+    }
+
+    loadSchedules( event: any, scheduleId ) {
+        event.preventDefault();
+        this.router.navigate( ['committee/schedule'], { queryParams: { 'scheduleId': scheduleId } } );
     }
 }

@@ -97,7 +97,7 @@
 				<!-- ACTIVE Members Display-->
 
 				<div *ngIf="memberExist">
-					<div *ngFor="let member of resultLoadedById.committee.committeeMemberships">
+					<div *ngFor="let member of this.resultLoadedById?.committee?.committeeMemberships">
 						<div class="set"
 							*ngIf="member.active && activeMembers || !member.active && activeMembers && !inactiveMembers && ( member.committeeMemberRoles.length == 0 || member.committeeMemberExpertises.length == 0 )">
 							<div class="setHead" *ngIf="!member.nonEmployeeFlag">

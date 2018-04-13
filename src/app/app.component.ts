@@ -4,7 +4,7 @@ import { Router, NavigationEnd } from '@angular/router';
 
 import { LoginCheckService } from './common/login-check.service';
 import { SessionManagementService } from './session/session-management.service';
-import { SessionTimeoutComponent } from './session/session-timeout.component';
+import { Subscription } from "rxjs/Subscription";
 
 @Component( {
     selector: 'app-root',
@@ -15,24 +15,28 @@ import { SessionTimeoutComponent } from './session/session-timeout.component';
 
 export class AppComponent implements OnInit {
     isLoggedIn$: Observable<Boolean>;
+    public subscription: Subscription;
 
     constructor( private loginCheckService: LoginCheckService, private sessionService: SessionManagementService, private router: Router ) {
-        router.events.subscribe(event => { 
-            if (event instanceof NavigationEnd ) {
-              if(event.url=='/logout'){
-                  localStorage.removeItem('currentUser');
-                  this.loginCheckService.logout();
-                  this.router.navigate( ['/loginpage'] );
-              }
+        this.subscription = router.events.subscribe( event => {
+            if ( event instanceof NavigationEnd ) {
+                if ( event.url == '/logout' ) {
+                    localStorage.removeItem( 'currentUser' );
+                    this.loginCheckService.logout();
+                    this.router.navigate( ['/loginpage'] );
+                }
             }
-          });
-        if ( !sessionService.canActivate() ) { 
+        } );
+        if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
-        } 
+        }
     }
 
     ngOnInit(): void {
         this.isLoggedIn$ = this.loginCheckService.isLoggedIn;
     }
 
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
 }

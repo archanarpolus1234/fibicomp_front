@@ -2,13 +2,13 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import { Injectable } from '@angular/core';
-import { Http, HttpModule } from '@angular/http';
 import { Observable } from 'rxjs';
-import { Constants } from '../../../constants/constants.service';
+import { Constants } from "../../../../constants/constants.service";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class ScheduleOtherActionsService {
-    constructor( private http: Http, private constant: Constants ) {
+    constructor( private http: HttpClient, private constant: Constants ) {
 
     }
 
@@ -19,7 +19,6 @@ export class ScheduleOtherActionsService {
             committeeScheduleActItems: committeeScheduleActItems
         };
         return this.http.post( this.constant.addOtherActions, params )
-            .map( res => res.json() )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
@@ -33,7 +32,6 @@ export class ScheduleOtherActionsService {
             commScheduleActItemsId: commScheduleActItemsId
         };
         return this.http.post( this.constant.deleteOtherActions, params )
-            .map( res => res.json() )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )

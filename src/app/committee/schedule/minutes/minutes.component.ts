@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 
-import {ScheduleConfigurationService} from '../../common/schedule-configuration.service';
+import {ScheduleConfigurationService} from '../schedule-configuration.service';
 import { MinutesService } from "../minutes/minutes.service";
-
+import { Subject } from "rxjs/Subject";
+import 'rxjs/add/operator/takeUntil';
 @Component({
   selector: 'app-minutes',
   templateUrl: './minutes.component.html',
-  styleUrls: ['../../../assets/css/bootstrap.min.css', '../../../assets/css/font-awesome.min.css', '../../../assets/css/style.css', '../../../assets/css/search.css']
+  styleUrls: ['../../../../assets/css/bootstrap.min.css', '../../../../assets/css/font-awesome.min.css', '../../../../assets/css/style.css', '../../../../assets/css/search.css']
 })
 export class MinutesComponent implements OnInit {
 
@@ -32,6 +33,7 @@ export class MinutesComponent implements OnInit {
     minuteListItem: any = {};
     committeeId: string;
     scheduleId: number;
+    public onDestroy$ = new Subject<void>();
 
     constructor( public scheduleConfigurationService: ScheduleConfigurationService, public minutesService: MinutesService ) {
         this.initialLoad();
@@ -40,7 +42,7 @@ export class MinutesComponent implements OnInit {
     ngOnInit() { }
 
     initialLoad() {
-        this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
+        this.scheduleConfigurationService.currentScheduleData.takeUntil(this.onDestroy$).subscribe( data => {
             this.result = data || [];
             if ( this.result != null ) {
                 this.entityType = this.result.minuteEntrytypes;
@@ -50,7 +52,10 @@ export class MinutesComponent implements OnInit {
             this.setDefaultModalValues();
         } );
     }
-  
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
     setDefaultModalValues() {
         this.entryDescription = "";
         this.selectedProtocolContingencyCode = null;
@@ -176,7 +181,7 @@ export class MinutesComponent implements OnInit {
         this.result.newCommitteeScheduleMinute.createTimestamp = new Date();
         this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
         if ( this.isMandatoryFilled == true ) {
-            this.minutesService.saveMinuteData( this.result ).subscribe( data => {
+            this.minutesService.saveMinuteData( this.result ).takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data || [];
             } );
             this.initialLoad();
@@ -217,7 +222,7 @@ export class MinutesComponent implements OnInit {
         if ( this.isToDelete == true ) {
             this.isToDelete = false;
         }
-        this.minutesService.deleteMinuteData( deleteRequestData ).subscribe( data => {
+        this.minutesService.deleteMinuteData( deleteRequestData ).takeUntil(this.onDestroy$).subscribe( data => {
             this.result = data || [];
         } );
         this.initialLoad();
@@ -232,7 +237,7 @@ export class MinutesComponent implements OnInit {
             this.result.scheduleId = this.result.committeeSchedule.scheduleId;
             this.result.newCommitteeScheduleMinute.updateTimestamp = new Date();
             this.result.newCommitteeScheduleMinute.updateUser = localStorage.getItem('currentUser');
-            this.minutesService.updateMinuteData( this.result ).subscribe( data => {
+            this.minutesService.updateMinuteData( this.result ).takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data || [];
             } );
             this.initialLoad();

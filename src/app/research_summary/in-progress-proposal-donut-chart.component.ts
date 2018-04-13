@@ -57,7 +57,8 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService im
     }
 
     drawGraph() {
-        localStorage.setItem( 'donutChartIndex', null );
+     this.expandedViewDataservice.setDonutChartIndex('');
+     this.expandedViewDataservice.setResearchSummaryIndex('');
         this.resultPie = this.dashboardData.getDashboardPieChartData();
         if ( this.resultPie != null && this.resultPie.summaryProposalDonutChart !== undefined ) {
             this.proposalList = this.resultPie.summaryProposalDonutChart;
@@ -79,7 +80,7 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService im
             this.proposalChart = this.createPiChart( document.getElementById( 'donut_proposal_chart' ) );
             this.proposalChart.draw( this.proposalData, this.proposalOptions );
             google.visualization.events.addListener( this.proposalChart, 'select', ( event ) => {
-                localStorage.setItem( 'donutChartIndex', 'INPROGRESS' );
+                this.expandedViewDataservice.setDonutChartIndex('INPROGRESS');
                 var selection = this.proposalChart.getSelection();
                 for ( var i = 0; i < selection.length; i++ ) {
                     var item = selection[i];
@@ -87,8 +88,8 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService im
                         this.proposalType = this.proposalData.getFormattedValue( item.row, 0 );
                         for ( let j = 0; j < this.proposalstatuscode.length; j++ ) {
                             if ( this.proposalType === this.proposalstatuscode[j][1] ) {
-                                localStorage.setItem( 'sponsorCode', this.proposalstatuscode[j][0] );
-                                localStorage.setItem( 'exapandedDonutViewProposalHeading', "Proposals by " + this.proposalType );
+                                this.expandedViewDataservice.setSponsorCode(this.proposalstatuscode[j][0]);
+                                this.expandedViewDataservice.setExpandedDonutViewProposalHeading( "Proposals by " + this.proposalType);
                             }
                         }
                     }

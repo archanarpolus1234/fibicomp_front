@@ -49,7 +49,7 @@ export class AwardedProposalDonutChartComponent extends GoogleChartService imple
             }
             this.ref.detectChanges();
         } );
-	}
+    }
 
     ngOnDestroy() {
         if ( this.subscription )
@@ -58,7 +58,8 @@ export class AwardedProposalDonutChartComponent extends GoogleChartService imple
     }
 
     drawGraph() {
-        localStorage.setItem( 'donutChartIndex', null );
+        this.expandedViewDataservice.setDonutChartIndex('');
+        this.expandedViewDataservice.setResearchSummaryIndex('');
         this.resultPie = this.dashboardData.getDashboardPieChartData();
         if ( this.resultPie != null && this.resultPie.summaryAwardDonutChart !== undefined ) {
             this.awardList = this.resultPie.summaryAwardDonutChart;
@@ -81,8 +82,7 @@ export class AwardedProposalDonutChartComponent extends GoogleChartService imple
             this.awardChart = this.createPiChart( document.getElementById( 'donut_award_chart' ) );
             this.awardChart.draw( this.awardData, this.awardOptions );
             google.visualization.events.addListener( this.awardChart, 'select', ( event ) => {
-
-                localStorage.setItem( 'donutChartIndex', 'AWARDED' );
+                this.expandedViewDataservice.setDonutChartIndex('AWARDED');
                 var selection = this.awardChart.getSelection();
                 for ( var i = 0; i < selection.length; i++ ) {
                     var item = selection[i];
@@ -90,8 +90,8 @@ export class AwardedProposalDonutChartComponent extends GoogleChartService imple
                         this.sponsorType = this.awardData.getFormattedValue( item.row, 0 );
                         for ( let j = 0; j < this.statuscode.length; j++ ) {
                             if ( this.sponsorType === this.statuscode[j][1] ) {
-                                localStorage.setItem( 'sponsorCode', this.statuscode[j][0] );
-                                localStorage.setItem( 'exapandedDonutViewAwardHeading', "Awards by " + this.sponsorType );
+                                this.expandedViewDataservice.setSponsorCode( this.statuscode[j][0]);
+                                this.expandedViewDataservice.setExpandedDonutViewAwardHeading( "Awards by " + this.sponsorType );
                             }
                         }
                     }

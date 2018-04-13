@@ -1,21 +1,23 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ScheduleService } from '../../schedule.service';
-import { ScheduleConfigurationService } from '../../../common/schedule-configuration.service';
+import { ScheduleConfigurationService } from '../../schedule-configuration.service';
 import { ActivatedRoute } from '@angular/router';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 import { ScheduleAttachmentsService } from './schedule-attachments.service';
-
+import { Subject } from "rxjs/Subject";
+import 'rxjs/add/operator/takeUntil';
 
 @Component( {
     selector: 'app-schedule-attachments',
     templateUrl: './schedule-attachments.component.html',
-    styleUrls: ['../../../../assets/css/bootstrap.min.css', '../../../../assets/css/font-awesome.min.css', '../../../../assets/css/style.css', '../../../../assets/css/search.css'],
+    styleUrls: ['../../../../../assets/css/bootstrap.min.css', '../../../../../assets/css/font-awesome.min.css', '../../../../../assets/css/style.css', '../../../../../assets/css/search.css'],
     changeDetection: ChangeDetectionStrategy.Default
 } )
 export class ScheduleAttachmentsComponent implements OnInit {
     scheduleId;
     fil: FileList;
     result: any = {};
+    public onDestroy$ = new Subject<void>();
     showPopup = false;
     attachmentTypeDescription;
     newCommitteeScheduleAttachment: any = {};
@@ -41,14 +43,20 @@ export class ScheduleAttachmentsComponent implements OnInit {
 
     ngOnInit() {
         this.scheduleId = this.activatedRoute.snapshot.queryParams['scheduleId'];
-        this.scheduleConfigurationService.currentScheduleData.subscribe( data => {
+        this.scheduleConfigurationService.currentScheduleData.takeUntil(this.onDestroy$).subscribe( data => {
             this.result = data;
             if ( this.result !== null ) {
                 this.nullAttachmentData = true;
             }
         } );
     }
+    
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
 
+    //when file list changes
     onChange( files: FileList ) {
         this.fil = files;
         this.ismandatoryFilled = true;
@@ -57,6 +65,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
         }
     }
 
+    //change type option
     attachmentTypeChange( type ) {
         var d = new Date();
         var timestamp = d.getTime();
@@ -71,6 +80,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
         }
     }
 
+    //files are dropped in drag and drop space
     public dropped( event: UploadEvent ) {
         this.files = event.files;
         this.ismandatoryFilled = true;
@@ -84,6 +94,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
         }
     }
 
+    //delete file function
     deleteFromUploadedFileList( item ) {
         for ( var i = 0; i < this.uploadedFile.length; i++ ) {
             if ( this.uploadedFile[i].name == item.name ) {
@@ -119,7 +130,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
             this.newCommitteeScheduleAttachment.updateTimestamp = timestamp;
             this.newCommitteeScheduleAttachment.updateUser = this.currentUser;
             this.result.newCommitteeScheduleAttachment = this.newCommitteeScheduleAttachment;
-            this.scheduleAttachmentsService.addAttachments( this.result.committeeSchedule.scheduleId, this.result.newCommitteeScheduleAttachment, this.result.newCommitteeScheduleAttachment.attachmentTypeCode, this.uploadedFile, this.attachmentTypeDescription, this.currentUser ).subscribe( data => {
+            this.scheduleAttachmentsService.addAttachments( this.result.committeeSchedule.scheduleId, this.result.newCommitteeScheduleAttachment, this.result.newCommitteeScheduleAttachment.attachmentTypeCode, this.uploadedFile, this.attachmentTypeDescription, this.currentUser ).takeUntil(this.onDestroy$).subscribe( data => {
                 this.uploadedFile = [];
                 var temp:any = {};
                 temp = data;
@@ -131,6 +142,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
         }
     }
 
+    //temporarily save while showing modal pop up
     tempSave( event, attachment ) {
         this.showPopup = true;
         this.tempSaveAttachment = attachment;
@@ -139,7 +151,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
     deleteAttachments( event ) {
         event.preventDefault();
         this.showPopup = false;
-        this.scheduleAttachmentsService.deleteAttachments( this.result.committeeSchedule.scheduleId, this.result.committee.committeeId, this.tempSaveAttachment.commScheduleAttachId ).subscribe( data => {
+        this.scheduleAttachmentsService.deleteAttachments( this.result.committeeSchedule.scheduleId, this.result.committee.committeeId, this.tempSaveAttachment.commScheduleAttachId ).takeUntil(this.onDestroy$).subscribe( data => {
         var temp:any = {};
         temp = data;
         this.result.committeeSchedule = temp.committeeSchedule;
@@ -148,7 +160,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
 
     downloadAttachements( event,attachments ) {
         event.preventDefault();
-        this.scheduleAttachmentsService.downloadAttachment( attachments.commScheduleAttachId, attachments.mimeType ).subscribe(
+        this.scheduleAttachmentsService.downloadAttachment( attachments.commScheduleAttachId, attachments.mimeType ).takeUntil(this.onDestroy$).subscribe(
             data => {
                 var a = document.createElement( "a" );
                 a.href = URL.createObjectURL( data );
@@ -173,7 +185,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
         this.attachmentObject.updateUser = this.currentUser;
         this.attachmentObject.commScheduleAttachId = attachments.commScheduleAttachId;
         this.scheduleAttachmentsService.updateScheduleAttachments(this.result.committee.committeeId, this.result.committeeSchedule.scheduleId, this.attachmentObject)
-        .subscribe(data=>{
+        .takeUntil(this.onDestroy$).subscribe(data=>{
             this.result = data;
         });
     }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AwardCommitmentsService } from './award-commitments.service';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from "rxjs/Subscription";
 @Component( {
     selector: 'app-award-commitments',
     templateUrl: './award-commitments.component.html',
@@ -13,12 +14,13 @@ export class AwardCommitmentsComponent implements OnInit {
     noCostsharingData: boolean = true;
     awardId: string;
     result: any = {};
+    subscription : Subscription;
 
     constructor( private awardCommitmentsService: AwardCommitmentsService, private route: ActivatedRoute ) { }
 
     ngOnInit() {
         this.awardId = this.route.snapshot.queryParamMap.get( 'awardId' );
-        this.awardCommitmentsService.loadCostsharingDetails( this.awardId )
+        this.subscription = this.awardCommitmentsService.loadCostsharingDetails( this.awardId )
             .subscribe( data => {
                 this.result = data;
                 if(this.result.costShareDetails !== undefined && this.result.fAndADetails !== undefined){
@@ -31,7 +33,10 @@ export class AwardCommitmentsComponent implements OnInit {
                 }
             } )
     }
-
+    
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
+    }
     showRatesTab( event: any ) {
         event.preventDefault();
         this.showRates = !this.showRates;
