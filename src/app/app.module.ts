@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpModule } from '@angular/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -9,12 +9,7 @@ import { Idle } from '@ng-idle/core';
 import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
-import { TreeModule } from 'angular-tree-component';
-import { Ng2CompleterModule } from 'ng2-completer';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DatePipe } from '@angular/common';
-import { FileDropModule } from 'ngx-file-drop';
 import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
@@ -33,22 +28,6 @@ import { HeaderComponent } from './common/header-tpl.component';
 import { LogoutComponent } from './login/logout.component';
 import { AwardBySponsorPieChartComponent } from './research_summary/award-by-sponsor-piechart.component';
 import { InProgressProposalDonutChartComponent } from './research_summary/in-progress-proposal-donut-chart.component';
-import { AwardComponent } from './award/award.component';
-import { AwardHomeComponent } from './award/award-home/award-home.component';
-import { AwardHierarchyComponent } from './award/award-hierarchy/award-hierarchy.component';
-import { AwardReportsAndTerms } from './award/award-reports-and-tabs/award-reports-and-terms.component';
-import { AwardCommitmentsComponent } from './award/award-commitments/award-commitments.component';
-import { CommitteeHomeComponent } from './committee/committee-home/committee-home.component';
-import { CommitteeMembersComponent } from './committee/committee-members/committee-members.component';
-import { ScheduleHomeComponent } from './schedule/schedule-home/schedule-home.component';
-import { MinutesComponent } from './schedule/minutes/minutes.component';
-import { CommitteeComponent } from './committee/committee.component';
-import { ScheduleComponent } from './schedule/schedule.component';
-import { ProtocolSubmittedComponent } from './schedule/schedule-home/protocol-submitted/protocol-submitted.component';
-import { ScheduleAttendanceComponent } from './schedule/schedule-home/schedule-attendance/schedule-attendance.component';
-import { ScheduleOtherActionsComponent } from './schedule/schedule-home/schedule-other-actions/schedule-other-actions.component';
-import { ScheduleAttachmentsComponent } from './schedule/schedule-home/schedule-attachments/schedule-attachments.component';
-
 
 import { LoginService } from './login/login.service';
 import { GoogleChartService } from './research_summary/google-chart.service';
@@ -65,39 +44,26 @@ import { ExpandedviewService } from './research_summary/expanded-view.service';
 import { LoginCheckService } from './common/login-check.service';
 import { AuthGuard } from './common/auth-guard.service';
 import { DashboardConfigurationService } from './common/dashboard-configuration-service';
-import { AwardSummaryService } from './award/award-home/award-summary.service';
-import { AwardHierarchyService } from './award/award-hierarchy/award-hierarchy.service';
-import { AwardReportsAndTermsService } from './award/award-reports-and-tabs/award-reports-and-terms.service';
-import { AwardCommitmentsService } from './award/award-commitments/award-commitments.service';
-import { CommitteeConfigurationService } from './common/committee-configuration.service';
-import { CommitteeMemberEmployeeElasticService } from './elastic-search/committee-members-employees-elastic-search.service';
-import { CommitteeMemberNonEmployeeElasticService } from './elastic-search/committee-members-nonEmployee-elastic-search.service';
-import { ScheduleService } from './schedule/schedule.service';
-import { ScheduleConfigurationService } from './common/schedule-configuration.service';
-import { ScheduleOtherActionsService } from './schedule/schedule-home/schedule-other-actions/schedule-other-actions.service';
-import { ScheduleHomeService } from './schedule/schedule-home/schedule-home.service';
-import { AwardconfigurationService } from '../app/award/awardconfiguration.service';
-import { ScheduleAttachmentsService } from '../app/schedule/schedule-home/schedule-attachments/schedule-attachments.service';
-import { ScheduleAttendanceService } from "./schedule/schedule-home/schedule-attendance/schedule-attendance.service";
-import { MinutesService } from '../app/schedule/minutes/minutes.service';
 import { AppHttpInterceptor } from "./common/http-interceptor";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-let appRoutes = [
-    { path: '', component: LoginComponent },
+let appRoutes = [{path: '',redirectTo: 'loginpage', pathMatch: 'full'},
 
-    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
 
     { path: 'loginpage', component: LoginComponent },
 
     { path: 'logout', component: LogoutComponent },
 
-    { path: 'award', component: AwardComponent },
+    { path: 'award', loadChildren: './award/award.module#AwardModule' },
 
     { path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard] },
 
-    { path: 'committee', component: CommitteeComponent },
+    { path: 'committee', loadChildren:'./committee/committee.module#CommitteeModule'},
 
-    { path: 'schedule', component: ScheduleComponent }
+    { path: 'grant', loadChildren:'./grant/grant.module#GrantModule', canActivate: [AuthGuard] },
+    
+    {path:'proposal', loadChildren: './proposal/proposal.module#ProposalModule', canActivate: [AuthGuard]}
 ];
 
 @NgModule( {
@@ -117,25 +83,11 @@ let appRoutes = [
         HeaderComponent,
         AwardBySponsorPieChartComponent,
         InProgressProposalDonutChartComponent,
-        LogoutComponent,
-        AwardComponent,
-        AwardReportsAndTerms,
-        AwardHomeComponent,
-        AwardHierarchyComponent,
-        AwardCommitmentsComponent,
-        CommitteeHomeComponent,
-        CommitteeMembersComponent,
-        ScheduleHomeComponent,
-        MinutesComponent,
-        CommitteeComponent,
-        ScheduleComponent,
-        ProtocolSubmittedComponent,
-        ScheduleAttendanceComponent,
-        ScheduleOtherActionsComponent,
-        ScheduleAttachmentsComponent
+        LogoutComponent
     ],
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         HttpModule,
         ChartsModule,
@@ -144,25 +96,19 @@ let appRoutes = [
         NgIdleKeepaliveModule.forRoot(),
         NgbModule.forRoot(),
         Ng2PageScrollModule,
-        TreeModule,
-        Ng2CompleterModule,
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
-        BrowserAnimationsModule,
-        FileDropModule,
         HttpClientModule
     ],
+    schemas:[CUSTOM_ELEMENTS_SCHEMA],
     providers: [ {
         provide: HTTP_INTERCEPTORS,
         useClass: AppHttpInterceptor,
         multi: true},
-        DashboardService, LoginService, GoogleChartService, SessionManagementService, AwardSummaryService, AwardHierarchyService,
+        DashboardService, LoginService, GoogleChartService, SessionManagementService,
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
-        IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService, AwardReportsAndTermsService,
-        AwardCommitmentsService, CommitteeConfigurationService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService, ScheduleConfigurationService, ScheduleOtherActionsService,
-        ScheduleHomeService, AwardconfigurationService, ScheduleAttachmentsService, ScheduleAttendanceService,
-        MinutesService],
+        IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService],
     bootstrap: [AppComponent]
 } )
 

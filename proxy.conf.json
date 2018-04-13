@@ -171,5 +171,9 @@
 	"/updateScheduleAttachment": {
 					"target":"http://192.168.1.93:8080/fibi-comp",
 					"secure":false
+	},
+	"/createGrantCall":{
+				"target":"http://192.168.1.72:8080/fibi-comp/",
+				"secure":false
 	}
 }

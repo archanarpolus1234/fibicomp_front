@@ -10,7 +10,8 @@ import { ExpandedViewDataService } from '../research_summary/expanded-view-data-
 import { DashboardData } from '../dashboard/dashboard-data.service';
 import { ExpandedviewService } from '../research_summary/expanded-view.service';
 import { DashboardConfigurationService } from '../common/dashboard-configuration-service';
-
+import { Subject } from "rxjs/Subject";
+import 'rxjs/add/operator/takeUntil';
 
 @Component( {
     templateUrl: 'dashboard.component.html',
@@ -119,6 +120,8 @@ export class DashboardComponent implements OnInit {
     public dashboardproposalBySponsorTypesWidget: boolean = true;
     public dashboardinProgressproposalBySponsorWidget: boolean = true;
     public message: string;
+    public onDestroy$ = new Subject<void>();
+  
 
     constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService ) {
         this.outputPath = this.constant.outputPath;
@@ -127,28 +130,32 @@ export class DashboardComponent implements OnInit {
         }
         this.getResearchSummaryData();
     }
-
+    
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
     ngOnInit() {
-        this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.subscribe( status => {
+        this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.takeUntil(this.onDestroy$).subscribe( status => {
             this.dashboardExpenditureVolumeWidget = status;
         } );
-        this.dashboardConfigurationService.currentdashboardResearchSummaryWidget.subscribe( status => {
+        this.dashboardConfigurationService.currentdashboardResearchSummaryWidget.takeUntil(this.onDestroy$).subscribe( status => {
             this.dashboardResearchSummaryWidget = status;
         } );
-        this.dashboardConfigurationService.currentdashboardawardedProposalBySponsorWidget.subscribe( status => {
+        this.dashboardConfigurationService.currentdashboardawardedProposalBySponsorWidget.takeUntil(this.onDestroy$).subscribe( status => {
             this.dashboardawardedProposalBySponsorWidget = status;
         } );
-        this.dashboardConfigurationService.currentdashboardAwardBysponsorTypesWidget.subscribe( status => {
+        this.dashboardConfigurationService.currentdashboardAwardBysponsorTypesWidget.takeUntil(this.onDestroy$).subscribe( status => {
             this.dashboardAwardBysponsorTypesWidget = status;
         } );
-        this.dashboardConfigurationService.currentdashboardproposalBySponsorTypesWidget.subscribe( status => {
+        this.dashboardConfigurationService.currentdashboardproposalBySponsorTypesWidget.takeUntil(this.onDestroy$).subscribe( status => {
             this.dashboardproposalBySponsorTypesWidget = status;
         } );
-        this.dashboardConfigurationService.currentdashboardinProgressproposalBySponsorWidget.subscribe( status => {
+        this.dashboardConfigurationService.currentdashboardinProgressproposalBySponsorWidget.takeUntil(this.onDestroy$).subscribe( status => {
             this.dashboardinProgressproposalBySponsorWidget = status;
         } );
 
-        localStorage.setItem( 'researchSummaryIndex', null );
+       // localStorage.setItem( 'researchSummaryIndex', null );
         this.adminStatus = localStorage.getItem( 'isAdmin' );
         this.userName = localStorage.getItem( 'currentUser' );
         this.fullName = localStorage.getItem( 'userFullname' );
@@ -160,7 +167,7 @@ export class DashboardComponent implements OnInit {
     initialLoad( currentPage ) {
         this.constval = this.constant.index_url;
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage, this.filterStartDate, this.filterEndDate )
-            .subscribe(
+            .takeUntil(this.onDestroy$).subscribe(
             data => {
                 this.result = data || [];
                 if ( this.result !== null) {
@@ -215,6 +222,7 @@ export class DashboardComponent implements OnInit {
             } );
     }
 
+   
     showTab( currentTabPosition ) {
         this.personId = localStorage.getItem( 'personId' );
         this.result = null;
@@ -284,13 +292,13 @@ export class DashboardComponent implements OnInit {
         this.dashboardData.setDashboardAreaChartData1([]);
         this.dashboardData.setDashboardPieChartData1({});
         this.dashboardService.getResearchSummaryData()
-            .subscribe( data => {
+            .takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data || [];
                 if ( this.result != null ) {
                     this.dashboardData.setdashboardAreaChartData( this.result.expenditureVolumes );
-					this.dashboardData.setDashboardAreaChartData1(this.result.expenditureVolumes);
+                    this.dashboardData.setDashboardAreaChartData1(this.result.expenditureVolumes);
                     this.dashboardData.setDashboardPieChartData( this.result );
-					this.dashboardData.setDashboardPieChartData1(this.result);
+                    this.dashboardData.setDashboardPieChartData1(this.result);
                     this.summaryViews = this.result.summaryViews;
                 }
             } );
@@ -306,7 +314,7 @@ export class DashboardComponent implements OnInit {
         }
 
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage, this.filterStartDate, this.filterEndDate )
-            .subscribe( data => {
+            .takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data || [];
                 if ( this.result != null ) {
                     this.totalPage = this.result.totalServiceRequest;
@@ -328,7 +336,8 @@ export class DashboardComponent implements OnInit {
                 }
             } );
     }
-
+    
+    //clear all advanced search fields
     clear() {
         this.advanceSearchCriteria.property1 = '';
         this.advanceSearchCriteria.property2 = '';
@@ -461,16 +470,22 @@ export class DashboardComponent implements OnInit {
 
     expandedView( summaryView ) {
         if ( summaryView == 'Submitted Proposal' ) {
-            localStorage.setItem( 'researchSummaryIndex', "PROPOSALSSUBMITTED" );
-            localStorage.setItem( 'expandedViewHeading', summaryView );
+            //localStorage.setItem( 'researchSummaryIndex', "PROPOSALSSUBMITTED" );
+            this.expandedViewDataservice.setResearchSummaryIndex("PROPOSALSSUBMITTED");
+            //localStorage.setItem( 'expandedViewHeading', summaryView );
+            this.expandedViewDataservice.setExpandedViewHeading(summaryView);
         }
         if ( summaryView == 'In Progress Proposal' ) {
-            localStorage.setItem( 'researchSummaryIndex', "PROPOSALSINPROGRESS" );
-            localStorage.setItem( 'expandedViewHeading', summaryView );
+           // localStorage.setItem( 'researchSummaryIndex', "PROPOSALSINPROGRESS" );
+            this.expandedViewDataservice.setResearchSummaryIndex("PROPOSALSINPROGRESS");
+            //localStorage.setItem( 'expandedViewHeading', summaryView );
+            this.expandedViewDataservice.setExpandedViewHeading(summaryView);
         }
         if ( summaryView == 'Active Award' ) {
-            localStorage.setItem( 'researchSummaryIndex', "AWARDSACTIVE" );
-            localStorage.setItem( 'expandedViewHeading', summaryView );
+            //localStorage.setItem( 'researchSummaryIndex', "AWARDSACTIVE" );
+            this.expandedViewDataservice.setResearchSummaryIndex("AWARDSACTIVE");
+           // localStorage.setItem( 'expandedViewHeading', summaryView );
+            this.expandedViewDataservice.setExpandedViewHeading(summaryView);
         }
         this.router.navigate( ['/expandedview'] );
     }
@@ -509,5 +524,16 @@ export class DashboardComponent implements OnInit {
             this.isMandatoryFilterFilled = true;
             this.initialLoad( this.currentPage );
         }
+    }
+
+    loadSchedules(event: any, scheduleId){
+        event.preventDefault();
+        this.router.navigate(['committee/schedule'], { queryParams: {'scheduleId': scheduleId} });
+    }
+
+    loadGrants(event:any, mode){
+        event.preventDefault();
+        this.currentPosition = 'GRANT';
+        this.router.navigate( ['/grant'], { queryParams: {'mode': mode} } );
     }
 }

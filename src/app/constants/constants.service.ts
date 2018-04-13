@@ -53,6 +53,7 @@ export class Constants {
     updateScheduleAttendanceData: string;
     deleteGuestMenberScheduleAttendance: string;
 
+    createGrandCalls: string;
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
         //this.index_url = 'http://52.20.110.7:9200/';
@@ -233,6 +234,10 @@ export class Constants {
         this.deleteGuestMenberScheduleAttendance = '/deleteScheduleAttendance';
         //this.deleteGuestMenberScheduleAttendance = 'http://demo.fibiweb.com/fibi-comp/deleteScheduleAttendance';
         //this.deleteGuestMenberScheduleAttendance = 'http://192.168.1.76:8080/fibi-comp/deleteScheduleAttendance';
+        
+        this.createGrandCalls ='/createGrantCall';
+      //this.createGrandCalls = 'http://demo.fibiweb.com/fibi-comp/createGrantCall';
+        //this.createGrandCalls = 'http://192.168.1.76:8080/fibi-comp/createGrantCall';
         
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';

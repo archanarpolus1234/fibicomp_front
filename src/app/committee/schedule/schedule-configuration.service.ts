@@ -5,7 +5,9 @@ export class ScheduleConfigurationService {
 
     private scheduleData = new BehaviorSubject<any>( {} );
     currentScheduleData = this.scheduleData.asObservable();
-
+    scheduleHomeEdit = new BehaviorSubject<boolean>(false);
+    currentschedulehomeEdit = this.scheduleHomeEdit.asObservable();
+    
     constructor() {
 
     }

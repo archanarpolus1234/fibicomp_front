@@ -11,6 +11,12 @@ export class CommitteeConfigurationService {
     currentCommitteeData = this.committeeData.asObservable();
     private currentMember = new BehaviorSubject<any[]>([]);
     currentMemberData = this.currentMember.asObservable();
+    committeeEditFlag = new BehaviorSubject<boolean>(false);
+    currentEditFlag = this.committeeEditFlag.asObservable();
+    committeeMemberEditFlag = new BehaviorSubject<boolean>(false);
+    currentMemberEditFlag = this.committeeMemberEditFlag.asObservable();
+    currentTab = new BehaviorSubject<string>("");
+    currentactivatedTab = this.currentTab.asObservable();
     
     constructor() {
         
@@ -30,5 +36,17 @@ export class CommitteeConfigurationService {
     
     changeMemberData(data :any[]){
         this.currentMember.next(data);
+    }
+    
+    changeEditFlag(flag: boolean){
+        this.committeeEditFlag.next(flag);
+    }
+    
+    changeEditMemberFlag(flag: boolean){
+        this.committeeMemberEditFlag.next(flag);
+    }
+    
+    changeActivatedtab(tab: string){
+        this.currentTab.next(tab);
     }
 }

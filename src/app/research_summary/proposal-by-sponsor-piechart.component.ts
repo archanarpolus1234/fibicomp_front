@@ -57,7 +57,8 @@ export class ProposalBySponsorPieChartComponent extends GoogleChartService imple
     }
 
     drawGraph() {
-        localStorage.setItem( 'piechartIndex', null );
+        this.expandedViewDataservice.setPiechartIndex('');
+        this.expandedViewDataservice.setResearchSummaryIndex('');
         this.resultPie = this.dashboardData.getDashboardPieChartData();
         if ( this.resultPie != null && this.resultPie.summaryProposalPieChart !== undefined ) {
             this.proposalList = this.resultPie.summaryProposalPieChart;
@@ -79,7 +80,7 @@ export class ProposalBySponsorPieChartComponent extends GoogleChartService imple
             this.proposalChart = this.createPiChart( document.getElementById( 'pichart_divEvolution' ) );
             this.proposalChart.draw( this.proposalData, this.proposalOptions );
             google.visualization.events.addListener( this.proposalChart, 'select', ( event ) => {
-                localStorage.setItem( 'piechartIndex', 'PROPOSAL' );
+                this.expandedViewDataservice.setPiechartIndex('PROPOSAL');
                 var selection = this.proposalChart.getSelection();
                 for ( var i = 0; i < selection.length; i++ ) {
                     var item = selection[i];
@@ -88,7 +89,7 @@ export class ProposalBySponsorPieChartComponent extends GoogleChartService imple
                         for ( let j = 0; j < this.proposalstatuscode.length; j++ ) {
                             if ( this.proposalType === this.proposalstatuscode[j][1] ) {
                                 localStorage.setItem( 'sponsorCode', this.proposalstatuscode[j][0] );
-                                localStorage.setItem( 'exapandedViewProposalHeading', "Proposals by " + this.proposalType );
+                               this.expandedViewDataservice.setExpandedViewProposalHeading( "Proposals by " + this.proposalType );
                             }
                         }
                     }

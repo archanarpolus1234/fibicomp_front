@@ -59,7 +59,8 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService implemen
     }
 
     drawGraph() {
-        localStorage.setItem( 'piechartIndex', null );
+        this.expandedViewDataservice.setPiechartIndex('');
+        this.expandedViewDataservice.setResearchSummaryIndex('');
         this.resultPie = this.dashboardData.getDashboardPieChartData();
         if ( this.resultPie != null && this.resultPie.summaryAwardPieChart !== undefined ) {
             this.awardList = this.resultPie.summaryAwardPieChart;
@@ -82,7 +83,7 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService implemen
             this.awardChart = this.createPiChart( document.getElementById( 'pichart_award' ) );
             this.awardChart.draw( this.awardData, this.awardOptions );
             google.visualization.events.addListener( this.awardChart, 'select', ( event ) => {
-                localStorage.setItem( 'piechartIndex', 'AWARD' );
+                this.expandedViewDataservice.setPiechartIndex( 'AWARD');
                 var selection = this.awardChart.getSelection();
                 for ( var i = 0; i < selection.length; i++ ) {
                     var item = selection[i];
@@ -90,8 +91,8 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService implemen
                         this.sponsorType = this.awardData.getFormattedValue( item.row, 0 );
                         for ( let j = 0; j < this.statuscode.length; j++ ) {
                             if ( this.sponsorType === this.statuscode[j][1] ) {
-                                localStorage.setItem( 'sponsorCode', this.statuscode[j][0] );
-                                localStorage.setItem( 'exapandedViewAwardHeading', "Awards by " + this.sponsorType );
+                                this.expandedViewDataservice.setSponsorCode(this.statuscode[j][0]);
+                                this.expandedViewDataservice.setExpandedViewAwardHeading( "Awards by " + this.sponsorType);
                             }
                         }
                     }

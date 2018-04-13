@@ -4,8 +4,8 @@ import { Http } from "@angular/http";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
-import { Constants } from "../../../constants/constants.service";
 import { HttpClient } from "@angular/common/http";
+import { Constants } from "../../../../constants/constants.service";
 
 @Injectable()
 export class ScheduleAttendanceService {

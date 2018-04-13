@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AwardComponent } from '../award.component';
 
 import { AwardconfigurationService } from '../../award/awardconfiguration.service';
+import { Subscription } from "rxjs/Subscription";
 
 @Component( {
     selector: 'app-award-home',
@@ -38,13 +39,14 @@ export class AwardHomeComponent implements OnInit {
     public unitName: string;
     public pi_coiTrigger = false;
     public kpTrigger = false;
+    public currentDataSubscription : Subscription;
 
     constructor( public awardComponent: AwardComponent, public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardconfigurationService: AwardconfigurationService ) {
     }
 
     ngOnInit() {
         this.awardId = this.route.snapshot.queryParams['awardId'];
-        this.awardconfigurationService.currentAwardData.subscribe( data => {
+       this.currentDataSubscription = this.awardconfigurationService.currentAwardData.subscribe( data => {
             this.result = data;
             if ( this.result.length !== 0 && this.result.awardDetails != null ) {
                 this.activityType = this.result.awardDetails[0].activity_type;
@@ -77,4 +79,7 @@ export class AwardHomeComponent implements OnInit {
     }
 
     ngOnChanges() { }
+    ngOnDestroy() {
+        this.currentDataSubscription.unsubscribe();
+    }
 }

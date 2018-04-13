@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
-import { ScheduleConfigurationService } from '../../common/schedule-configuration.service';
 import { ScheduleHomeService } from "./schedule-home.service";
 import { DatePipe } from '@angular/common';
+import { ScheduleConfigurationService } from "../schedule-configuration.service";
 
 @Component( {
     selector: 'app-schedule-home',
     templateUrl: './schedule-home.component.html',
-    styleUrls: ['../../../assets/css/bootstrap.min.css', '../../../assets/css/font-awesome.min.css', '../../../assets/css/style.css', '../../../assets/css/search.css'],
+    styleUrls: ['../../../../assets/css/bootstrap.min.css', '../../../../assets/css/font-awesome.min.css', '../../../../assets/css/style.css', '../../../../assets/css/search.css'],
     changeDetection: ChangeDetectionStrategy.Default
 } )
 export class ScheduleHomeComponent implements OnInit {

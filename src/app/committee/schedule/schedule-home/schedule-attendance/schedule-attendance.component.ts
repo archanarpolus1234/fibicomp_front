@@ -3,15 +3,17 @@ import { FormControl } from '@angular/forms';
 import { Subject, Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
-import { ScheduleConfigurationService } from "../../../common/schedule-configuration.service";
-import { CommitteeMemberNonEmployeeElasticService } from "../../../elastic-search/committee-members-nonEmployee-elastic-search.service";
-import { CommitteeMemberEmployeeElasticService } from "../../../elastic-search/committee-members-employees-elastic-search.service";
+import { ScheduleConfigurationService } from "../../schedule-configuration.service";
+import { CommitteeMemberNonEmployeeElasticService } from "../../../../elastic-search/committee-members-nonEmployee-elastic-search.service";
+import { CommitteeMemberEmployeeElasticService } from "../../../../elastic-search/committee-members-employees-elastic-search.service";
 import { ScheduleAttendanceService } from "./schedule-attendance.service";
+
+import 'rxjs/add/operator/takeUntil';
 
 @Component( {
     selector: 'app-schedule-attendance',
     templateUrl: './schedule-attendance.component.html',
-    styleUrls: ['../../../../assets/css/bootstrap.min.css', '../../../../assets/css/font-awesome.min.css', '../../../../assets/css/style.css', '../../../../assets/css/search.css']
+    styleUrls: ['../../../../../assets/css/bootstrap.min.css', '../../../../../assets/css/font-awesome.min.css', '../../../../../assets/css/style.css', '../../../../../assets/css/search.css']
 } )
 export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     result: any = {};
@@ -23,7 +25,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
     nonEmployeeFlag: boolean = false;
     message: string;
     showAddMember: boolean = false;
-
+    public onDestroy$ = new Subject<void>();
     elasticSearchresults: any = [];
     searchString: string;
     hits_source;
@@ -76,7 +78,10 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
             this.result = data;
         } );
     }
-
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
     ngAfterViewInit() {
         this.searchText
             .valueChanges
@@ -170,7 +175,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
                     }
                 } );
             } ).catch( this.handleError )
-            .subscribe( this._results );
+            .takeUntil(this.onDestroy$).subscribe( this._results );
     }
 
     handleError(): any {
@@ -208,7 +213,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.guestMemberObj.roleName = '';
         this.guestMemberObj.updateTimestamp = new Date().getTime();
         this.guestMemberObj.updateUser = this.currentUser;
-        this.scheduleAttendanceService.addGuestMember( this.guestMemberObj, this.scheduleId ).subscribe( data => {
+        this.scheduleAttendanceService.addGuestMember( this.guestMemberObj, this.scheduleId ).takeUntil(this.onDestroy$).subscribe( data => {
             this.result = data;
         } );
     }
@@ -259,7 +264,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.updatingMemberObj.updateUser = this.currentUser;
         this.updatingMemberObj.updateTimestamp = new Date().getTime();
         this.scheduleAttendanceService.updateMemberattendanceDate( this.committeeId, this.scheduleId, this.updatingMemberObj )
-            .subscribe( data => {
+            .takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data;
             } );
     }
@@ -296,7 +301,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.updatingMemberObj.updateUser = this.currentUser;
         this.updatingMemberObj.updateTimestamp = new Date().getTime();
         this.scheduleAttendanceService.updateMemberattendanceDate( this.committeeId, this.scheduleId, this.updatingMemberObj )
-            .subscribe( data => {
+            .takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data;
             } );
     }
@@ -311,14 +316,11 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.showPopup = false;
         this.committeeId = this.result.committeeSchedule.committeeId;
         this.scheduleAttendanceService.deleteScheduleMemberAttendance( this.committeeId, this.scheduleId, this.deletingMeberObj.committeeScheduleAttendanceId )
-            .subscribe( data => {
+            .takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data;
             } );
     }
-
-    changes( mebrObj ) {
-    }
-
+    
     onSearchValueChange() {
         this.iconClass = this.searchTextModel ? 'fa fa-times' : 'fa fa-search';
         this.elasticSearchresults = [];

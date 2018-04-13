@@ -67,19 +67,7 @@
 				</section>
 			</div>
 		</section>
-		<div *ngIf="currentTab =='committee_home'">
-			<app-committee-home [Id]="result.committee.committeeId"
-				[Name]="result.committee.committeeName"
-				[Type]="result.committee.committeeType.description"
-				[Unit]="result.committee.homeUnitNumber"
-				(editFlag)="recieveFlag($event)" (modeFlag)="recievemode($event)"
-				[unitName]="result.committee.homeUnitName"
-				[reviewTypes]="result.reviewTypes" [areaList]="areaList"
-				[scheduleStatus]="result.scheduleStatus" #homeComponent></app-committee-home>
-		</div>
-		<div *ngIf="currentTab =='committee_members'">
-			<app-committee-members (isOnEditMembers) = "recieveEditmembersFlag($event)"></app-committee-members>
-		</div>
+		<router-outlet (activate)="onActivate($event)"></router-outlet>
 		<!-- modal for showing warnings -->
 		<div class="modal fade mySkinDialog modalFallBack" *ngIf="showPopup"
 			id="warningModalMain" tabindex="-1" role="dialog"
@@ -100,10 +88,10 @@
 						<p *ngIf="isOnEditMembers">{{ alertMsgMemberMiddleOfEdit }}</p>
 					</div>
 					<div class="modal-footer" *ngIf="middleOfEdit">
-						<button type="button" class="btnSkin btn-secondary"
-							data-dismiss="modal">Ok</button>
+						<button type="button" class="btnSkin btn-secondary" 
+							data-dismiss="modal" (click)="stayOnCommittee()">Ok</button>
 						<button type="button" class="btnSkin btnSkinPrimary"
-							(click)="saveAndContinue()" data-dismiss="modal">Save
+							(click)="saveAndContinue(this.activatedRoute)" data-dismiss="modal">Save
 							and continue</button>
 					</div>
 					<div class="modal-footer" *ngIf="alertMsgNotSaved">

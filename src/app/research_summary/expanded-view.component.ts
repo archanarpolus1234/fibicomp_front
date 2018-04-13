@@ -7,6 +7,9 @@ import { Constants } from '../constants/constants.service';
 import { DashboardService } from '../dashboard/dashboard.service';
 import { ExpandedviewService } from "./expanded-view.service";
 import { ExpandedViewDataService } from './expanded-view-data-service';
+import { Subject } from "rxjs/Subject";
+import 'rxjs/add/operator/takeUntil';
+
 
 @Component( {
     selector: 'expanded-view',
@@ -17,6 +20,7 @@ import { ExpandedViewDataService } from './expanded-view-data-service';
 
 export class ExpandedviewComponent implements OnInit {
     awardsheading: string;
+    sponsorCode: string;
     proposalheading: string;
     donutAwardHeading: string;
     donutProposalHeading: string;
@@ -53,6 +57,7 @@ export class ExpandedviewComponent implements OnInit {
     nullResearchSummaryAwardData: boolean = false;
     nullResearchSummaryProposalSubmittedData: boolean = false;
     nullResearchSummaryProposalInprogressData: boolean = false;
+    public onDestroy$ = new Subject<void>();
 
     constructor( private router: Router, private sessionService: SessionManagementService, private constant: Constants, private dashboardService: DashboardService, private route: ActivatedRoute, private expandedViewService: ExpandedviewService, public expandedViewDataService: ExpandedViewDataService ) {
         this.logo = './assets/images/logo.png';
@@ -64,34 +69,41 @@ export class ExpandedviewComponent implements OnInit {
             this.router.navigate( ['/expandedview'] );
         }
     }
-
+    
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
+    
     ngOnInit() {
         this.adminStatus = localStorage.getItem( 'isAdmin' );
         this.userName = localStorage.getItem( 'currentUser' );
         this.fullName = localStorage.getItem( 'userFullname' );
-        this.piechartIndex = localStorage.getItem( 'piechartIndex' );
-        this.donutAwardHeading = localStorage.getItem( 'exapandedDonutViewAwardHeading' );
-        this.donutProposalHeading = localStorage.getItem( 'exapandedDonutViewProposalHeading' );
-        this.awardsheading = localStorage.getItem( 'exapandedViewAwardHeading' );
-        this.proposalheading = localStorage.getItem( 'exapandedViewProposalHeading' );
-        this.summaryIndex = localStorage.getItem( 'researchSummaryIndex' );
-        this.summaryheading = localStorage.getItem( 'expandedViewHeading' );
-        this.donutchartIndex = localStorage.getItem( 'donutChartIndex' );
+        this.expandedViewDataService.piechartIndex.subscribe( piechartindex => { this.piechartIndex = piechartindex; } );
+        this.expandedViewDataService.exapandedDonutViewAwardHeading.subscribe( donutawardheading => this.donutAwardHeading = donutawardheading );
+        this.expandedViewDataService.changedExapandedDonutViewProposalHeading.subscribe( donutproposalheading => this.donutProposalHeading = donutproposalheading );
+        this.expandedViewDataService.expandedViewAwardHeading.subscribe( awardheading => { this.awardsheading = awardheading } );
+        this.expandedViewDataService.expandedViewProposalHeading.subscribe( proposalheading => this.proposalheading = proposalheading );
+        this.expandedViewDataService.researchSummaryIndex.subscribe( researchIndex => this.summaryIndex = researchIndex );
+        this.expandedViewDataService.expandedViewHeading.subscribe( expandedheading => this.summaryheading = expandedheading );
+        this.expandedViewDataService.donutChartIndex.subscribe( donutindex => this.donutchartIndex = donutindex );
+        this.expandedViewDataService.sponsorCode.subscribe( sponsorCode => this.sponsorCode = sponsorCode );
+  
         if ( this.adminStatus == 'true' ) {
             this.isAdmin = true;
         }
         
          if ( this.piechartIndex != "null" ) {
-            this.expandedViewService.loadExpandedView( localStorage.getItem( 'sponsorCode' ), localStorage.getItem( 'personId' ), localStorage.getItem( 'piechartIndex' ) ).subscribe(
+            this.expandedViewService.loadExpandedView( this.sponsorCode, localStorage.getItem( 'personId' ),this.piechartIndex ).takeUntil(this.onDestroy$).subscribe(
                 data => {
                     this.piechartResult = data || [];
-                    if ( localStorage.getItem( 'piechartIndex' ) == "AWARD" ) {
+                    if ( this.piechartIndex == "AWARD" ) {
                         this.serviceRequestList = this.piechartResult.awardViews;
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullPiechartAwardData = true;
                         }
                     }
-                    if ( localStorage.getItem( 'piechartIndex' ) == "PROPOSAL" ) {
+                    if (  this.piechartIndex == "PROPOSAL" ) {
                         this.serviceRequestList = this.piechartResult.proposalViews;
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullPiechartProposalData = true;
@@ -100,22 +112,22 @@ export class ExpandedviewComponent implements OnInit {
                 } );
         }
         if ( this.summaryIndex != "null" ) {
-			this.expandedViewService.loadExpandedSummaryView( localStorage.getItem( 'personId' ), localStorage.getItem( 'researchSummaryIndex' ) ).subscribe(
+            this.expandedViewService.loadExpandedSummaryView( localStorage.getItem( 'personId' ), this.summaryIndex ).takeUntil(this.onDestroy$).subscribe(
                 data => {
                     this.summaryResult = data || [];
-                    if ( localStorage.getItem( 'researchSummaryIndex' ) == "PROPOSALSSUBMITTED" ) {
+                    if ( this.summaryIndex == "PROPOSALSSUBMITTED" ) {
                         this.serviceRequestList = this.summaryResult.proposalViews;
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullResearchSummaryProposalSubmittedData = true;
                         }
                     }
-                    if ( localStorage.getItem( 'researchSummaryIndex' ) == "PROPOSALSINPROGRESS" ) {
+                    if ( this.summaryIndex == "PROPOSALSINPROGRESS" ) {
                         this.serviceRequestList = this.summaryResult.proposalViews;
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullResearchSummaryProposalInprogressData = true;
                         }
                     }
-                    if ( localStorage.getItem( 'researchSummaryIndex' ) == "AWARDSACTIVE" ) {
+                    if (  this.summaryIndex  == "AWARDSACTIVE" ) {
                         this.serviceRequestList = this.summaryResult.awardViews;
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullResearchSummaryAwardData = true;
@@ -124,16 +136,16 @@ export class ExpandedviewComponent implements OnInit {
                 } );
         }
         if ( this.donutchartIndex != "null" ) {
-            this.expandedViewService.loadDonutExpandedView( localStorage.getItem( 'sponsorCode' ), localStorage.getItem( 'personId' ), localStorage.getItem( 'donutChartIndex' ) ).subscribe(
+            this.expandedViewService.loadDonutExpandedView( this.sponsorCode, localStorage.getItem( 'personId' ), this.donutchartIndex ).takeUntil(this.onDestroy$).subscribe(
                 data => {
                     this.piechartResult = data || [];
-                    if ( localStorage.getItem( 'donutChartIndex' ) == "AWARDED" ) {
+                    if ( this.donutchartIndex == "AWARDED" ) {
                         this.serviceRequestList = this.piechartResult.proposalViews;
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullDonutchartAwardData = true;
                         }
                     }
-                    if ( localStorage.getItem( 'donutChartIndex' ) == "INPROGRESS" ) {
+                    if (  this.donutchartIndex == "INPROGRESS" ) {
                         this.serviceRequestList = this.piechartResult.proposalViews;
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullDonutchartInprogressData = true;

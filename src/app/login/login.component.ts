@@ -5,6 +5,9 @@ import { DashboardService } from '../dashboard/dashboard.service';
 import { SessionManagementService } from '../session/session-management.service';
 import {LoginCheckService} from '../common/login-check.service';
 import { Http, HttpModule, Headers, Response } from '@angular/http';
+import { Subject } from "rxjs/Subject";
+import 'rxjs/add/operator/takeUntil';
+
 
 @Component( {
     selector: 'login-tpl',
@@ -19,6 +22,7 @@ export class LoginComponent implements AfterViewInit {
         username: '',
         password: ''
     };
+    public onDestroy$ = new Subject<void>();
     fullName: string;
     errorMsg: string;
     isAuthenticated: string;
@@ -46,7 +50,7 @@ export class LoginComponent implements AfterViewInit {
 
     @ViewChild( 'input' ) input: ElementRef;
     login() {
-        this.loginService.login( this.credentials.username, this.credentials.password ).subscribe(
+        this.loginService.login( this.credentials.username, this.credentials.password ).takeUntil(this.onDestroy$).subscribe(
             data => { 
                 this.result = data.body; 
                 if(this.result != null){
@@ -77,5 +81,9 @@ export class LoginComponent implements AfterViewInit {
                 console.log( error );
             }
         );
+    }
+    ngOnDestroy() {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
     }
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from "@angular/http";
-import { Constants } from "../../constants/constants.service";
 import { Observable } from "rxjs";
 import { HttpClient } from "@angular/common/http";
+
+import { Constants } from "../../../constants/constants.service";
 
 @Injectable()
 export class ScheduleHomeService {
