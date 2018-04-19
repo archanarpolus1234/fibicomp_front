@@ -31,7 +31,7 @@
 								<ul class="actionButtonGroup">
 									<li title="edit"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="editMinuteItem($event, i, minute)"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
 									<li title="delete"><a href="#" *ngIf="!isEditMinuteItem[i] == true" (click)="showDeleteModal($event, i, minute, result.committeeSchedule.committeeId, result.committeeSchedule.scheduleId)" data-toggle="modal" data-target="#deleteModal"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
-									<li title="save"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="updateMinuteItem($event, i, minute)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
+									<li title="save"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="updateMinuteItem( i, minute)"><i class="fa fa-floppy-o" aria-hidden="true"></i></a></li>
 									<li title="cancel"><a href="#" *ngIf="!isEditMinuteItem[i] == false" (click)="cancelEditMinuteItem($event, i, minute)"><i class="fa fa-times" aria-hidden="true"></i></a></li>
 								</ul>
 							</td>

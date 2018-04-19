@@ -37,7 +37,11 @@ let routes = [
         { path: 'committeeHome', component: CommitteeHomeComponent },
         { path: 'committeeMembers', component: CommitteeMembersComponent }]
     },
-    { path: 'schedule', component: ScheduleComponent }];
+    { path: 'schedule', component: ScheduleComponent,
+    children : [{ path:'',redirectTo:'scheduleHome',pathMatch : 'full'},
+    {path:'scheduleHome',component:ScheduleHomeComponent},
+    {path:'minutes',component:MinutesComponent}] 
+}];
 
 @NgModule( {
     imports: [
@@ -63,7 +67,7 @@ let routes = [
         ScheduleAttachmentsComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [Constants, CommitteeConfigurationService,
-        , CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService, ScheduleConfigurationService, ScheduleOtherActionsService,
+     CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, DatePipe, ScheduleService, ScheduleConfigurationService, ScheduleOtherActionsService,
         ScheduleHomeService, ScheduleAttachmentsService, ScheduleAttendanceService,
         MinutesService]
 } )

@@ -1,13 +1,13 @@
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import { Http, HttpModule } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
+
 import { SessionManagementService } from '../session/session-management.service';
 import { Constants } from '../constants/constants.service';
-import { HttpClient } from "@angular/common/http";
 
 @Injectable()
 export class DashboardService {
@@ -33,9 +33,7 @@ export class DashboardService {
             tabIndex: tabIndex,
             userName: this.username,
             personId: this.personId,
-            currentPage: currentPage,
-            filterStartDate: filterStartDate,
-            filterEndDate: filterEndDate
+            currentPage: currentPage
         };
         return this.http.post( this.constant.dashboardUrl, params )
             .catch( error => {

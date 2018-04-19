@@ -38,11 +38,11 @@
                     <section class="row">
              <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                 <ul class="tabsIcon" style="margin-top:10px;">
-                    <li class="active" [ngClass]="{'active':currentTab=='schedule_home'}">
+                    <li class="active" [ngClass]="{'active':currentTab=='schedule_home'}" data-target="#editWarning" data-toggle="modal">
 	                    <a style="padding-top:-5px;" href="#" (click)="show_current_tab($event,'schedule_home');">
 	                    <i  class="fa fa-calendar"></i><span>Schedule</span></a>
                     </li>
-                    <li [ngClass]="{'active':currentTab=='minutes'}">
+                    <li [ngClass]="{'active':currentTab=='minutes'}" data-target="#editWarning" data-toggle="modal">
 	                    <a href="#" (click)="show_current_tab($event,'minutes');">
 	                    <i class="fa fa-users"></i><span>Minutes</span></a>
                     </li>
@@ -51,13 +51,34 @@
 		</section>
       </div>
     </section>
-   <div *ngIf="currentTab =='schedule_home'">
-	<app-schedule-home></app-schedule-home>
-   </div>
-   <div *ngIf="currentTab =='minutes'">
-	<app-minutes></app-minutes>
-	</div>
-	
+    <router-outlet (activate)="onActivate($event)"></router-outlet>
 	<div class="footerPush"></div>
 	</div>
+</div>
+
+<!-- EDIT WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showEditWarning"
+id="editWarning" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Warning</h5>
+
+            <button type="button" class="close" data-dismiss="modal"
+                aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>You are in the middle of editing an item. Do you want to save the progress?</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btnSkin btn-secondary"
+                data-dismiss="modal" data-toggle="modal" (click)="stayOnPage()">No</button>
+            <button type="button" class="btnSkin btnSkinPrimary"
+                (click)="saveAndContinue($event)" data-dismiss="modal">Save and Continue</button>
+        </div>
+    </div>
+</div>
 </div>

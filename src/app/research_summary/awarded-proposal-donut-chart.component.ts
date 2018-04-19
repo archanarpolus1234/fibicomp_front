@@ -92,11 +92,12 @@ export class AwardedProposalDonutChartComponent extends GoogleChartService imple
                             if ( this.sponsorType === this.statuscode[j][1] ) {
                                 this.expandedViewDataservice.setSponsorCode( this.statuscode[j][0]);
                                 this.expandedViewDataservice.setExpandedDonutViewAwardHeading( "Awards by " + this.sponsorType );
+                                this.router.navigate( ['/expandedview'],{queryParams : {"donutchartIndex" : "AWARDED","sponsorCode" :this.statuscode[j][0],"donutAwardHeading":"Awards by " + this.sponsorType}} );
+                                break;
                             }
                         }
                     }
                 }
-                this.router.navigate( ['/expandedview'] );
             } );
             google.visualization.events.addListener( this.awardChart, 'onmouseover', ( event ) => {
                 document.getElementById( 'donut_award_chart' ).style.cursor = 'pointer';

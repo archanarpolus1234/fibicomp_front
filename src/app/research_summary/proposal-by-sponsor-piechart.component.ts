@@ -90,11 +90,11 @@ export class ProposalBySponsorPieChartComponent extends GoogleChartService imple
                             if ( this.proposalType === this.proposalstatuscode[j][1] ) {
                                 localStorage.setItem( 'sponsorCode', this.proposalstatuscode[j][0] );
                                this.expandedViewDataservice.setExpandedViewProposalHeading( "Proposals by " + this.proposalType );
+                               this.router.navigate( ['/expandedview'],{queryParams : {"pieChartIndex" : "PROPOSAL","sponsorCode" :  this.proposalstatuscode[j][0],"proposalheading" :  "Proposals by " + this.proposalType }});
                             }
                         }
                     }
                 }
-                this.router.navigate( ['/expandedview'] );
             } );
 
             google.visualization.events.addListener( this.proposalChart, 'onmouseover', ( event ) => {

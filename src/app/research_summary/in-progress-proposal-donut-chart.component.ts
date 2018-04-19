@@ -34,7 +34,7 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService im
     private proposalstatuscode: any[] = [];
     private sponsorType: string;
     private proposalType: string;
-
+    private sponsorCode: string;
     private subscription: ISubscription;
 
     constructor( private ref: ChangeDetectorRef, private dashboardService: DashboardService, private router: Router, public expandedViewDataservice: ExpandedViewDataService, public dashboardData: DashboardData ) {
@@ -89,13 +89,14 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService im
                         for ( let j = 0; j < this.proposalstatuscode.length; j++ ) {
                             if ( this.proposalType === this.proposalstatuscode[j][1] ) {
                                 this.expandedViewDataservice.setSponsorCode(this.proposalstatuscode[j][0]);
+                                this.sponsorCode = this.proposalstatuscode[j][0];
                                 this.expandedViewDataservice.setExpandedDonutViewProposalHeading( "Proposals by " + this.proposalType);
+                                this.router.navigate( ['/expandedview'],{queryParams : {"donutchartIndex" : "INPROGRESS","sponsorCode" : this.sponsorCode,"donutProposalHeading" : "Proposals by " + this.proposalType }});
                             }
                         }
                     }
                 }
-                this.router.navigate( ['/expandedview'] );
-            } );
+               } );
 
             google.visualization.events.addListener( this.proposalChart, 'onmouseover', ( event ) => {
                 document.getElementById( 'donut_proposal_chart' ).style.cursor = 'pointer';

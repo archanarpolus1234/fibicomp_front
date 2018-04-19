@@ -33,6 +33,7 @@ export class MinutesComponent implements OnInit {
     minuteListItem: any = {};
     committeeId: string;
     scheduleId: number;
+    minuteItem;
     public onDestroy$ = new Subject<void>();
 
     constructor( public scheduleConfigurationService: ScheduleConfigurationService, public minutesService: MinutesService ) {
@@ -184,6 +185,7 @@ export class MinutesComponent implements OnInit {
             this.minutesService.saveMinuteData( this.result ).takeUntil(this.onDestroy$).subscribe( data => {
                 this.result = data || [];
             } );
+            this.scheduleConfigurationService.changeMinutesEditFlag(false);
             this.initialLoad();
         }
     }
@@ -203,6 +205,7 @@ export class MinutesComponent implements OnInit {
         e.preventDefault();
         this.isEditMinuteItem[i] = !this.isEditMinuteItem[i];
         this.entryDescriptionOnEdit = minuteItem.minuteEntry;
+        this.scheduleConfigurationService.changeMinutesEditFlag(true);
     }
 
     showDeleteModal( e, i, minuteItem, committeeId, scheduleId ) {
@@ -228,9 +231,11 @@ export class MinutesComponent implements OnInit {
         this.initialLoad();
     }
 
-    updateMinuteItem( e, i, minuteItem ) {
-        e.preventDefault();
+    updateMinuteItem(  i, minuteItem ) {
+      
         this.isEditMinuteItem[i] = !this.isEditMinuteItem[i];
+        this.minuteItem = minuteItem;
+        this.scheduleConfigurationService.changeMinutesEditFlag(false);
         if(minuteItem.minuteEntry != "") {
             this.result.newCommitteeScheduleMinute = minuteItem;
             this.result.committeeId = this.result.committeeSchedule.committeeId;
@@ -248,5 +253,6 @@ export class MinutesComponent implements OnInit {
         e.preventDefault();
         this.isEditMinuteItem[i] = !this.isEditMinuteItem[i];
         minuteItem.minuteEntry = this.entryDescriptionOnEdit;
+        this.scheduleConfigurationService.changeMinutesEditFlag(false);
     }
 }

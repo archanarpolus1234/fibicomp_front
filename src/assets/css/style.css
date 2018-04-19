@@ -420,6 +420,7 @@ input[type="text"] {
 	text-decoration: none;
 	color: #656565;
 	transition: color .25s;
+	cursor:pointer;
 }
 
 .advancedTools {
@@ -687,6 +688,7 @@ input[type="text"] {
 
 .actionButtonGroup>li>a:hover {
 	color: #9e9e9e;
+	cursor:pointer;
 }
 
 .sortorder:after {
@@ -1076,6 +1078,19 @@ tbody td label {
 	text-decoration: none;
 	color: #26A69A !important;
 	font-size: 14px;
+}
+.grantCallCreateProposalLink {
+	border: 2px solid #26A69A;
+	padding: 4px;
+	border-radius: 4px;
+	text-decoration: none;
+	color: #26A69A !important;
+	font-size: 14px;
+}
+.grantCallCreateProposalLink:hover {
+	text-decoration: none;
+	color: #26A69A !important;
+	cursor:pointer;
 }
 
 .view_external_link:hover {
@@ -1625,4 +1640,20 @@ a:hover {
 
 #returnToCommiteeLink{
 	color: #26a69a;
+}
+
+.widthLimiterNg2Completer div input {
+	border-radius: 20px;
+	border: 1px #DEDEDE solid;
+	width: 40%;
+	padding-right: 10px;
+	line-height: 27px;
+	padding-left: 10px;
+}
+
+.fibiDefaultColor {
+	color:#26A69A;
+}
+.fibiDefaultColor:hover {
+	cursor:pointer;
 }

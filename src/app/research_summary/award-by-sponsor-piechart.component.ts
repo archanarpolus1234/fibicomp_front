@@ -80,25 +80,31 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService implemen
                     '#9CCC66', '#E5F37A', '#FFF15A', '#FDD154', '#FFA827',
                     '#FF7143', '#8C6E63', '#BDBDBD', '#78909C']
             };
+            var statusCode;
             this.awardChart = this.createPiChart( document.getElementById( 'pichart_award' ) );
             this.awardChart.draw( this.awardData, this.awardOptions );
             google.visualization.events.addListener( this.awardChart, 'select', ( event ) => {
                 this.expandedViewDataservice.setPiechartIndex( 'AWARD');
                 var selection = this.awardChart.getSelection();
-                for ( var i = 0; i < selection.length; i++ ) {
+                
+                outerLoop: for ( var i = 0; i < selection.length; i++ ) { 
                     var item = selection[i];
                     if ( item.row != null ) {
                         this.sponsorType = this.awardData.getFormattedValue( item.row, 0 );
                         for ( let j = 0; j < this.statuscode.length; j++ ) {
-                            if ( this.sponsorType === this.statuscode[j][1] ) {
+                            if ( this.sponsorType == this.statuscode[j][1] ) {
                                 this.expandedViewDataservice.setSponsorCode(this.statuscode[j][0]);
+                                statusCode = this.statuscode[j][0];
                                 this.expandedViewDataservice.setExpandedViewAwardHeading( "Awards by " + this.sponsorType);
+                                this.router.navigate( ['/expandedview'],{queryParams : {"sponsorCode" :this.statuscode[j][0],"pieChartIndex" : "AWARD","expandedViewAwardHeading" :  "Awards by " + this.sponsorType  }} );
+                                break outerLoop;
                             }
-                        }
-                    }
+                        }  
+                    } 
                 }
-                this.router.navigate( ['/expandedview'] );
-            } );
+                
+               } );
+               
             google.visualization.events.addListener( this.awardChart, 'onmouseover', ( event ) => {
                 document.getElementById( 'pichart_award' ).style.cursor = 'pointer';
             } );

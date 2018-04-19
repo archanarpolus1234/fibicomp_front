@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { SlicePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subject } from "rxjs/Subject";
+import 'rxjs/add/operator/takeUntil';
 
 import { SessionManagementService } from '../session/session-management.service';
 import { ElasticSearchComponent } from '../elastic-search/elastic-search.component';
@@ -10,8 +12,6 @@ import { ExpandedViewDataService } from '../research_summary/expanded-view-data-
 import { DashboardData } from '../dashboard/dashboard-data.service';
 import { ExpandedviewService } from '../research_summary/expanded-view.service';
 import { DashboardConfigurationService } from '../common/dashboard-configuration-service';
-import { Subject } from "rxjs/Subject";
-import 'rxjs/add/operator/takeUntil';
 
 @Component( {
     templateUrl: 'dashboard.component.html',
@@ -210,6 +210,14 @@ export class DashboardComponent implements OnInit {
                     }
                     if ( this.currentPosition == "SCHEDULE" ) {
                         this.serviceRequestList = this.result.committeeSchedules;
+                        console.log(this.result);
+                        if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
+                            this.nullScheduleData = true;
+                        }
+                    }
+                    if ( this.currentPosition == "GRANT" ) {
+                        this.serviceRequestList = this.result.grantCalls;
+                        console.log(this.result)
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullScheduleData = true;
                         }
@@ -474,20 +482,21 @@ export class DashboardComponent implements OnInit {
             this.expandedViewDataservice.setResearchSummaryIndex("PROPOSALSSUBMITTED");
             //localStorage.setItem( 'expandedViewHeading', summaryView );
             this.expandedViewDataservice.setExpandedViewHeading(summaryView);
+            this.router.navigate( ['/expandedview'],{queryParams:{"summaryIndex" : "PROPOSALSSUBMITTED","summaryheading" : summaryView}} );
         }
         if ( summaryView == 'In Progress Proposal' ) {
            // localStorage.setItem( 'researchSummaryIndex', "PROPOSALSINPROGRESS" );
             this.expandedViewDataservice.setResearchSummaryIndex("PROPOSALSINPROGRESS");
             //localStorage.setItem( 'expandedViewHeading', summaryView );
             this.expandedViewDataservice.setExpandedViewHeading(summaryView);
+            this.router.navigate( ['/expandedview'],{queryParams:{"summaryIndex" : "PROPOSALSINPROGRESS","summaryheading" : summaryView}} );
         }
         if ( summaryView == 'Active Award' ) {
-            //localStorage.setItem( 'researchSummaryIndex', "AWARDSACTIVE" );
             this.expandedViewDataservice.setResearchSummaryIndex("AWARDSACTIVE");
-           // localStorage.setItem( 'expandedViewHeading', summaryView );
             this.expandedViewDataservice.setExpandedViewHeading(summaryView);
+            this.router.navigate( ['/expandedview'],{queryParams:{"summaryIndex" : "AWARDSACTIVE","summaryheading" : summaryView}} );
         }
-        this.router.navigate( ['/expandedview'] );
+        
     }
 
     filterSchedule() {
@@ -535,5 +544,11 @@ export class DashboardComponent implements OnInit {
         event.preventDefault();
         this.currentPosition = 'GRANT';
         this.router.navigate( ['/grant'], { queryParams: {'mode': mode} } );
+    }
+
+    viewGrantById(event:any,grantId) {
+        event.preventDefault(); 
+        this.currentPosition = 'GRANT';
+        this.router.navigate( ['/grant'], { queryParams: {'grantId':grantId} });
     }
 }

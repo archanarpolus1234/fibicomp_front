@@ -17,6 +17,9 @@ export class CommitteeConfigurationService {
     currentMemberEditFlag = this.committeeMemberEditFlag.asObservable();
     currentTab = new BehaviorSubject<string>("");
     currentactivatedTab = this.currentTab.asObservable();
+    scheduleHomeDetailEditFlag = new BehaviorSubject<boolean>(false);
+    scheduleHomeAttachmentsEditFlag = new BehaviorSubject<boolean>(false);
+    scheduleHomeAttendanceEditFlag = new BehaviorSubject<boolean>(false);
     
     constructor() {
         
@@ -48,5 +51,16 @@ export class CommitteeConfigurationService {
     
     changeActivatedtab(tab: string){
         this.currentTab.next(tab);
+    }
+    changeScheduleHomeDetailEditFlag (flag: boolean) {
+        this.scheduleHomeDetailEditFlag.next(flag);
+    }
+
+    changeScheduleHomeAttachmentsEditFlag (flag: boolean) {
+        this.scheduleHomeAttachmentsEditFlag.next(flag);
+    }
+
+    changeScheduleHomeAttendanceEditFlag (flag: boolean) {
+        this.scheduleHomeAttendanceEditFlag.next(flag);
     }
 }

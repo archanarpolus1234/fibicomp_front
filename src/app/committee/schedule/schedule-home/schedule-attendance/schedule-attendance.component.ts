@@ -167,10 +167,7 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
                                     } );
 
                                 } )
-                                .catch(( error ) => {
-                                    console.log( "catch error", error );
-
-                                } );
+                                .catch(( error ) => { } );
                         } );
                     }
                 } );
@@ -233,6 +230,9 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.commentsIndex = commentIndex;
         if((!this.commentFlgEnabled[commentIndex]) == true){
             this.commentFlgEnabled[commentIndex] = true;
+            this.scheduleConfigurationService.changeScheduleHomeAttendanceEditFlag(true);
+        } else {
+            this.scheduleConfigurationService.changeScheduleHomeAttendanceEditFlag(false);
         }
     }
 
@@ -240,6 +240,9 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         event.preventDefault();
         if((!this.editFlagEnabled[index]) == true){
             this.editFlagEnabled[index]= true;
+            this.scheduleConfigurationService.changeScheduleHomeAttendanceEditFlag(true);
+        } else {
+            this.scheduleConfigurationService.changeScheduleHomeAttendanceEditFlag(false);
         }
         this.tempAlternateFor = memberObj.alternateFor;
         this.tempComment = memberObj.comments;
@@ -252,9 +255,11 @@ export class ScheduleAttendanceComponent implements OnInit, AfterViewInit {
         this.attendanceShowFlag = false;
         if((!this.editFlagEnabled[index]) == false){
             this.editFlagEnabled[index] = false;
+            this.scheduleConfigurationService.changeScheduleHomeAttendanceEditFlag(false);
         }
         if((!this.commentFlgEnabled[index]) == false){
             this.commentFlgEnabled[index] = false;
+            this.scheduleConfigurationService.changeScheduleHomeAttendanceEditFlag(false);
         }
         this.committeeId = this.result.committeeSchedule.committeeId;
         this.updatingMemberObj.alternateFor = memberObj.alternateFor;

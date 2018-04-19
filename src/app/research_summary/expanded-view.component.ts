@@ -65,9 +65,7 @@ export class ExpandedviewComponent implements OnInit {
         this.outputPath = this.constant.outputPath;
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
-        } else {
-            this.router.navigate( ['/expandedview'] );
-        }
+        } 
     }
     
     ngOnDestroy() {
@@ -79,16 +77,16 @@ export class ExpandedviewComponent implements OnInit {
         this.adminStatus = localStorage.getItem( 'isAdmin' );
         this.userName = localStorage.getItem( 'currentUser' );
         this.fullName = localStorage.getItem( 'userFullname' );
-        this.expandedViewDataService.piechartIndex.subscribe( piechartindex => { this.piechartIndex = piechartindex; } );
-        this.expandedViewDataService.exapandedDonutViewAwardHeading.subscribe( donutawardheading => this.donutAwardHeading = donutawardheading );
-        this.expandedViewDataService.changedExapandedDonutViewProposalHeading.subscribe( donutproposalheading => this.donutProposalHeading = donutproposalheading );
-        this.expandedViewDataService.expandedViewAwardHeading.subscribe( awardheading => { this.awardsheading = awardheading } );
-        this.expandedViewDataService.expandedViewProposalHeading.subscribe( proposalheading => this.proposalheading = proposalheading );
-        this.expandedViewDataService.researchSummaryIndex.subscribe( researchIndex => this.summaryIndex = researchIndex );
-        this.expandedViewDataService.expandedViewHeading.subscribe( expandedheading => this.summaryheading = expandedheading );
-        this.expandedViewDataService.donutChartIndex.subscribe( donutindex => this.donutchartIndex = donutindex );
-        this.expandedViewDataService.sponsorCode.subscribe( sponsorCode => this.sponsorCode = sponsorCode );
-  
+        this.sponsorCode = this.route.snapshot.queryParamMap.get('sponsorCode');
+        this.awardsheading = this.route.snapshot.queryParamMap.get('expandedViewAwardHeading');
+        this.donutProposalHeading = this.route.snapshot.queryParamMap.get('donutProposalHeading');
+        this.piechartIndex = this.route.snapshot.queryParamMap.get('pieChartIndex');
+        this.donutAwardHeading = this.route.snapshot.queryParamMap.get('donutAwardHeading');
+        this.proposalheading = this.route.snapshot.queryParamMap.get('proposalheading');
+        this.summaryIndex = this.route.snapshot.queryParamMap.get('summaryIndex');
+        this.summaryheading = this.route.snapshot.queryParamMap.get('summaryheading');
+        this.donutchartIndex = this.route.snapshot.queryParamMap.get('donutchartIndex');
+       
         if ( this.adminStatus == 'true' ) {
             this.isAdmin = true;
         }
