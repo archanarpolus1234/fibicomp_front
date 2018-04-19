@@ -137,7 +137,6 @@ export class ScheduleAttachmentsComponent implements OnInit {
                 this.result.committeeSchedule = temp.committeeSchedule;
             },
                 error => {
-                    console.log( "error", error )
                 } );
         }
     }
@@ -174,10 +173,12 @@ export class ScheduleAttachmentsComponent implements OnInit {
         event.preventDefault();
         this.tempEditObject.description = attachments.description;
         this.editScheduleattachment[index] = !this.editScheduleattachment[index];
+        this.scheduleConfigurationService.changeScheduleHomeAttachmentsEditFlag( true);
     }
     
     saveEditedattachments(event: any,index, attachments){
         event.preventDefault();
+        this.scheduleConfigurationService.changeScheduleHomeAttachmentsEditFlag( false);
         this.editScheduleattachment[index] = !this.editScheduleattachment[index];
         this.attachmentObject = {};
         this.attachmentObject.description = attachments.description;
@@ -194,6 +195,7 @@ export class ScheduleAttachmentsComponent implements OnInit {
         event.preventDefault();
         this.editScheduleattachment[index] = !this.editScheduleattachment[index];
         attachments.description = this.tempEditObject.description;
+        this.scheduleConfigurationService.changeScheduleHomeAttachmentsEditFlag( false);
     }
 
     closeAttachments(){

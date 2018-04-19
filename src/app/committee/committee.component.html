@@ -53,7 +53,8 @@
 				<section class="row">
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 						<ul class="tabsIcon" style="margin-top: 10px;">
-							<li class="active" data-toggle="modal" data-target="#warningModalMain"
+							<li class="active" data-toggle="modal"
+								data-target="#warningModalMain"
 								[ngClass]="{'active':currentTab=='committee_home'}"><a
 								style="padding-top: -5px;" href="#"
 								(click)="show_current_tab($event,'committee_home');"><i
@@ -75,7 +76,8 @@
 			<div class="modal-dialog modal-dialog-centered" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<h5 class="modal-title" *ngIf="middleOfEdit || middleOfSave || isOnEditMembers"
+						<h5 class="modal-title"
+							*ngIf="middleOfEdit || middleOfSave || isOnEditMembers"
 							id="exampleModalLongTitle">Alert!</h5>
 						<button type="button" class="close" data-dismiss="modal"
 							aria-label="Close">
@@ -88,11 +90,11 @@
 						<p *ngIf="isOnEditMembers">{{ alertMsgMemberMiddleOfEdit }}</p>
 					</div>
 					<div class="modal-footer" *ngIf="middleOfEdit">
-						<button type="button" class="btnSkin btn-secondary" 
+						<button type="button" class="btnSkin btn-secondary"
 							data-dismiss="modal" (click)="stayOnCommittee()">Ok</button>
 						<button type="button" class="btnSkin btnSkinPrimary"
-							(click)="saveAndContinue(this.activatedRoute)" data-dismiss="modal">Save
-							and continue</button>
+							(click)="saveAndContinue(this.activatedRoute)"
+							data-dismiss="modal">Save and continue</button>
 					</div>
 					<div class="modal-footer" *ngIf="alertMsgNotSaved">
 						<button type="button" class="btnSkin btnSkinPrimary"
@@ -100,7 +102,8 @@
 					</div>
 					<div class="modal-footer" *ngIf="isOnEditMembers">
 						<button type="button" class="btnSkin btn-secondary"
-							(click)="saveMemberAndContinue(memberData)">Cancel and Exit</button>
+							(click)="saveMemberAndContinue(memberData)">Cancel and
+							Exit</button>
 						<button type="button" class="btnSkin btnSkinPrimary"
 							data-dismiss="modal" (click)="stayOnPage()">Yes</button>
 					</div>

@@ -93,11 +93,15 @@ export class ScheduleHomeComponent implements OnInit {
         this.comments = committeeSchedule.comments;
         if ( this.editDetails ) {
             this.editClass = 'scheduleBoxes';
+            this.scheduleConfigurationService.changeScheduleHomeDetailEditFlag(true);
+        } else {
+            this.scheduleConfigurationService.changeScheduleHomeDetailEditFlag(false);
         }
     }
 
     updateDetails() {
         this.editDetails = false;
+        this.scheduleConfigurationService.changeScheduleHomeDetailEditFlag(false);
         this.result.committeeId = this.result.committeeSchedule.committeeId;
         this.result.committeeSchedule.viewTime.time = this.datePipe.transform( this.scheduleTime, 'hh:mm' );
         this.result.committeeSchedule.viewTime.meridiem = this.datePipe.transform( this.scheduleTime, 'aa' );
@@ -121,9 +125,11 @@ export class ScheduleHomeComponent implements OnInit {
 
     cancelEditDetails() {
         this.errorFlag = false;
+        this.scheduleConfigurationService.changeScheduleHomeDetailEditFlag(false);
         this.editDetails = !this.editDetails;
         if ( !this.editDetails ) {
             this.editClass = 'committeeBoxNotEditable';
+            
         }
         this.result.committeeSchedule.meetingDate = this.meetingDate;
         this.result.committeeSchedule.scheduleStatus.description = this.description;

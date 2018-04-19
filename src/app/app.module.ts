@@ -10,7 +10,7 @@ import { NgIdleKeepaliveModule } from '@ng-idle/keepalive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Ng2PageScrollModule } from 'ng2-page-scroll';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import { HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -47,23 +47,23 @@ import { DashboardConfigurationService } from './common/dashboard-configuration-
 import { AppHttpInterceptor } from "./common/http-interceptor";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 
-let appRoutes = [{path: '',redirectTo: 'loginpage', pathMatch: 'full'},
+let appRoutes = [{ path: '', redirectTo: 'loginpage', pathMatch: 'full' },
 
-    { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+{ path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
 
-    { path: 'loginpage', component: LoginComponent },
+{ path: 'loginpage', component: LoginComponent },
 
-    { path: 'logout', component: LogoutComponent },
+{ path: 'logout', component: LogoutComponent },
 
-    { path: 'award', loadChildren: './award/award.module#AwardModule' },
+{ path: 'award', loadChildren: './award/award.module#AwardModule' },
 
-    { path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard] },
+{ path: 'expandedview', component: ExpandedviewComponent, canActivate: [AuthGuard] },
 
-    { path: 'committee', loadChildren:'./committee/committee.module#CommitteeModule'},
+{ path: 'committee', loadChildren: './committee/committee.module#CommitteeModule' },
 
-    { path: 'grant', loadChildren:'./grant/grant.module#GrantModule', canActivate: [AuthGuard] },
-    
-    {path:'proposal', loadChildren: './proposal/proposal.module#ProposalModule', canActivate: [AuthGuard]}
+{ path: 'grant', loadChildren: './grant/grant.module#GrantModule', canActivate: [AuthGuard] },
+
+{ path: 'proposal', loadChildren: './proposal/proposal.module#ProposalModule', canActivate: [AuthGuard] }
 ];
 
 @NgModule( {
@@ -100,13 +100,14 @@ let appRoutes = [{path: '',redirectTo: 'loginpage', pathMatch: 'full'},
         OwlNativeDateTimeModule,
         HttpClientModule
     ],
-    schemas:[CUSTOM_ELEMENTS_SCHEMA],
-    providers: [ {
+    schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    providers: [{
         provide: HTTP_INTERCEPTORS,
         useClass: AppHttpInterceptor,
-        multi: true},
+        multi: true
+    },
         DashboardService, LoginService, GoogleChartService, SessionManagementService,
-        { provide: LocationStrategy, useClass: HashLocationStrategy },
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
         AwardElasticsearchService, DisclosureElasticsearchService, IacucElasticsearchService,
         IrbElasticsearchService, ProposalElasticsearchService, Constants, ExpandedViewDataService, ExpandedviewService, LoginCheckService, AuthGuard, DashboardConfigurationService],
     bootstrap: [AppComponent]

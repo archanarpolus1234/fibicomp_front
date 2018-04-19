@@ -25,7 +25,7 @@
 					<li [ngClass]="{'active': currentPosition == 'SCHEDULE'}"><a
 						(click)="showTab('SCHEDULE')"> Schedules</a></li>
 						<li [ngClass]="{'active': currentPosition == 'GRANT'}"><a
-							(click)="showTab('GRANT')"> Grant</a></li>
+							(click)="showTab('GRANT')"> Grant Call</a></li>
 				</ul>
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
@@ -446,7 +446,7 @@
 										<li><a title="Open {{awardDetails.awardNumber}}"
 											routerLink='/award'
 											[queryParams]={awardId:awardDetails.awardId}><i
-												class="fa fa-eye"></i> </a></li>
+												class="fa fa-eye "></i> </a></li>
 									</ul>
 								</td>
 							</tr>
@@ -898,7 +898,7 @@
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open" (click)="loadSchedules($event,schedule.scheduleId)"><i
-												class="fa fa-eye"></i></a></li>
+												class="fa fa-eye pointer"></i></a></li>
 									</ul>
 								</td>
 							</tr>
@@ -915,24 +915,58 @@
 					
 						<span class="linkButtonGroup"> <a
 							[href]="" (click)="loadGrants($event,'create')">
-								<i class="fa fa-plus" ></i> Create Grant
+								<i class="fa fa-plus pointer" ></i> Create Grant
 						</a>
 						</span>
-						<span class="linkButtonGroup"> <a
-							[href]="" (click)="loadGrants($event,'view')">
-								<i class="fa fa-eye"></i> View Grant
-						</a>
-						</span>
-					
 				</div>
-				<ul>
-					<li>Grant 1</li>
-					<li>Grant 2</li>
-					<li>Grant 3</li>
-					<li>Grant 4</li>
-					<li>Grant 5</li>
-				</ul>
+				
+				<div class="borderBox" *ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin" *ngIf="this.result?.committeeSchedules?.length !== 0">
+						<thead>
+							
+							
+							<tr>
+								<th>Id<span class="sortorder" [ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduleId')}"></span>
+								</th>
+								<th title="Click to sort by Schedule Date">Name<span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduledDate')}"></span>
+								</th>
+								<th title="Click to sort by Place">Description <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'place')}"></span>
+								</th>
+								<th title="Click to sort by Deadline Date">Opening Date <span
+									class="sortorder"
+									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolSubDeadline')}"></span>
+								</th>
+								<th>Closing Date</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let grant of serviceRequestList">
+								<td>{{grant.grantCallId}}</td>
+								<td>{{grant.grantCallName}}</td>
+								<td>{{grant?.description}}</td>
+								<td>{{grant.openingDate}}</td>
+								<td>{{grant.closingDate}}</td>
+								<td>{{grant.grantCallStatus?.description}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a title="Open" (click)="viewGrantById($event,grant.grantCallId)" class="pointer"><i
+												class="fa fa-eye pointer"></i></a></li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div *ngIf="this.result?.committeeSchedules?.length == 0"
+						class="noDataOnChart">No Schedule data Found</div>
+				</div>
 			</div>
+			
 
 			<!-- Pagination -->
 

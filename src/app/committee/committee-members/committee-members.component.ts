@@ -205,8 +205,6 @@ export class CommitteeMembersComponent implements OnInit, AfterViewInit {
 
                                 } )
                                 .catch(( error ) => {
-                                    console.log( "catch error", error );
-
                                 } );
                         } );
                     }

@@ -1,20 +1,26 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { Ng2CompleterModule } from 'ng2-completer';
 import { FileDropModule } from 'ngx-file-drop';
 
 import { GrantComponent } from './grant.component';
 
 import { GrantService } from "./grant.service";
 
-const routes = [{ path: '', component: GrantComponent },
-                { path: 'grant', component: GrantComponent }]; 
+const routes = [{ path: '', component: GrantComponent }]; 
 
 @NgModule( {
     imports: [
         CommonModule,
-        RouterModule.forChild( routes ),
-        FileDropModule
+        FormsModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule,
+        Ng2CompleterModule,
+        FileDropModule,
+        RouterModule.forChild( routes )
         
     ],
     declarations: [

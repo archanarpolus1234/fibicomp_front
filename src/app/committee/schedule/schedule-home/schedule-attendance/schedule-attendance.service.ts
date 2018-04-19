@@ -3,8 +3,8 @@ import { Observable } from "rxjs/Observable";
 import { Http } from "@angular/http";
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
-
 import { HttpClient } from "@angular/common/http";
+
 import { Constants } from "../../../../constants/constants.service";
 
 @Injectable()
@@ -19,7 +19,6 @@ export class ScheduleAttendanceService {
         };
         return this.http.post( this.constants.addGuestMember, params )
             .catch( error => {
-                console.log( error || error )
                 return Observable.throw( error )
             } );
     }
@@ -33,7 +32,6 @@ export class ScheduleAttendanceService {
 
         return this.http.post( this.constants.updateScheduleAttendanceData, params )
             .catch( error => {
-                console.log( error );
                 return Observable.throw( error )
             } );
     }
@@ -46,7 +44,6 @@ export class ScheduleAttendanceService {
         };
         return this.http.post( this.constants.deleteGuestMenberScheduleAttendance, params )
             .catch( error => {
-                console.log( error );
                 return Observable.throw( error )
             } );
     }
