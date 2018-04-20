@@ -4,13 +4,13 @@ import { Injectable } from '@angular/core';
 export class Constants {
     //baseUrl : string = "http://192.168.1.76";
     //baseUrl : string = "http://52.20.110.7";
-    //baseUrl : string = "http://14.140.179.70";
+    baseUrl : string = "http://14.140.179.70";
     // baseUrl : string = "http://demo.fibiweb.com/fibi-comp";
-   baseUrl: string = "";
+  // baseUrl: string = "";
 
    // portAndPath: string = ":8080/fibi-comp";
-    //portAndPath: string = ":1550/fibi-comp";
-    portAndPath: string = "";
+   portAndPath: string = ":1550/fibi-comp";
+   // portAndPath: string = "";
 
     expandedSummaryViewUrl: string;
     expandedDonutViewUrl: string;
@@ -79,10 +79,9 @@ export class Constants {
     downloadProposalAttachment: string;
     deleteProposalResearchArea: string;
     deleteIrbProtocol: string;
-
     createGrantCalls: string;
-
     createProposalUrl: string;
+    deleteProposalSponsor: string;
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -215,6 +214,8 @@ export class Constants {
         this.deleteProposalResearchArea = this.baseUrl + this.portAndPath + '/deleteProposalResearchArea';
 
         this.deleteIrbProtocol = this.baseUrl + this.portAndPath + '/deleteIrbProtocol';
+
+        this.deleteProposalSponsor = this.baseUrl + this.portAndPath + '/deleteProposalSponsor';
 
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
