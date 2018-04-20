@@ -1634,7 +1634,7 @@ a:hover {
 	padding-left: 10px;
 }
 :host>>> .drop-zone {
-	height:200px !important;
+	height:125px !important;
 	border: 2px dotted #00bcd4 !important;
 }
 
@@ -1656,4 +1656,7 @@ a:hover {
 }
 .fibiDefaultColor:hover {
 	cursor:pointer;
+}
+.warningMessage{
+font-size: 0.85em !important;
 }

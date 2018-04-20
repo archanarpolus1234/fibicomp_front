@@ -5,7 +5,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
 				<div class="row">
-					<div class="col-6 text-left"><span>Grant Call</span></div>
+					<div class="col-6 text-left"><span>Grant Call#{{result.grantCall.grantCallId}}</span></div>
 					<div class="col-6 text-right ">
 					<span *ngIf="result?.grantCall.grantCallStatus.description == 'Open'" class = "grantCall_create_proposal_link">
 					<button class="grantCallCreateProposalLink bg-white" (click)="navigate($event, 'create')">Create Proposal</button>
@@ -15,13 +15,13 @@
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
 						<div class="borderBox">
-							<h4 class="borderBoxHeading">Overview</h4> <p *ngIf = "showWarning"><span class="mandatory" style="font-size: 0.85em">*Please fill all the mandatory fields marked</span></p>
+							<h4 class="borderBoxHeading">Overview</h4> <p *ngIf = "showWarning"><span class="mandatory warningMessage">*Please fill all the mandatory fields marked</span></p>
 							<div class="pullSide">
 								<table class="table tableSkin grid2">
 									<tbody>
 										<tr>
 											<td ><label><span class="mandatory">*</span>Type:</label><br><select *ngIf="mode!='view'; else view_type" [(ngModel)]="grantCallTypeSelected" [ngClass]="editClass"  [disabled]="mode == 'view' ? true : false" (change) = "grantCallTypeChange($event.target.value)">
-												
+												<option>Select</option>
 												<option *ngFor="let type of result?.grantCallTypes" (value)="type">
 												{{type.description}}
 											</option>
@@ -29,39 +29,39 @@
 											<ng-template #view_type>{{result?.grantCall.grantCallType.description}}</ng-template>
 											</td>
 											<td><label><span class="mandatory">*</span>Status:</label><br> 
-												<span *ngIf = "result.grantCall.grantCallId!=null;else view_status">{{result?.grantCall?.grantCallStatus?.description}}</span>
+												<span *ngIf = "result.grantCall.grantCallId!=null;else view_status">&nbsp;&nbsp;{{result?.grantCall?.grantCallStatus?.description}}</span>
 												<ng-template #view_status>{{result?.grantCall?.grantCallStatus?.description}}</ng-template>
 											</td>
-											<td><label><span class="mandatory">*</span>Opening Date:</label><br><input type="text" [(ngModel)] = "result?.grantCall.openingDate" [max] = "result?.grantCall.closingDate" [min] = "currentDate" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [owlDateTimeTrigger]="openingDt" [owlDateTime]="openingDt"  class="committeeBox "/>&nbsp;
+											<td><label><span class="mandatory">*</span>Opening Date:</label><br><input type="text" placeholder="Opening Date" [(ngModel)] = "result?.grantCall.openingDate" [max] = "result?.grantCall.closingDate" [min] = "currentDate" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [owlDateTimeTrigger]="openingDt" [owlDateTime]="openingDt"  class="committeeBox "/>&nbsp;
 												<span *ngIf="mode != 'view'" class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="openingDt"></span> <owl-date-time #openingDt [pickerType]="'calendar'" ></owl-date-time></td>
-												<td><label><span class="mandatory">*</span>Closing Date:</label><br><input type="text" [(ngModel)] = "result?.grantCall.closingDate" [ngClass]="editClass" [min] = "result?.grantCall.openingDate" [disabled]="mode == 'view' ? true : false" [owlDateTimeTrigger]="closingDt" [owlDateTime]="closingDt"  class="committeeBox "/>&nbsp;
+												<td><label><span class="mandatory">*</span>Closing Date:</label><br><input type="text" placeholder="Closing Date" [(ngModel)] = "result?.grantCall.closingDate" [ngClass]="editClass" [min] = "result?.grantCall.openingDate" [disabled]="mode == 'view' ? true : false" [owlDateTimeTrigger]="closingDt" [owlDateTime]="closingDt"  class="committeeBox "/>&nbsp;
 													<span *ngIf="mode != 'view'" class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="closingDt"></span> <owl-date-time #closingDt [pickerType]="'calendar'" ></owl-date-time></td>
 										</tr>
 										<tr>
-											<td colspan="2"><label><span class="mandatory">*</span>Name:</label><br><input type="text" [(ngModel)] = "result?.grantCall.grantCallName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
-											<td colspan="2"><label><span class="mandatory">*</span>Description:</label><br><input type="text" [(ngModel)] = "result?.grantCall.description" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+											<td colspan="2"><label><span class="mandatory">*</span>Name:</label><br><input type="text" placeholder="Name" [(ngModel)] = "result?.grantCall.grantCallName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+											<td colspan="2"><label><span class="mandatory">*</span>Description:</label><br><textarea  placeholder = "Description" [(ngModel)] = "result?.grantCall.description" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
                                         </tr>
                                         <tr>
-                                            <td ><label><span class="mandatory">*</span>Max Budget (SGD):</label><br><input type="number" [(ngModel)] = "result?.grantCall.maximumBudget" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
-                                            <td ><label>Quantum:</label><br><input type="number" [(ngModel)] = "result?.grantCall.quantum" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                            <td ><label><span class="mandatory">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="Max Budget" [(ngModel)] = "result?.grantCall.maximumBudget" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                            <td ><label>Quantum:</label><br><input type="number" [(ngModel)] = "result?.grantCall.quantum" placeholder="Quantum"  [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
 											<td colspan="2"><label>Keywords:</label><br>
-												<ng2-completer *ngIf="mode!='view'" title="Add Keyword"
+												<ng2-completer *ngIf="mode!='view'" title="Add Keyword" 
 													[inputClass]="completerID"
-													[(ngModel)]="selectedKeyword" 
+													[(ngModel)]="selectedKeyword" placeholder="Keyword"
 													[datasource]="keywordsList" [minSearchLength]="0"
-													(selected)="keywordChangeFunction()"  class="widthLimiterNg2Completer" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer>
-													<ul class="d-inline-flex"><li *ngFor="let keyword of result.grantCall.grantCallKeywords;let i = index"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
+													(selected)="keywordChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0" [disabled]="mode == 'view' ? true : false"></ng2-completer>
+													<ul *ngIf="result.grantCall.grantCallKeywords.length!=0" class="d-inline-flex" style="word-break: break-all;"><li *ngFor="let keyword of result.grantCall.grantCallKeywords;let i = index" class="pr-4"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
 											</td>
 										<!-- List for showing added keywords -->
 										
 										</tr>
-										
+										<p *ngIf="keyWordWarningMessage!=null">{{keyWordWarningMessage}}</p>
                                         <tr>
-                                            <td colspan="2"><label>Application Procedure:</label><br><input type="text" [(ngModel)] = "result?.grantCall.applicationProcedure" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
-                                            <td colspan="2"><label>Other Information:</label><br><input type="text" [(ngModel)] = "result?.grantCall.otherInformation" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+                                            <td colspan="2"><label>Application Procedure:</label><br><textarea placeholder = "Procedure Details" [(ngModel)] = "result?.grantCall.applicationProcedure" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
+                                            <td colspan="2"><label>Other Information:</label><br><textarea placeholder = "Other informaton" [(ngModel)] = "result?.grantCall.otherInformation" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
                                         </tr>
                                         <tr *ngIf="grantCallTypeSelected == 'External'">
-                                        	<td colspan="8"><label>External Weblink:</label><br><input type="text" [(ngModel)] = "result?.grantCall.externalUrl" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td> 
+                                        	<td colspan="8"><label>External Weblink:</label><br><input type="text" placeholder="Web Link" [(ngModel)] = "result?.grantCall.externalUrl" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td> 
                                         </tr>
 
 									</tbody>
@@ -81,33 +81,33 @@
 								<label>
 									Name:
 								</label> <br>
-								<input type="text" [ngClass]="editClass" [(ngModel)] = "pointOfContactObject.fullName" [disabled]="mode == 'view' ? true : false">
+								<input type="text" [ngClass]="editClass" placeholder="Name" [(ngModel)] = "pointOfContactObject.fullName" [disabled]="mode == 'view' ? true : false">
 								<div *ngIf="!valid">{{validationError}}</div>
 							</td>
 							<td>
 								<label>
 									Designation:
 								</label> <br>
-								<input type="text" [ngClass]="editClass" [(ngModel)] = "pointOfContactObject.designation" [disabled]="mode == 'view' ? true : false">
+								<input type="text" [ngClass]="editClass" placeholder="Designation" [(ngModel)] = "pointOfContactObject.designation" [disabled]="mode == 'view' ? true : false">
 							</td>
 							<td>
 								<label>
 									Email:
 								</label> <br>
-								<input type="text" [ngClass]="editClass" [(ngModel)] = "pointOfContactObject.email" [disabled]="mode == 'view' ? true : false" >
+								<input type="text" [ngClass]="editClass" placeholder="Email" [(ngModel)] = "pointOfContactObject.email" [disabled]="mode == 'view' ? true : false" >
 							</td>
 							<td>
 								<label>
 									Phone:
 								</label> <br>
-								<input type="number" [ngClass]="editClass" [(ngModel)] = "pointOfContactObject.mobile" [disabled]="mode == 'view' ? true : false">
+								<input type="number" [ngClass]="editClass" placeholder="Phone" [(ngModel)] = "pointOfContactObject.mobile" [disabled]="mode == 'view' ? true : false">
 							</td>
 							<td colspan="2">
 								<button class="btnSkin btnSkinPrimary"  (click)="addPointOfContact(pointOfContactObject)">Add</button>
 							</td>
 						</tr>
 						
-						<tr>
+						<tr *ngIf="this.result.grantCall.grantCallContacts.length!=0">
 							<th title="Click to sort by Sl no">Sl No</th>
 							<th title="Click to sort by Name">Name</th>
 							<th title="Click to sort by Designation">Designation</th>
@@ -135,22 +135,20 @@
 					</table> 
                                 </div>
                                 <div class="borderBox">
-                                                <h4 class="borderBoxHeading">Funding Agency</h4>
+                                                <h4 class="borderBoxHeading">Funding Agency Information</h4>
                                                 <div class="pullSide">
                                                         <table class="table tableSkin grid2">
                                                                 <tbody>
-                                                                   <tr>
-                                                                          <td><label>Sponsor Type:</label><br>
+                                                                   <tr *ngIf="mode!=view && this.result.grantCall.sponsor==null || mode==view && this.result.grantCall.sponsor!=null || mode!=view && this.result.grantCall.sponsor!=null">
+                                                                          <td><label> Type:</label><br>
 																				<select *ngIf="mode!='view';else view_sponsorType" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" (change) = "sponsorTypeChange($event.target.value)" [(ngModel)] = "selectedSponsorType">
-																				<option >Select</option>
 																					<option *ngFor="let type of this.result?.sponsorTypes" (value)="type">
 																					{{type.description}}
 																				</option>
 																			</select>
 																			<ng-template #view_sponsorType>{{result?.grantCall.sponsorType.description}}</ng-template>
 																				</td>
-																		 <td ><label>Sponsor Name:</label><br> <select *ngIf="mode!='view';else view_sponsorName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)] = "selectedSponsor"  (change) = "sponsorNameChange($event.target.value)" >
-																			<option >Select</option>
+																		 <td ><label>Name:</label><br> <select *ngIf="mode!='view';else view_sponsorName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)] = "selectedSponsor"  (change) = "sponsorNameChange($event.target.value)" >
 																			<option *ngFor="let sponsor of this.sponsorList" (value)="sponsor" >
 																				{{sponsor.sponsorName}}
 																			</option>
@@ -199,7 +197,7 @@
 																				<div>
 																					 <ng2-completer title="Add area of research"
 																						[inputClass]="completerID"
-																						[(ngModel)]="selectedResearchArea"
+																						[(ngModel)]="selectedResearchArea" placeholder="Area Name"
 																						[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
 																						
 																				</div>
@@ -209,7 +207,7 @@
 																			</td>
 																		</tr>
                                                                 
-                                                                        <tr>
+                                                                        <tr *ngIf = "result?.grantCall?.grantCallResearchAreas.length!=0">
                                                                                 <th title="Click to sort by Sl no">Sl no</th>
                                                                                 <th title="Click to sort by Research Area Code">Research Area Code</th>
                                                                                 <th title="Click to sort by Code/Description">Code/Description</th>
@@ -245,10 +243,12 @@
                                                                         		<tr id="addEligibilityRow" *ngIf="isEligibleAddopen">
 																					<td><label>Criteria:</label></td>
 																					<td><select class="committeeBox" [(ngModel)] = "selectedCriteria">
+																						<option>Select</option>
 																								<option *ngFor="let criteria of result.grantCallCriterias">{{criteria.description}}</option>
 																						</select></td>
 																					<td><label>Type:</label></td>
 																					<td><select class="committeeBox" [(ngModel)] = "selectedEligibilityType" >
+																							<option>Select</option>
 																								<option *ngFor="let type of result.grantCallEligibilityTypes">{{type.description}}</option>
 																								
 																						</select>
@@ -257,7 +257,7 @@
 																						<button class="btnSkin btnSkinPrimary" (click)="addEligibility()">Add</button>
 																					</td>
 																				</tr>
-                                                                                <tr>
+                                                                                <tr *ngIf="result.grantCall.grantCallEligibilities.length!=0">
                                                                                         <th title="Click to sort by Sl no">Sl no</th>
                                                                                         <th title="Click to sort by Criteria">Criteria</th>
                                                                                         <th title="Click to sort by Type" colspan="2">Type</th>
@@ -285,12 +285,12 @@
                                                                 </div>
                                                         </div>
                                                         <div class="borderBox col-12" *ngIf = "result?.grantCall?.grantCallStatus?.description !='Open'  && result?.grantCall?.grantCallAttachments.length!=0 || result?.grantCall?.grantCallStatus?.description !='Open'  && result?.grantCall?.grantCallAttachments.length==0 || result?.grantCall?.grantCallStatus?.description =='Open'  && result?.grantCall?.grantCallAttachments.length!=0; else showNoAttachments">
-                                                                        <h4 class="borderBoxHeading">Attachments</h4>
+                                                                        <h4 class="borderBoxHeading">Supporting Documents</h4>
                                                                         <button title="add new attachment" class="addBtn font hoverColor" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
 																				<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
 																			</button>
                                                                         <table class="table table-responsive tableSkin">
-                                                                                <tr>
+                                                                                <tr *ngIf = "result?.grantCall?.grantCallAttachments.length!=0">
                                                                                         <th title="Click to sort by Sl no">Sl No</th>
                                                                                         <th title="Click to sort by Name">Attachment Type</th>
                                                                                         <th title="Click to sort by Designation">Description</th>
@@ -313,10 +313,12 @@
 																			
                                                                         </table>
 																</div>
-																<ng-template #showNoAttachments><span><p>No attachments are associated with this grant</p></span> </ng-template>
+																
                                                                 <div class="col-12 text-right" *ngIf="mode != 'view'">
+																		<p class="mandatory warningMessage" *ngIf="saveSuccessfulMessage!=null"> {{saveSuccessfulMessage}}</p>
                                                                 	<button type="button" class="btnSkin btnPublish" (click) = "showPublishWarning = true" data-toggle="modal" data-target="#publishWarning" href="#scrollToTop"  [disabled] = "result.grantCall.grantCallId ==null" *ngIf="result.grantCall.grantCallId !=null">Publish</button>
 																	<button type="button" class="btnSkin btnSkinPrimary" (click)="saveGrant()" href="#scrollToTop">Save</button>
+																	
 																</div>
 																
                               
