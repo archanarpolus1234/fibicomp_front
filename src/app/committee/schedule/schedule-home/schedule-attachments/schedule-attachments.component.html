@@ -47,6 +47,7 @@
 							<td class="noData filterElement">Add :</td>
 							<td class="filterElement"><span class="mandatory">*</span> 
 							<select (change)="attachmentTypeChange($event.target.value)" class="committeeBox" [(ngModel)]="attachment.description">
+								<option>Select</option>
 								<option *ngFor="let type of result?.attachmentTypes"
 									(value)="type">{{type.description}}</option>
 							</select></td>

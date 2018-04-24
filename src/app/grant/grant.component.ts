@@ -29,7 +29,7 @@ export class GrantComponent {
     subscription: Subscription;
     result: any ={};
     status : string = "hello";
-    keywordsList :  any  = {};
+    keywordsList :  any  = [];
     keywordDisplayList : any[] = [];
     selectedKeyword : string;
     keywordObject : any = {};
@@ -47,7 +47,7 @@ export class GrantComponent {
     validationError: string = " ";
     valid : boolean = true;
     sponsorList : any[] = [];
-    areaList : any = {};
+    areaList : any = [];
     selectedResearchArea: string;
     researchAreaList : any[] = [];
     saveType:string="SAVE";
@@ -76,7 +76,16 @@ export class GrantComponent {
     showPublishWarning:boolean = false;
     currentDate:Date = new Date();
     saveSuccessfulMessage: string = null;
-    keywordFlag:boolean= false;
+    keyWordWarningMessage: string;
+    pocDuplicationMessage:boolean = false;
+    eligibilityWarning:boolean = false;
+    areaWarning:boolean = false;
+    attachmentWarning:boolean = false;
+    attachmentTypeWarning:boolean = false;
+    isDateWarningText:boolean = false;
+    dateWarningText:string = null;
+    durInYears;durInMonths;durInDays;
+
     
     
 
@@ -84,22 +93,24 @@ export class GrantComponent {
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         }
+        this.result.grantCall = {};
     }
 
-    ngOnInit() {
-        this.currentDate.setDate(this.currentDate.getDate()-1);
+    ngOnInit() { 
+     this.currentDate.setDate(this.currentDate.getDate()-1);
        this.grantId = this.route.snapshot.queryParamMap.get('grantId');
         if(this.grantId==null) {
             this.mode='create';
             this.editClass="committeeBox";
             this.loadGrantInitData();
         } else {
-            this.grantService.loadGrantById(this.grantId).takeUntil(this.onDestroy$).subscribe(response=>{
+            this.grantService.loadGrantById(this.grantId).takeUntil(this.onDestroy$).subscribe(response=>{ 
                         this.result = response;
-
+                        this.changeRef.detectChanges();
+                        
                         if(this.result.grantCall.grantCallStatus.description == 'Draft') {
                             this.mode = 'edit';
-                            this.editClass="committeeBox";
+                            this.editClass="committeeBox";this.dateValidation();
                             if(this.result.grantCall.sponsorCode!=null) {
                                 this.grantService.fetchSponsorsBySponsorType(this.result.grantCall.sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
                                     var temp :any= {};
@@ -120,11 +131,6 @@ export class GrantComponent {
                                    this.selectedSponsor = temp.sponsors[0].sponsorName;
                                     this.selectedActivityType = this.result.activityTypes[0].description;
                                     this.selectedFundingType =  this.result.fundingSourceTypes[0].description;
-                                    
-                                   
-                                    
-                                    
-                                    
                                     this.sponsorTypeChange( this.selectedSponsorType);
                                     this.sponsorNameChange( this.selectedSponsor);
                                     this.researchTypeChange(this.selectedActivityType)
@@ -148,6 +154,52 @@ export class GrantComponent {
         }
      
     }
+
+    differenceBetweenDates( startDate, endDate ) {
+        if(startDate == null ) {
+            this.isDateWarningText = true;
+            this.dateWarningText = 'Select a opening date';
+        } else if(startDate> endDate) {
+            this.isDateWarningText = true;
+            this.dateWarningText = 'Opening date is after closing date';
+        }
+        if ( startDate != null && endDate != null && startDate <= endDate ) { 
+        var diffInMs = Math.round( Date.parse( endDate ) - Date.parse( startDate ) );
+        // diffInMs = Math.round(1523507183000); for testing
+        var difference = Math.floor( diffInMs / 1000 / 60 / 60 / 24 | 0 );
+        this.durInYears = Math.floor( difference / 365 | 0 );
+        difference = Math.floor( difference % 365 | 0 )
+        this.durInMonths = Math.floor( difference / 31 | 0 );
+        this.durInDays = Math.floor( difference % 31 | 0 );
+        }
+    }
+
+    dateValidation() {
+        if ( this.result.grantCall.openingDate == null ) {
+            this.isDateWarningText = true;
+            this.dateWarningText = 'Please select a opening date';
+        } else if ( new Date(this.result.grantCall.openingDate) < this.currentDate ) {
+            this.isDateWarningText = true;
+            this.dateWarningText = 'Please select a opening date from today';
+        } else if ( this.result.grantCall.openingDate != null && this.result.grantCall.closingDate != null && new Date(this.result.grantCall.openingDate) <= new Date(this.result.grantCall.closingDate) ) {
+            this.isDateWarningText = false;
+            this.differenceBetweenDates( this.result.grantCall.openingDate, this.result.grantCall.closingDate );
+            
+        } else if ( this.result.grantCall.closingDate == null ) {
+            this.isDateWarningText = true;
+            this.dateWarningText = 'Please select a closing date';
+        } else if ( new Date(this.result.grantCall.openingDate) > new Date(this.result.grantCall.closingDate) ) {
+            this.isDateWarningText = true;
+            this.dateWarningText = 'Please select a closing date after opening date';
+        } else if ( this.result.grantCall.openingDate != null && this.result.grantCall.closingDate != null && new Date(this.result.grantCall.openingDate) <= new Date(this.result.grantCall.closingDate) ) {
+            this.isDateWarningText = false;
+            this.differenceBetweenDates( this.result.grantCall.openingDate, this.result.grantCall.closingDate );
+           
+        } else {
+            this.isDateWarningText = false;
+        }
+    }
+
     
     ngOnDestroy(){
         this.onDestroy$.next();
@@ -162,7 +214,13 @@ export class GrantComponent {
                 temp = success;
                 this.sponsorList = temp.sponsors;
                 this.selectedSponsorType = this.result.sponsorTypes[0].description;
-                this.selectedSponsor = temp.grantCall.sponsor.sponsorName;
+                this.selectedSponsor = temp.sponsors[0].sponsorName;
+                this.selectedActivityType = this.result.activityTypes[0].description;
+                this.selectedFundingType =  this.result.fundingSourceTypes[0].description;
+                this.sponsorTypeChange( this.selectedSponsorType);
+                this.sponsorNameChange( this.selectedSponsor);
+                this.researchTypeChange(this.selectedActivityType)
+                this.fundingTypeChange(this.selectedFundingType);
             });
            this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
            this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' )
@@ -174,13 +232,24 @@ export class GrantComponent {
     }
     
     addPointOfContact(pointOfContactObject) {
+        this.pocDuplicationMessage = false;
         if(this.validateEmailAndMobile(this.pointOfContactObject.email.trim(),this.pointOfContactObject.mobile) && this.pointOfContactObject.fullName.trim().length>0 && this.pointOfContactObject.designation.trim().length>0 ) {
-            this.pointOfContactObject.personId = "";
+            if(this.result.grantCall.grantCallContacts.length!=0) {
+            for(let poc of this.result.grantCall.grantCallContacts) {
+                if(poc.email.trim() == this.pointOfContactObject.email.trim()) {
+                    this.pocDuplicationMessage = true;
+                } 
+            }
+            }
+            
+            if(this.pocDuplicationMessage == false) {
+                this.pointOfContactObject.personId = "";
             this.result.grantCall.grantCallContacts.push(pointOfContactObject);
             this.pointOfContactObject = {};
             this.valid = true;
             this.changeRef.detectChanges();
-        } else {
+            } 
+        }else {
             this.validationError = "Fields are incorrect or not filled";
             this.valid = false;
         }
@@ -238,27 +307,38 @@ export class GrantComponent {
         var tempObj:any = {};
         var d = new Date();
         var timestamp = d.getTime();
+       this.eligibilityWarning= false;
         if(this.selectedCriteria == null || this.selectedEligibilityType == null) {
-            
+          
         } else {
-            for(let criteria of this.result.grantCallCriterias) {
-                if(this.selectedCriteria == criteria.description) {
-                    tempObj.grantCriteriaCode = criteria.grantCriteriaCode;
-                    tempObj.grantCallCriteria= criteria
-                    for(let type of this.result.grantCallEligibilityTypes) {
-                        if(this.selectedEligibilityType == type.description) {
-                            tempObj.grantEligibilityTypeCode = type.grantEligibilityTypeCode;
-                            tempObj.grantCallEligibilityType = type;
-                            tempObj.updateTimestamp = timestamp;
-                            tempObj.updateUser = this.currentUser;
-                            this.result.grantCall.grantCallEligibilities.push(tempObj);
-
-                        }
+                    for(let eligibility of this.result.grantCall.grantCallEligibilities) {
+                        if(eligibility.grantCallCriteria.description  == this.selectedCriteria && eligibility.grantCallEligibilityType.description == this.selectedEligibilityType) {
+                        this.eligibilityWarning = true; break;
+                        } 
                     }
-
+            
+            if(this.eligibilityWarning == false) {
+                label:for(let criteria of this.result.grantCallCriterias) {
+                    if(this.selectedCriteria == criteria.description) {
+                        tempObj.grantCriteriaCode = criteria.grantCriteriaCode;
+                        tempObj.grantCallCriteria= criteria;
+                        for(let type of this.result.grantCallEligibilityTypes) {
+                            if(this.selectedEligibilityType == type.description) {
+                                tempObj.grantEligibilityTypeCode = type.grantEligibilityTypeCode;
+                                tempObj.grantCallEligibilityType = type;
+                                tempObj.updateTimestamp = timestamp;
+                                tempObj.updateUser = this.currentUser;
+                                this.result.grantCall.grantCallEligibilities.push(tempObj); break label;
+    
+                            }
+                        }
+    
+                    }
                 }
             }
         }
+        this.selectedCriteria = "Select";
+        this.selectedEligibilityType = "Select";
        
     }
 
@@ -375,23 +455,49 @@ export class GrantComponent {
     
     addAttachments(){
         var d = new Date();
-        
-        var timestamp = d.getTime();
-        var tempObjectForAdd:any = {};
-        tempObjectForAdd.grantCallAttachType = this.attachmentObject;
-        tempObjectForAdd.grantAttachmentTypeCode = this.attachmentObject.grantAttachmentTypeCode;
-        tempObjectForAdd.description = this.attachmentDescription;
-        tempObjectForAdd.updateTimestamp = timestamp;
-        tempObjectForAdd.updateUser = this.currentUser;
-        this.result.newAttachment = tempObjectForAdd;
-        this.grantService.addGrantCallAttachment(this.result.grantCall,this.result.newAttachment,this.uploadedFile).subscribe(success=>{
-            var temporaryObject:any ={};
-            temporaryObject = success;
-            this.result.grantCall = temporaryObject.grantCall;
-        },error=>{},()=>{
-            this.closeAttachments();
-        });
-        this.temp2 = this.result;
+        this.attachmentWarning = false;
+        this.attachmentTypeWarning = false;
+        if(this.result.grantCall.grantCallAttachments.length!=0) {
+            if( this.uploadedFile.length!=0) {
+                label: for (let attachment of this.result.grantCall.grantCallAttachments) {
+                    for(let file of this.uploadedFile) {
+                        if(attachment.fileName == file.name) {
+                            this.attachmentWarning = true;
+                            break label;
+                        }
+                    }
+                    
+                }
+            }
+         
+        }
+        if(this.attachmentWarning == false) {
+            var timestamp = d.getTime();
+            var tempObjectForAdd:any = {};
+            
+            if(this.attachmentObject.description!=null) { 
+                this.attachmentTypeWarning = false;
+                tempObjectForAdd.grantCallAttachType = this.attachmentObject;
+                tempObjectForAdd.grantAttachmentTypeCode = this.attachmentObject.grantAttachmentTypeCode;
+                tempObjectForAdd.description = this.attachmentDescription;
+                tempObjectForAdd.updateTimestamp = timestamp;
+                tempObjectForAdd.updateUser = this.currentUser;
+                this.result.newAttachment = tempObjectForAdd;
+                this.grantService.addGrantCallAttachment(this.result.grantCall,this.result.newAttachment,this.uploadedFile).subscribe(success=>{
+                    var temporaryObject:any ={};
+                    temporaryObject = success;
+                    this.result.grantCall = temporaryObject.grantCall;
+                console.log( this.result.grantCall)
+                },error=>{},()=>{
+                    this.closeAttachments();
+                });
+                
+            } else {
+                this.attachmentTypeWarning = true;
+            }
+           
+        }
+      
         
     }
     
@@ -495,35 +601,30 @@ export class GrantComponent {
         var d = new Date();
         var timeStamp = d.getTime();
         this.keywordObject = {};
-         this.keywordFlag=false;
-     
-        for(let keyword of this.result.scienceKeywords) {
-            if(keyword.description == this.selectedKeyword) {
-               this.keywordObject.scienceKeywordCode = keyword.code;
-               this.keywordObject.scienceKeyword = keyword;
-               this.keywordObject.updateTimestamp = timeStamp;
-               this.keywordObject.updateUser = this.currentUser;
-               this.result.grantCall.grantCallKeywords.push(this.keywordObject);
+        var keywordFlag:boolean = false;
+          for(let word of this.result.grantCall.grantCallKeywords) {
+                if(word.scienceKeyword.description == this.selectedKeyword) {
+                    keywordFlag = true;
+                    this.keyWordWarningMessage = "Keyword already added";
+                    break;
+                } 
             }
-        }
-        if(this.result.grantCall.grantCallKeywords.length!=0) {
-        for(let word of this.result.grantCall.grantCallKeywords) {
-            if(word.scienceKeyword.description == this.selectedKeyword) {
-            this.keywordFlag = true;
-            } 
-        }
-        if(this.keywordFlag==true) {
-        } else {
-            this.result.grantCall.grantCallKeywords.push(this.keywordObject);
-        }
-    } else {
-        
-        this.result.grantCall.grantCallKeywords.push(this.keywordObject);
-    
-    } 
-
-
-
+            if(keywordFlag ==false) {
+                for(let keyword of this.result.scienceKeywords) {
+                    if(keyword.description == this.selectedKeyword) {
+                       this.keywordObject.scienceKeywordCode = keyword.code;
+                       this.keywordObject.scienceKeyword = keyword;
+                       this.keywordObject.updateTimestamp = timeStamp;
+                       this.keywordObject.updateUser = this.currentUser;
+                       this.result.grantCall.grantCallKeywords.push(this.keywordObject);
+                       this.keyWordWarningMessage = null;
+                       break;
+                    }
+                }
+            } else{
+                this.keyWordWarningMessage = "Keyword already added";
+            }
+      
         this.selectedKeyword = null;
     }
 
@@ -545,14 +646,12 @@ export class GrantComponent {
                             break;
                         }
                 }
-                
-            
         }
     }
 
     saveGrant() {
         
-        if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null ) {
+        if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true) {
             var scrollTop;
             this.showWarning = true;
             this.saveSuccessfulMessage = "";
@@ -576,24 +675,33 @@ export class GrantComponent {
             } else {
                 this.saveType = "UPDATE";
             }
-            this.grantService.saveGrantCall(this.result.grantCall,this.result.newAttachments,this.saveType,this.uploadedFile).takeUntil(this.onDestroy$).subscribe(response=>{
-                var temp:any = {};
-                temp = response;
-                this.result.grantCall = temp.grantCall;
-                this.grantId = this.result.grantCall.grantCallId;
-               
-
-                
-                },error=>{
-                    this.saveSuccessfulMessage = null;
-            },()=>{ this.saveSuccessfulMessage = null;});
+            
+                this.grantService.saveGrantCall(this.result.grantCall,this.result.newAttachments,this.saveType,this.uploadedFile).takeUntil(this.onDestroy$).subscribe(response=>{
+                    var temp:any = {};
+                    temp = response;
+                    this.result.grantCall = temp.grantCall;
+                    this.grantId = this.result.grantCall.grantCallId;
+                    },error=>{
+                        this.saveSuccessfulMessage = null;
+                },()=>{ this.saveSuccessfulMessage = null;});
+           
+           
         }
        
     }
 
     addResearchArea() {
         var d =new Date();
-        var timeStamp = d.getTime();
+        var timeStamp = d.getTime(); 
+        this.areaWarning = false;
+        if(this.result.grantCall.grantCallResearchAreas.length!=0) {
+           for(let area of this.result.grantCall.grantCallResearchAreas) {
+               if(area.researchArea.description == this.selectedResearchArea) {
+                   this.areaWarning = true; break;
+               }
+           }
+        }
+       if(this.areaWarning == false) {
         for(let researchArea of this.result.researchAreas) {
             if(researchArea.description == this.selectedResearchArea) {
                 var tempObj:any = {};
@@ -601,10 +709,11 @@ export class GrantComponent {
                 tempObj.researchArea  = researchArea;
                 tempObj.updateTimestamp = timeStamp;
                 tempObj.updateUser = this.currentUser;
-                this.result.grantCall.grantCallResearchAreas.push(tempObj);
-                 
+                this.result.grantCall.grantCallResearchAreas.push(tempObj); break;
             }
         }
+       }
+       this.selectedResearchArea = null;
     }
 
     tempSaveResearchAreaObject(e,researchArea) {
