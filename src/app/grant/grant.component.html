@@ -47,7 +47,8 @@
                                         <tr>
                                             <td ><label><span class="mandatory">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="Max Budget" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
                                             <td ><label>Quantum:</label><br><input type="number" [(ngModel)] = "result.grantCall.quantum" placeholder="Quantum"  [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
-											<td colspan="2"><label>Keywords:</label>&nbsp;&nbsp;<br>
+											<td ><label>Grant Theme:</label><br><input type="text" [(ngModel)] = "result.grantCall.grantTheme" placeholder="theme"  [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+											<td ><label>Keywords:</label>&nbsp;&nbsp;<br>
 												<ng2-completer *ngIf="mode!='view'" title="Add Keyword" 
 													[inputClass]="completerID"
 													[(ngModel)]="selectedKeyword" placeholder="Keyword"
