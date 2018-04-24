@@ -213,3 +213,51 @@ input[type=number]::-webkit-outer-spin-button {
 .addTextBtn:hover {
 	color: #17BFBF;
 }
+
+
+.tableSkin label {
+	color: #26A69A;
+}
+
+.hoverColor:hover {
+	color: #17BFBF;
+}
+
+.radioElement {
+	font-size: 1em !important;
+	border: none !important;
+}
+
+.radioElement>li {
+	padding-bottom: 0px !important;
+}
+
+.greenLabel {
+	color: #26A69A;
+	font-size: 1.1em;
+}
+
+.memberSearchBox {
+	margin-bottom: 0px;
+	font-size: 1rem !important;
+}
+
+.noDataExists {
+	color: #9E9E9E;
+}
+
+.keywordList {
+	padding-left: 10px !important;
+}
+
+.keywordListItem {
+	padding: 5px;
+}
+
+.keywordClose:hover {
+	color: #26A69A;
+}
+
+.dateBox {
+	width: 100% !important;
+}

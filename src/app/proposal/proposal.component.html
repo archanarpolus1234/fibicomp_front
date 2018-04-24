@@ -1,3 +1,714 @@
-<p>
-  proposal works!
-</p>
+<div class="push4slideMenu  pageMinHeight" id="scrollToTop">
+	<div class="container-fluid pushFixedHeaderFooter">
+        <div class="headerPush"></div>
+		<section class="row">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<br>
+						<div class="row">
+							<div class="col-12 text-left"><span>Project &nbsp;</span><span *ngIf="result?.proposal?.proposalId">{{numberOrNewText}}</span><span>{{result?.proposal?.proposalId}}</span></div>
+						</div>
+						<br>
+						<div class="row">
+							<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+								<div class="borderBox">
+									<h4 class="borderBoxHeading">Details</h4>
+									<div class="pullSide">
+										<table class="table tableSkin grid2">
+											<tbody>
+												<tr>
+													<td colspan="3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Title:</label><br><input type="text" placeholder="enter title" class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="result.proposal.title"/><span *ngIf="mode == 'view'" >{{result?.proposal?.title}}</span></td>
+		                                        	<td><label>Category:</label><br><select class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="proposalCategorySelected">
+																						<option *ngFor="let category of result.proposalCategories" (value) = "category">{{category.description}}</option>
+																					  </select><span *ngIf="mode == 'view'" >{{proposalCategorySelected}}</span></td>
+											  		<td><label class="greenLabel">Type:&nbsp;</label><br><select class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="grantCallTypeSelected" >
+																						<option *ngFor="let type of result?.grantCallTypes" (value)="type">{{type.description}}</option>
+																					  </select><span *ngIf="mode == 'view'">{{grantCallTypeSelected}}</span></td>
+													<td><label class="greenLabel">Status:&nbsp;</label><br><input type="text" [disabled]="true" class="committeeBoxNotEditable" [value]="result?.proposal?.proposalStatus?.description" style="width: 70%" disabled/></td>
+												</tr>
+		                                        <tr  *ngIf="isMandatory">
+		                                        	<td colspan="3"><span class="mandatory">{{mandatoryText}}</span></td>
+													<td colspan="3"></td>
+												</tr>
+												<tr>
+													<td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed Start Date:</label><br><span *ngIf="mode != 'view'" ><input placeholder="start date"
+															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" 
+															[(ngModel)]="result.proposal.startDate" 
+															[ngClass]="editClass" />
+															<i class="fa fa-calendar fa-large" [owlDateTimeTrigger]="startDt"></i>
+															<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
+															<span *ngIf="mode == 'view'" >{{result?.proposal?.startDate}}</span></td>
+													<td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed End Date:</label><br><span *ngIf="mode != 'view'" ><input placeholder="end date"
+															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" 
+															[(ngModel)]="result.proposal.endDate"
+															[ngClass]="editClass" />
+															<i class="fa fa-calendar fa-large" [owlDateTimeTrigger]="endDt"></i>
+															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
+															<span *ngIf="mode == 'view'" >{{result?.proposal?.endDate}}</span>
+															</td>
+		                                            <td><label>Duration:</label><br><span><b>{{durInYears}}</b> year(s), <b>{{durInMonths}}</b> month(s) & <b>{{durInDays}}</b> day(s)</span></td>
+													<td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br><span *ngIf="mode != 'view'" ><input placeholder="date of submission"
+															[owlDateTimeTrigger]="subDt" [owlDateTime]="subDt" 
+															[(ngModel)]="result.proposal.submissionDate"
+															[ngClass]="editClass" />
+															<i class="fa fa-calendar fa-large" [owlDateTimeTrigger]="subDt"></i>
+															<owl-date-time #subDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
+															<span *ngIf="mode == 'view'" >{{result?.proposal?.submissionDate}}</span>
+													</td>
+													<td colspan="2"><label>Keywords:</label><br><span *ngIf="mode!='view'"><ng2-completer style="border:none; padding:0px"
+															[inputClass]="completerID"
+															[(ngModel)]="selectedKeyword" placeholder="search a keyword"
+															[datasource]="keywordsList" [minSearchLength]="0"
+															(selected)="keywordChangeFunction()" [ngClass]="editClass" [disabled]="mode == 'view'"></ng2-completer></span>
+															<ul *ngIf="result?.proposal?.proposalKeywords?.length > 0 " class="d-inline-flex keywordList"><li *ngFor="let keyword of result?.proposal?.proposalKeywords;let i = index" class="keywordListItem"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer keywordClose" title="remove this keyword" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
+															<span class="mandatory" *ngIf="isKeywordWarning">{{keywordWarningText}}</span><i class="fa fa-times" *ngIf="isKeywordWarning" (click)="closeKeywordWarning()"></i>
+													
+													</td>
+		                                        </tr>
+		                                        <tr  *ngIf="isDateWarningText">
+		                                        	<td colspan="3"><span class="mandatory">{{dateWarningText}}</span></td>
+													<td colspan="3"></td>
+												</tr>
+		                                        <tr>
+		                                        	<td><label>Is this Project under SMU ICLs?</label><br><ul class="tablelayout radioElement" *ngIf="mode != 'view'">
+		                                        														  	<li><input type="radio" name="underICL" (click)="toggleICL(true)"/>&nbsp;Yes</li>
+		                                        														  	<li><input type="radio" name="underICL" checked (click)="toggleICL(false)"/>&nbsp;No</li>
+		                                        														  </ul>
+		                                        														  <input type="text" class="committeeBoxNotEditable" *ngIf="mode == 'view'" [value]="showICLs ? 'Yes':'No'"/>
+		                                         	<td><span *ngIf="showICLs"><label>ICL:</label><br><select *ngIf="mode != 'view'" [ngClass]="editClass" [disabled]="mode == 'view'" [(ngModel)]="selectedICLLab">
+																						<option *ngFor="let icl of result.proposalInstituteCentreLabs" (value) ="icl">{{icl.description}}</option>
+																					  </select></span>
+																					  <span *ngIf="mode == 'view'">{{selectedICLLab}}</span>
+																					  </td>
+												    <td colspan="4"></td> 
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="borderBox col-12">
+							<h4 class="borderBoxHeading">Grant Call Details</h4>
+							<table class="table table-responsive tableSkin">
+								<tr *ngIf="result?.proposal?.grantCall == null && mode !='view'">
+									<td class="text-right">Name of Grant Call:</td>
+									<td class="pull-left"><span><ng2-completer style="border:none; padding:0px"
+															[inputClass]="completerID" placeholder="search a grant call name"
+															[(ngModel)]="selectedGrantCall"
+															[datasource]="grantCallList" [minSearchLength]="0"
+															(selected)="grantCallChangeFunction()" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
+										
+									</td>
+									<td colspan="3">&nbsp;</td>
+								</tr>
+								<tr *ngIf="result?.proposal?.grantCall == null">
+									<td colspan="5"><div class="noDataExists">
+											No grant call associated with this proposal
+										</div></td>
+								</tr>
+								<tbody *ngIf="result?.proposal?.grantCall != null">
+									<tr>
+										<th >Name of Grant Call</th>
+			                            <th >Funding Agency</th>
+			                            <th >Funding Scheme</th>
+			                            <th >Grant Theme</th>
+			                            <th >Action</th>
+									</tr>
+									<tr>
+										<td style="padding-left: 10px"><span >{{result?.proposal?.grantCall?.grantCallName}}</span></td>
+										<td ><span >{{result?.proposal?.grantCall?.sponsorType?.description}}</span></td>
+										<td ><span >{{result?.proposal?.grantCall?.sponsor?.sponsorName}}</span></td>
+										<td ><span >{{result?.proposal?.grantCall?.grantTheme}}</span></td>
+										<td ><!-- <i class="fa fa-trash fa-large" (click)="removeSelectedGrant()"></i> -->
+											<ul class="actionButtonGroup">
+												<li><a href="#" (click)="removeSelectedGrant($event)"><i class="fa fa-trash-o" aria-hidden="true" title="remove this grant call"></i></a></li>
+											</ul>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+                         <div class="borderBox col-12">
+								<h4 class="borderBoxHeading">Area of Research</h4>
+                                    <table class="table table-responsive tableSkin">
+                                       <!-- <tr *ngIf="mode != 'view'">
+                                       		<td></td>
+											<td colspan="2"><ul class="tablelayout border-top-0 radioElement">
+											  		<li><input type="radio" name="areaChange" checked (click)="changeArea(result?.proposalResearchTypes[0]?.description)"/>{{result?.proposalResearchTypes[0]?.description}}</li>
+											  		<li><input type="radio" name="areaChange" (click)="changeArea(result?.proposalResearchTypes[1]?.description)"/>{{result?.proposalResearchTypes[1]?.description}}</li>
+											  	</ul></td>
+										  	<td></td>
+									   </tr> -->
+										<tr id="addAreaOfResearchRow" *ngIf=" mode != 'view'">
+											<td class="text-right">Type:</td>
+											<td><select [ngClass]="editClass" [(ngModel)]="areaTypeSelected" (change)="changeArea($event.target.value)">
+														<option *ngFor="let type of result?.proposalResearchTypes" (value)="type">{{type.description}}</option>
+														  </select></td>
+											<td class="text-right">{{selectedAreaType}}:</td>
+											<td>
+												<div>
+													 <ng2-completer title="Add area of research"
+														[inputClass]="completerID" placeholder="search an area of research"
+														[(ngModel)]="selectedArea"
+														[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
+												</div>
+											</td>
+											<td>
+												<button class="btnSkin btnSkinPrimary" (click)="addArea()">Add</button>
+											</td>
+										</tr>
+                                        <tr  *ngIf="isAreaWarning">
+                                        	<td colspan="3"><span class="mandatory">{{areaWarningText}}</span><i class="fa fa-times" (click)="closeAreaWarning()"></i></td>
+											<td colspan="2"></td>
+										</tr>
+										<tbody *ngIf="result?.proposal?.proposalResearchAreas?.length > 0 ">
+	                                        <tr>
+	                                            <th >Sl no</th>
+	                                            <th >Research Area Code</th>
+	                                            <th  colspan="2">Code/Description</th>
+	                                            <th title="" *ngIf="mode != 'view'">Action</th>
+	                                        </tr>
+	                                        <tr *ngFor = "let researchArea of result?.proposal?.proposalResearchAreas; let i = index">
+	                                            <td>{{i+1}}</td>
+												<td *ngIf="researchArea.excellenceAreaCode? researchArea.excellenceAreaCode: researchArea.researchAreaCode;let areaCode; ">{{areaCode}}</td>
+	                                            <td  colspan="2"*ngIf="researchArea.proposalExcellenceArea? researchArea.proposalExcellenceArea.description: researchArea.researchArea.description;let description; ">{{description}}</td>
+	                                            <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+														<li><a href="#" data-toggle="modal"
+															data-target="#deleteResearchArea"
+															(click)="tempSaveArea($event,researchArea,i)"><i
+																class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+													</ul></td>
+	                                        </tr>
+	                                        <tr>
+	                                        	<td><label>Description:</label></td>
+	                                        	<td colspan="4"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="elaborate contributions of your proposal to area of researches" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+	                                        	<span *ngIf="mode == 'view'">{{result?.proposal?.researchDescription}}</span>
+	                                        </tr>
+                                        </tbody>
+                                        <tr *ngIf="result?.proposal?.proposalResearchAreas?.length == 0 ">
+                                        	<td colspan="5"><div class="noDataExists">
+														No area of research/excellence added with this proposal
+													</div></td>
+                                        </tr>
+                                  </table>
+                             </div>
+                            <div class="borderBox col-12">
+                    			<h4 class="borderBoxHeading">Project Team</h4>
+                                    <table class="table table-responsive tableSkin">
+                                    	<tr id="addTeamMemberRow" *ngIf="mode != 'view'">
+                                    		<td>Member Type:</td>
+                                    		<td><select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)]="memberTypeSelected" (change)="memberTypeChanged()">
+													<option *ngFor="let type of memberTypes" (value)="type">{{type.value}}</option>
+													  </select></td>
+											<td class="text-right">Name:</td>
+											<td> 
+												<div class="searchBox memberSearchBox">
+													<input type="text" placeholder="{{placeHolderText}}" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+														[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
+														class="searchButton" (click)="clearSearchBox($event)"><i
+														[ngClass]="iconClass"></i></a>
+													<div class="sb-seachresults"  *ngIf="searchActive">
+														<ul class="sb-results-dropdown-menu text-left">
+															<li *ngFor="let result of this.elasticSearchresults "
+																(mousedown)="selected(result)"><span
+																[innerHTML]="result.label"></span></li>
+														</ul>
+													</div>
+												</div>
+											</td>
+											<td class="text-right">Role:</td>
+											<td><select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)]="personRoleSelected">
+													<option *ngFor="let role of personRolesList" (value)="role">{{role.description}}</option>
+													  </select>
+											</td>
+											<td class="text-left">
+												<button class="btnSkin btnSkinPrimary" (click)="addProposalTeamMember()">Add</button>
+											</td>
+										</tr>
+										<tr *ngIf="personWarningFlag">
+											<td colspan="7"><span class="mandatory">{{personWarningMsg}}</span>&nbsp;<i class="fa fa-times" (click)="closeMemberWarning()"></i></td>
+										</tr>
+										<tr *ngIf="result?.proposal?.proposalPersons?.length == 0">
+											<td colspan="7"><div class="noDataExists">
+													No members are associated with this proposal
+												</div></td>
+										</tr>
+										<tbody *ngIf="result?.proposal?.proposalPersons?.length > 0">
+	                                        <tr>
+	                                            <th >Sl no</th>
+	                                            <th colspan="2">Name</th>
+	                                            <th >Role</th>
+	                                            <th colspan="2">Lead Unit</th>
+	                                            <th *ngIf="mode != 'view'">Action</th>
+	                                        </tr>
+	                                        <tr *ngFor="let person of result?.proposal?.proposalPersons; let i = index">
+	                                            <td>{{i+1}}</td>
+	                                            <td colspan="2">{{person.fullName}}</td>
+	                                            <td>{{person.proposalPersonRole.description}}</td>
+	                                            <td colspan="2">{{person.leadUnitName}}</td>
+	                                            <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																				<li><a href="#" data-toggle="modal"
+																					data-target="#deleteMemberModal"
+																					(click)="tempSavePerson($event,person, i)"><i
+																						class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																			</ul>
+												</td>
+	                                         </tr>
+                                         </tbody>
+                                       </table>
+                                    </div>
+	                        <div class="borderBox col-12">
+								<h4 class="borderBoxHeading">Project Description</h4>
+								<div class="pullSide">
+									<table class="table tableSkin grid2">
+										<tbody>
+											<tr>
+												<td><label>Abstract:</label><br>
+													<textarea name="abstract" class="forTextAreaEntry" placeholder="research abstract" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
+													<span *ngIf="mode == 'view'">{{result?.proposal?.abstractDescription}}</span>
+												</td>
+												<td><label>Funding Strategy:</label><br>
+													<textarea name="fundingStrategy" class="forTextAreaEntry" placeholder="strategy for obtaining external funding" [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<span *ngIf="mode == 'view'">{{result?.proposal?.fundingStrategy}}</span>
+	                                        	</td>
+	                                        </tr>
+	                                        <tr>
+												<td><label>Details of Proposal:</label><br>
+													<textarea name="details" class="forTextAreaEntry" placeholder="write on aim, significance, aproach, preliminary studies etc." [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
+													<span *ngIf="mode == 'view'">{{result?.proposal?.details}}</span>
+												</td>
+												<td><label>Deliverables:</label><br>
+													<textarea name="deliverables" class="forTextAreaEntry" placeholder="project deliverables like manpoer training, research outcomes, etc." [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<span *ngIf="mode == 'view'">{{result?.proposal?.deliverables}}</span>
+													</td>
+	                                        </tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="borderBox col-12">
+								<h4 class="borderBoxHeading">Declaration</h4>
+										<div class="borderBox col-12">
+											<h4 class="borderBoxHeading">Funding Support</h4>
+											<div class="pullSide">
+												<table class="table table-responsive tableSkin">
+													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
+														
+														<td><label>Type of Funding Agency :</label><br><select [(ngModel)] = "selectedSponsorType" [ngClass]="editClass" (change)="sponsorTypeChange()">
+															<option *ngFor="let sponsorType of result.sponsorTypes">{{sponsorType.description}}</option>
+														</select></td>
+														<td><label>Name of Funding Agency:</label><br>
+															<select [(ngModel)] = "selectedSponsorName" [ngClass]="editClass" >
+																<option *ngFor="let sponsor of result.sponsors" (value)="sponsor">{{sponsor.sponsorName}}</option>
+															</select>
+														</td>
+														<td><label>Start Date:</label><input
+															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" placeholder="start date"
+															[(ngModel)]="fundingStartDate" 
+															[disabled]="mode == 'view' ? true : false"
+															[ngClass]="editClass" />
+															<i class="fa fa-calendar fa-large" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="startDt"></i>
+															<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></td>
+													<td><label>End Date:</label><input
+															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" placeholder="end date"
+															[(ngModel)]="fundingEndDate"
+															[disabled]="mode == 'view' ? true : false"
+															[ngClass]="editClass" />
+															<i class="fa fa-calendar fa-large" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="endDt"></i>
+															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></td>
+														
+												
+													<td><label>Amount</label><br><input type="number"  [ngClass]="editClass" [(ngModel)] = "sponsorAmount"/></td>
+														<td><br>
+															<button class="btnSkin btnSkinPrimary" (click)="addSponsor()">Add</button>
+														</td>
+													</tr>
+													<tr  *ngIf="isFundingWarning">
+			                                        	<td colspan="3"><span class="mandatory">{{fundingWarningText}}</span><i class="fa fa-times" (click)="closeFundingWarning()"></i></td>
+														<td colspan="3"></td>
+													</tr>
+													<tr *ngIf="result?.proposal?.proposalSponsors?.length == 0">
+														<td colspan="6"><div class="noDataExists">
+																You declared no fundings are associated for you before this proposal
+															</div></td>
+													</tr>
+													<tbody *ngIf="result?.proposal?.proposalSponsors?.length > 0">
+				                                        <tr>
+				                                            <th >Sl no</th>
+				                                            <th >Funding Agency</th>
+				                                            <th >Start Date</th>
+				                                            <th >End Date</th>
+				                                            <th >Amount</th>
+				                                            <th  *ngIf="mode != 'view'">Action</th>
+				                                        </tr>
+				                                        <tr *ngFor="let proposalSponsor of this.result?.proposal?.proposalSponsors;let i = index">
+				                                            <td>{{i+1}}</td>
+				                                            <td >{{proposalSponsor?.sponsor?.sponsorName}}</td>
+				                                            <td >{{proposalSponsor?.startDate | date:'MM/dd/yyyy'}}</td>
+				                                            <td >{{proposalSponsor?.endDate | date:'MM/dd/yyyy'}}</td>
+				                                            <td >{{proposalSponsor?.amount}}</td>
+				                                         	<td  *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																	<li><a href="#" data-toggle="modal"
+																		data-target="#deleteSponsor"
+																		(click)="tempSaveSponsor(sponsor,i)"><i
+																			class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																</ul></td>
+				                                         </tr>
+			                                         </tbody>
+	                                      			</table>
+											</div>
+										</div>
+										<div class="borderBox col-12">
+											<h4 class="borderBoxHeading">IRB</h4>
+											<div class="pullSide">
+												<table class="table table-responsive tableSkin">
+													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
+														<td></td>
+														<td class="text-right">Protocol:</td>
+														<td colspan="2">
+															<div>
+																<ng2-completer title="Add area of research"
+																	[inputClass]="completerID" placeholder="search a protocol title"
+																	[(ngModel)]="selectedProtocol"
+																	[datasource]="protocolsList" [minSearchLength]="0"></ng2-completer>
+															</div>
+														</td>
+														<td>
+															<button class="btnSkin btnSkinPrimary" (click)="addIRB()">Add</button>
+														</td>
+														<td></td>
+													</tr>
+													<tr  *ngIf="isIRBWarning">
+			                                        	<td colspan="4"><span class="mandatory">{{irbWarningText}}</span><i class="fa fa-times" (click)="closeIrbWarning()"></i></td>
+														<td colspan="3"></td>
+													</tr>
+													<tr *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0">
+														<td colspan="6"><div class="noDataExists">
+																You declared no protocols are associated before this proposal
+															</div></td>
+													</tr>
+													<tbody *ngIf="result?.proposal?.proposalIrbProtocols?.length > 0">
+				                                        <tr>
+				                                            <th >Sl no</th>
+				                                            <th >Protocol Number</th>
+				                                            <th >Title</th>
+				                                            <th >Approval Status</th>
+				                                            <th >Approval Date</th>
+				                                            <th >Expiration Date</th>
+				                                            <th *ngIf="mode != 'view'">Action</th>
+				                                        </tr>
+														<tr *ngFor = "let protocol of result?.proposal?.proposalIrbProtocols; let i = index">
+				                                            <td>{{i+1}}</td>
+				                                            <td>{{protocol?.protocol?.protocolNumber}}</td>
+															<td>{{protocol?.protocol?.title}}</td>
+															<td>{{protocol?.protocol?.protocolStatus?.description}}</td>
+				                                            <td>{{protocol?.protocol?.approvalDate}}</td>
+				                                            <td>{{protocol?.protocol?.expirationDate}}</td>
+				                                         	<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																	<li><a href="#" data-toggle="modal"
+																		data-target="#deleteIRB"
+																		(click)="tempSaveIRB($event,protocol,i)"><i
+																			class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																</ul></td>
+				                                         </tr>
+			                                         </tbody>
+	                                      			</table>
+											</div>
+										</div>
+							</div>
+							<div class="borderBox col-12">
+									<h4 class="borderBoxHeading">Budget</h4>
+									<div class="pullSide">
+										<table class="table table-responsive tableSkin">
+											<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
+	                                        	<td class="text-right">Category:</td>
+	                                        	<td><select [ngClass]="editClass" [(ngModel)]="budgetCategorySelected" (change)="budgetCategoryChanged()" >
+														<option *ngFor="let category of result?.proposalBudgetCategories" (value)="category">{{category.description}}</option>
+														  </select></td>
+												<td class="text-right">Cost Element: </td>
+												<td><select [ngClass]="editClass" [(ngModel)]="costElementSelected" >
+														<option *ngFor="let costElement of result?.proposalCostElements" (value)="costElement">{{costElement.description}}</option>
+														  </select>
+														<!-- <ng2-completer title="Add area of research"
+															[inputClass]="completerID"
+															[(ngModel)]="areaInput.researchAreaDescription"
+															[datasource]="areaList" [minSearchLength]="0"
+															(ngModelChange)="areaChangeFunction(areaInput)"
+															(selected)="onAreaSelect()"></ng2-completer> -->
+												</td>
+												<td class="text-right">Description: </td>
+												<td><input type="text" [ngClass]="editClass" [(ngModel)]="budgetDescription"/></td>
+												<td class="text-right">Cost: </td>
+												<td><input type="number" [ngClass]="editClass" [(ngModel)]="budgetCost"/></td>
+												<td>
+													<button class="btnSkin btnSkinPrimary" (click)="addBudget()">Add</button>
+												</td>
+											</tr>
+											<tr *ngIf="budgetWarningFlag">
+												<td colspan="9"><span class="mandatory">{{budgetWarningMsg}}</span>&nbsp;<i class="fa fa-times keywordClose" (click)="closeBudgetWarning()"></i></td>
+											</tr>
+											<tbody *ngIf="result?.proposal?.proposalBudgets?.length > 0">
+		                                        <tr >
+		                                            <th >Sl no</th>
+		                                            <th colspan="2">Budget category</th>
+		                                            <th colspan="2">Cost Element</th>
+		                                            <th colspan="2">Line Item Description</th>
+		                                            <th >Line Item Cost</th>
+		                                            <th *ngIf="mode != 'view'">Action</th>
+		                                        </tr>
+		                                        <tr *ngFor="let budget of result?.proposal?.proposalBudgets; let i = index">
+		                                            <td>{{ i + 1 }}</td>
+		                                            <td colspan="2">{{budget?.budgetCategory?.description}}</td>
+		                                            <td colspan="2">{{budget?.proposalCostElement?.description}}</td>
+		                                            <td colspan="2">{{budget?.description}}</td>
+		                                            <td>$ {{budget.cost}}</td>
+		                                         	<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+															<li><a href="#" data-toggle="modal"
+																data-target="#deleteMemberModal"
+																(click)="deleteBudgetConfirmation($event, budget, i)"><i
+																	class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+														</ul></td>
+		                                         </tr>
+	                                         </tbody>
+	                                         <tr *ngIf="result?.proposal?.proposalBudgets?.length == 0">
+												<td colspan="9"><div class="noDataExists">
+														Budget is not estimated with this proposal yet
+													</div></td>
+											</tr>
+	                                    </table>
+									</div>
+								</div>
+	                            <div class="borderBox col-12">
+                               <h4 class="borderBoxHeading">Supporting Documents</h4>
+                                <button title="add new attachment" class="addBtn font hoverColor" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
+									<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
+								</button>
+                               <table class="table table-responsive tableSkin">
+                               		<tr *ngIf="result?.proposal?.proposalAttachments?.length == 0">
+										<td colspan="5"><div class="noDataExists">
+												No supporting documents are attached with this proposal
+											</div></td>
+									</tr>
+									<tbody *ngIf="result?.proposal?.proposalAttachments?.length > 0">
+	                                   <tr>
+	                                       <th>Sl No</th>
+	                                       <th>Attachment Type</th>
+	                                       <th>Description</th>
+	                                       <th>File Name</th>
+	                                       <th>Action</th>
+	                                   </tr>
+	                                   <tr *ngFor="let attachment of result?.proposal?.proposalAttachments;let i = index">
+											<td>{{i+1}}</td>
+											<td>{{attachment.attachmentType.description}}</td>
+											<td>{{attachment.description}}</td>
+											<td>{{attachment.fileName}}</td>
+											<td ><ul class="actionButtonGroup">
+													<li *ngIf="mode != 'view'"><a (click)="tempSaveAttachments($event,attachment,i)" *ngIf="editScheduleattachment == true" 
+														data-toggle="modal" data-target="#deleteAttachment"><i
+															class="fa fa-trash-o"></i></a></li>
+													<li><a  (click)="downloadAttachments($event, attachment)" title="Open"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
+												</ul>
+											</td>
+									</tr>
+                                   </tbody>
+                                 </table>
+                               </div>
+                               <div class="col-12 text-right">
+                                 	<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view'" (click)="saveProposal()">Save</button>
+									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view'" (click)="submitProposal()">Submit</button>
+                               </div>
+                    </div>
+			</section>
+		<div class="footerPush"></div>
+	</div>
+</div>
+
+<!-- ADD ATTACHMENT MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" id="addAttachment"
+		tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle"
+		aria-hidden="true" *ngIf="showAddAttachment">
+		<div class="modal-dialog modal-lg modal-dialog-centered"
+			role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="skippedSchedulesLongTitle">Add
+						Attachment</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" (click)="showAddAttachment = false">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<table class="table table-responsive tableSkin">
+						<tr *ngIf="showAddAttachment">
+							<td class="noData filterElement">Add :</td>
+							<td class="filterElement"><span class="mandatory">*</span> 
+							<select class="committeeBox" >
+								<option>Option 1</option>
+								<option>Option 2</option>
+							</select></td>
+							<td class="filterElement"><textarea id="desc" placeholder="Description" class="scheduleBoxes"></textarea></td>
+						</tr>
+					</table>
+
+					<!-- <file-drop headertext="Drop files here" > <input type="file" multiple /> OR &nbsp;&nbsp;
+					</file-drop> -->
+					<input type="file"/>
+					<ul>
+						<li>
+						<!-- <span></span><i class="fa fa-trash-o" (click)="deleteFromUploadedFileList(item)"></i> -->
+						</li>
+					</ul>
+					<!-- <div *ngIf="!ismandatoryFilled"><span class="mandatory font">{{attachmentWarningMsg}}</span></div> -->
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
+					<button type="button" class="btnSkin btnSkinPrimary" (click)="addAttachments()">Add</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- DELETE MEMBER WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteMember || showDeleteBudget" tabindex="-1"
+id="deleteMemberModal" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Want to delete?</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to delete this item?</p>
+		</div>
+		<div class="modal-footer" *ngIf="showDeleteMember">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteMember = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deletePerson()" data-dismiss="modal">Yes</button>
+		</div>
+		<div class="modal-footer" *ngIf="showDeleteBudget">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteBudget = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deleteBudget()" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- DELETE RESEARCH AREA WARNING MODAL -->
+	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteResearchArea" tabindex="-1"
+		id="deleteResearchArea" tabindex="-1" role="dialog"
+		aria-labelledby="deleteModalTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Want to delete?</h5>
+
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete this item?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary"
+						data-dismiss="modal" data-toggle="modal" (click)="showDeleteResearchArea = false">No</button>
+					<button type="button" class="btnSkin btnSkinPrimary"
+						(click)="deleteArea($event)" data-dismiss="modal">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- DELETE IRB WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteIRB" tabindex="-1"
+id="deleteIRB" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Want to delete?</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to delete this item?</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteIRB = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deleteIRB()" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- ADD WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showAddedModal" tabindex="-1"
+id="addProposal" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" *ngIf="!showAddedModal">Saved</h5>
+			<h5 class="modal-title" *ngIf="showAddedModal">Warning</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p *ngIf="!showAddedModal">Proposal has been saved successfully.</p>
+			<p *ngIf="showAddedModal">Error in saving your proposal, please review mandatory details</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="!showAddedModal"
+				(click)="navigate($event, 'view')" data-dismiss="modal">Ok</button>
+			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="showAddedModal"
+				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- DELETE SPONSOR WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteSponsor" tabindex="-1"
+id="deleteSponsor" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Want to delete?</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to delete this item?</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteSponsor = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deleteSponsor()" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+	

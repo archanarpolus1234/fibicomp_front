@@ -48,6 +48,10 @@ body {
 	font-size: 1.2em;
 }
 
+.fa-med {
+	font-size: 1rem;
+}
+
 .text-border-padding {
 	border: 1px #DEDEDE solid !important;
 	padding-left: 0.8em !important;
