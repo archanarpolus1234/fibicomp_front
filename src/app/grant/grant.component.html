@@ -47,8 +47,7 @@
                                         <tr>
                                             <td ><label><span class="mandatory">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="Max Budget" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
                                             <td ><label>Quantum:</label><br><input type="number" [(ngModel)] = "result.grantCall.quantum" placeholder="Quantum"  [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
-											<td ><label>Grant Theme:</label><br><input type="text" [(ngModel)] = "result.grantCall.grantTheme" placeholder="theme"  [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
-											<td ><label>Keywords:</label>&nbsp;&nbsp;<br>
+											<td colspan="2"><label>Keywords:</label>&nbsp;&nbsp;<br>
 												<ng2-completer *ngIf="mode!='view'" title="Add Keyword" 
 													[inputClass]="completerID"
 													[(ngModel)]="selectedKeyword" placeholder="Keyword"
@@ -153,7 +152,7 @@
 																					{{type.description}}
 																				</option>
 																			</select>
-																			<ng-template #view_sponsorType>{{result?.grantCall.sponsorType.description}}</ng-template>
+																			<ng-template #view_sponsorType>{{result?.grantCall?.sponsorType?.description}}</ng-template>
 																				</td>
 																		 <td ><label>Name:</label><br> <select *ngIf="mode!='view';else view_sponsorName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)] = "selectedSponsor"  (change) = "sponsorNameChange($event.target.value)" >
 																			<option *ngFor="let sponsor of this.sponsorList" (value)="sponsor" >
@@ -168,7 +167,7 @@
 																				{{type.description}}
 																			</option>
 																			</select>
-																			<ng-template #view_researchType>{{result?.grantCall.activityType.description}}</ng-template>
+																			<ng-template #view_researchType>{{result?.grantCall?.activityType.description}}</ng-template>
 																				</td>
                                                                           <td><label>Funding Type:</label><br>
                                                                          <select [ngClass]="editClass"  *ngIf="mode!='view';else view_fundingType" [disabled]="mode == 'view' ? true : false" (change)="fundingTypeChange($event.target.value)" [(ngModel)] = "selectedFundingType">
@@ -177,7 +176,7 @@
 																		{{type.description}}
 																	</option>
 																	</select>
-																	<ng-template #view_fundingType>{{result?.grantCall.fundingSourceType.description}}</ng-template>
+																	<ng-template #view_fundingType>{{result?.grantCall?.fundingSourceType.description}}</ng-template>
 																		</td>
                                                                    </tr>
                                                                 </tbody>
