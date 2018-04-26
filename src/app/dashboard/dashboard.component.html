@@ -24,8 +24,10 @@
 						(click)="showTab('COMMITTEE')"> Committee</a></li>
 					<li [ngClass]="{'active': currentPosition == 'SCHEDULE'}"><a
 						(click)="showTab('SCHEDULE')"> Schedules</a></li>
-						<li [ngClass]="{'active': currentPosition == 'GRANT'}"><a
+					<li [ngClass]="{'active': currentPosition == 'GRANT'}"><a
 							(click)="showTab('GRANT')"> Grant Call</a></li>
+					<li [ngClass]="{'active': currentPosition == 'SMU_PROPOSAL'}"><a
+								(click)="showTab('SMU_PROPOSAL')"> SMU_Proposal</a></li>
 				</ul>
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
@@ -79,7 +81,7 @@
 									[placeText]="'Search: Disclosure#,  PI Name, Disposition, Status'"></app-elastic-search>
 							</div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"
-								*ngIf="currentPosition !== 'SCHEDULE' && currentPosition !== 'COMMITTEE' &&  currentPosition !== 'GRANT'">
+								*ngIf="currentPosition !== 'SCHEDULE' && currentPosition !== 'COMMITTEE' &&  currentPosition !== 'GRANT' &&  currentPosition !== 'SMU_PROPOSAL'">
 								<a id="advcanceSearch" href="#" class="linkButton"
 									(click)="advanceSearch($event)"> <i class="fa fa-cog"></i>
 									Advanced Search
@@ -928,17 +930,14 @@
 							<tr>
 								<th>Id<span class="sortorder" [ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduleId')}"></span>
 								</th>
-								<th title="Click to sort by Schedule Date">Name<span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduledDate')}"></span>
+								<th >Name<span
+									class="sortorder" ></span>
 								</th>
-								<th title="Click to sort by Place">Description <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'place')}"></span>
+								<th>Description <span
+									class="sortorder"></span>
 								</th>
-								<th title="Click to sort by Deadline Date">Opening Date <span
-									class="sortorder"
-									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolSubDeadline')}"></span>
+								<th >Opening Date <span
+									class="sortorder"></span>
 								</th>
 								<th>Closing Date</th>
 								<th>Status</th>
@@ -964,6 +963,52 @@
 					</table>
 					<div *ngIf="this.result?.committeeSchedules?.length == 0"
 						class="noDataOnChart">No Schedule data Found</div>
+				</div>
+			</div>
+
+			<!-- SMU_PROPOSAL -->
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
+			*ngIf="(currentPosition == 'SMU_PROPOSAL')">
+			<div class="row">
+					
+						
+				</div>
+				
+				<div class="borderBox" *ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					<table class="table table-responsive tableSkin">
+						<thead>
+							
+							
+							<tr>
+								<th>Id<span class="sortorder" ></span>
+								</th>
+								<th >Name<span
+									class="sortorder"></span>
+								</th>
+								<th >Opening Date <span></span>
+								</th>
+								<th>Closing Date</th>
+								<th>Status</th>
+								<th>Action</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let proposal of serviceRequestList">
+								<td>{{proposal.proposalId}}</td>
+								<td>{{proposal.title}}</td>
+								<td>{{proposal.startDate}}</td>
+								<td>{{proposal.endDate}}</td>
+								<td>{{proposal.proposalStatus?.description}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a title="Open"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
+												class="fa fa-eye pointer"></i></a></li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					
 				</div>
 			</div>
 			

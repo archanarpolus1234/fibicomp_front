@@ -138,4 +138,15 @@ export class ProposalCreateEditService {
                     return Observable.throw( error.message || error )
                 } );
     }
+
+    loadProposalById(proposalId): Observable<JSON> {
+        var params = {
+            proposalId : proposalId
+        }
+        return this.http.post( this.constant.loadProposalById, params )
+        .catch( error => {
+            console.error( error.message || error );
+            return Observable.throw( error.message || error )
+        } );
+    }
 }
