@@ -5,7 +5,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
 						<div class="row">
-							<div class="col-12 text-left"><span>Project &nbsp;</span><span *ngIf="result?.proposal?.proposalId">{{numberOrNewText}}</span><span>{{result?.proposal?.proposalId}}</span></div>
+							<div class="col-12 text-left"><span *ngIf="result.proposal.proposalId == null">New&nbsp;</span><span>Project &nbsp;</span><span *ngIf="result?.proposal?.proposalId">#</span><span>{{result?.proposal?.proposalId}}</span></div>
 						</div>
 						<br>
 						<div class="row">
@@ -16,18 +16,20 @@
 										<table class="table tableSkin grid2">
 											<tbody>
 												<tr>
-													<td colspan="3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Title:</label><br><input type="text" placeholder="enter title" class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="result.proposal.title"/><span *ngIf="mode == 'view'" >{{result?.proposal?.title}}</span></td>
-		                                        	<td><label>Category:</label><br><select class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="proposalCategorySelected" (change) = "categoryChange($event.target.value)">
+													<td colspan="1"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Title:</label><br><input type="text" placeholder="enter title" class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="result.proposal.title"/><span *ngIf="mode == 'view'" >{{result?.proposal?.title}}</span></td>
+		                                        	<td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Category:</label><br><select class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="proposalCategorySelected" (change) = "proposalCategoryChange()">
+																						<option (value)="select">{{select}}</option>
 																						<option *ngFor="let category of result.proposalCategories" (value) = "category">{{category.description}}</option>
 																					  </select><span *ngIf="mode == 'view'" >{{proposalCategorySelected}}</span></td>
-											  		<td><label class="greenLabel">Type:&nbsp;</label><br><select class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="grantCallTypeSelected" (change) = "grantCallTypeChange($event.target.value)" >
-																						<option *ngFor="let type of result?.grantCallTypes" (value)="type">{{type.description}}</option>
-																					  </select><span *ngIf="mode == 'view'">{{grantCallTypeSelected}}</span></td>
+											  		<td><label class="greenLabel"><span class="mandatory" *ngIf="mode != 'view'">*</span>Type:&nbsp;</label><br><select class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="proposalTypeSelected" (change)="proposalTypeChange()" >
+																						<option (value)="select">{{select}}</option>
+																						<option *ngFor="let type of result?.proposalTypes" >{{type.description}}</option>
+																					  </select><span *ngIf="mode == 'view'">{{result?.proposal?.proposalType?.description}}</span></td>
 													<td><label class="greenLabel">Status:&nbsp;</label><br><input type="text" [disabled]="true" class="committeeBoxNotEditable" [value]="result?.proposal?.proposalStatus?.description" style="width: 70%" disabled/></td>
 												</tr>
 		                                        <tr  *ngIf="isMandatory">
-		                                        	<td colspan="3"><span class="mandatory">{{mandatoryText}}</span></td>
-													<td colspan="3"></td>
+		                                        	<td colspan="2"><span class="mandatory">{{mandatoryText}}</span></td>
+													<td colspan="2"></td>
 												</tr>
 												<tr>
 													<td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed Start Date:</label><br><span *ngIf="mode != 'view'" ><input placeholder="start date"
@@ -45,8 +47,7 @@
 															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
 															<span *ngIf="mode == 'view'" >{{result?.proposal?.endDate}}</span>
 															</td>
-		                                            <td><label>Duration:</label><br><span><b>{{durInYears}}</b> year(s), <b>{{durInMonths}}</b> month(s) & <b>{{durInDays}}</b> day(s)</span></td>
-													<td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br><span *ngIf="mode != 'view'" ><input placeholder="date of submission"
+		                                            <td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br><span *ngIf="mode != 'view'" ><input placeholder="date of submission"
 															[owlDateTimeTrigger]="subDt" [owlDateTime]="subDt" 
 															[(ngModel)]="result.proposal.submissionDate"
 															[ngClass]="editClass" />
@@ -54,32 +55,37 @@
 															<owl-date-time #subDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
 															<span *ngIf="mode == 'view'" >{{result?.proposal?.submissionDate}}</span>
 													</td>
-													<td colspan="2"><label>Keywords:</label><br><span *ngIf="mode!='view'"><ng2-completer style="border:none; padding:0px"
+													<td><label>Duration:</label><br><span><b>{{durInYears}}</b> year(s), <b>{{durInMonths}}</b> month(s) & <b>{{durInDays}}</b> day(s)</span></td>
+												</tr>
+		                                        <tr  *ngIf="isDateWarningText">
+		                                        	<td colspan="2"><span class="mandatory">{{dateWarningText}}</span></td>
+													<td colspan="2"></td>
+												</tr>
+		                                        <tr>
+		                                        	<td colspan="1"><label>Keywords:</label><br><span *ngIf="mode!='view'"><ng2-completer style="border:none; padding:0px"
 															[inputClass]="completerID"
 															[(ngModel)]="selectedKeyword" placeholder="search a keyword"
 															[datasource]="keywordsList" [minSearchLength]="0"
 															(selected)="keywordChangeFunction()" [ngClass]="editClass" [disabled]="mode == 'view'"></ng2-completer></span>
 															<ul *ngIf="result?.proposal?.proposalKeywords?.length > 0 " class="d-inline-flex keywordList"><li *ngFor="let keyword of result?.proposal?.proposalKeywords;let i = index" class="keywordListItem"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer keywordClose" title="remove this keyword" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
 															<span class="mandatory" *ngIf="isKeywordWarning">{{keywordWarningText}}</span><i class="fa fa-times" *ngIf="isKeywordWarning" (click)="closeKeywordWarning()"></i>
-													
+															<div class="noDataExists" *ngIf="result?.proposal?.proposalKeywords?.length == 0 && mode == 'view'">
+																No keywords added with this proposal
+															</div>
 													</td>
-		                                        </tr>
-		                                        <tr  *ngIf="isDateWarningText">
-		                                        	<td colspan="3"><span class="mandatory">{{dateWarningText}}</span></td>
-													<td colspan="3"></td>
-												</tr>
-		                                        <tr>
-		                                        	<td><label>Is this Project under SMU ICLs?</label><br><ul class="tablelayout radioElement" *ngIf="mode != 'view'">
-		                                        														  	<li><input type="radio" name="underICL" (click)="toggleICL(true)"/>&nbsp;Yes</li>
-		                                        														  	<li><input type="radio" name="underICL" checked (click)="toggleICL(false)"/>&nbsp;No</li>
+													<td><label>Is this Project under SMU ICLs?</label><br><ul class="tablelayout radioElement" *ngIf="mode != 'view'">
+		                                        														  	<li><input type="radio" name="underICL" (click)="toggleICL(true)" [checked]="result?.proposal?.isSmu == true"/>&nbsp;Yes</li>
+		                                        														  	<li><input type="radio" name="underICL" (click)="toggleICL(false)" [checked]="result?.proposal?.isSmu == false"/>&nbsp;No</li>
 		                                        														  </ul>
-		                                        														  <input type="text" class="committeeBoxNotEditable" *ngIf="mode == 'view'" [value]="showICLs ? 'Yes':'No'"/>
-		                                         	<td><span *ngIf="showICLs"><label>ICL:</label><br><select *ngIf="mode != 'view'" [ngClass]="editClass" [disabled]="mode == 'view'" [(ngModel)]="selectedICLLab">
-																						<option *ngFor="let icl of result.proposalInstituteCentreLabs" (value) ="icl">{{icl.description}}</option>
+		                                        														  <input type="text" class="committeeBoxNotEditable" *ngIf="mode == 'view'" [value]="(result?.proposal?.isSmu == true) ? 'Yes':'No'"/>
+		                                         	<td><span *ngIf="result?.proposal?.isSmu == true"><label>ICL:</label><br><select *ngIf="mode != 'view'" [ngClass]="editClass" [disabled]="mode == 'view'" 
+		                                         									[(ngModel)]="selectedICLLab" (change)="labICLChange()">
+																						<option (value)="select">{{select}}</option>
+																						<option *ngFor="let icl of result.proposalInstituteCentreLabs">{{icl.description}}</option>
 																					  </select></span>
 																					  <span *ngIf="mode == 'view'">{{selectedICLLab}}</span>
-																					  </td>
-												    <td colspan="4"></td> 
+													</td>
+													<td></td> 
 												</tr>
 											</tbody>
 										</table>
@@ -112,15 +118,14 @@
 			                            <th >Funding Agency</th>
 			                            <th >Funding Scheme</th>
 			                            <th >Grant Theme</th>
-			                            <th >Action</th>
+			                            <th *ngIf="mode != 'view'">Action</th>
 									</tr>
 									<tr>
 										<td style="padding-left: 10px"><span >{{result?.proposal?.grantCall?.grantCallName}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.sponsor?.sponsorName}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.activityType?.description}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.grantTheme}}</span></td>
-										<td ><!-- <i class="fa fa-trash fa-large" (click)="removeSelectedGrant()"></i> -->
-											<ul class="actionButtonGroup">
+										<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 												<li><a href="#" (click)="removeSelectedGrant($event)"><i class="fa fa-trash-o" aria-hidden="true" title="remove this grant call"></i></a></li>
 											</ul>
 										</td>
@@ -131,17 +136,9 @@
                          <div class="borderBox col-12">
 								<h4 class="borderBoxHeading">Area of Research</h4>
                                     <table class="table table-responsive tableSkin">
-                                       <!-- <tr *ngIf="mode != 'view'">
-                                       		<td></td>
-											<td colspan="2"><ul class="tablelayout border-top-0 radioElement">
-											  		<li><input type="radio" name="areaChange" checked (click)="changeArea(result?.proposalResearchTypes[0]?.description)"/>{{result?.proposalResearchTypes[0]?.description}}</li>
-											  		<li><input type="radio" name="areaChange" (click)="changeArea(result?.proposalResearchTypes[1]?.description)"/>{{result?.proposalResearchTypes[1]?.description}}</li>
-											  	</ul></td>
-										  	<td></td>
-									   </tr> -->
 										<tr id="addAreaOfResearchRow" *ngIf=" mode != 'view'">
 											<td class="text-right">Type:</td>
-											<td><select [ngClass]="editClass" [(ngModel)]="areaTypeSelected" (change)="changeArea($event.target.value)">
+											<td><select [ngClass]="editClass" [(ngModel)]="researchTypeSelected" (change)="changeArea($event.target.value)">
 														<option *ngFor="let type of result?.proposalResearchTypes" (value)="type">{{type.description}}</option>
 														  </select></td>
 											<td class="text-right">{{selectedAreaType}}:</td>
@@ -183,9 +180,12 @@
 	                                        	<td><label>Description:</label></td>
 	                                        	<td colspan="4"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="elaborate contributions of your proposal to area of researches" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 	                                        	<span *ngIf="mode == 'view'">{{result?.proposal?.researchDescription}}</span>
+	                                        	<div class="noDataExists" *ngIf="result?.proposal?.details == null && mode == 'view'">
+													No contributions or descriptions on area of research added for this proposal
+												</div>
 	                                        </tr>
                                         </tbody>
-                                        <tr *ngIf="result?.proposal?.proposalResearchAreas?.length == 0 ">
+                                        <tr *ngIf="result?.proposal?.proposalResearchAreas?.length == 0">
                                         	<td colspan="5"><div class="noDataExists">
 														No area of research/excellence added with this proposal
 													</div></td>
@@ -218,8 +218,8 @@
 											</td>
 											<td class="text-right">Role:</td>
 											<td><select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)]="personRoleSelected">
-												<option>Select</option>	
-												<option *ngFor="let role of personRolesList" (value)="role">{{role.description}}</option>
+												<option (value)="select">{{select}}</option>	
+												<option *ngFor="let role of personRolesList">{{role.description}}</option>
 													  </select>
 											</td>
 											<td class="text-left">
@@ -267,21 +267,33 @@
 												<td><label>Abstract:</label><br>
 													<textarea name="abstract" class="forTextAreaEntry" placeholder="research abstract" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.abstractDescription}}</span>
+													<div class="noDataExists" *ngIf="result?.proposal?.abstractDescription == null && mode == 'view'">
+														No abstract for this proposal
+													</div>
 												</td>
 												<td><label>Funding Strategy:</label><br>
 													<textarea name="fundingStrategy" class="forTextAreaEntry" placeholder="strategy for obtaining external funding" [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.fundingStrategy}}</span>
+													<div class="noDataExists" *ngIf="result?.proposal?.fundingStrategy == null && mode == 'view'">
+														No description for funding strategy for this proposal
+													</div>
 	                                        	</td>
 	                                        </tr>
 	                                        <tr>
 												<td><label>Details of Proposal:</label><br>
 													<textarea name="details" class="forTextAreaEntry" placeholder="write on aim, significance, aproach, preliminary studies etc." [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.details}}</span>
+													<div class="noDataExists" *ngIf="result?.proposal?.details == null && mode == 'view'">
+														No additional details for this proposal
+													</div>
 												</td>
 												<td><label>Deliverables:</label><br>
 													<textarea name="deliverables" class="forTextAreaEntry" placeholder="project deliverables like manpoer training, research outcomes, etc." [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.deliverables}}</span>
-													</td>
+													<div class="noDataExists" *ngIf="result?.proposal?.deliverables == null && mode == 'view'">
+														No deliverables for this proposal
+													</div>
+												</td>
 	                                        </tr>
 										</tbody>
 									</table>
@@ -296,11 +308,13 @@
 													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
 														
 														<td><label>Type of Funding Agency :</label><br><select [(ngModel)] = "selectedSponsorType" [ngClass]="editClass" (change)="sponsorTypeChange()">
+															<option (value)="select">{{select}}</option>
 															<option *ngFor="let sponsorType of result.sponsorTypes">{{sponsorType.description}}</option>
 														</select></td>
 														<td><label>Name of Funding Agency:</label><br>
 															<select [(ngModel)] = "selectedSponsorName" [ngClass]="editClass" >
-																<option *ngFor="let sponsor of result.sponsors" (value)="sponsor">{{sponsor.sponsorName}}</option>
+																<option (value)="select">{{select}}</option>
+																<option *ngFor="let sponsor of result.sponsors" >{{sponsor.sponsorName}}</option>
 															</select>
 														</td>
 														<td><label>Start Date:</label><input
@@ -347,7 +361,7 @@
 				                                            <td >{{proposalSponsor?.sponsor?.sponsorName}}</td>
 				                                            <td >{{proposalSponsor?.startDate | date:'MM/dd/yyyy'}}</td>
 				                                            <td >{{proposalSponsor?.endDate | date:'MM/dd/yyyy'}}</td>
-				                                            <td >{{proposalSponsor?.amount}}</td>
+				                                            <td >$ {{proposalSponsor?.amount}}</td>
 				                                         	<td  *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 																	<li><a href="#" data-toggle="modal"
 																		data-target="#deleteSponsor"
@@ -366,26 +380,23 @@
 													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
 														<td></td>
 														<td class="text-right">Protocol:</td>
-														<td colspan="2">
+														<td>
 															<div>
 																<ng2-completer title="Add area of research"
 																	[inputClass]="completerID" placeholder="search a protocol title"
-																	[(ngModel)]="selectedProtocol"
+																	[(ngModel)]="selectedProtocol" (selected)="addIRB()"
 																	[datasource]="protocolsList" [minSearchLength]="0"></ng2-completer>
 															</div>
 														</td>
-														<td>
-															<button class="btnSkin btnSkinPrimary" (click)="addIRB()">Add</button>
-														</td>
-														<td></td>
+														<td colspan="4">&nbsp;</td>
 													</tr>
 													<tr  *ngIf="isIRBWarning">
 			                                        	<td colspan="4"><span class="mandatory">{{irbWarningText}}</span><i class="fa fa-times" (click)="closeIrbWarning()"></i></td>
 														<td colspan="3"></td>
 													</tr>
 													<tr *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0">
-														<td colspan="6"><div class="noDataExists">
-																You declared no protocols are associated before this proposal
+														<td colspan="7"><div class="noDataExists">
+																No protocols associated before this proposal
 															</div></td>
 													</tr>
 													<tbody *ngIf="result?.proposal?.proposalIrbProtocols?.length > 0">
@@ -424,18 +435,14 @@
 											<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
 	                                        	<td class="text-right">Category:</td>
 	                                        	<td><select [ngClass]="editClass" [(ngModel)]="budgetCategorySelected" (change)="budgetCategoryChanged()" >
-														<option *ngFor="let category of result?.proposalBudgetCategories" (value)="category">{{category.description}}</option>
+														<option (value)="select">{{select}}</option>
+														<option *ngFor="let category of result?.proposalBudgetCategories">{{category.description}}</option>
 														  </select></td>
 												<td class="text-right">Cost Element: </td>
 												<td><select [ngClass]="editClass" [(ngModel)]="costElementSelected" >
-														<option *ngFor="let costElement of result?.proposalCostElements" (value)="costElement">{{costElement.description}}</option>
-														  </select>
-														<!-- <ng2-completer title="Add area of research"
-															[inputClass]="completerID"
-															[(ngModel)]="areaInput.researchAreaDescription"
-															[datasource]="areaList" [minSearchLength]="0"
-															(ngModelChange)="areaChangeFunction(areaInput)"
-															(selected)="onAreaSelect()"></ng2-completer> -->
+														<option (value)="select">{{select}}</option>
+														<option *ngFor="let costElement of result?.proposalCostElements" >{{costElement.description}}</option>
+													</select>
 												</td>
 												<td class="text-right">Description: </td>
 												<td><input type="text" [ngClass]="editClass" [(ngModel)]="budgetDescription"/></td>
@@ -516,12 +523,117 @@
                                </div>
                                <div class="col-12 text-right">
                                  	<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view'" (click)="saveProposal()">Save</button>
-									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view'" (click)="submitProposal()">Submit</button>
+									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view' && result?.proposal?.proposalId" (click)="submitProposal()">Submit</button>
+                               		<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="mode == 'view' || result?.proposal?.proposalStatus?.description != 'In Progress'" (click)="openRouteLog()" >Route Log</button>
                                </div>
                     </div>
 			</section>
 		<div class="footerPush"></div>
 	</div>
+</div>
+
+<!-- ROUTE LOG MODAL  -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="isRoutelogOpened" tabindex="-1"
+id="routeLogModal" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Route Log</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			
+			<!--  -->
+			<div
+				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+				<div class="row">
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>Proposal #</label> <span>{{result?.proposal?.proposalId}}</span>
+					</div>
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>title</label> <span>{{result?.proposal?.title}}</span>
+					</div>
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>Proposal Start Date</label> <span>{{result?.proposal?.startDate}}</span>
+					</div>
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>Proposal End Date</label> <span>{{result?.proposal?.endDate}}</span>
+					</div>
+				</div>
+			</div>
+			
+			<!--  -->
+			<div class="borderBox col-12">
+				<div class="pullSide">
+					<table class="table table-responsive tableSkin">
+						<tbody >
+                            <tr>
+                                <th >Name</th>
+                                <th >Routing Status</th>
+                                <th >Action Date</th>
+                                <th >Comments</th>
+                                <th >Attachments</th>
+                            </tr>
+                            <h4 class="borderBoxHeading">Grant Administrator</h4>
+                            <tr>
+                                <td>Dowdy Savan</td>
+                                <td>Aproved</td>
+                                <td>07/10/2018</td>
+                                <td>Comments</td>
+                             	<td><ul class="actionButtonGroup">
+									<li><a href="#" (click)="downloadRouteAttachment($event)"><i
+											class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+								</ul></td>
+                             </tr>
+                             <tr>
+                                <td>Carrol Woods</td>
+                                <td>Aproved</td>
+                                <td>07/21/2018</td>
+                                <td>Comments</td>
+                             	<td><ul class="actionButtonGroup">
+									<li><a href="#" (click)="downloadRouteAttachment($event)"><i
+											class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+								</ul></td>
+                             </tr>
+                            <h4 class="borderBoxHeading">Grant Manager</h4>
+                            <tr>
+                                <td>Steve Smith</td>
+                                <td>Aproved</td>
+                                <td>08/01/2018</td>
+                                <td>Comments</td>
+                             	<td><ul class="actionButtonGroup">
+									<li><a href="#" (click)="downloadRouteAttachment($event)"><i
+											class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+								</ul></td>
+                             </tr>
+                             <tr>
+                                <td>Michael Ballack</td>
+                                <td>Waiting for aproval</td>
+                                <td></td>
+                                <td></td>
+                             	<td><ul class="actionButtonGroup">
+									<li><a href="#" (click)="downloadRouteAttachment($event)"><i
+											class="fa fa-file-pdf-o" aria-hidden="true"></i></a></li>
+								</ul></td>
+                             </tr>
+                          </tbody>
+                     </table>
+				</div>
+			</div>
+			
+			<!--  -->
+		</div>
+		<div class="modal-footer" >
+			<button type="button" class="btnSkin btnSkinPrimary"
+				data-dismiss="modal" data-toggle="modal" (click)="isRoutelogOpened = false">Ok</button>
+		</div>
+	</div>
+</div>
 </div>
 
 <!-- ADD ATTACHMENT MODAL -->
@@ -661,15 +773,15 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 </div>
 </div>
 
-<!-- ADD WARNING MODAL -->
+<!-- SAVE PROPOSAL MODAL -->
 <div class="modal fade mySkinDialog modalFallBack" *ngIf="showAddedModal" tabindex="-1"
 id="addProposal" tabindex="-1" role="dialog"
 aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title" *ngIf="!showAddedModal">Saved</h5>
-			<h5 class="modal-title" *ngIf="showAddedModal">Warning</h5>
+			<h5 class="modal-title" *ngIf="isProposalSaved">Saved</h5>
+			<h5 class="modal-title" *ngIf="!isProposalSaved">Warning</h5>
 
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
@@ -677,13 +789,13 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 			</button>
 		</div>
 		<div class="modal-body">
-			<p *ngIf="!showAddedModal">Proposal has been saved successfully.</p>
-			<p *ngIf="showAddedModal">Error in saving your proposal, please review mandatory details</p>
+			<p *ngIf="isProposalSaved">Proposal has been saved successfully.</p>
+			<p *ngIf="!isProposalSaved">Error in saving your proposal, please review mandatory details</p>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="!showAddedModal"
-				(click)="navigate($event, 'view')" data-dismiss="modal">Ok</button>
-			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="showAddedModal"
+			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="isProposalSaved"
+				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
+			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="!isProposalSaved"
 				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
 		</div>
 	</div>

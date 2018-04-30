@@ -48,12 +48,12 @@ export class ProposalCreateEditService {
         }
         return this.http.post( this.constant.deleteProposalAttachment, params )
     }
-    
-    saveProposal( proposalObject, type  ): Observable<JSON> {
+
+    saveProposal( proposalObject, type ): Observable<JSON> {
         var sendObject = {
-                proposal: proposalObject,
-                updateType: type,
-            }
+            proposal: proposalObject,
+            updateType: type,
+        }
         return this.http.post( this.constant.saveOrUpdateProposal, sendObject )
             .catch( error => {
                 console.error( error.message || error );
@@ -115,38 +115,38 @@ export class ProposalCreateEditService {
                 return Observable.throw( error.message || error )
             } );
     }
-    
+
     deleteProposalKeyword( proposalId, keywordId ): Observable<JSON> {
         var params = {
-                proposalId: proposalId,
-                keywordId: keywordId
-            }
-            return this.http.post( this.constant.deleteProposalKeywordUrl, params )
-                .catch( error => {
-                    console.error( error.message || error );
-                    return Observable.throw( error.message || error )
-                } );
-    }
-    
-    fetchCostElementData( budgetCategoryCode ): Observable<JSON> {
-        var params = {
-                budgetCategoryCode: budgetCategoryCode
-            }
-            return this.http.post( this.constant.fetchCostElementUrl, params )
-                .catch( error => {
-                    console.error( error.message || error );
-                    return Observable.throw( error.message || error )
-                } );
+            proposalId: proposalId,
+            keywordId: keywordId
+        }
+        return this.http.post( this.constant.deleteProposalKeywordUrl, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
     }
 
-    loadProposalById(proposalId): Observable<JSON> {
+    fetchCostElementData( budgetCategoryCode ): Observable<JSON> {
         var params = {
-            proposalId : proposalId
+            budgetCategoryCode: budgetCategoryCode
+        }
+        return this.http.post( this.constant.fetchCostElementUrl, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    loadProposalById( proposalId ): Observable<JSON> {
+        var params = {
+            proposalId: proposalId
         }
         return this.http.post( this.constant.loadProposalById, params )
-        .catch( error => {
-            console.error( error.message || error );
-            return Observable.throw( error.message || error )
-        } );
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
     }
 }
