@@ -261,3 +261,29 @@ input[type=number]::-webkit-outer-spin-button {
 .dateBox {
 	width: 100% !important;
 }
+
+.routeLogModalHeader {
+	background-color: #00bcd4;
+}
+
+.routeLogModalHeader>.modal-title {
+	color: #fff;
+}
+
+#routelogHeader {
+	background-color: #26A69A;
+}
+
+#routelogHeader>th {
+	color:#fff;
+}
+
+.commentBox {
+	width: 100%;
+	line-height: 30px;
+	padding: 0 5px;
+	border-radius: 20px;
+	opacity: 1 !important;
+	border: 1px #DEDEDE solid;
+	font-size: 0.85em;
+}

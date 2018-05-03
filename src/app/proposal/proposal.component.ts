@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionManagementService } from "../session/session-management.service";
-import { Subject,Observable } from "rxjs";
+import { Subject, Observable } from "rxjs";
 import { CompleterService, CompleterData } from "ng2-completer";
 import { UploadFile, UploadEvent } from "ngx-file-drop";
 import { CommitteeMemberEmployeeElasticService } from '../elastic-search/committee-members-employees-elastic-search.service';
@@ -21,8 +21,10 @@ import 'rxjs/Rx';
 } )
 export class ProposalComponent implements OnInit, AfterViewInit {
 
-    mode: string = "view";
-    showICLs: boolean = false;
+    routelogDoc1Selected: string;
+    routelogDoc2Selected: string;
+    routelogDoc3Selected: string;
+    mode: string = 'view';
     showGrantSearch: boolean = true;
     isAOREnabled: boolean = true;
     editScheduleattachment: boolean = true;
@@ -30,14 +32,13 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     editAreaClass: string = 'scheduleBoxes';
     sendObject: any = {};
     result: any = {};
-    grantCallTypeSelected: string;
+    proposalTypeSelected: string;
     grantCallType: any = [];
     proposalCategorySelected: string;
     durInYears: number;
     durInMonths: number;
     durInDays: number;
-    keywordsList:any  = [];
-    keywordsDisplayList: any[] = [];
+    keywordsList: any = [];
     selectedKeyword: string;
     keywordObject: any = {};
     currentUser: string = localStorage.getItem( 'currentUser' );
@@ -58,10 +59,13 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     budgetWarningFlag: boolean = false;
     budgetWarningMsg: string;
     showDeleteBudget: boolean = false;
-    numberOrNewText: string = '#';
     isMandatory: boolean = false;
     mandatoryText: string = '';
-    areaTypeSelected: string;
+    researchTypeSelected: string;
+    showApproveDisapproveModal: boolean = false;
+    approveDisapprovePlaceHolder: string;
+    modalAproveHeading: string;
+    approveComments: string;
 
     showAddAttachment: boolean = false;
     uploadedFile: any[] = [];
@@ -99,7 +103,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     fundingStartDate: any;
     fundingEndDate: any;
     showAddedModal: boolean = false;
-
+    showSubmittedModal: boolean = false;
+    isRoutelogOpened: boolean = false;
+    select: string = '--Select--';
     //for setting validation of start Date
     currentDate: Date = new Date();
     selectedMember: any;
@@ -112,6 +118,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     tempSavePersonObject: any = {};
     tempBudgetObject: any = {};
     showDeleteMember: boolean = false;
+    isProposalSaved: boolean = false;
+    isProposalSubmitted: boolean = false;
 
     //for elastic search
     searchActive: boolean = false;
@@ -131,8 +139,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     last_name: any;
     _results: any;
     placeHolderText: string = 'Search an employee';
-    proposalId:string;
-    grantId:string = null;
+    proposalId: string;
+    grantId: string = null;
+    workflow: any = {};
 
     public onDestroy$ = new Subject<void>();
 
@@ -151,94 +160,88 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.grantId = this.route.snapshot.queryParamMap.get( 'grantId' );
 
         this.proposalId = this.route.snapshot.queryParamMap.get( 'proposalId' );
-        if( this.proposalId == null ) {
+        if ( this.proposalId == null ) {
             this.mode = 'create';
             this.editClass = "committeeBox";
             this.editAreaClass = "scheduleBoxes";
             this.createProposalCall();
         } else {
-            this.proposalCreateService.loadProposalById(this.proposalId).subscribe(success=>{
+            this.proposalCreateService.loadProposalById( this.proposalId, localStorage.getItem( 'personId' ), localStorage.getItem( 'currentUser' ) ).subscribe( success => {
                 this.result = success;
-                console.log("result",this.result)
-                if(this.result.proposal.proposalStatus.description == 'In Progress') {
-                    this.mode == 'edit';
+                if ( this.result.proposal.proposalStatus.description == 'In Progress' ) {
+                    this.mode = 'edit';
                     this.editClass = "committeeBox";
                     this.editAreaClass = "scheduleBoxes";
                 } else {
-                    this.mode == 'view';
+                    this.mode = 'view';
                     this.editClass = "committeeBoxNotEditable";
-                    this.editAreaClass = "scheduleBoxes";   
+                    this.editAreaClass = "scheduleBoxes";
 
                 }
                 this.grantCallType = this.result.grantCallTypes;
-            this.personRolesList = this.result.proposalPersonRoles;
-            this.grantCallTypeSelected = ( this.result.proposal.grantCall != null ) ? this.result.proposal.grantCall.grantCallType.description : this.result.grantCallTypes[2].description;
-            this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.result.proposalCategories[0].description;
-            this.grantCallType = this.result.grantCallTypes;
-            this.selectedAreaType = this.result.proposalResearchTypes[0].description;
-            this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.result.proposalInstituteCentreLabs[0].description;
-            this.personRoleSelected = this.result.proposalPersonRoles[2].description;
-            this.budgetCategorySelected = this.result.proposalBudgetCategories[0].description;
-            this.areaTypeSelected = this.result.proposalResearchTypes[0].description;
-            this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
-            this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
-            this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
-            this.selectedSponsorType = this.result.proposal.grantCall.sponsorType.description;
-            this.budgetCategoryChanged();
-            this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {   
-                var temp: any = {};
-                temp = data;
-                this.result.sponsors = temp.sponsors;
-                this.selectedSponsorName = this.result.sponsors[0].sponsorName;
-                this.fundingStartDate = null;
-                this.fundingEndDate = null;
-                this.sponsorAmount = 0;
-            } );
-            this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
-            this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
-            this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
-            this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
-            this.protocolsList = this.completerService.local( this.result.protocols, 'title', 'title' );
-                
+                this.personRolesList = this.result.proposalPersonRoles;
+                this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
+                this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
+                this.grantCallType = this.result.grantCallTypes;
+                this.selectedAreaType = this.result.proposalResearchTypes[0].description;
+                this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
+                this.personRoleSelected = this.select;
+                this.budgetCategorySelected = this.select;
+                this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
+                this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
+                this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
+                this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
+                this.selectedSponsorType = this.select;
+                this.budgetCategoryChanged();
+                this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
+                    var temp: any = {};
+                    temp = data;
+                    this.result.sponsors = temp.sponsors;
+                    this.selectedSponsorName = this.select;
+                    this.fundingStartDate = null;
+                    this.fundingEndDate = null;
+                    this.sponsorAmount = 0;
+                } );
+                this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
+                this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
+                this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
+                this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
+                this.protocolsList = this.completerService.local( this.result.protocols, 'title', 'title' );
 
-                console.log("result",this.result)
-            });
+            } );
         }
     }
 
     createProposalCall() {
         if ( this.grantId != null ) {
             this.sendObject.grantCallId = this.grantId;
-            console.log(this.grantId)
 
         } else {
-            console.log("grantId is null");
             this.sendObject.grantCallId = null;
         }
         this.proposalCreateService.loadCreateProposalData( this.sendObject ).takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data || [];
-            console.log("result create",this.result)
             this.grantCallType = this.result.grantCallTypes;
             this.personRolesList = this.result.proposalPersonRoles;
-            this.grantCallTypeSelected = ( this.result.proposal.grantCall != null ) ? this.result.proposal.grantCall.grantCallType.description : this.result.grantCallTypes[2].description;
-            this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.result.proposalCategories[0].description;
+            this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
+            this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
             this.grantCallType = this.result.grantCallTypes;
             this.selectedAreaType = this.result.proposalResearchTypes[0].description;
-            this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.result.proposalInstituteCentreLabs[0].description;
-            this.personRoleSelected = this.result.proposalPersonRoles[2].description;
-            this.budgetCategorySelected = this.result.proposalBudgetCategories[0].description;
-            this.areaTypeSelected = this.result.proposalResearchTypes[0].description;
+            this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
+            this.personRoleSelected = this.select;
+            this.budgetCategorySelected = this.select;
+            this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
             this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
-            this.selectedSponsorType = this.result.sponsorTypes[0].description;
+            this.selectedSponsorType = this.select;
             this.budgetCategoryChanged();
 
             this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
                 var temp: any = {};
                 temp = data;
                 this.result.sponsors = temp.sponsors;
-                this.selectedSponsorName = this.result.sponsors[0].sponsorName;
+                this.selectedSponsorName = this.select;
                 this.fundingStartDate = null;
                 this.fundingEndDate = null;
                 this.sponsorAmount = 0;
@@ -373,12 +376,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     toggleICL( flag ) {
-        this.showICLs = flag;
         this.result.proposal.isSmu = flag;
-        this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.result.proposalInstituteCentreLabs[0].description;
-    }
-    addGrantCall( grantCall ) {
-
+        this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
     }
 
     changeArea( areaType ) {
@@ -492,14 +491,16 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     deleteKeyword( keyword, k ) {
         var length = this.result.proposal.proposalKeywords.length;
         for ( let i = 0; i < length; ++i ) {
-            if ( this.result.proposal.proposalKeywords[i].keywordId != null && this.result.proposal.proposalKeywords[i].grantKeywordId == keyword.keywordId ) {
-                this.proposalCreateService.deleteProposalKeyword( this.result.grantCall.grantCallId, keyword.grantKeywordId ).subscribe( success => {
-                    var temp: any = {};
-                    temp = success;
+            if ( this.result.proposal.proposalKeywords[i].scienceKeywordCode == keyword.scienceKeywordCode ) {
+                if ( this.result.proposal.proposalKeywords[i].keywordId != null ) {
+                    this.proposalCreateService.deleteProposalKeyword( this.result.proposal.proposalId, keyword.keywordId ).subscribe( success => {
+                        var temp: any = {};
+                        temp = success;
+                        this.result.proposal.proposalKeywords.splice( k, 1 );
+                    } );
+                } else {
                     this.result.proposal.proposalKeywords.splice( k, 1 );
-                } );
-            } else {
-                this.result.proposal.proposalKeywords.splice( k, 1 );
+                }
             }
         }
         this.selectedKeyword = '';
@@ -527,8 +528,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                     this.keywordObject.scienceKeywordCode = keyword.code;
                     this.keywordObject.updateTimeStamp = timeStamp;
                     this.keywordObject.updateUser = this.currentUser;
-                    this.keywordsDisplayList.push( this.keywordObject );
-                    this.result.proposal.proposalKeywords = this.keywordsDisplayList;
+                    this.result.proposal.proposalKeywords.push( this.keywordObject );
                     this.isKeywordWarning = false;
                     this.keywordWarningText = null;
                     break;
@@ -539,11 +539,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.keywordWarningText = "Keyword already added";
         }
         this.selectedKeyword = null;
-    }
-
-    closeKeywordWarning() {
-        this.isKeywordWarning = false;
-        this.keywordWarningText = null;
     }
 
     grantCallChangeFunction() {
@@ -568,7 +563,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
     addProposalTeamMember() {
         var personFlag = false;
-        if ( this.selectedMember != null ) {
+        if ( this.selectedMember != null && this.personRoleSelected != this.select ) {
             var tempObj: any = {};
             if ( !this.nonEmployeeFlag ) {
                 tempObj.personId = this.selectedMember.prncpl_id;
@@ -581,13 +576,14 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 tempObj.leadUnitNumber = null;
                 tempObj.leadUnitName = this.selectedMember.organization;
             }
+
             this.personRolesList.forEach(( value, index ) => {
                 if ( value.description == this.personRoleSelected ) {
                     tempObj.proposalPersonRole = value;
                     tempObj.personRoleId = value.id;
                 }
             } );
-            
+
             if ( this.result.proposal.proposalPersons.length != 0 ) {
                 for ( let person of this.result.proposal.proposalPersons ) {
                     if ( person.fullName == tempObj.fullName ) {
@@ -611,8 +607,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 this.selectedMember = null;
                 this.memberTypeSelected = 'Employee';
                 this.memberTypeChanged();
-                this.personRoleSelected = this.result.proposalPersonRoles[2].description;
-                
+                this.personRoleSelected = this.select;
+
                 this.personWarningFlag = false;
                 this.personWarningMsg = null;
             } else {
@@ -620,8 +616,11 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 this.personWarningMsg = 'You have already added ' + tempObj.fullName;
                 this.selectedMember = null;
             }
-            
-           } else {
+
+        } else if ( this.personRoleSelected == this.select ) {
+            this.personWarningFlag = true;
+            this.personWarningMsg = '* Please choose a role';
+        } else {
             this.personWarningFlag = true;
             this.personWarningMsg = 'Please choose name of a member';
         }
@@ -632,10 +631,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.showDeleteMember = true;
         this.tempSavePersonObject = person;
         this.index = i;
-    }
-
-    closeMemberWarning() {
-        this.personWarningFlag = false;
     }
 
     deletePerson() {
@@ -664,13 +659,13 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             var temp: any = {};
             temp = success;
             this.result.proposalCostElements = temp.proposalCostElements;
-            this.costElementSelected = this.result.proposalCostElements[0].description;
+            this.costElementSelected = this.select;
             this.changeRef.detectChanges();
         } );
     }
-    
+
     addBudget() {
-        if ( this.budgetCost != null ) {
+        if ( this.budgetCost != null && this.budgetCategorySelected != this.select && this.costElementSelected != this.select ) {
             this.budgetWarningFlag = false;
             var tempObj: any = {};
             this.result.proposalBudgetCategories.forEach(( value, index ) => {
@@ -693,14 +688,18 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
             this.budgetDescription = "";
             this.budgetCost = null;
+            this.costElementSelected = this.select;
+            this.budgetCategorySelected = this.select;
+        } else if ( this.budgetCategorySelected == this.select ) {
+            this.budgetWarningFlag = true;
+            this.budgetWarningMsg = '* Please choose budget category';
+        } else if ( this.costElementSelected == this.select ) {
+            this.budgetWarningFlag = true;
+            this.budgetWarningMsg = '* Please choose a cost element';
         } else {
             this.budgetWarningFlag = true;
             this.budgetWarningMsg = 'Please enter budget cost';
         }
-    }
-
-    closeBudgetWarning() {
-        this.budgetWarningFlag = false;
     }
 
     deleteBudgetConfirmation( e, budget, i ) {
@@ -745,12 +744,11 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             var temporaryObject: any = {};
             temporaryObject = success;
             this.result.proposal = temporaryObject.proposal;
-            console.log("attachment added",this.result)
         }, error => { console.log( error ) }, () => {
             this.closeAttachments();
         } );
-     }
-    
+    }
+
     showAddAttachmentPopUp( e ) {
         e.preventDefault();
         this.showAddAttachment = true;
@@ -841,7 +839,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
         if ( this.selectedArea == null || this.selectedArea == "" ) {
             this.isAreaWarning = true;
-            this.areaWarningText = 'Select an area of research/excellence'
+            this.areaWarningText = '* Select an area of research/excellence'
         } else {
             this.areaWarningText = null;
             this.isAreaWarning = false;
@@ -854,7 +852,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                         break;
                     }
                 }
-            } else if (this.result.proposal.proposalResearchAreas.length != 0 && this.selectedAreaType == 'Area of Research' ) {
+            } else if ( this.result.proposal.proposalResearchAreas.length != 0 && this.selectedAreaType == 'Area of Research' ) {
                 for ( let area of this.result.proposal.proposalResearchAreas ) {
                     if ( area.researchArea != undefined && area.researchArea.description == this.selectedArea ) {
                         areaFlag = true;
@@ -906,45 +904,123 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.selectedArea = "";
     }
 
-    closeAreaWarning() {
-        this.areaWarningText = null;
-        this.isAreaWarning = false;
-    }
-    
     saveProposal() {
         var type = ( this.result.proposal.proposalId != null ) ? "UPDATE" : "SAVE";
-        if(this.result.proposal.title == "") {
+        // proposal details validation
+        if ( this.result.proposal.title == "" || this.result.proposal.title == null ) {
             this.isMandatory = true;
+            this.mandatoryText = '* Please enter a title';
+        } else if ( this.proposalCategorySelected == this.select ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please choose a category';
+        } else if ( this.proposalTypeSelected == this.select ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please choose proposal type';
+        } else {
+            this.isMandatory = false;
+            this.dateValidation();
         }
-        if(!this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && !this.isFundingWarning && !this.isIRBWarning && !this.budgetWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
-            console.log("send proposal",this.result.proposal)
+        // AOR validation
+        if ( this.result.proposal.proposalResearchAreas.length > 0 ) {
+            this.areaWarningText = null;
+            this.isAreaWarning = false;
+        } else {
+            this.isAreaWarning = true;
+            this.areaWarningText = '* Select an area of research/excellence'
+        }
+        var flag = false;
+        if ( this.result.proposal.proposalPersons.length > 0 ) {
+            this.result.proposal.proposalPersons.forEach(( value, index ) => {
+                if ( value.proposalPersonRole.description == 'Principal Investigator' ) {
+                    flag = true;
+                }
+            } );
+            if ( flag == false ) {
+                this.personWarningMsg = '* Select a member as PI';
+                this.personWarningFlag = true;
+            } else {
+                this.personWarningMsg = null;
+                this.personWarningFlag = false;
+            }
+        } else {
+            this.personWarningFlag = true;
+            this.personWarningMsg = '* Select atleast one team member';
+        }
+        this.showAddedModal = true;
+        if ( !this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
             this.proposalCreateService.saveProposal( this.result.proposal, type ).subscribe( data => {
                 var temp: any = data;
                 this.result.proposal = temp.proposal;
-                console.log("saved",this.result);
+                this.isProposalSaved = true;
             } );
+        } else {
+            this.isProposalSaved = false;
         }
-        else {
-            this.showAddedModal = true;
-        }
-        
+        window.scrollTo( 0, 0 );
+
     }
 
     submitProposal() {
-        this.saveProposal();
-        this.mode = 'view';
-        this.showAddedModal = false;
-        if ( this.mode == 'view' ) {
-            this.editClass = "committeeBoxNotEditable";
-            this.editAreaClass = "committeeBoxNotEditable";
-        } else if ( this.mode == 'create' || this.mode == 'edit' ) {
-            this.editClass = "committeeBox";
-            this.editAreaClass = "scheduleBoxes";
+        // this.saveProposal();
+        if ( this.result.proposal.title == "" || this.result.proposal.title == null ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please enter a title';
+        } else if ( this.proposalCategorySelected == this.select ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please choose a category';
+        } else if ( this.proposalTypeSelected == this.select ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please choose proposal type';
+        } else {
+            this.isMandatory = false;
+            this.dateValidation();
         }
-    }
-    
-    deleteArea() {
+        // AOR validation
+        if ( this.result.proposal.proposalResearchAreas.length > 0 ) {
+            this.areaWarningText = null;
+            this.isAreaWarning = false;
+        } else {
+            this.isAreaWarning = true;
+            this.areaWarningText = '* Select an area of research/excellence'
+        }
+        // Project members validation
+        var flag = false;
+        if ( this.result.proposal.proposalPersons.length > 0 ) {
+            this.result.proposal.proposalPersons.forEach(( value, index ) => {
+                if ( value.proposalPersonRole.description == 'Principal Investigator' ) {
+                    flag = true;
+                }
+            } );
+            if ( flag == false ) {
+                this.personWarningMsg = '* Select a member as PI';
+                this.personWarningFlag = true;
+            } else {
+                this.personWarningMsg = null;
+                this.personWarningFlag = false;
+            }
+        } else {
+            this.personWarningFlag = true;
+            this.personWarningMsg = '* Select atleast one team member';
+        }
 
+        if ( !this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && !this.isFundingWarning && !this.isIRBWarning && !this.budgetWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
+            this.mode = 'view';
+            this.showAddedModal = false;
+            //this.showSubmittedModal = true;
+            this.proposalCreateService.submitProposal( this.result.proposal, localStorage.getItem( 'currentUser' ) ).subscribe( data => {
+                var temp: any = data;
+                this.result.proposal = temp.proposal;
+                this.result.workflow = temp.workflow;
+                this.isProposalSubmitted = true;
+                this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'mode': this.mode, 'proposalId': this.result.proposal.proposalId } } );
+            } );
+        } else {
+            this.isProposalSubmitted = false;
+        }
+        window.scrollTo( 0, 0 );
+    }
+
+    deleteArea() {
         if ( this.tempAreaObject.researchAreaId != null ) {
             //serviceCall
             this.proposalCreateService.deleteProposalResearchArea( this.result.proposal.proposalId, this.tempAreaObject.researchAreaId ).subscribe();
@@ -999,11 +1075,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
     }
 
-    closeIrbWarning() {
-        this.isIRBWarning = false;
-        this.irbWarningText = null;
-    }
-    
     tempSaveIRB( e, irb ) {
         e.preventDefault();
         this.showDeleteIRB = true;
@@ -1020,15 +1091,17 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     sponsorTypeChange() {
-        for ( let type of this.result.sponsorTypes ) {
-            if ( type.description == this.selectedSponsorType ) {
-                this.grantService.fetchSponsorsBySponsorType( type.code ).subscribe( data => {
-                    var temp: any = {};
-                    temp = data;
-                    this.result.sponsors = temp.sponsors;
-                    this.selectedSponsorName = this.result.sponsors[0].sponsorName;
-                } );
-                break;
+        if ( this.selectedSponsorType != this.select ) {
+            for ( let type of this.result.sponsorTypes ) {
+                if ( type.description == this.selectedSponsorType ) {
+                    this.grantService.fetchSponsorsBySponsorType( type.code ).subscribe( data => {
+                        var temp: any = {};
+                        temp = data;
+                        this.result.sponsors = temp.sponsors;
+                        this.selectedSponsorName = this.select;
+                    } );
+                    break;
+                }
             }
         }
     }
@@ -1036,13 +1109,13 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     sponsorDateValidation() {
         if ( this.fundingStartDate == null ) {
             this.isFundingWarning = true;
-            this.fundingWarningText = 'Please select start date';
+            this.fundingWarningText = '* Please select start date';
         } else if ( this.fundingEndDate == null ) {
             this.isFundingWarning = true;
-            this.fundingWarningText = 'Please select end date';
+            this.fundingWarningText = '* Please select end date';
         } else if ( this.fundingStartDate > this.fundingEndDate ) {
             this.isFundingWarning = true;
-            this.fundingWarningText = 'Please select an end date after start date';
+            this.fundingWarningText = '* Please select an end date after start date';
         } else {
             this.isFundingWarning = false;
             this.fundingWarningText = null;
@@ -1053,59 +1126,119 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.sponsorDateValidation();
         var tempSponsorObject: any = {};
         if ( this.fundingStartDate != null && this.fundingEndDate != null && this.fundingStartDate <= this.fundingEndDate ) {
-            for ( let sponsor of this.result.sponsors ) {
-                if ( sponsor.sponsorName == this.selectedSponsorName ) {
-                    tempSponsorObject.sponsor = sponsor;
-                    tempSponsorObject.sponsorCode = sponsor.sponsorCode;
-                    tempSponsorObject.updateTimeStamp = ( new Date() ).getTime();
-                    tempSponsorObject.updateUser = localStorage.getItem( 'currentUser' );
+            if ( this.selectedSponsorName != this.select && this.selectedSponsorType != this.select ) {
+                for ( let sponsor of this.result.sponsors ) {
+                    if ( sponsor.sponsorName == this.selectedSponsorName ) {
+                        tempSponsorObject.sponsor = sponsor;
+                        tempSponsorObject.sponsorCode = sponsor.sponsorCode;
+                        tempSponsorObject.updateTimeStamp = ( new Date() ).getTime();
+                        tempSponsorObject.updateUser = localStorage.getItem( 'currentUser' );
+                    }
                 }
+                tempSponsorObject.startDate = this.fundingStartDate;
+                tempSponsorObject.endDate = this.fundingEndDate;
+                tempSponsorObject.amount = this.sponsorAmount;
+                this.isFundingWarning = false;
+                this.fundingWarningText = null;
+                this.result.proposal.proposalSponsors.push( tempSponsorObject );
+            } else if ( this.selectedSponsorType == this.select ) {
+                this.isFundingWarning = true;
+                this.fundingWarningText = '* Please select funding agency type';
+            } else {
+                this.isFundingWarning = true;
+                this.fundingWarningText = '* Please select funding agency name';
             }
-            tempSponsorObject.startDate = this.fundingStartDate;
-            tempSponsorObject.endDate = this.fundingEndDate;
-            tempSponsorObject.amount = this.sponsorAmount;
-            this.isFundingWarning = false;
-            this.fundingWarningText = null;
-            this.result.proposal.proposalSponsors.push( tempSponsorObject );
         }
     }
 
-    closeFundingWarning() {
-        this.isFundingWarning = false;
-        this.fundingWarningText = null;
-    }
-    
     tempSaveSponsor( sponsor, i ) {
         this.tempSaveSponsorObject = sponsor;
         this.showDeleteSponsor = true;
         this.index = i;
     }
-    
+
     deleteSponsor() {
         if ( this.tempSaveSponsorObject.sponsorId != null ) {
-            this.proposalCreateService.deleteProposalSponsor( this.result.proposal.proposalId, this.tempSaveSponsorObject.sponsorId ).subscribe( data => {  } );
+            this.proposalCreateService.deleteProposalSponsor( this.result.proposal.proposalId, this.tempSaveSponsorObject.sponsorId ).subscribe( data => { } );
             this.result.proposal.proposalSponsors.splice( this.index, 1 );
         } else {
             this.result.proposal.proposalSponsors.splice( this.index, 1 );
         }
     }
 
-    categoryChange(categoryDescription) {
-        var categoryObject:any = {};
-        for(let i=0;i<this.result.proposalCategories.length;i++) {
-            if(this.result.proposalCategories[i].description == categoryDescription) {
-                this.result.proposal.proposalCategory = this.result.proposalCategories[i];
-                this.result.proposal.categoryCode = this.result.proposalCategories[i].categoryCode;
+    proposalCategoryChange() {
+        if ( this.proposalCategorySelected != this.select ) {
+            for ( let category of this.result.proposalCategories ) {
+                if ( category.description == this.proposalCategorySelected ) {
+                    this.result.proposal.categoryCode = category.categoryCode;
+                    this.result.proposal.proposalCategory = category;
+                    this.proposalCategorySelected = category.description;
+                }
             }
         }
     }
 
-    grantCallTypeChange(type) {
-        for(let grantCallType of this.result.grantCallTypes) {
-            if(grantCallType.description == type) {
-                this.result.proposal.grantCall.grantCallType = grantCallType;
-                this.result.proposal.grantCall.grantTypeCode = grantCallType.grantTypeCode;
+    proposalTypeChange() {
+        if ( this.proposalTypeSelected != this.select ) {
+            for ( let proposalType of this.result.proposalTypes ) {
+                if ( proposalType.description == this.proposalTypeSelected ) {
+                    this.result.proposal.proposalType = proposalType;
+                    this.result.proposal.typeCode = proposalType.typeCode;
+                    this.proposalTypeSelected = proposalType.description;
+                }
             }
         }
-     }
+    }
+
+    labICLChange() {
+        if ( this.selectedICLLab != this.select ) {
+            for ( let icl of this.result.proposalInstituteCentreLabs ) {
+                if ( icl.description == this.selectedICLLab ) {
+                    this.result.proposal.iclCode = icl.iclCode;
+                    this.result.proposal.proposalInstituteCentreLab = icl;
+                    this.selectedICLLab = icl.description;
+                }
+            }
+        }
+    }
+
+    openRouteLog() {
+        this.isRoutelogOpened = true;
+        this.result.proposal.proposalStatus.description = 'Submitted';
+    }
+
+    downloadRouteAttachment( e ) {
+        e.preventDefault();
+    }
+
+    disapproveProposal() {
+        this.sendObject = {};
+        this.approveDisapprovePlaceHolder = 'Comments on disapproving the proposal';
+        this.modalAproveHeading = 'Disapprove';
+        this.sendObject.actionType = 'R';
+        this.showApproveDisapproveModal = true;
+    }
+
+    approveProposal() {
+        this.sendObject = {};
+        this.approveDisapprovePlaceHolder = 'Comments on approving the proposal';
+        this.modalAproveHeading = 'Approve';
+        this.sendObject.actionType = 'A';
+        this.showApproveDisapproveModal = true;
+    }
+
+    approveDisapproveProposal() {
+        this.sendObject.personId = localStorage.getItem( 'personId' );
+        this.sendObject.proposal = this.result.proposal;
+        this.sendObject.approveComment = this.approveComments;
+        this.proposalCreateService.approveDisapproveProposal( this.sendObject, this.uploadedFile ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.result.proposal = temp.proposal;
+            this.result.workflow = temp.workflow;
+            this.changeRef.detectChanges();
+            this.ngOnInit();
+        } );
+        this.showApproveDisapproveModal = false;
+    }
 }

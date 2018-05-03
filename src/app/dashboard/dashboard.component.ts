@@ -165,7 +165,6 @@ export class DashboardComponent implements OnInit {
     }
 
     initialLoad( currentPage ) {
-        console.log(this.currentPosition)
         this.constval = this.constant.index_url;
         this.dashboardService.loadDashBoard( this.advanceSearchCriteria.property1, this.advanceSearchCriteria.property2, this.advanceSearchCriteria.property3, this.advanceSearchCriteria.property4, this.pageNumber, this.sortBy, this.sortOrder, this.currentPosition, currentPage, this.filterStartDate, this.filterEndDate )
             .takeUntil(this.onDestroy$).subscribe(
@@ -211,14 +210,12 @@ export class DashboardComponent implements OnInit {
                     }
                     if ( this.currentPosition == "SCHEDULE" ) {
                         this.serviceRequestList = this.result.committeeSchedules;
-                        console.log(this.result);
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullScheduleData = true;
                         }
                     }
                     if ( this.currentPosition == "GRANT" ) {
                         this.serviceRequestList = this.result.grantCalls;
-                        console.log(this.result)
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullScheduleData = true;
                         }
@@ -226,7 +223,6 @@ export class DashboardComponent implements OnInit {
 
                     if ( this.currentPosition == "SMU_PROPOSAL" ) {
                         this.serviceRequestList = this.result.proposal;
-                        console.log(this.result)
                         if ( this.serviceRequestList == null || this.serviceRequestList.length == 0 ) {
                             this.nullScheduleData = true;
                         }
@@ -549,21 +545,21 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(['committee/schedule'], { queryParams: {'scheduleId': scheduleId} });
     }
 
-    loadGrants(event:any, mode){
+    loadGrants( event: any, mode ) {
         event.preventDefault();
         this.currentPosition = 'GRANT';
-        this.router.navigate( ['/grant'], { queryParams: {'mode': mode} } );
+        this.router.navigate( ['/grant'], { queryParams: { 'mode': mode } } );
     }
 
-    viewGrantById(event:any,grantId) {
-        event.preventDefault(); 
+    viewGrantById( event: any, grantId ) {
+        event.preventDefault();
         this.currentPosition = 'GRANT';
-        this.router.navigate( ['/grant'], { queryParams: {'grantId':grantId} });
+        this.router.navigate( ['/grant'], { queryParams: { 'grantId': grantId } } );
     }
     
-    viewProposalById(event:any,proposalId,grantCallId) {
-        event.preventDefault(); 
+    viewProposalById( event: any, proposalId, grantCallId ) {
+        event.preventDefault();
         this.currentPosition = 'SMU_PROPOSAL';
-        this.router.navigate( ['/proposal/createProposal'], { queryParams: {'proposalId':proposalId,'grantId' : grantCallId} });
+        this.router.navigate( ['/proposal/createProposal'], { queryParams: { 'proposalId': proposalId, 'grantId': grantCallId } } );
     }
 }

@@ -10,6 +10,7 @@ import 'rxjs/add/operator/map'
 @Injectable()
 export class ProposalCreateEditService {
     formData = new FormData();
+    approveFormData = new FormData();
     constructor( private http: HttpClient, private constant: Constants ) {
 
     }
@@ -30,13 +31,11 @@ export class ProposalCreateEditService {
             console.log( "item->", i + 1, uploadedFile[i].name )
             this.formData.append( 'files', uploadedFile[i] );
         }
-        console.log( "new attachment", newAttachment )
         var sendObject = {
             proposal: proposalObject,
             newAttachment: newAttachment,
 
         }
-        console.log( "sending object", sendObject )
         this.formData.append( 'formDataJson', JSON.stringify( sendObject ) );
         return this.http.post( this.constant.addProposalAttachment, this.formData )
     }
@@ -48,12 +47,12 @@ export class ProposalCreateEditService {
         }
         return this.http.post( this.constant.deleteProposalAttachment, params )
     }
-    
-    saveProposal( proposalObject, type  ): Observable<JSON> {
+
+    saveProposal( proposalObject, type ): Observable<JSON> {
         var sendObject = {
-                proposal: proposalObject,
-                updateType: type,
-            }
+            proposal: proposalObject,
+            updateType: type,
+        }
         return this.http.post( this.constant.saveOrUpdateProposal, sendObject )
             .catch( error => {
                 console.error( error.message || error );
@@ -115,38 +114,69 @@ export class ProposalCreateEditService {
                 return Observable.throw( error.message || error )
             } );
     }
-    
+
     deleteProposalKeyword( proposalId, keywordId ): Observable<JSON> {
         var params = {
-                proposalId: proposalId,
-                keywordId: keywordId
-            }
-            return this.http.post( this.constant.deleteProposalKeywordUrl, params )
-                .catch( error => {
-                    console.error( error.message || error );
-                    return Observable.throw( error.message || error )
-                } );
-    }
-    
-    fetchCostElementData( budgetCategoryCode ): Observable<JSON> {
-        var params = {
-                budgetCategoryCode: budgetCategoryCode
-            }
-            return this.http.post( this.constant.fetchCostElementUrl, params )
-                .catch( error => {
-                    console.error( error.message || error );
-                    return Observable.throw( error.message || error )
-                } );
+            proposalId: proposalId,
+            keywordId: keywordId
+        }
+        return this.http.post( this.constant.deleteProposalKeywordUrl, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
     }
 
-    loadProposalById(proposalId): Observable<JSON> {
+    fetchCostElementData( budgetCategoryCode ): Observable<JSON> {
         var params = {
-            proposalId : proposalId
+            budgetCategoryCode: budgetCategoryCode
+        }
+        return this.http.post( this.constant.fetchCostElementUrl, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    loadProposalById( proposalId, personId, currentUser ): Observable<JSON> {
+        var params = {
+            proposalId: proposalId,
+            personId: personId,
+            userName: currentUser
         }
         return this.http.post( this.constant.loadProposalById, params )
-        .catch( error => {
-            console.error( error.message || error );
-            return Observable.throw( error.message || error )
-        } );
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    submitProposal( proposal: Object, userName ): Observable<JSON> {
+        var params = {
+                proposal: proposal,
+                userName: userName
+        }
+        return this.http.post( this.constant.submitProposalUrl, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+    
+    approveDisapproveProposal( sendObject: Object, uploadedFile ): Observable<JSON> {
+        this.approveFormData.delete( 'files' );
+        this.approveFormData.delete( 'formDataJson' );
+
+        for ( var i = 0; i < uploadedFile.length; i++ ) {
+            this.approveFormData.append( 'files', uploadedFile[i] );
+        }
+        
+       
+        this.approveFormData.append( 'formDataJson', JSON.stringify( sendObject ) );
+        return this.http.post( this.constant.approveRejectProposalUrl, this.approveFormData )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
     }
 }
