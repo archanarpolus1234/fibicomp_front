@@ -969,8 +969,14 @@
 			<!-- SMU_PROPOSAL -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="(currentPosition == 'SMU_PROPOSAL')">
-			<div class="row">
-					
+				<div class="row">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a title="Open"
+							routerLink='/proposal' [queryParams]="{mode:'create'}"><i
+								class="fa fa-plus"></i> Create SMU Proposal</a>
+						</span>
+					</div>
 						
 				</div>
 				

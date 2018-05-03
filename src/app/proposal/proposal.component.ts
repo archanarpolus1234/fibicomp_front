@@ -21,7 +21,10 @@ import 'rxjs/Rx';
 } )
 export class ProposalComponent implements OnInit, AfterViewInit {
 
-    mode: string = "view";
+    routelogDoc1Selected: string;
+    routelogDoc2Selected: string;
+    routelogDoc3Selected: string;
+    mode: string = 'view';
     showGrantSearch: boolean = true;
     isAOREnabled: boolean = true;
     editScheduleattachment: boolean = true;
@@ -59,6 +62,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     isMandatory: boolean = false;
     mandatoryText: string = '';
     researchTypeSelected: string;
+    showApproveDisapproveModal: boolean = false;
+    approveDisapprovePlaceHolder: string;
+    modalAproveHeading: string;
+    approveComments: string;
 
     showAddAttachment: boolean = false;
     uploadedFile: any[] = [];
@@ -96,6 +103,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     fundingStartDate: any;
     fundingEndDate: any;
     showAddedModal: boolean = false;
+    showSubmittedModal: boolean = false;
     isRoutelogOpened: boolean = false;
     select: string = '--Select--';
     //for setting validation of start Date
@@ -111,6 +119,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     tempBudgetObject: any = {};
     showDeleteMember: boolean = false;
     isProposalSaved: boolean = false;
+    isProposalSubmitted: boolean = false;
 
     //for elastic search
     searchActive: boolean = false;
@@ -132,6 +141,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     placeHolderText: string = 'Search an employee';
     proposalId: string;
     grantId: string = null;
+    workflow: any = {};
 
     public onDestroy$ = new Subject<void>();
 
@@ -156,14 +166,14 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.editAreaClass = "scheduleBoxes";
             this.createProposalCall();
         } else {
-            this.proposalCreateService.loadProposalById( this.proposalId ).subscribe( success => {
+            this.proposalCreateService.loadProposalById( this.proposalId, localStorage.getItem( 'personId' ), localStorage.getItem( 'currentUser' ) ).subscribe( success => {
                 this.result = success;
                 if ( this.result.proposal.proposalStatus.description == 'In Progress' ) {
-                    this.mode == 'edit';
+                    this.mode = 'edit';
                     this.editClass = "committeeBox";
                     this.editAreaClass = "scheduleBoxes";
                 } else {
-                    this.mode == 'view';
+                    this.mode = 'view';
                     this.editClass = "committeeBoxNotEditable";
                     this.editAreaClass = "scheduleBoxes";
 
@@ -446,7 +456,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         /* }*/
     }
 
-    dateValidation() {debugger;
+    dateValidation() {
         if ( this.result.proposal.startDate == null ) {
             this.isDateWarningText = true;
             this.dateWarningText = 'Please select a start date';
@@ -529,11 +539,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.keywordWarningText = "Keyword already added";
         }
         this.selectedKeyword = null;
-    }
-
-    closeKeywordWarning() {
-        this.isKeywordWarning = false;
-        this.keywordWarningText = null;
     }
 
     grantCallChangeFunction() {
@@ -628,10 +633,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.index = i;
     }
 
-    closeMemberWarning() {
-        this.personWarningFlag = false;
-    }
-
     deletePerson() {
         this.showDeleteMember = false;
         if ( this.tempSavePersonObject.proposalPersonId == null ) {
@@ -699,10 +700,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.budgetWarningFlag = true;
             this.budgetWarningMsg = 'Please enter budget cost';
         }
-    }
-
-    closeBudgetWarning() {
-        this.budgetWarningFlag = false;
     }
 
     deleteBudgetConfirmation( e, budget, i ) {
@@ -842,7 +839,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
         if ( this.selectedArea == null || this.selectedArea == "" ) {
             this.isAreaWarning = true;
-            this.areaWarningText = 'Select an area of research/excellence'
+            this.areaWarningText = '* Select an area of research/excellence'
         } else {
             this.areaWarningText = null;
             this.isAreaWarning = false;
@@ -907,11 +904,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.selectedArea = "";
     }
 
-    closeAreaWarning() {
-        this.areaWarningText = null;
-        this.isAreaWarning = false;
-    }
-
     saveProposal() {
         var type = ( this.result.proposal.proposalId != null ) ? "UPDATE" : "SAVE";
         // proposal details validation
@@ -930,50 +922,102 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
         // AOR validation
         if ( this.result.proposal.proposalResearchAreas.length > 0 ) {
-            this.isAreaWarning = true;
-            this.areaWarningText = 'Select an area of research/excellence'
-        } else {
             this.areaWarningText = null;
             this.isAreaWarning = false;
-        }
-        // Project members validation
-        if ( this.result.proposal.proposalPersons.length > 0 ) {
-            this.personWarningFlag = true;
-            this.personWarningMsg = 'Select atleast one team member';
         } else {
-            this.personWarningMsg = null;
-            this.personWarningFlag = false;
+            this.isAreaWarning = true;
+            this.areaWarningText = '* Select an area of research/excellence'
+        }
+        var flag = false;
+        if ( this.result.proposal.proposalPersons.length > 0 ) {
+            this.result.proposal.proposalPersons.forEach(( value, index ) => {
+                if ( value.proposalPersonRole.description == 'Principal Investigator' ) {
+                    flag = true;
+                }
+            } );
+            if ( flag == false ) {
+                this.personWarningMsg = '* Select a member as PI';
+                this.personWarningFlag = true;
+            } else {
+                this.personWarningMsg = null;
+                this.personWarningFlag = false;
+            }
+        } else {
+            this.personWarningFlag = true;
+            this.personWarningMsg = '* Select atleast one team member';
         }
         this.showAddedModal = true;
-        if ( !this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && !this.isFundingWarning && !this.isIRBWarning && !this.budgetWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
+        if ( !this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
             this.proposalCreateService.saveProposal( this.result.proposal, type ).subscribe( data => {
                 var temp: any = data;
                 this.result.proposal = temp.proposal;
                 this.isProposalSaved = true;
             } );
-        }
-        else {
+        } else {
             this.isProposalSaved = false;
         }
+        window.scrollTo( 0, 0 );
 
     }
 
     submitProposal() {
-        this.saveProposal();
+        // this.saveProposal();
         if ( this.result.proposal.title == "" || this.result.proposal.title == null ) {
             this.isMandatory = true;
+            this.mandatoryText = '* Please enter a title';
+        } else if ( this.proposalCategorySelected == this.select ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please choose a category';
+        } else if ( this.proposalTypeSelected == this.select ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please choose proposal type';
+        } else {
+            this.isMandatory = false;
+            this.dateValidation();
         }
+        // AOR validation
+        if ( this.result.proposal.proposalResearchAreas.length > 0 ) {
+            this.areaWarningText = null;
+            this.isAreaWarning = false;
+        } else {
+            this.isAreaWarning = true;
+            this.areaWarningText = '* Select an area of research/excellence'
+        }
+        // Project members validation
+        var flag = false;
+        if ( this.result.proposal.proposalPersons.length > 0 ) {
+            this.result.proposal.proposalPersons.forEach(( value, index ) => {
+                if ( value.proposalPersonRole.description == 'Principal Investigator' ) {
+                    flag = true;
+                }
+            } );
+            if ( flag == false ) {
+                this.personWarningMsg = '* Select a member as PI';
+                this.personWarningFlag = true;
+            } else {
+                this.personWarningMsg = null;
+                this.personWarningFlag = false;
+            }
+        } else {
+            this.personWarningFlag = true;
+            this.personWarningMsg = '* Select atleast one team member';
+        }
+
         if ( !this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && !this.isFundingWarning && !this.isIRBWarning && !this.budgetWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
             this.mode = 'view';
             this.showAddedModal = false;
-            if ( this.mode == 'view' ) {
-                this.editClass = "committeeBoxNotEditable";
-                this.editAreaClass = "committeeBoxNotEditable";
-            } else if ( this.mode == 'create' || this.mode == 'edit' ) {
-                this.editClass = "committeeBox";
-                this.editAreaClass = "scheduleBoxes";
-            }
+            //this.showSubmittedModal = true;
+            this.proposalCreateService.submitProposal( this.result.proposal, localStorage.getItem( 'currentUser' ) ).subscribe( data => {
+                var temp: any = data;
+                this.result.proposal = temp.proposal;
+                this.result.workflow = temp.workflow;
+                this.isProposalSubmitted = true;
+                this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'mode': this.mode, 'proposalId': this.result.proposal.proposalId } } );
+            } );
+        } else {
+            this.isProposalSubmitted = false;
         }
+        window.scrollTo( 0, 0 );
     }
 
     deleteArea() {
@@ -1029,11 +1073,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             }
             this.selectedProtocol = null;
         }
-    }
-
-    closeIrbWarning() {
-        this.isIRBWarning = false;
-        this.irbWarningText = null;
     }
 
     tempSaveIRB( e, irb ) {
@@ -1112,11 +1151,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
     }
 
-    closeFundingWarning() {
-        this.isFundingWarning = false;
-        this.fundingWarningText = null;
-    }
-
     tempSaveSponsor( sponsor, i ) {
         this.tempSaveSponsorObject = sponsor;
         this.showDeleteSponsor = true;
@@ -1172,8 +1206,39 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.isRoutelogOpened = true;
         this.result.proposal.proposalStatus.description = 'Submitted';
     }
-    
-    downloadRouteAttachment(e) {
+
+    downloadRouteAttachment( e ) {
         e.preventDefault();
+    }
+
+    disapproveProposal() {
+        this.sendObject = {};
+        this.approveDisapprovePlaceHolder = 'Comments on disapproving the proposal';
+        this.modalAproveHeading = 'Disapprove';
+        this.sendObject.actionType = 'R';
+        this.showApproveDisapproveModal = true;
+    }
+
+    approveProposal() {
+        this.sendObject = {};
+        this.approveDisapprovePlaceHolder = 'Comments on approving the proposal';
+        this.modalAproveHeading = 'Approve';
+        this.sendObject.actionType = 'A';
+        this.showApproveDisapproveModal = true;
+    }
+
+    approveDisapproveProposal() {
+        this.sendObject.personId = localStorage.getItem( 'personId' );
+        this.sendObject.proposal = this.result.proposal;
+        this.sendObject.approveComment = this.approveComments;
+        this.proposalCreateService.approveDisapproveProposal( this.sendObject, this.uploadedFile ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.result.proposal = temp.proposal;
+            this.result.workflow = temp.workflow;
+            this.changeRef.detectChanges();
+            this.ngOnInit();
+        } );
+        this.showApproveDisapproveModal = false;
     }
 }

@@ -12,9 +12,10 @@ import { CommitteeMemberEmployeeElasticService } from '../elastic-search/committ
 import { GrantService } from "../grant/grant.service";
 import { ProposalCreateEditService } from '../proposal/proposal-create-view.service';
 
-let routes = [{ path: '', component: ProposalComponent},
-              { path: 'proposal', component: ProposalComponent},
-              {path:'createProposal', component: ProposalComponent }];
+let routes = [{ path: '', component: ProposalComponent },
+              { path: 'proposal', component: ProposalComponent },
+              { path: 'createProposal', component: ProposalComponent },
+              { path: 'viewSubmittedProposal', component: ProposalComponent}];
 
 @NgModule({
   imports: [
