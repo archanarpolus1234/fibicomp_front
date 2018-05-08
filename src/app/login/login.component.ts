@@ -35,6 +35,7 @@ export class LoginComponent implements AfterViewInit {
     lastName: string;
     isLoginPage: boolean= false;
     res:Response;
+    unitNumber:string;
     constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionManagementService, private renderer: Renderer, private loginCheck: LoginCheckService) {
      if ( !this.sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
@@ -59,6 +60,8 @@ export class LoginComponent implements AfterViewInit {
                         this.fullName = this.result.fullName;
                         this.personId = this.result.personID;
                         this.isAdmin = this.result.unitAdmin;
+                        this.unitNumber = this.result.unitNumber;
+                         
                         this.firstName = this.result.firstName;
                         this.lastName = this.result.lastName;
                         localStorage.setItem( 'currentUser', this.result.userName );
@@ -67,6 +70,7 @@ export class LoginComponent implements AfterViewInit {
                         localStorage.setItem( 'firstName', this.result.firstName );
                         localStorage.setItem( 'lastName', this.result.lastName );
                         localStorage.setItem( 'isAdmin', String( this.isAdmin ) );
+                        localStorage.setItem( 'unitNumber', String(this.unitNumber ) );
                         this.loginCheck.login();
                         this.router.navigate( ['/dashboard'] );
                     } else {

@@ -236,7 +236,7 @@ export class DashboardComponent implements OnInit {
     }
 
    
-    showTab( currentTabPosition ) {
+    showTab( currentTabPosition ) { 
         this.personId = localStorage.getItem( 'personId' );
         this.result = null;
         this.resultAward = false;
@@ -277,17 +277,17 @@ export class DashboardComponent implements OnInit {
         this.documentNo = ' ';
         if ( currentTabPosition === 'SUMMARY' ) {
             this.getResearchSummaryData();
-        } else if ( this.adminStatus != 'true' ) {
-            this.initialLoad( this.currentPage );
-            this.adminClear = false;
-        }
-        if ( currentTabPosition == 'SCHEDULE' ) {
+        }  else if ( currentTabPosition == 'SCHEDULE' ) {
             this.filterStartDate = null;
             this.filterEndDate = null;
             this.filterValidationMessage = "";
             this.isFilterDatePrevious = false;
             this.isMandatoryFilterFilled = true; 
+        } else {
+            this.initialLoad( this.currentPage );
+            this.adminClear = false;
         }
+       
     }
 
     sortResult( sortFieldBy, current_Position ) {
