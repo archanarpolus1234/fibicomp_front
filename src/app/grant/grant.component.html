@@ -16,6 +16,7 @@
 					<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
 						<div class="borderBox">
 							<h4 class="borderBoxHeading">Overview</h4> <p *ngIf = "showWarning"><span class="mandatory warningMessage">*Please fill all the mandatory fields marked</span></p>
+							<p class="float-right" *ngIf = "showSavedSuccessfully"><span class="mandatory warningMessage">Saved Successfully</span></p>
 							<div class="pullSide">
 								<table class="table tableSkin grid2">
 									<tbody>
@@ -41,7 +42,13 @@
 
 										</tr>
 										<tr>
-											<td colspan="2"><label><span class="mandatory">*</span>Name:</label><br><input type="text" placeholder="Name" [(ngModel)] = "result.grantCall.grantCallName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+											<td colspan="1"><label><span class="mandatory">*</span>Name:</label><br><input type="text" placeholder="Name" [(ngModel)] = "result.grantCall.grantCallName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+											<td><label>Home Units:</label>&nbsp;&nbsp;<br>
+												<ng2-completer *ngIf="mode!='view'" title="Add Unit" 
+													[inputClass]="completerID"
+													[(ngModel)]="selectedHomeUnit" placeholder="Home Units"
+													[datasource]="homeUnits" [minSearchLength]="0"
+													(selected)="homeUnitChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0" [disabled]="mode == 'view' ? true : false"></ng2-completer></td>
 											<td colspan="2"><label><span class="mandatory">*</span>Description:</label><br><textarea  placeholder = "Description" [(ngModel)] = "result.grantCall.description" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
                                         </tr>
                                         <tr>

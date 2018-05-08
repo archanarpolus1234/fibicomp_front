@@ -12,8 +12,8 @@
 						(click)="showTab('SUMMARY')"> Research Summary </a></li>
 					<li [ngClass]="{'active': currentPosition == 'AWARD'}"><a
 						(click)="showTab('AWARD')"> Award </a></li>
-					<li [ngClass]="{'active': currentPosition == 'PROPOSAL'}"><a
-						(click)="showTab('PROPOSAL')"> Proposal </a></li>
+					<!-- <li [ngClass]="{'active': currentPosition == 'PROPOSAL'}"><a
+						(click)="showTab('PROPOSAL')"> Proposal </a></li> -->
 					<li [ngClass]="{'active': currentPosition == 'IRB'}"><a
 						(click)="showTab('IRB')"> IRB{{message}} </a></li>
 					<li [ngClass]="{'active': currentPosition == 'IACUC'}"><a
@@ -27,7 +27,7 @@
 					<li [ngClass]="{'active': currentPosition == 'GRANT'}"><a
 							(click)="showTab('GRANT')"> Grant Call</a></li>
 					<li [ngClass]="{'active': currentPosition == 'SMU_PROPOSAL'}"><a
-								(click)="showTab('SMU_PROPOSAL')"> SMU_Proposal</a></li>
+								(click)="showTab('SMU_PROPOSAL')"> Applications</a></li>
 				</ul>
 			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
@@ -915,14 +915,14 @@
 			*ngIf="(currentPosition == 'GRANT')">
 			<div class="row">
 					
-						<span class="linkButtonGroup"> <a
+						<span class="linkButtonGroup" *ngIf = "isAdmin == true"> <a
 							[href]="" (click)="loadGrants($event,'create')">
 								<i class="fa fa-plus pointer" ></i> Create Grant
 						</a>
 						</span>
 				</div>
 				
-				<div class="borderBox" *ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+				<div class="borderBox" >
 					<table class="table table-responsive tableSkin" *ngIf="this.result?.committeeSchedules?.length !== 0">
 						<thead>
 							
@@ -974,13 +974,13 @@
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a title="Open"
 							routerLink='/proposal' [queryParams]="{mode:'create'}"><i
-								class="fa fa-plus"></i> Create SMU Proposal</a>
+								class="fa fa-plus"></i> Create Application</a>
 						</span>
 					</div>
 						
 				</div>
 				
-				<div class="borderBox" *ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+				<div class="borderBox" >
 					<table class="table table-responsive tableSkin">
 						<thead>
 							

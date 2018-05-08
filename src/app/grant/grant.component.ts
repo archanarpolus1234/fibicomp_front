@@ -85,6 +85,9 @@ export class GrantComponent {
     isDateWarningText:boolean = false;
     dateWarningText:string = null;
     durInYears;durInMonths;durInDays;
+    showSavedSuccessfully: boolean =false;
+    homeUnits: any = [];
+    selectedHomeUnit: string;
 
     
     
@@ -224,7 +227,7 @@ export class GrantComponent {
             });
            this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
            this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' )
-            
+           this.homeUnits =  this.completerService.local( this.result.homeUnits, 'unitName', 'unitName' )
         });
     }
     showaddPointOfContact() {
@@ -654,6 +657,7 @@ export class GrantComponent {
         if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true) {
             var scrollTop;
             this.showWarning = true;
+            this.showSavedSuccessfully = false;
             this.saveSuccessfulMessage = "";
             //Scroll to Top Javascript Function
              scrollTop = setInterval(function(){ 
@@ -664,6 +668,7 @@ export class GrantComponent {
         } else {
             this.scrollToTop = "";
             this.showWarning = false;
+            this.showSavedSuccessfully = true;
             var d = new Date();
             var timeStamp = d.getTime();
             this.result.grantCall.createUser = this.currentUser;
@@ -681,11 +686,23 @@ export class GrantComponent {
                     temp = response;
                     this.result.grantCall = temp.grantCall;
                     this.grantId = this.result.grantCall.grantCallId;
+                    
                     },error=>{
                         this.saveSuccessfulMessage = null;
-                },()=>{ this.saveSuccessfulMessage = null;});
-           
-           
+                },()=>{
+                     //Scroll to Top Javascript Function
+             scrollTop = setInterval(function(){ 
+                if(document.body.scrollTop == document.documentElement.scrollTop) {
+                    clearInterval(scrollTop);
+                }
+                document.body.scrollTop = document.documentElement.scrollTop -=10 ; }, 1000/30);
+             
+                });
+                setTimeout(()=> {
+                    this.showSavedSuccessfully = false;
+                   
+                },8000);
+                
         }
        
     }
@@ -773,5 +790,16 @@ export class GrantComponent {
 
     navigate($event, mode) {
         this.router.navigate(['/proposal/createProposal'], { queryParams: {'grantId':this.result.grantCall.grantCallId,'mode': mode} });
+    }
+
+    homeUnitChangeFunction() {
+        
+       for(let homeUnit of this.result.homeUnits){
+            if ( homeUnit.unitName == this.selectedHomeUnit ) {
+                this.result.grantCall.homeUnitNumber = homeUnit.unitNumber;
+                this.result.grantCall.homeUnitName = this.selectedHomeUnit;
+                console.log("grantCall",this.result.grantCall)
+            }
+        }
     }
 }
