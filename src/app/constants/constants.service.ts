@@ -89,6 +89,9 @@ export class Constants {
     loadProposalById: string;
     submitProposalUrl: string;
     approveRejectProposalUrl: string;
+    downloadRoutelogAttachmentUrl: string;
+    addReviewerUrl: string;
+    completeReviewUrl: string;
     applicationReport: string;
     fetchOpenGrantIds: string;
 
@@ -241,6 +244,11 @@ export class Constants {
 
         this.approveRejectProposalUrl = this.baseUrl + this.portAndPath + '/approveOrRejectProposal';
 
+        this.downloadRoutelogAttachmentUrl = this.baseUrl + this.portAndPath + '/downloadWorkflowAttachment';
+
+        this.addReviewerUrl = this.baseUrl + this.portAndPath + '/assignReviewer';
+
+        this.completeReviewUrl = this.baseUrl + this.portAndPath + '/reviewCompleted';
         this.fetchOpenGrantIds = this.baseUrl + this.portAndPath + '/fetchOpenGrantIds';
 
         this.applicationReport = this.baseUrl + this.portAndPath + '/applicationReport';

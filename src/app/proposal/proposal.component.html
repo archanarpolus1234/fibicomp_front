@@ -5,7 +5,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
 						<div class="row">
-							<div class="col-12 text-left"><span *ngIf="result.proposal.proposalId == null">New&nbsp;</span><span>Project &nbsp;</span><span *ngIf="result?.proposal?.proposalId">#</span><span>{{result?.proposal?.proposalId}}</span></div>
+							<div class="col-12 text-left"><span *ngIf="result.proposal.proposalId == null">New&nbsp;</span><span>Application &nbsp;</span><span *ngIf="result?.proposal?.proposalId">#</span><span>{{result?.proposal?.proposalId}}</span></div>
 						</div>
 						<br>
 						<div class="row">
@@ -25,7 +25,7 @@
 																						<option (value)="select">{{select}}</option>
 																						<option *ngFor="let type of result?.proposalTypes" >{{type.description}}</option>
 																					  </select><span *ngIf="mode == 'view'">{{result?.proposal?.proposalType?.description}}</span></td>
-													<td><label class="greenLabel">Status:&nbsp;</label><br><input type="text" [disabled]="true" class="committeeBoxNotEditable" [value]="result?.proposal?.proposalStatus?.description" style="width: 70%" disabled/></td>
+													<td><label class="greenLabel">Status:&nbsp;</label><br><span>{{result?.proposal?.proposalStatus?.description}}</span></td>
 												</tr>
 		                                        <tr  *ngIf="isMandatory">
 		                                        	<td colspan="2"><span class="mandatory">{{mandatoryText}}</span></td>
@@ -77,7 +77,7 @@
 		                                        														  	<li><input type="radio" name="underICL" (click)="toggleICL(true)" [checked]="result?.proposal?.isSmu == true"/>&nbsp;Yes</li>
 		                                        														  	<li><input type="radio" name="underICL" (click)="toggleICL(false)" [checked]="result?.proposal?.isSmu == false || result?.proposal?.isSmu == null"/>&nbsp;No</li>
 		                                        														  </ul>
-		                                        														  <input type="text" class="committeeBoxNotEditable" *ngIf="mode == 'view'" [value]="(result?.proposal?.isSmu == true) ? 'Yes':'No'"/>
+		                                        														  <input type="text" class="committeeBoxNotEditable" style="padding-left:  0px;" *ngIf="mode == 'view'" [value]="(result?.proposal?.isSmu == true) ? 'Yes':'No'"/>
 		                                         	<td><span *ngIf="result?.proposal?.isSmu == true"><label>ICL:</label><br><select *ngIf="mode != 'view'" [ngClass]="editClass" [disabled]="mode == 'view'" 
 		                                         									[(ngModel)]="selectedICLLab" (change)="labICLChange()">
 																						<option (value)="select">{{select}}</option>
@@ -524,10 +524,12 @@
                                <div class="col-12 text-right">
                                  	<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view'" (click)="saveProposal()">Save</button>
 									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposal" *ngIf="mode !='view' && result?.proposal?.proposalId" (click)="submitProposal()">Submit</button>
-                               		<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="mode == 'view'" (click)="openRouteLog()" >Route Log</button>
-                               		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.approver == true && result?.isApproved == false" (click)="disapproveProposal()" >Disapprove</button>
-                               		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.approver == true && result?.isApproved == false" (click)="approveProposal()">Approve</button>
-								</div>
+                               		<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="(mode == 'view') || (mode != 'view' && result?.proposal?.proposalStatus?.statusCode == 9)" (click)="openRouteLog()" >Route Log</button>
+                               		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="disapproveProposal()" >Disapprove</button>
+                               		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="approveProposal()">Approve</button>
+									<button type="button" class="btnSkin btnPublish" *ngIf="mode =='view' && result?.isGrantAdmin == true && result?.isReviewed != true && result?.isApproved != true && workflowStopThree?.length == 0" (click)="addReviewer()">Add a Reviewer</button>
+									<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isReviewer == true && result?.isReviewed == false" (click)="approveProposal()">Complete Review</button>
+                               		</div>
                     </div>
 			</section>
 		<div class="footerPush"></div>
@@ -554,68 +556,26 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 			<div
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
 				<div class="row">
-					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
-						<label>Proposal #</label> <span>{{result?.proposal?.proposalId}}</span>
+					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+						<label>Application #</label> <span>{{result?.proposal?.proposalId}}</span>
+					</div>
+					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+						<label>Title</label> <span>{{result?.proposal?.title}}</span>
+					</div>
+					<div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>Status</label> <span>{{result?.proposal?.proposalStatus?.description}}</span>
+					</div>
+					<div class="col-xl-3 col-lg-2 col-md-6 col-sm-6 col-6">
+						<label>PI</label> <span>{{proposalPIName}}</span>
 					</div>
 					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
-						<label>title</label> <span>{{result?.proposal?.title}}</span>
-					</div>
-					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
-						<label>Proposal Start Date</label> <span>{{result?.proposal?.startDate}}</span>
-					</div>
-					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
-						<label>Proposal End Date</label> <span>{{result?.proposal?.endDate}}</span>
+						<label>Lead unit</label> <span>{{proposalLeadUnit}}</span>
 					</div>
 				</div>
 			</div>
 			
-			<!--  -->
 			<div class="borderBox col-12">
 				<div class="pullSide">
-					<!-- <table class="table table-responsive tableSkin">
-						<tr id="routelogHeader">
-                                <th >Name</th>
-                                <th >Routing Status</th>
-                                <th >Action Date</th>
-                                <th >Comments</th>
-                                <th >Attachments</th>
-                                <th >Actions</th>
-                            </tr>
-                            </table> -->
-                            
-                         <!--    
-                          <div  *ngFor = "let workflow of result.workflow.workflowDetails">
-                           <h4 class="borderBoxHeading">Stop : {{workflow.approvalStopNumber}}</h4>
-                           <table class="table table-responsive tableSkin">
-	                           	<tr id="routelogHeader">
-	                                <th >Name</th>
-	                                <th >Routing Status</th>
-	                                <th >Action Date</th>
-	                                <th >Comments</th>
-	                                <th >Attachments</th>
-	                                <th >Actions</th>
-	                            </tr>
-	                            <tr>
-	                            	<td colspan="6">Stop : {{workflow.approvalStopNumber}}</td>
-	                            </tr>
-	                            <tr *ngFor = " let eachWorkFlow of result.workflow.workflowDetails">
-	                                <td *ngIf = "eachWorkFlow.approvalStopNumber == workflow.approvalStopNumber ">{{eachWorkFlow.approverPersonId}}</td>
-	                                <td  *ngIf = "eachWorkFlow.approvalStopNumber == workflow.approvalStopNumber ">{{eachWorkFlow?.workflowStatus?.approveStatus}}</td>
-	                                <td *ngIf = "eachWorkFlow.approvalStopNumber == workflow.approvalStopNumber ">07/10/2018</td>
-	                                <td *ngIf = "eachWorkFlow.approvalStopNumber == workflow.approvalStopNumber " >Comments</td>
-	                                <td  *ngIf = "eachWorkFlow.approvalStopNumber == workflow.approvalStopNumber "><select [ngClass]="editClass" [(ngModel)]="routelogDoc1Selected" >
-													<option (value)="select">{{select}}</option>
-													<option *ngFor="let costElement of result?.proposalTypes" >{{costElement.description}}.pdf</option>
-												</select>
-	                                </td>
-	                             	<td *ngIf = "eachWorkFlow.approvalStopNumber == workflow.approvalStopNumber "><ul class="actionButtonGroup">
-										<li><a href="#" (click)="downloadRouteAttachment($event)"><i
-												class="fa fa-download" aria-hidden="true"></i></a></li>
-									</ul></td>
-	                             </tr>
-                             </table>
-                           </div>  -->
-                           
                     <table class="table table-responsive tableSkin">
 	                           	<tr id="routelogHeader">
 	                                <th >Name</th>
@@ -626,82 +586,81 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	                                <th >Actions</th>
 	                            </tr>
 	                             <tr>
-	                            	<td colspan="6" class="borderBoxHeading">Grant Investigator</td>
+	                            	<td colspan="6" class="borderBoxHeading"><label>Stop 1:&nbsp;</label>Grant Manager</td>
 	                           	 </tr>
-	                            <tr  *ngFor = "let workflow of result?.workflow?.workflowDetails;let i = index">
-	                            	<td *ngIf = "workflow.approvalStopNumber == 1">{{workflow?.approverPersonName}}</td>
-	                            	<td *ngIf = "workflow.approvalStopNumber == 1">{{workflow?.workflowStatus?.approveStatus}}</td>
-	                            	<td *ngIf = "workflow.approvalStopNumber == 1">{{workflow?.approvalDate}}</td>
-	                                <td *ngIf = "workflow.approvalStopNumber == 1">{{workflow?.approvalComment}}</td>
-	                                <td  *ngIf = "workflow.approvalStopNumber == 1">
-	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="routelogDoc1Selected" >
-													<option (value)="select">{{select}}</option>
-													<option *ngFor="let attachment of workflow.workflowAttachments" >{{attachment.fileName}}</option>
+	                            <tr *ngFor = "let workflow of workflowStopOne;let i = index">
+	                            	<td >{{workflow?.approverPersonName}}</td>
+	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
+	                            	<td >{{workflow?.approvalDate}}</td>
+	                                <td >{{workflow?.approvalComment}}</td>
+	                                <td >
+	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
+	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" >
+													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 												</select>
 	                                </td>
 	                                <td *ngIf = "workflow.approvalStopNumber == 1"><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event)"><i
+										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopOne[0])"><i title="download this document"
 												class="fa fa-download" aria-hidden="true"></i></a></li>
 									</ul></td>
 	                            </tr>
 	                            <tr>
-	                            	<td colspan="6"  class="borderBoxHeading">Grant Reviewer</td>
+	                            	<td colspan="6"  class="borderBoxHeading"><label>Stop 2:&nbsp;</label>Grant Administrator</td>
 	                           	 </tr>
-	                            <tr  *ngFor = "let workflow of result?.workflow?.workflowDetails;let i = index">
-	                            	<td *ngIf = "workflow.approvalStopNumber == 2">{{workflow?.approverPersonName}}</td>
-	                            	<td *ngIf = "workflow.approvalStopNumber == 2">{{workflow?.workflowStatus?.approveStatus}}</td>
-	                            	<td *ngIf = "workflow.approvalStopNumber == 2">{{workflow?.approvalDate}}</td>
-	                                <td *ngIf = "workflow.approvalStopNumber == 2">{{workflow?.approvalComment}}</td>
-	                                <td  *ngIf = "workflow.approvalStopNumber == 2">
-	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="routelogDoc1Selected" >
-													<option (value)="select">{{select}}</option>
+	                            <tr  *ngFor = "let workflow of workflowStopTwo;let i = index">
+	                            	<td >{{workflow?.approverPersonName}}</td>
+	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
+	                            	<td >{{workflow?.approvalDate}}</td>
+	                                <td >{{workflow?.approvalComment}}</td>
+	                                <td >
+	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
+	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" >
 													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 												</select>
 	                                </td>
-	                                <td *ngIf = "workflow.approvalStopNumber == 2"><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event)"><i
+	                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
+										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopTwo[0])"><i title="download this document"
 												class="fa fa-download" aria-hidden="true"></i></a></li>
 									</ul></td>
 	                            </tr>
 	                            <tr>
-	                            	<td colspan="6"  class="borderBoxHeading">Grant Administrator</td>
+	                            	<td colspan="6"  class="borderBoxHeading"><label>Stop 3:&nbsp;</label>Grant Reviewer</td>
 	                           	 </tr>
-	                            <tr  *ngFor = "let workflow of result?.workflow?.workflowDetails;let i = index">
-	                            	<td *ngIf = "workflow.approvalStopNumber == 3">{{workflow?.approverPersonName}}</td>
-	                            	<td *ngIf = "workflow.approvalStopNumber == 3">{{workflow?.workflowStatus?.approveStatus}}</td>
-	                            	<td *ngIf = "workflow.approvalStopNumber == 3">{{workflow?.approvalDate}}</td>
-	                                <td *ngIf = "workflow.approvalStopNumber == 3">{{workflow?.approvalComment}}</td>
-	                                <td  *ngIf = "workflow.approvalStopNumber == 3">
-                                				<span *ngIf="workflow?.workflowAttachments?.length == 0" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="routelogDoc1Selected" >
-													<option (value)="select">{{select}}</option>
+	                           	 <tr *ngIf="workflowStopThree?.length == 0">
+	                           	 	<td colspan="6">No reviewers added yet</td>
+	                           	 </tr>
+	                            <tr *ngFor = "let workflow of workflowStopThree;let i = index">
+	                            	<td >{{workflow?.approverPersonName}}</td>
+	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
+	                            	<td >{{workflow?.approvalDate}}</td>
+	                                <td >{{workflow?.approvalComment}}</td>
+	                                <td >
+                                				<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'WR'" class="noDataExists">No attachments added</span>
+	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" >
 													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 												</select>
 	                                </td>
-	                                <td *ngIf = "workflow.approvalStopNumber == 3"><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event)"><i
+	                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
+										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopThree[0])"><i title="download this document"
 												class="fa fa-download" aria-hidden="true"></i></a></li>
 									</ul></td>
 	                            </tr>
 	                            <tr>
-	                            	<td colspan="6"  class="borderBoxHeading">Grant Manager</td>
+	                            	<td colspan="6"  class="borderBoxHeading"><label>Stop 4:&nbsp;</label>Grant Manager</td>
 	                           	 </tr>
-	                            <tr  *ngFor = "let workflow of result?.workflow?.workflowDetails;let i = index">
-	                            	<td *ngIf = "workflow.approvalStopNumber == 4">{{workflow?.approverPersonName}}</td>
-	                            	<td *ngIf = "workflow.approvalStopNumber == 4">{{workflow?.workflowStatus?.approveStatus}}</td>
-	                            	<td *ngIf = "workflow.approvalStopNumber == 4">{{workflow?.approvalDate}}</td>
-	                                <td *ngIf = "workflow.approvalStopNumber == 4">{{workflow?.approvalComment}}</td>
-	                                <td  *ngIf = "workflow.approvalStopNumber == 4">
-	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="routelogDoc1Selected" >
-													<option (value)="select">{{select}}</option>
+	                            <tr  *ngFor = "let workflow of workflowStopFour;let i = index">
+	                            	<td >{{workflow?.approverPersonName}}</td>
+	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
+	                            	<td >{{workflow?.approvalDate}}</td>
+	                                <td >{{workflow?.approvalComment}}</td>
+	                                <td >
+	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
+	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" >
 													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 												</select>
 	                                </td>
-	                                <td *ngIf = "workflow.approvalStopNumber == 4"><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event)"><i
+	                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
+										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopFour[0])"><i title="download this document"
 												class="fa fa-download" aria-hidden="true"></i></a></li>
 									</ul></td>
 	                            </tr>
@@ -973,7 +932,8 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
-					<button type="button" class="btnSkin btnSkinPrimary"  data-dismiss="modal" (click)="approveDisapproveProposal()" >Ok</button>
+					<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" *ngIf="result?.isReviewer != true " (click)="approveDisapproveProposal()" >{{modalAproveHeading}}</button>
+					<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" *ngIf="result?.isReviewer == true && result?.isReviewed == false" (click)="completeReview()" >Complete Review</button>
 				</div>
 			</div>
 		</div>
