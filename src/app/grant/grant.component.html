@@ -5,7 +5,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
 				<div class="row">
-					<div class="col-6 text-left"><span >Grant Call#<span *ngIf="grantId!=null">{{grantId}}</span></span></div>
+					<div class="col-6 text-left"><span >Grant Call #<span *ngIf="grantId!=null">{{grantId}}</span></span></div>
 					<div class="col-6 text-right ">
 					<span *ngIf="result?.grantCall?.grantCallStatus?.description == 'Open'" class = "grantCall_create_proposal_link">
 					<button class="grantCallCreateProposalLink bg-white" (click)="navigate($event, 'create')">Create Proposal</button>
@@ -43,14 +43,17 @@
 										</tr>
 										<tr>
 											<td colspan="1"><label><span class="mandatory">*</span>Name:</label><br><input type="text" placeholder="Name" [(ngModel)] = "result.grantCall.grantCallName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
-											<td><label>Home Units:</label>&nbsp;&nbsp;<br>
-												<ng2-completer *ngIf="mode!='view'" title="Add Unit" 
+											<td><label><span class="mandatory">*</span>Lead Unit:</label>&nbsp;&nbsp;<br>
+												<ng2-completer *ngIf="mode!='view';else viewHomeUnitName" title="Add Unit" 
 													[inputClass]="completerID"
 													[(ngModel)]="selectedHomeUnit" placeholder="Home Units"
 													[datasource]="homeUnits" [minSearchLength]="0"
-													(selected)="homeUnitChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0" [disabled]="mode == 'view' ? true : false"></ng2-completer></td>
-											<td colspan="2"><label><span class="mandatory">*</span>Description:</label><br><textarea  placeholder = "Description" [(ngModel)] = "result.grantCall.description" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
-                                        </tr>
+													(selected)="homeUnitChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0" [disabled]="mode == 'view' ? true : false"></ng2-completer>
+												<ng-template #viewHomeUnitName>{{result.grantCall.homeUnitName}}</ng-template>
+												</td>
+											<td colspan="1"><label><span class="mandatory">*</span>Description:</label><br><textarea  placeholder = "Description" [(ngModel)] = "result.grantCall.description" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
+											<td><label><span class="mandatory">*</span>Grant Theme</label><input type="text" [(ngModel)] = "result.grantCall.grantTheme" placeholder="Grant Theme" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></td>
+										</tr>
                                         <tr>
                                             <td ><label><span class="mandatory">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="Max Budget" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
                                             <td ><label>Quantum:</label><br><input type="number" [(ngModel)] = "result.grantCall.quantum" placeholder="Quantum"  [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
@@ -60,7 +63,7 @@
 													[(ngModel)]="selectedKeyword" placeholder="Keyword"
 													[datasource]="keywordsList" [minSearchLength]="0"
 													(selected)="keywordChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0" [disabled]="mode == 'view' ? true : false"></ng2-completer>
-													<ul *ngIf="result?.grantCall?.grantCallKeywords?.length!=0" class="d-inline-flex" style="word-break: break-all;"><li *ngFor="let keyword of result?.grantCall?.grantCallKeywords;let i = index" class="pr-4"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
+													<ul *ngIf="result?.grantCall?.grantCallKeywords?.length!=0" class="d-inline-flex p-2" style="word-break: break-all;"><li *ngFor="let keyword of result?.grantCall?.grantCallKeywords;let i = index" class="pr-4"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
 											</td>
 										<!-- List for showing added keywords -->
 										
@@ -162,6 +165,8 @@
 																			<ng-template #view_sponsorType>{{result?.grantCall?.sponsorType?.description}}</ng-template>
 																				</td>
 																		 <td ><label>Name:</label><br> <select *ngIf="mode!='view';else view_sponsorName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)] = "selectedSponsor"  (change) = "sponsorNameChange($event.target.value)" >
+																			<option>Select
+																			</option>
 																			<option *ngFor="let sponsor of this.sponsorList" (value)="sponsor" >
 																				{{sponsor.sponsorName}}
 																			</option>

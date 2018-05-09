@@ -572,8 +572,9 @@ export class DashboardComponent implements OnInit {
     }
 
     reportNameChange() {
+        this.reportObject = null;
+        this.selectedGrantId = null;
         this.dashboardService.fetchOpenGrantIds().subscribe(data=>{
-            console.log("open grant Ids" , data);
             var temp = data;
             this.openGrantList = this.completerService.local(  temp.grantIds, 'grantCallId', 'grantCallId' )
         });
@@ -581,7 +582,7 @@ export class DashboardComponent implements OnInit {
 
     grantIdChange() {
         this.dashboardService.applicationReport(this.selectedGrantId,this.selectedReportName).subscribe(data=>{
-            console.log("report" , data);
+          
             var temp = data;
             this.reportObject = temp;
         });
