@@ -5,13 +5,13 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
 						<div class="row">
-							<div class="col-12 text-left"><span *ngIf="result.proposal.proposalId == null">New&nbsp;</span><span>Application &nbsp;</span><span *ngIf="result?.proposal?.proposalId">#</span><span>{{result?.proposal?.proposalId}}</span></div>
+							<div class="col-12 text-left"><span *ngIf="result?.proposal?.proposalId">Application&nbsp;#{{result?.proposal?.proposalId}}</span></div>
 						</div>
 						<br>
 						<div class="row">
 							<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
 								<div class="borderBox">
-									<h4 class="borderBoxHeading">Details</h4>
+									<h4 class="borderBoxHeading">Application Details</h4>
 									<div class="pullSide">
 										<table class="table tableSkin grid2">
 											<tbody>
@@ -105,15 +105,16 @@
 															(selected)="grantCallChangeFunction()" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
 										
 									</td>
-									<td colspan="3">&nbsp;</td>
+									<td colspan="4">&nbsp;</td>
 								</tr>
 								<tr *ngIf="result?.proposal?.grantCall == null">
-									<td colspan="5"><div class="noDataExists">
+									<td colspan="6"><div class="noDataExists">
 											No grant call associated with this proposal
 										</div></td>
 								</tr>
 								<tbody *ngIf="result?.proposal?.grantCall != null">
 									<tr>
+										<th >Grant Call Id</th>
 										<th >Name of Grant Call</th>
 			                            <th >Funding Agency</th>
 			                            <th >Funding Scheme</th>
@@ -121,7 +122,8 @@
 			                            <th *ngIf="mode != 'view'">Action</th>
 									</tr>
 									<tr>
-										<td style="padding-left: 10px"><span >{{result?.proposal?.grantCall?.grantCallName}}</span></td>
+										<td style="padding-left: 10px"><span >{{result?.proposal?.grantCallId}}</span></td>
+										<td ><span >{{result?.proposal?.grantCall?.grantCallName}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.sponsor?.sponsorName}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.activityType?.description}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.grantTheme}}</span></td>
@@ -180,7 +182,7 @@
 	                                        	<td><label>Description:</label></td>
 	                                        	<td colspan="4"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="elaborate contributions of your proposal to area of researches" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 	                                        	<span *ngIf="mode == 'view'">{{result?.proposal?.researchDescription}}</span>
-	                                        	<div class="noDataExists" *ngIf="result?.proposal?.details == null && mode == 'view'">
+	                                        	<div class="noDataExists" *ngIf="result?.proposal?.researchDescription == null && mode == 'view'">
 													No contributions or descriptions added for this proposal
 												</div>
 	                                        </tr>
@@ -524,11 +526,11 @@
                                <div class="col-12 text-right">
                                  	<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view'" (click)="saveProposal()">Save</button>
 									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposal" *ngIf="mode !='view' && result?.proposal?.proposalId" (click)="submitProposal()">Submit</button>
-                               		<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="(mode == 'view') || (mode != 'view' && result?.proposal?.proposalStatus?.statusCode == 9)" (click)="openRouteLog()" >Route Log</button>
-                               		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="disapproveProposal()" >Disapprove</button>
+                               		<button type="button" class="btnSkin btn-secondary" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="disapproveProposal()" >Disapprove</button>
                                		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="approveProposal()">Approve</button>
 									<button type="button" class="btnSkin btnPublish" *ngIf="mode =='view' && result?.isGrantAdmin == true && result?.isReviewed != true && result?.isApproved != true && workflowStopThree?.length == 0" (click)="addReviewer()">Add a Reviewer</button>
 									<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isReviewer == true && result?.isReviewed == false" (click)="approveProposal()">Complete Review</button>
+                               		<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="(mode == 'view') || (mode != 'view' && result?.proposal?.proposalStatus?.statusCode == 9)" (click)="openRouteLog()" >Route Log</button>
                                		</div>
                     </div>
 			</section>
@@ -562,14 +564,14 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label>Title</label> <span>{{result?.proposal?.title}}</span>
 					</div>
-					<div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 col-6">
+					<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
 						<label>Status</label> <span>{{result?.proposal?.proposalStatus?.description}}</span>
 					</div>
-					<div class="col-xl-3 col-lg-2 col-md-6 col-sm-6 col-6">
+					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label>PI</label> <span>{{proposalPIName}}</span>
 					</div>
-					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
-						<label>Lead unit</label> <span>{{proposalLeadUnit}}</span>
+					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+						<label>Home Unit</label> <span>{{proposalLeadUnit}}</span>
 					</div>
 				</div>
 			</div>
@@ -595,12 +597,12 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	                                <td >{{workflow?.approvalComment}}</td>
 	                                <td >
 	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" >
+	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="selectedAttachmentStopOne[i]">
 													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 												</select>
 	                                </td>
 	                                <td *ngIf = "workflow.approvalStopNumber == 1"><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopOne[0])"><i title="download this document"
+										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopOne[i], workflow.workflowAttachments)"><i title="download this document"
 												class="fa fa-download" aria-hidden="true"></i></a></li>
 									</ul></td>
 	                            </tr>
@@ -614,12 +616,12 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	                                <td >{{workflow?.approvalComment}}</td>
 	                                <td >
 	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" >
+	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="selectedAttachmentStopTwo[i]">
 													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 												</select>
 	                                </td>
 	                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopTwo[0])"><i title="download this document"
+										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopTwo[i], workflow.workflowAttachments)"><i title="download this document"
 												class="fa fa-download" aria-hidden="true"></i></a></li>
 									</ul></td>
 	                            </tr>
@@ -636,31 +638,12 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	                                <td >{{workflow?.approvalComment}}</td>
 	                                <td >
                                 				<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'WR'" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" >
+	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="selectedAttachmentStopThree[i]">
 													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 												</select>
 	                                </td>
 	                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopThree[0])"><i title="download this document"
-												class="fa fa-download" aria-hidden="true"></i></a></li>
-									</ul></td>
-	                            </tr>
-	                            <tr>
-	                            	<td colspan="6"  class="borderBoxHeading"><label>Stop 4:&nbsp;</label>Grant Manager</td>
-	                           	 </tr>
-	                            <tr  *ngFor = "let workflow of workflowStopFour;let i = index">
-	                            	<td >{{workflow?.approverPersonName}}</td>
-	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
-	                            	<td >{{workflow?.approvalDate}}</td>
-	                                <td >{{workflow?.approvalComment}}</td>
-	                                <td >
-	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" >
-													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
-												</select>
-	                                </td>
-	                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopFour[0])"><i title="download this document"
+										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopThree[i], workflow.workflowAttachments)"><i title="download this document"
 												class="fa fa-download" aria-hidden="true"></i></a></li>
 									</ul></td>
 	                            </tr>

@@ -25,10 +25,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     selectedAttachmentStopTwo: any = [];
     selectedAttachmentStopThree: any = [];
     selectedAttachmentStopFour: any = [];
-/*routelogDoc1Selected: string;
-routelogDoc2Selected: string;
-routelogDoc3Selected: string;
-routelogDoc4Selected: string;*/
+    /*routelogDoc1Selected: string;
+    routelogDoc2Selected: string;
+    routelogDoc3Selected: string;
+    routelogDoc4Selected: string;*/
     mode: string = 'view';
     showGrantSearch: boolean = true;
     isAOREnabled: boolean = true;
@@ -176,95 +176,98 @@ routelogDoc4Selected: string;*/
             this.editClass = "committeeBox";
             this.editAreaClass = "scheduleBoxes";
             this.createProposalCall();
+        } else {
+            this.proposalCreateService.loadProposalById( this.proposalId, localStorage.getItem( 'personId' ), localStorage.getItem( 'currentUser' ) ).subscribe( success => {
+                this.result = success;
+                this.initialiseProposalFormElements();
+            } );
+        }
+    }
+
+    initialiseProposalFormElements() {
+        if ( this.result.proposal.proposalStatus.statusCode == 1 || this.result.proposal.proposalStatus.statusCode == 9 ) {
+            this.mode = 'edit';
+            this.editClass = "committeeBox";
+            this.editAreaClass = "scheduleBoxes";
             this.selectedAreaType = this.result.proposalResearchTypes[0].description;
             this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
             this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
         } else {
-            this.proposalCreateService.loadProposalById( this.proposalId, localStorage.getItem( 'personId' ), localStorage.getItem( 'currentUser' ) ).subscribe( success => {
-                this.result = success;
-                if ( this.result.proposal.proposalStatus.statusCode == 1 || this.result.proposal.proposalStatus.statusCode == 9 ) {
-                    this.mode = 'edit';
-                    this.editClass = "committeeBox";
-                    this.editAreaClass = "scheduleBoxes";
-                    this.selectedAreaType = this.result.proposalResearchTypes[0].description;
-                    this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
-                    this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
-                } else {
-                    this.mode = 'view';
-                    this.editClass = "committeeBoxNotEditable";
-                    this.editAreaClass = "scheduleBoxes";
+            this.mode = 'view';
+            this.editClass = "committeeBoxNotEditable";
+            this.editAreaClass = "scheduleBoxes";
 
-                }
-                this.updateWorkflowStops();
-                this.updateRouteLogHeader();
-                if ( this.result.workflow != null ) {/*
-                    var i = 0;
-                    this.result.workflow.workflowDetails.forEach((value, index) => {
-                        if ( value.approvalStopNumber == 1 && value.workflowAttachments.length > 0) {
-                            this.selectedAttachmentStopOne[i] = value.workflowAttachments[i].fileName;
-                            i++;
-                        }
-                    });
-                    i = 0;
-                    this.result.workflow.workflowDetails.forEach((value, index) => {
-                        if ( value.approvalStopNumber == 2 && value.workflowAttachments.length > 0) {
-                            this.selectedAttachmentStopTwo[i] = value.workflowAttachments[i].fileName;
-                            i++;
-                        }
-                    });
-                    i = 0;
-                    this.result.workflow.workflowDetails.forEach((value, index) => {
-                        if ( value.approvalStopNumber == 3 && value.workflowAttachments.length > 0) {
-                            this.selectedAttachmentStopThree[i] = value.workflowAttachments[i].fileName;
-                            i++;
-                        }
-                    });
-                    i = 0;
-                    this.result.workflow.workflowDetails.forEach((value, index) => {
-                        if ( value.approvalStopNumber == 4 && value.workflowAttachments.length > 0) {
-                            this.selectedAttachmentStopFour[i] = value.workflowAttachments[i].fileName;
-                            i++;
-                        }
-                    });
-                */}
-
-                this.grantCallType = this.result.grantCallTypes;
-                this.personRolesList = this.result.proposalPersonRoles;
-                this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
-                this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
-                this.grantCallType = this.result.grantCallTypes;
-                this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
-                this.personRoleSelected = this.select;
-                this.budgetCategorySelected = this.select;
-                this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
-                this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
-                this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
-                this.selectedSponsorType = this.select;
-                //this.budgetCategoryChanged();
-                /*this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
-                    var temp: any = {};
-                    temp = data;
-                    this.result.sponsors = temp.sponsors;
-                    this.selectedSponsorName = this.select;
-                    this.fundingStartDate = null;
-                    this.fundingEndDate = null;
-                    this.sponsorAmount = 0;
-                } );*/
-                this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
-                this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
-                this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
-                this.protocolsList = this.completerService.local( this.result.protocols, 'title', 'title' );
-
-                this.selectedSponsorName = this.select;
-                this.fundingStartDate = null;
-                this.fundingEndDate = null;
-                this.sponsorAmount = 0;
-
-                this.costElementSelected = this.select;
-            } );
         }
+        this.updateWorkflowStops();
+        this.updateRouteLogHeader();
+        if ( this.result.workflow != null ) {/*
+            var i = 0;
+            this.result.workflow.workflowDetails.forEach((value, index) => {
+                if ( value.approvalStopNumber == 1 && value.workflowAttachments.length > 0) {
+                    this.selectedAttachmentStopOne[i] = value.workflowAttachments[i].fileName;
+                    i++;
+                }
+            });
+            i = 0;
+            this.result.workflow.workflowDetails.forEach((value, index) => {
+                if ( value.approvalStopNumber == 2 && value.workflowAttachments.length > 0) {
+                    this.selectedAttachmentStopTwo[i] = value.workflowAttachments[i].fileName;
+                    i++;
+                }
+            });
+            i = 0;
+            this.result.workflow.workflowDetails.forEach((value, index) => {
+                if ( value.approvalStopNumber == 3 && value.workflowAttachments.length > 0) {
+                    this.selectedAttachmentStopThree[i] = value.workflowAttachments[i].fileName;
+                    i++;
+                }
+            });
+            i = 0;
+            this.result.workflow.workflowDetails.forEach((value, index) => {
+                if ( value.approvalStopNumber == 4 && value.workflowAttachments.length > 0) {
+                    this.selectedAttachmentStopFour[i] = value.workflowAttachments[i].fileName;
+                    i++;
+                }
+            });
+        */}
+
+        this.grantCallType = this.result.grantCallTypes;
+        this.personRolesList = this.result.proposalPersonRoles;
+        this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
+        this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
+        this.grantCallType = this.result.grantCallTypes;
+        this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
+        this.personRoleSelected = this.select;
+        this.budgetCategorySelected = this.select;
+        this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
+        this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
+        this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
+        this.selectedSponsorType = this.select;
+        //this.budgetCategoryChanged();
+        /*this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.result.sponsors = temp.sponsors;
+            this.selectedSponsorName = this.select;
+            this.fundingStartDate = null;
+            this.fundingEndDate = null;
+            this.sponsorAmount = 0;
+        } );*/
+        this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
+        this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
+        this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
+        this.protocolsList = this.completerService.local( this.result.protocols, 'title', 'title' );
+
+        this.selectedSponsorName = this.select;
+        this.fundingStartDate = null;
+        this.fundingEndDate = null;
+        this.sponsorAmount = 0;
+
+        this.budgetCost = 0;
+        this.budgetDescription = "";
+        this.costElementSelected = this.select;
     }
-    
+
     updateWorkflowStops() {
         this.workflowStopOne = [];
         this.workflowStopTwo = [];
@@ -279,17 +282,32 @@ routelogDoc4Selected: string;*/
                     case 4: this.workflowStopFour.push( value ); break;
                 }
             } );
+            this.workflowStopOne.forEach(( value, index ) => {
+                if ( value.workflowAttachments != null && value.workflowAttachments.length > 0 ) {
+                    this.selectedAttachmentStopOne[index] = value.workflowAttachments[0].fileName;
+                }
+            } );
+            this.workflowStopTwo.forEach(( value, index ) => {
+                if ( value.workflowAttachments != null && value.workflowAttachments.length > 0 ) {
+                    this.selectedAttachmentStopTwo[index] = value.workflowAttachments[0].fileName;
+                }
+            } );
+            this.workflowStopThree.forEach(( value, index ) => {
+                if ( value.workflowAttachments != null && value.workflowAttachments.length > 0 ) {
+                    this.selectedAttachmentStopThree[index] = value.workflowAttachments[0].fileName;
+                }
+            } );
         }
     }
-    
+
     updateRouteLogHeader() {
-        if(this.result.proposal != null && this.result.proposal.proposalPersons.length >0) {
-            this.result.proposal.proposalPersons.forEach((value, index)=> {
-                if(value.proposalPersonRole.code == "PI") {
+        if ( this.result.proposal != null && this.result.proposal.proposalPersons.length > 0 ) {
+            this.result.proposal.proposalPersons.forEach(( value, index ) => {
+                if ( value.proposalPersonRole.code == "PI" ) {
                     this.proposalPIName = value.fullName;
                     this.proposalLeadUnit = value.leadUnitName;
                 }
-            });
+            } );
         }
     }
 
@@ -310,6 +328,9 @@ routelogDoc4Selected: string;*/
             this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
             this.personRoleSelected = this.select;
             this.budgetCategorySelected = this.select;
+            this.selectedAreaType = this.result.proposalResearchTypes[0].description;
+            this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
+            this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
             this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
@@ -334,7 +355,9 @@ routelogDoc4Selected: string;*/
             this.fundingStartDate = null;
             this.fundingEndDate = null;
             this.sponsorAmount = 0;
-            
+
+            this.budgetCost = 0;
+            this.budgetDescription = "";
             this.costElementSelected = this.select;
         } );
     }
@@ -599,6 +622,7 @@ routelogDoc4Selected: string;*/
                 this.result.proposal.grantCall.updateUser = this.currentUser;
             }
         }
+        this.changeRef.detectChanges();
         this.selectedGrantCall = null;
     }
 
@@ -1053,16 +1077,18 @@ routelogDoc4Selected: string;*/
         //this.showSubmittedModal = true;
         if ( !this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && !this.isFundingWarning && !this.isIRBWarning && !this.budgetWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
             this.mode = 'view';
-            if(this.result.proposal.statusCode == 9 ) {
+            if ( this.result.proposal.statusCode == 9 ) {
                 this.result.proposalStatusCode = 9;
             } else {
-                this.result.proposalStatusCode = 2;
+                this.result.proposalStatusCode = 2; // proposal status is set to Approval In Progress
             }
             this.showAddedModal = false;
             this.proposalCreateService.submitProposal( this.result.proposal, localStorage.getItem( 'currentUser' ), this.result.proposalStatusCode ).subscribe( data => {
                 var temp: any = data;
                 this.result.proposal = temp.proposal;
                 this.result.workflow = temp.workflow;
+                this.updateWorkflowStops();
+                this.updateRouteLogHeader();
                 this.isProposalSubmitted = true;
                 this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'mode': this.mode, 'proposalId': this.result.proposal.proposalId } } );
             } );
@@ -1193,6 +1219,11 @@ routelogDoc4Selected: string;*/
                 this.isFundingWarning = false;
                 this.fundingWarningText = null;
                 this.result.proposal.proposalSponsors.push( tempSponsorObject );
+                this.selectedSponsorType = this.select;
+                this.selectedSponsorName = this.select;
+                this.fundingStartDate = null;
+                this.fundingEndDate = null;
+                this.sponsorAmount = 0;
             } else if ( this.selectedSponsorType == this.select ) {
                 this.isFundingWarning = true;
                 this.fundingWarningText = '* Please select funding agency type';
@@ -1283,15 +1314,14 @@ routelogDoc4Selected: string;*/
             var temp: any = {};
             temp = data;
             this.result = temp;
-            this.updateWorkflowStops();
-            this.updateRouteLogHeader();
+            this.initialiseProposalFormElements();
             this.changeRef.detectChanges();
         } );
         this.showApproveDisapproveModal = false;
     }
-    
+
     addReviewer() {
-        this.proposalCreateService.assignReviewer(this.result.proposal, this.result.proposal.proposalId, this.currentUser ).subscribe( data => {
+        this.proposalCreateService.assignReviewer( this.result.proposal, this.result.proposal.proposalId, this.currentUser ).subscribe( data => {
             var temp: any = {};
             temp = data;
             this.result = temp;
@@ -1300,14 +1330,14 @@ routelogDoc4Selected: string;*/
             this.changeRef.detectChanges();
         } );
     }
-    
+
     completeReview() {
         this.sendObject.proposal = this.result.proposal;
         this.sendObject.proposalId = this.result.proposal.proposalId;
-        this.sendObject.userName = this.currentUser ;
+        this.sendObject.userName = this.currentUser;
         this.sendObject.approveComment = this.approveComments;
         this.sendObject.personId = this.result.personId;
-        this.proposalCreateService.completeReviewAction(this.sendObject, this.uploadedFile ).subscribe( data => {
+        this.proposalCreateService.completeReviewAction( this.sendObject, this.uploadedFile ).subscribe( data => {
             var temp: any = {};
             temp = data;
             this.result = temp;
@@ -1317,31 +1347,25 @@ routelogDoc4Selected: string;*/
         } );
         this.showApproveDisapproveModal = false;
     }
-    
-    downloadRouteAttachment( event, selectedFileName ) {
-    console.log(selectedFileName);
+
+    downloadRouteAttachment( event, selectedFileName, selectedAttachArray: any[] ) {
         event.preventDefault();
-       // var attachmentName = this.selectedAttachmentStopOne[0];
-        var attachmentName = selectedFileName;
-        console.log(attachmentName)
-        for(let workflow of this.result.workflow.workflowDetails) {
-            for(let attachment of workflow.workflowAttachments) {
-                if(attachment.fileName == attachmentName) {
-                    if ( attachment.attachmentId != null ) {
-                        this.proposalCreateService.downloadRoutelogAttachment( attachment.attachmentId ).takeUntil( this.onDestroy$ ).subscribe(
-                            data => {
-                                var a = document.createElement( "a" );
-                                a.href = URL.createObjectURL( data );
-                                a.download = attachment.fileName;
-                                a.click();
-                            } );
-                    } else {
-                        var url = "data:" + attachment.mimeType + ";base64," + attachment.attachment;
-                        var a = document.createElement( "a" );
-                        a.href = url;
-                        a.download = attachment.fileName;
-                        a.click();
-                    }
+        for ( let attachment of selectedAttachArray ) {
+            if ( attachment.fileName == selectedFileName ) {
+                if ( attachment.attachmentId != null ) {
+                    this.proposalCreateService.downloadRoutelogAttachment( attachment.attachmentId ).takeUntil( this.onDestroy$ ).subscribe(
+                        data => {
+                            var a = document.createElement( "a" );
+                            a.href = URL.createObjectURL( data );
+                            a.download = attachment.fileName;
+                            a.click();
+                        } );
+                } else {
+                    var url = "data:" + attachment.mimeType + ";base64," + attachment.attachment;
+                    var a = document.createElement( "a" );
+                    a.href = url;
+                    a.download = attachment.fileName;
+                    a.click();
                 }
             }
         }
