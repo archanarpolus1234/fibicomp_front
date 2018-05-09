@@ -134,6 +134,7 @@ export class GrantComponent {
                                    this.selectedSponsor = temp.sponsors[0].sponsorName;
                                     this.selectedActivityType = this.result.activityTypes[0].description;
                                     this.selectedFundingType =  this.result.fundingSourceTypes[0].description;
+                                    
                                     this.sponsorTypeChange( this.selectedSponsorType);
                                     this.sponsorNameChange( this.selectedSponsor);
                                     this.researchTypeChange(this.selectedActivityType)
@@ -143,9 +144,12 @@ export class GrantComponent {
                             }
                            this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
                            this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' )
+                           this.homeUnits =  this.completerService.local( this.result.homeUnits, 'unitName', 'unitName' )
+                           this.selectedHomeUnit = this.result.grantCall.homeUnitName;
                         } else {
                             this.mode='view';
                             this.editClass="committeeBoxNotEditable";
+                            this.selectedHomeUnit = this.result.grantCall.homeUnitName;
                         }
                         
                         //placing list from loaded grantCall 
@@ -562,6 +566,7 @@ export class GrantComponent {
                 });
                 this.result.grantCall.sponsorType = sponsorType;
                 this.result.grantCall.sponsorTypeCode = sponsorType.code;
+                this.sponsorNameChange(this.selectedSponsor);
             }
         }
     }
@@ -590,6 +595,7 @@ export class GrantComponent {
     }
 
     sponsorNameChange(sponsorName:string ) {
+        console.log("called")
         for(let sponsor of this.sponsorList) {
             if(sponsor.sponsorName == sponsorName) {
                 sponsor.sponsorType = this.result.grantCall.sponsorType;
@@ -654,7 +660,7 @@ export class GrantComponent {
 
     saveGrant() {
         
-        if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true) {
+        if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.selectedHomeUnit==null || this.result.grantCall.grantTheme==null) {
             var scrollTop;
             this.showWarning = true;
             this.showSavedSuccessfully = false;
@@ -669,6 +675,7 @@ export class GrantComponent {
             this.scrollToTop = "";
             this.showWarning = false;
             this.showSavedSuccessfully = true;
+            this.keyWordWarningMessage = null;
             var d = new Date();
             var timeStamp = d.getTime();
             this.result.grantCall.createUser = this.currentUser;
@@ -758,9 +765,9 @@ export class GrantComponent {
     }
 
     publishCall() {
-       
+       console.log("send object",this.result.grantCall);
                     
-        if(this.result.grantCall.grantCallId ==null || this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null ) {
+        if(this.result.grantCall.grantCallId ==null || this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.selectedHomeUnit==null || this.result.grantCall.grantTheme==null ) {
             var scrollTop;
             //Scroll to Top Javascript Function
             this.showWarning = true;
@@ -774,6 +781,7 @@ export class GrantComponent {
         } else {
             this.scrollToTop = "";
             this.showWarning = false;
+            this.keyWordWarningMessage = null;
             this.grantService.publishCall(this.result.grantCall).subscribe(success=>{
                 var temp:any = {};
                 temp = success;

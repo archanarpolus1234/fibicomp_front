@@ -27,7 +27,7 @@
 					<li [ngClass]="{'active': currentPosition == 'GRANT'}"><a
 							(click)="showTab('GRANT')"> Grant Call</a></li>
 					<li [ngClass]="{'active': currentPosition == 'SMU_PROPOSAL'}"><a
-								(click)="showTab('SMU_PROPOSAL')"> Applications</a></li>
+								(click)="showTab('SMU_PROPOSAL')"> Application</a></li>
 					<li [ngClass]="{'active': currentPosition == 'GRANTREPORT'}"><a
 						(click)="showTab('GRANTREPORT')"> Reports</a></li>
 				</ul>
@@ -930,19 +930,22 @@
 							
 							
 							<tr>
-								<th>Id<span class="sortorder" [ngClass]="{reverse:reverse, sortorder: (sortBy == 'scheduleId')}"></span>
+								<th (click)="sortResult('grantCallId',currentPosition)"
+								title="Click to sort by Grant Id">Id<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallId')}"></span>
 								</th>
-								<th >Name<span
-									class="sortorder" ></span>
+								<th >Name
 								</th>
-								<th>Description <span
-									class="sortorder"></span>
+								<th>Description
 								</th>
-								<th >Opening Date <span
-									class="sortorder"></span>
+								<th (click)="sortResult('openingDate',currentPosition)"
+								title="Click to sort by Opening Date">Opening Date <span
+									  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'openingDate')}" ></span>
 								</th>
-								<th>Closing Date</th>
-								<th>Status</th>
+								<th (click)="sortResult('closingDate',currentPosition)"
+								title="Click to sort by Closing Date">Closing Date  <span
+								 [ngClass]="{reverse:reverse, sortorder: (sortBy == 'closingDate')}" ></span></th>
+								<th (click)="sortResult('description',currentPosition)" title="Click to sort by Status">Status <span
+						  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'description')}" ></span></th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -990,14 +993,16 @@
 							
 							
 							<tr>
-								<th>Id<span class="sortorder" ></span>
+								<th (click)="sortResult('proposalId',currentPosition)"
+								title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
 								</th>
-								<th >Name<span
-									class="sortorder"></span>
+								<th >Name
 								</th>
-								<th >Opening Date <span></span>
+								<th (click)="sortResult('startDate',currentPosition)"
+								title="Click to sort by Application Id">Opening Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'startDate')}"></span>
 								</th>
-								<th>Closing Date</th>
+								<th (click)="sortResult('endDate',currentPosition)"
+								title="Click to sort by End Date">Closing Date<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'endDate')}"></span></th>
 								<th>Status</th>
 								<th>Action</th>
 							</tr>
@@ -1032,7 +1037,7 @@
 						<label>Report Name : </label>
 								<select [(ngModel)] = "selectedReportName" (change)="reportNameChange()"  class = "committeeBox">
 									<option>Select</option>
-									<option>Submitted Application by Grant</option>
+									<option>Submitted Applications by Grant</option>
 									<option>Awards by Grant</option>
 									<option>Expenditure by Award</option>
 								</select>
@@ -1049,14 +1054,14 @@
 															[inputClass]="completerID"
 															[(ngModel)]="selectedGrantId" placeholder="Search by Id or Name"
 															[datasource]="openGrantList" [minSearchLength]="0"
-															(selected)="grantIdChange()"  class="widthLimiterNg2Completer" class="p-0 border-0"></ng2-completer>
+															(selected)="grantIdChange()"  class="widthLimiterNg2Completer p-0 border-0"></ng2-completer>
 									
 								
 								</div>
 								</div>
 								<div class="col-xl-5 col-xl-offset-5 col-lg-5 col-md-5 col-sm-5 col-5" *ngIf="reportObject!=null">
-										<div class="borderBox" >
-											<span>Submitted applications for grant {{reportObject.grantCallId}} :&nbsp;{{reportObject.proposalCount}}</span>
+										<div class="borderBox" ><br/>
+											<span>{{selectedReportName}} {{reportObject.grantCallId}} :&nbsp;{{reportObject.proposalCount}}</span>
 									</div>
 									</div>
 							</div>
