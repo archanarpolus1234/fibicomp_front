@@ -21,9 +21,14 @@ import 'rxjs/Rx';
 } )
 export class ProposalComponent implements OnInit, AfterViewInit {
 
-    routelogDoc1Selected: string;
-    routelogDoc2Selected: string;
-    routelogDoc3Selected: string;
+    selectedAttachmentStopOne: any = [];
+    selectedAttachmentStopTwo: any = [];
+    selectedAttachmentStopThree: any = [];
+    selectedAttachmentStopFour: any = [];
+/*routelogDoc1Selected: string;
+routelogDoc2Selected: string;
+routelogDoc3Selected: string;
+routelogDoc4Selected: string;*/
     mode: string = 'view';
     showGrantSearch: boolean = true;
     isAOREnabled: boolean = true;
@@ -66,6 +71,12 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     approveDisapprovePlaceHolder: string;
     modalAproveHeading: string;
     approveComments: string;
+    workflowStopOne: any = [];
+    workflowStopTwo: any = [];
+    workflowStopThree: any = [];
+    workflowStopFour: any = [];
+    proposalPIName: string;
+    proposalLeadUnit: string;
 
     showAddAttachment: boolean = false;
     uploadedFile: any[] = [];
@@ -165,35 +176,72 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.editClass = "committeeBox";
             this.editAreaClass = "scheduleBoxes";
             this.createProposalCall();
+            this.selectedAreaType = this.result.proposalResearchTypes[0].description;
+            this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
+            this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
         } else {
             this.proposalCreateService.loadProposalById( this.proposalId, localStorage.getItem( 'personId' ), localStorage.getItem( 'currentUser' ) ).subscribe( success => {
                 this.result = success;
-                if ( this.result.proposal.proposalStatus.description == 'In Progress' ) {
+                if ( this.result.proposal.proposalStatus.statusCode == 1 || this.result.proposal.proposalStatus.statusCode == 9 ) {
                     this.mode = 'edit';
                     this.editClass = "committeeBox";
                     this.editAreaClass = "scheduleBoxes";
+                    this.selectedAreaType = this.result.proposalResearchTypes[0].description;
+                    this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
+                    this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
                 } else {
                     this.mode = 'view';
                     this.editClass = "committeeBoxNotEditable";
                     this.editAreaClass = "scheduleBoxes";
 
                 }
+                this.updateWorkflowStops();
+                this.updateRouteLogHeader();
+                if ( this.result.workflow != null ) {/*
+                    var i = 0;
+                    this.result.workflow.workflowDetails.forEach((value, index) => {
+                        if ( value.approvalStopNumber == 1 && value.workflowAttachments.length > 0) {
+                            this.selectedAttachmentStopOne[i] = value.workflowAttachments[i].fileName;
+                            i++;
+                        }
+                    });
+                    i = 0;
+                    this.result.workflow.workflowDetails.forEach((value, index) => {
+                        if ( value.approvalStopNumber == 2 && value.workflowAttachments.length > 0) {
+                            this.selectedAttachmentStopTwo[i] = value.workflowAttachments[i].fileName;
+                            i++;
+                        }
+                    });
+                    i = 0;
+                    this.result.workflow.workflowDetails.forEach((value, index) => {
+                        if ( value.approvalStopNumber == 3 && value.workflowAttachments.length > 0) {
+                            this.selectedAttachmentStopThree[i] = value.workflowAttachments[i].fileName;
+                            i++;
+                        }
+                    });
+                    i = 0;
+                    this.result.workflow.workflowDetails.forEach((value, index) => {
+                        if ( value.approvalStopNumber == 4 && value.workflowAttachments.length > 0) {
+                            this.selectedAttachmentStopFour[i] = value.workflowAttachments[i].fileName;
+                            i++;
+                        }
+                    });
+                */}
+
                 this.grantCallType = this.result.grantCallTypes;
                 this.personRolesList = this.result.proposalPersonRoles;
                 this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
                 this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
                 this.grantCallType = this.result.grantCallTypes;
-                this.selectedAreaType = this.result.proposalResearchTypes[0].description;
                 this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
                 this.personRoleSelected = this.select;
                 this.budgetCategorySelected = this.select;
-                this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
                 this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
                 this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
                 this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
                 this.selectedSponsorType = this.select;
-                this.budgetCategoryChanged();
-                this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
+                //this.budgetCategoryChanged();
+                /*this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
                     var temp: any = {};
                     temp = data;
                     this.result.sponsors = temp.sponsors;
@@ -201,14 +249,47 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                     this.fundingStartDate = null;
                     this.fundingEndDate = null;
                     this.sponsorAmount = 0;
-                } );
-                this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
+                } );*/
                 this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
                 this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
                 this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
                 this.protocolsList = this.completerService.local( this.result.protocols, 'title', 'title' );
 
+                this.selectedSponsorName = this.select;
+                this.fundingStartDate = null;
+                this.fundingEndDate = null;
+                this.sponsorAmount = 0;
+
+                this.costElementSelected = this.select;
             } );
+        }
+    }
+    
+    updateWorkflowStops() {
+        this.workflowStopOne = [];
+        this.workflowStopTwo = [];
+        this.workflowStopThree = [];
+        this.workflowStopFour = [];
+        if ( this.result.workflow != null && this.result.workflow.workflowDetails.length > 0 ) {
+            this.result.workflow.workflowDetails.forEach(( value, index ) => {
+                switch ( value.approvalStopNumber ) {
+                    case 1: this.workflowStopOne.push( value ); break;
+                    case 2: this.workflowStopTwo.push( value ); break;
+                    case 3: this.workflowStopThree.push( value ); break;
+                    case 4: this.workflowStopFour.push( value ); break;
+                }
+            } );
+        }
+    }
+    
+    updateRouteLogHeader() {
+        if(this.result.proposal != null && this.result.proposal.proposalPersons.length >0) {
+            this.result.proposal.proposalPersons.forEach((value, index)=> {
+                if(value.proposalPersonRole.code == "PI") {
+                    this.proposalPIName = value.fullName;
+                    this.proposalLeadUnit = value.leadUnitName;
+                }
+            });
         }
     }
 
@@ -226,18 +307,16 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
             this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
             this.grantCallType = this.result.grantCallTypes;
-            this.selectedAreaType = this.result.proposalResearchTypes[0].description;
             this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
             this.personRoleSelected = this.select;
             this.budgetCategorySelected = this.select;
-            this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
             this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
             this.selectedSponsorType = this.select;
-            this.budgetCategoryChanged();
+            //this.budgetCategoryChanged();
 
-            this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
+            /*this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
                 var temp: any = {};
                 temp = data;
                 this.result.sponsors = temp.sponsors;
@@ -245,13 +324,18 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 this.fundingStartDate = null;
                 this.fundingEndDate = null;
                 this.sponsorAmount = 0;
-            } );
-            this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
+            } );*/
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
             this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
             this.protocolsList = this.completerService.local( this.result.protocols, 'title', 'title' );
 
+            this.selectedSponsorName = this.select;
+            this.fundingStartDate = null;
+            this.fundingEndDate = null;
+            this.sponsorAmount = 0;
+            
+            this.costElementSelected = this.select;
         } );
     }
     ngAfterViewInit() {
@@ -390,30 +474,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
     }
 
-    addAreaOfResearch( areaInput ) {
-
-    }
-
-    addAreaOfExcellence( areaInput ) {
-
-    }
-
-    deleteAreaOfResearchConfirmation( e, area ) {
-
-    }
-
-    addFundingSupport( fundInput ) {
-
-    }
-
-    deleteFundingSupportConfirmation( e, area ) {
-
-    }
-
-    deleteIRBProtocolConfirmation( $event, area ) {
-
-    }
-
     editAttachments( $event, i, attachments ) {
         $event.preventDefault();
         this.editScheduleattachment = !this.editScheduleattachment;
@@ -429,23 +489,11 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.editScheduleattachment = !this.editScheduleattachment;
     }
 
-    downloadAttachements( e, attachments ) {
-        e.preventDefault();
-    }
-
     navigate( mode ) {
         this.router.navigate( ['/proposal/proposal'], { queryParams: { 'mode': mode } } );
     }
 
     differenceBetweenDates( startDate, endDate ) {
-        /*if(startDate == null) {
-            this.isDateWarningText = true;
-            this.dateWarningText = 'Select a proposal start date';
-        } else if(startDate> endDate) {
-            this.isDateWarningText = true;
-            this.dateWarningText = 'Start date is after end date';
-        }
-        if ( startDate != null && endDate != null && startDate <= endDate ) { */
         var diffInMs = Math.round( Date.parse( endDate ) - Date.parse( startDate ) );
         // diffInMs = Math.round(1523507183000); for testing
         var difference = Math.floor( diffInMs / 1000 / 60 / 60 / 24 | 0 );
@@ -453,7 +501,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         difference = Math.floor( difference % 365 | 0 )
         this.durInMonths = Math.floor( difference / 31 | 0 );
         this.durInDays = Math.floor( difference % 31 | 0 );
-        /* }*/
     }
 
     dateValidation() {
@@ -1003,11 +1050,16 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.personWarningMsg = '* Select atleast one team member';
         }
 
+        //this.showSubmittedModal = true;
         if ( !this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && !this.isFundingWarning && !this.isIRBWarning && !this.budgetWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
             this.mode = 'view';
+            if(this.result.proposal.statusCode == 9 ) {
+                this.result.proposalStatusCode = 9;
+            } else {
+                this.result.proposalStatusCode = 2;
+            }
             this.showAddedModal = false;
-            //this.showSubmittedModal = true;
-            this.proposalCreateService.submitProposal( this.result.proposal, localStorage.getItem( 'currentUser' ) ).subscribe( data => {
+            this.proposalCreateService.submitProposal( this.result.proposal, localStorage.getItem( 'currentUser' ), this.result.proposalStatusCode ).subscribe( data => {
                 var temp: any = data;
                 this.result.proposal = temp.proposal;
                 this.result.workflow = temp.workflow;
@@ -1204,11 +1256,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
     openRouteLog() {
         this.isRoutelogOpened = true;
-        this.result.proposal.proposalStatus.description = 'Submitted';
-    }
-
-    downloadRouteAttachment( e ) {
-        e.preventDefault();
     }
 
     disapproveProposal() {
@@ -1230,15 +1277,74 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     approveDisapproveProposal() {
         this.sendObject.personId = localStorage.getItem( 'personId' );
         this.sendObject.proposal = this.result.proposal;
+        this.sendObject.approverStopNumber = this.result.approverStopNumber;
         this.sendObject.approveComment = this.approveComments;
         this.proposalCreateService.approveDisapproveProposal( this.sendObject, this.uploadedFile ).subscribe( data => {
             var temp: any = {};
             temp = data;
-            this.result.proposal = temp.proposal;
-            this.result.workflow = temp.workflow;
+            this.result = temp;
+            this.updateWorkflowStops();
+            this.updateRouteLogHeader();
             this.changeRef.detectChanges();
-            this.ngOnInit();
         } );
         this.showApproveDisapproveModal = false;
+    }
+    
+    addReviewer() {
+        this.proposalCreateService.assignReviewer(this.result.proposal, this.result.proposal.proposalId, this.currentUser ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.result = temp;
+            this.updateWorkflowStops();
+            this.updateRouteLogHeader();
+            this.changeRef.detectChanges();
+        } );
+    }
+    
+    completeReview() {
+        this.sendObject.proposal = this.result.proposal;
+        this.sendObject.proposalId = this.result.proposal.proposalId;
+        this.sendObject.userName = this.currentUser ;
+        this.sendObject.approveComment = this.approveComments;
+        this.sendObject.personId = this.result.personId;
+        this.proposalCreateService.completeReviewAction(this.sendObject, this.uploadedFile ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.result = temp;
+            this.updateWorkflowStops();
+            this.updateRouteLogHeader();
+            this.changeRef.detectChanges();
+        } );
+        this.showApproveDisapproveModal = false;
+    }
+    
+    downloadRouteAttachment( event, selectedFileName ) {
+    console.log(selectedFileName);
+        event.preventDefault();
+       // var attachmentName = this.selectedAttachmentStopOne[0];
+        var attachmentName = selectedFileName;
+        console.log(attachmentName)
+        for(let workflow of this.result.workflow.workflowDetails) {
+            for(let attachment of workflow.workflowAttachments) {
+                if(attachment.fileName == attachmentName) {
+                    if ( attachment.attachmentId != null ) {
+                        this.proposalCreateService.downloadRoutelogAttachment( attachment.attachmentId ).takeUntil( this.onDestroy$ ).subscribe(
+                            data => {
+                                var a = document.createElement( "a" );
+                                a.href = URL.createObjectURL( data );
+                                a.download = attachment.fileName;
+                                a.click();
+                            } );
+                    } else {
+                        var url = "data:" + attachment.mimeType + ";base64," + attachment.attachment;
+                        var a = document.createElement( "a" );
+                        a.href = url;
+                        a.download = attachment.fileName;
+                        a.click();
+                    }
+                }
+            }
+        }
+
     }
 }

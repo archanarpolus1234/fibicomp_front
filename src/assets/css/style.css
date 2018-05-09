@@ -356,7 +356,7 @@ header {
 	height: 48px;
 }
 
-.borderBox>.tableSkin>tbody>tr>td:first-child, .borderBox>.tableSkin>thead>tr>th:first-child
+/* .borderBox>.tableSkin>tbody>tr>td:first-child, .borderBox>.tableSkin>thead>tr>th:first-child
 	{
 	padding-left: 0;
 }
@@ -364,7 +364,7 @@ header {
 .borderBox>.tableSkin>tbody>tr>td:last-child, .borderBox>.tableSkin>thead>tr>th:last-child
 	{
 	padding-right: 0;
-}
+} */
 
 .tableSkin>thead, .tableSkin>tbody {
 	

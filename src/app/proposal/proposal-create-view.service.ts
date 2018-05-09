@@ -151,10 +151,11 @@ export class ProposalCreateEditService {
             } );
     }
 
-    submitProposal( proposal: Object, userName ): Observable<JSON> {
+    submitProposal( proposal: Object, userName, proposalStatusCode ): Observable<JSON> {
         var params = {
-                proposal: proposal,
-                userName: userName
+            proposal: proposal,
+            userName: userName,
+            proposalStatusCode: proposalStatusCode
         }
         return this.http.post( this.constant.submitProposalUrl, params )
             .catch( error => {
@@ -162,7 +163,7 @@ export class ProposalCreateEditService {
                 return Observable.throw( error.message || error )
             } );
     }
-    
+
     approveDisapproveProposal( sendObject: Object, uploadedFile ): Observable<JSON> {
         this.approveFormData.delete( 'files' );
         this.approveFormData.delete( 'formDataJson' );
@@ -170,13 +171,46 @@ export class ProposalCreateEditService {
         for ( var i = 0; i < uploadedFile.length; i++ ) {
             this.approveFormData.append( 'files', uploadedFile[i] );
         }
-        
-       
         this.approveFormData.append( 'formDataJson', JSON.stringify( sendObject ) );
         return this.http.post( this.constant.approveRejectProposalUrl, this.approveFormData )
             .catch( error => {
                 console.error( error.message || error );
                 return Observable.throw( error.message || error )
             } );
+    }
+
+    downloadRoutelogAttachment( attachmentId ) {
+        return this.http.get( this.constant.downloadRoutelogAttachmentUrl, {
+            headers: new HttpHeaders().set( 'attachmentId', attachmentId.toString() ),
+            responseType: 'blob'
+        } );
+    }
+    
+    assignReviewer( proposal: Object, proposalId: string, userName: string ) {
+        var params = {
+                proposal: proposal,
+                proposalId: proposalId,
+                userName: userName
+        }
+        return this.http.post( this.constant.addReviewerUrl, params )
+        .catch( error => {
+            console.error( error.message || error );
+            return Observable.throw( error.message || error )
+        } );
+    }
+    
+    completeReviewAction( sendObject: Object, uploadedFile) {
+        this.approveFormData.delete( 'files' );
+        this.approveFormData.delete( 'formDataJson' );
+
+        for ( var i = 0; i < uploadedFile.length; i++ ) {
+            this.approveFormData.append( 'files', uploadedFile[i] );
+        }
+        this.approveFormData.append( 'formDataJson', JSON.stringify( sendObject ) );
+        return this.http.post( this.constant.completeReviewUrl, this.approveFormData )
+        .catch( error => {
+            console.error( error.message || error );
+            return Observable.throw( error.message || error )
+        } );
     }
 }
