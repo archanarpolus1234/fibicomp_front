@@ -3,7 +3,9 @@ import { DashboardService } from './dashboard.service';
 import { SlicePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subject } from "rxjs/Subject";
+import { CompleterService, CompleterData } from 'ng2-completer';
 import 'rxjs/add/operator/takeUntil';
+
 
 import { SessionManagementService } from '../session/session-management.service';
 import { ElasticSearchComponent } from '../elastic-search/elastic-search.component';
@@ -121,9 +123,13 @@ export class DashboardComponent implements OnInit {
     public dashboardinProgressproposalBySponsorWidget: boolean = true;
     public message: string;
     public onDestroy$ = new Subject<void>();
+    selectedReportName: string = 'Select';
+    openGrantList: any= [];
+    selectedGrantId: string = null;
+    reportObject: any = null;
   
 
-    constructor( private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService ) {
+    constructor( public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService ) {
         this.outputPath = this.constant.outputPath;
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
@@ -283,7 +289,9 @@ export class DashboardComponent implements OnInit {
             this.filterValidationMessage = "";
             this.isFilterDatePrevious = false;
             this.isMandatoryFilterFilled = true; 
-        } else {
+        } else if (currentTabPosition == 'GRANTREPORT') {
+          
+        }else {
             this.initialLoad( this.currentPage );
             this.adminClear = false;
         }
@@ -562,4 +570,23 @@ export class DashboardComponent implements OnInit {
         this.currentPosition = 'SMU_PROPOSAL';
         this.router.navigate( ['/proposal/createProposal'], { queryParams: { 'proposalId': proposalId, 'grantId': grantCallId } } );
     }
+
+    reportNameChange() {
+        this.dashboardService.fetchOpenGrantIds().subscribe(data=>{
+            console.log("open grant Ids" , data);
+            var temp = data;
+            this.openGrantList = this.completerService.local(  temp.grantIds, 'grantCallId', 'grantCallId' )
+        });
+    }
+
+    grantIdChange() {
+        this.dashboardService.applicationReport(this.selectedGrantId,this.selectedReportName).subscribe(data=>{
+            console.log("report" , data);
+            var temp = data;
+            this.reportObject = temp;
+        });
+       
+    }
+
+   
 }
