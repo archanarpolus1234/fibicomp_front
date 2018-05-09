@@ -28,6 +28,7 @@ import { HeaderComponent } from './common/header-tpl.component';
 import { LogoutComponent } from './login/logout.component';
 import { AwardBySponsorPieChartComponent } from './research_summary/award-by-sponsor-piechart.component';
 import { InProgressProposalDonutChartComponent } from './research_summary/in-progress-proposal-donut-chart.component';
+import { Ng2CompleterModule } from 'ng2-completer';
 
 import { LoginService } from './login/login.service';
 import { GoogleChartService } from './research_summary/google-chart.service';
@@ -63,7 +64,8 @@ let appRoutes = [{ path: '', redirectTo: 'loginpage', pathMatch: 'full' },
 
 { path: 'grant', loadChildren: './grant/grant.module#GrantModule', canActivate: [AuthGuard] },
 
-{ path: 'proposal', loadChildren: './proposal/proposal.module#ProposalModule', canActivate: [AuthGuard] }
+{ path: 'proposal', loadChildren: './proposal/proposal.module#ProposalModule', canActivate: [AuthGuard]}
+
 ];
 
 @NgModule( {
@@ -98,7 +100,8 @@ let appRoutes = [{ path: '', redirectTo: 'loginpage', pathMatch: 'full' },
         Ng2PageScrollModule,
         OwlDateTimeModule,
         OwlNativeDateTimeModule,
-        HttpClientModule
+        HttpClientModule,
+        Ng2CompleterModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [{

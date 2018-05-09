@@ -75,4 +75,29 @@ export class DashboardService {
                 return Observable.throw( error.message || error );
             } );
     }
+
+    applicationReport(grantCallId,reportName) {
+
+        var params = {
+            grantCallId : grantCallId,
+            reportName : reportName
+        }
+
+        return this.http.post( this.constant.applicationReport,params )
+        .catch( error => {
+            console.error( error.message || error );
+            return Observable.throw( error.message || error );
+        } );
+        
+    }
+
+    fetchOpenGrantIds() {
+
+        return this.http.post( this.constant.fetchOpenGrantIds,{} )
+        .catch( error => {
+            console.error( error.message || error );
+            return Observable.throw( error.message || error );
+        } );
+
+    }
 }

@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class Constants {
-    baseUrl : string = "http://192.168.1.76";
+    //baseUrl : string = "http://192.168.1.76";
     //baseUrl : string = "http://52.20.110.7";
     //baseUrl : string = "http://14.140.179.70";
     // baseUrl : string = "http://demo.fibiweb.com/fibi-comp";
-    //baseUrl: string = "";
+    baseUrl: string = "";
 
-     portAndPath: string = ":8080/fibi-comp";
+     //portAndPath: string = ":8080/fibi-comp";
     //portAndPath: string = ":1550/fibi-comp";
-    //portAndPath: string = "";
+    portAndPath: string = "";
 
     expandedSummaryViewUrl: string;
     expandedDonutViewUrl: string;
@@ -89,6 +89,9 @@ export class Constants {
     loadProposalById: string;
     submitProposalUrl: string;
     approveRejectProposalUrl: string;
+    applicationReport: string;
+    fetchOpenGrantIds: string;
+
 
     constructor() {
         this.index_url = 'http://192.168.1.76:9200/';
@@ -237,6 +240,10 @@ export class Constants {
         this.submitProposalUrl = this.baseUrl + this.portAndPath + '/submitProposal';
 
         this.approveRejectProposalUrl = this.baseUrl + this.portAndPath + '/approveOrRejectProposal';
+
+        this.fetchOpenGrantIds = this.baseUrl + this.portAndPath + '/fetchOpenGrantIds';
+
+        this.applicationReport = this.baseUrl + this.portAndPath + '/applicationReport';
 
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
