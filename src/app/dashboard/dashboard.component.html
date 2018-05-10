@@ -28,7 +28,7 @@
 							(click)="showTab('GRANT')"> Grant Call</a></li>
 					<li [ngClass]="{'active': currentPosition == 'SMU_PROPOSAL'}"><a
 								(click)="showTab('SMU_PROPOSAL')"> Application</a></li>
-					<li [ngClass]="{'active': currentPosition == 'GRANTREPORT'}"><a
+					<li *ngIf="isAdmin" [ngClass]="{'active': currentPosition == 'GRANTREPORT'}"><a
 						(click)="showTab('GRANTREPORT')"> Reports</a></li>
 				</ul>
 			</div>
@@ -924,8 +924,8 @@
 						</span>
 				</div>
 				
-				<div class="borderBox" >
-					<table class="table table-responsive tableSkin" *ngIf="this.result?.committeeSchedules?.length !== 0">
+				<div class="borderBox" *ngIf="serviceRequestList.length!=0">
+					<table class="table table-responsive tableSkin" >
 						<thead>
 							
 							
@@ -987,7 +987,7 @@
 						
 				</div>
 				
-				<div class="borderBox" >
+				<div class="borderBox" *ngIf="serviceRequestList.length!=0">
 					<table class="table table-responsive tableSkin">
 						<thead>
 							
@@ -1046,10 +1046,6 @@
 					<div  class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
 						<div class="borderBox" *ngIf="openGrantList.length!=0">
 								<label>Grant : </label>
-										<!-- <select [(ngModel)] = "selectedGrantId" (change)="grantIdChange()" class = "committeeBox">
-											<option>Select</option>
-											<option *ngFor="let grant of openGrantList">{{grant.grantCallId}}</option>
-										</select> -->
 										<ng2-completer  title="Search grant" 
 															[inputClass]="completerID"
 															[(ngModel)]="selectedGrantId" placeholder="Search by Id or Name"
@@ -1065,6 +1061,46 @@
 									</div>
 									</div>
 							</div>
+				</div>
+
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="reportObject!=null">
+					<div class="borderBox">
+						<table class="table table-responsive tableSkin">
+								<thead>
+									<tr>
+										<th (click)="sortResult('proposalId',currentPosition)"
+										title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
+										</th>
+										<th >Name
+										</th>
+										<th (click)="sortResult('startDate',currentPosition)"
+										title="Click to sort by Application Id">Opening Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'startDate')}"></span>
+										</th>
+										<th (click)="sortResult('endDate',currentPosition)"
+										title="Click to sort by End Date">Closing Date<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'endDate')}"></span></th>
+										<th>Lead Unit</th>
+										<th>Status</th>
+										<th>Action</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr *ngFor="let proposal of proposals">
+										<td>{{proposal.proposalId}}</td>
+										<td>{{proposal.title}}</td>
+										<td>{{proposal.startDate}}</td>
+										<td>{{proposal.endDate}}</td>
+										<td>{{proposal.grantCall.homeUnitName}}</td>
+										<td>{{proposal.proposalStatus?.description}}</td>
+										<td>
+											<ul class="actionButtonGroup">
+												<li><a title="Open"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
+														class="fa fa-eye pointer"></i></a></li>
+											</ul>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
 				</div>
 				
 

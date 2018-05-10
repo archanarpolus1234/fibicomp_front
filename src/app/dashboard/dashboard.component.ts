@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef,ChangeDetectorRef } from '@angular/core';
 import { DashboardService } from './dashboard.service';
 import { SlicePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -127,9 +127,10 @@ export class DashboardComponent implements OnInit {
     openGrantList: any= [];
     selectedGrantId: string = null;
     reportObject: any = null;
+    proposals:any[] = [];
   
 
-    constructor( public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService ) {
+    constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService ) {
         this.outputPath = this.constant.outputPath;
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
@@ -306,7 +307,11 @@ export class DashboardComponent implements OnInit {
             this.sortOrder = "ASC";
         }
         this.sortBy = sortFieldBy;
-        this.initialLoad( this.currentPage );
+        if(current_Position=='GRANTREPORT') { 
+        } else {
+            this.initialLoad( this.currentPage );
+        }
+        
     }
 
     getResearchSummaryData() {
@@ -585,6 +590,7 @@ export class DashboardComponent implements OnInit {
           
             var temp = data;
             this.reportObject = temp;
+            this.proposals = this.reportObject.proposals;
         });
        
     }
