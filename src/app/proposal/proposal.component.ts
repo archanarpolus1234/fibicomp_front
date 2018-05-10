@@ -25,10 +25,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     selectedAttachmentStopTwo: any = [];
     selectedAttachmentStopThree: any = [];
     selectedAttachmentStopFour: any = [];
-    /*routelogDoc1Selected: string;
-    routelogDoc2Selected: string;
-    routelogDoc3Selected: string;
-    routelogDoc4Selected: string;*/
+    selectedAttachmentReviewer: any = [];
     mode: string = 'view';
     showGrantSearch: boolean = true;
     isAOREnabled: boolean = true;
@@ -77,6 +74,11 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     workflowStopFour: any = [];
     proposalPIName: string;
     proposalLeadUnit: string;
+    isRevExpanded: any = {};
+    showReviewerModal: boolean = false;
+    reviewerList: any = [];
+    reviewerListTemp: any = [];
+    selectedReviewer: string;
 
     showAddAttachment: boolean = false;
     uploadedFile: any[] = [];
@@ -191,7 +193,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.editAreaClass = "scheduleBoxes";
             this.selectedAreaType = this.result.proposalResearchTypes[0].description;
             this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
-            this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
+            this.selectedAttachmentType = this.select;
         } else {
             this.mode = 'view';
             this.editClass = "committeeBoxNotEditable";
@@ -200,36 +202,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
         this.updateWorkflowStops();
         this.updateRouteLogHeader();
-        if ( this.result.workflow != null ) {/*
-            var i = 0;
-            this.result.workflow.workflowDetails.forEach((value, index) => {
-                if ( value.approvalStopNumber == 1 && value.workflowAttachments.length > 0) {
-                    this.selectedAttachmentStopOne[i] = value.workflowAttachments[i].fileName;
-                    i++;
-                }
-            });
-            i = 0;
-            this.result.workflow.workflowDetails.forEach((value, index) => {
-                if ( value.approvalStopNumber == 2 && value.workflowAttachments.length > 0) {
-                    this.selectedAttachmentStopTwo[i] = value.workflowAttachments[i].fileName;
-                    i++;
-                }
-            });
-            i = 0;
-            this.result.workflow.workflowDetails.forEach((value, index) => {
-                if ( value.approvalStopNumber == 3 && value.workflowAttachments.length > 0) {
-                    this.selectedAttachmentStopThree[i] = value.workflowAttachments[i].fileName;
-                    i++;
-                }
-            });
-            i = 0;
-            this.result.workflow.workflowDetails.forEach((value, index) => {
-                if ( value.approvalStopNumber == 4 && value.workflowAttachments.length > 0) {
-                    this.selectedAttachmentStopFour[i] = value.workflowAttachments[i].fileName;
-                    i++;
-                }
-            });
-        */}
 
         this.grantCallType = this.result.grantCallTypes;
         this.personRolesList = this.result.proposalPersonRoles;
@@ -291,6 +263,14 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 if ( value.workflowAttachments != null && value.workflowAttachments.length > 0 ) {
                     this.selectedAttachmentStopTwo[index] = value.workflowAttachments[0].fileName;
                 }
+                if ( value.workflowReviewerDetails != null && value.workflowReviewerDetails.length > 0 ) {
+                    this.isRevExpanded[index] = true;
+                    value.workflowReviewerDetails.forEach(( valueR, indexR ) => {
+                        if ( valueR.workflowAttachments != null && valueR.workflowAttachments.length > 0 ) {
+                            this.selectedAttachmentReviewer[indexR] = valueR.workflowAttachments[0].fileName;
+                        }
+                    } );
+                }
             } );
             this.workflowStopThree.forEach(( value, index ) => {
                 if ( value.workflowAttachments != null && value.workflowAttachments.length > 0 ) {
@@ -330,7 +310,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.budgetCategorySelected = this.select;
             this.selectedAreaType = this.result.proposalResearchTypes[0].description;
             this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
-            this.selectedAttachmentType = this.result.proposalAttachmentTypes[0].description;
+            this.selectedAttachmentType = this.select;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
             this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
@@ -618,6 +598,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             if ( grant.grantCallName == this.selectedGrantCall ) {
                 this.result.proposal.grantCall = grant;
                 this.result.proposal.grantCallId = grant.grantCallId;
+                this.result.proposal.grantCallType = grant.grantCallType;
                 this.result.proposal.grantCall.updateTimeStamp = timeStamp;
                 this.result.proposal.grantCall.updateUser = this.currentUser;
             }
@@ -629,6 +610,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     removeSelectedGrant( e ) {
         e.preventDefault();
         this.result.proposal.grantCall = null;
+        this.result.proposal.grantCallType = this.result.defaultGrantCallType;
         this.selectedGrantCall = null;
     }
 
@@ -799,25 +781,29 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     addAttachments() {
         var d = new Date();
         var timestamp = d.getTime();
-        for ( let attachmentType of this.result.proposalAttachmentTypes ) {
-            if ( attachmentType.description == this.selectedAttachmentType ) {
-                this.attachmentObject = attachmentType;
+        if(this.selectedAttachmentType == this.select) {
+            
+        } else {
+            for ( let attachmentType of this.result.proposalAttachmentTypes ) {
+                if ( attachmentType.description == this.selectedAttachmentType ) {
+                    this.attachmentObject = attachmentType;
+                }
             }
+            var tempObjectForAdd: any = {};
+            tempObjectForAdd.attachmentType = this.attachmentObject;
+            tempObjectForAdd.attachmentTypeCode = this.attachmentObject.attachmentTypeCode;
+            tempObjectForAdd.description = this.attachmentDescription;
+            tempObjectForAdd.updateTimeStamp = timestamp;
+            tempObjectForAdd.updateUser = this.currentUser;
+            this.result.newAttachment = tempObjectForAdd;
+            this.proposalCreateService.addProposalAttachment( this.result.proposal, this.result.newAttachment, this.uploadedFile ).subscribe( success => {
+                var temporaryObject: any = {};
+                temporaryObject = success;
+                this.result.proposal = temporaryObject.proposal;
+            }, error => { console.log( error ) }, () => {
+                this.closeAttachments();
+            } );
         }
-        var tempObjectForAdd: any = {};
-        tempObjectForAdd.attachmentType = this.attachmentObject;
-        tempObjectForAdd.attachmentTypeCode = this.attachmentObject.attachmentTypeCode;
-        tempObjectForAdd.description = this.attachmentDescription;
-        tempObjectForAdd.updateTimeStamp = timestamp;
-        tempObjectForAdd.updateUser = this.currentUser;
-        this.result.newAttachment = tempObjectForAdd;
-        this.proposalCreateService.addProposalAttachment( this.result.proposal, this.result.newAttachment, this.uploadedFile ).subscribe( success => {
-            var temporaryObject: any = {};
-            temporaryObject = success;
-            this.result.proposal = temporaryObject.proposal;
-        }, error => { console.log( error ) }, () => {
-            this.closeAttachments();
-        } );
     }
 
     showAddAttachmentPopUp( e ) {
@@ -1320,8 +1306,43 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.showApproveDisapproveModal = false;
     }
 
+    
+    getAllReviewer() {
+        this.showReviewerModal = true;
+        this.proposalCreateService.fetchAvailableReviewers( this.result.proposal ).subscribe( data => {
+            var temp: any = {};
+            temp = data;
+            this.reviewerListTemp = temp.reviewers;
+            this.reviewerList = this.completerService.local( this.reviewerListTemp, 'approverPersonName', 'approverPersonName' );
+            this.result.reviewers = null;
+            this.changeRef.detectChanges();
+        } );
+    }
+
+    removeSelectedReviewer( $event, reviewer, i ) {
+        $event.preventDefault();
+        if(this.result.reviewers != null) {
+            this.result.reviewers.splice(i, 1);
+        }
+    }
+    
+    reviewerChangeFunction() {
+        var d = new Date();
+        var timeStamp = d.getTime();
+        if(this.result.reviewers == null) {
+            this.result.reviewers = [];
+        }
+        for ( let reviewer of this.reviewerListTemp ) {
+            if ( reviewer.approverPersonName == this.selectedReviewer ) {
+                this.result.reviewers.push(reviewer);
+            }
+        }
+        this.changeRef.detectChanges();
+        this.selectedReviewer = null; 
+    }
+    
     addReviewer() {
-        this.proposalCreateService.assignReviewer( this.result.proposal, this.result.proposal.proposalId, this.currentUser ).subscribe( data => {
+        this.proposalCreateService.assignReviewer( this.result.proposal, this.result.reviewers, this.result.proposal.proposalId, this.currentUser ).subscribe( data => {
             var temp: any = {};
             temp = data;
             this.result = temp;
@@ -1329,6 +1350,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.updateRouteLogHeader();
             this.changeRef.detectChanges();
         } );
+        this.showReviewerModal = false;
     }
 
     completeReview() {
@@ -1370,5 +1392,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             }
         }
 
+    }
+
+    toggleReviewers($event, i) {
+        $event.preventDefault();
+        this.isRevExpanded[i] = !this.isRevExpanded[i];
     }
 }

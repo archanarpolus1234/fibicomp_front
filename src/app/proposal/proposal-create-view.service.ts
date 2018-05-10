@@ -186,10 +186,11 @@ export class ProposalCreateEditService {
         } );
     }
     
-    assignReviewer( proposal: Object, proposalId: string, userName: string ) {
+    assignReviewer( proposal: Object, reviewers: Object, proposalId: string, userName: string ) {
         var params = {
                 proposal: proposal,
                 proposalId: proposalId,
+                reviewers: reviewers,
                 userName: userName
         }
         return this.http.post( this.constant.addReviewerUrl, params )
@@ -208,6 +209,17 @@ export class ProposalCreateEditService {
         }
         this.approveFormData.append( 'formDataJson', JSON.stringify( sendObject ) );
         return this.http.post( this.constant.completeReviewUrl, this.approveFormData )
+        .catch( error => {
+            console.error( error.message || error );
+            return Observable.throw( error.message || error )
+        } );
+    }
+    
+    fetchAvailableReviewers( proposal: Object ) {
+        var params = {
+                proposal: proposal
+        }
+        return this.http.post( this.constant.fetchReviewerUrl, params )
         .catch( error => {
             console.error( error.message || error );
             return Observable.throw( error.message || error )
