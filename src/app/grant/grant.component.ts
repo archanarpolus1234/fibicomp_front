@@ -494,7 +494,6 @@ export class GrantComponent {
                     var temporaryObject:any ={};
                     temporaryObject = success;
                     this.result.grantCall = temporaryObject.grantCall;
-                console.log( this.result.grantCall)
                 },error=>{},()=>{
                     this.closeAttachments();
                 });
@@ -595,7 +594,6 @@ export class GrantComponent {
     }
 
     sponsorNameChange(sponsorName:string ) {
-        console.log("called")
         for(let sponsor of this.sponsorList) {
             if(sponsor.sponsorName == sponsorName) {
                 sponsor.sponsorType = this.result.grantCall.sponsorType;
@@ -765,7 +763,6 @@ export class GrantComponent {
     }
 
     publishCall() {
-       console.log("send object",this.result.grantCall);
                     
         if(this.result.grantCall.grantCallId ==null || this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.selectedHomeUnit==null || this.result.grantCall.grantTheme==null ) {
             var scrollTop;
@@ -806,7 +803,6 @@ export class GrantComponent {
             if ( homeUnit.unitName == this.selectedHomeUnit ) {
                 this.result.grantCall.homeUnitNumber = homeUnit.unitNumber;
                 this.result.grantCall.homeUnitName = this.selectedHomeUnit;
-                console.log("grantCall",this.result.grantCall)
             }
         }
     }

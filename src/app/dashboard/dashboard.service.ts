@@ -37,7 +37,6 @@ export class DashboardService {
             isUnitAdmin:localStorage.getItem('isAdmin'),
             unitNumber: localStorage.getItem('unitNumber')
         };
-        console.log("params",params)
         return this.http.post( this.constant.dashboardUrl, params )
             .catch( error => {
                 console.error( error.message || error );

@@ -24,9 +24,11 @@
 		<header class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<ul class="headerMenu">
-					<li><a href="#" class="logo"> <span class="logoIcon"><img
+					<li><a href="#" class="logo"> 
+						<!-- <span class="logoIcon"><img
 								[src]="logo" class="" /></span> <span class="brandText">Polus
-								University</span>
+								University</span> -->
+						<span ><img [src]="logo" class="" /></span> 
 					</a></li>
 					<li *ngIf="isAdmin == false"><a> <span class="userName">Dashboard
 								of {{fullName}} (PI)</span> <i style="cursor: pointer;"

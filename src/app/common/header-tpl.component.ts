@@ -48,7 +48,8 @@ export class HeaderComponent implements OnInit {
         document.addEventListener( 'mouseup', this.offClickHandler.bind( this ) );
         document.addEventListener( 'mouseup', this.offClickHandlerDashboardConf.bind( this ) );
         this.outputPath = this.constant.outputPath;
-        this.logo = './assets/images/logo.png';
+        this.logo = './assets/images/logo-smu.jpg';
+        // this.logo = './assets/images/logo.png';
     }
 
     offClickHandler( event: any ) {
