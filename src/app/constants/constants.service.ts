@@ -94,6 +94,7 @@ export class Constants {
     completeReviewUrl: string;
     applicationReport: string;
     fetchOpenGrantIds: string;
+    fetchReviewerUrl: string;
 
 
     constructor() {
@@ -248,7 +249,10 @@ export class Constants {
 
         this.addReviewerUrl = this.baseUrl + this.portAndPath + '/assignReviewer';
 
+        this.fetchReviewerUrl = this.baseUrl + this.portAndPath + '/fetchReviewers';
+
         this.completeReviewUrl = this.baseUrl + this.portAndPath + '/reviewCompleted';
+        
         this.fetchOpenGrantIds = this.baseUrl + this.portAndPath + '/fetchOpenGrantIds';
 
         this.applicationReport = this.baseUrl + this.portAndPath + '/applicationReport';

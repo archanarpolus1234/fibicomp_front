@@ -287,3 +287,44 @@ input[type=number]::-webkit-outer-spin-button {
 	border: 1px #DEDEDE solid;
 	font-size: 0.85em;
 }
+
+#routeLogTable {
+	margin-bottom: 0px;
+}
+
+#routeLogBody {
+	padding-bottom: 0px;
+	margin-bottom: 0px;
+}
+
+/* style  for reviewer */
+.reviewTable {
+	margin-bottom: 0px;
+}
+.reviewTable thead th {
+	font-size: .95em !important;
+}
+.reviewTable tr th {
+	font-size: .95em !important;
+}
+.reviewTable tr td {
+	font-size: .95em !important;
+}
+.reviewTable>tbody>tr>td {
+	font-size: .95em !important;
+}
+#reviewHeading, #reviewAssignModalTable {
+	border-top : 0px;
+	padding-top: 0px;
+}
+.collapseExpand {
+	color: #bdbdbd;
+	background: #FEFEFE;
+	border: 5px #FEFEFE solid;
+	font-size: 1.1em;
+	line-height: normal;
+}
+.collapseExpand:hover {
+	color: #26A69A;
+}
+

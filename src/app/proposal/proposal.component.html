@@ -46,8 +46,8 @@
 															<i class="fa fa-calendar fa-large" [owlDateTimeTrigger]="endDt"></i>
 															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
 															<span *ngIf="mode == 'view'" >{{result?.proposal?.endDate}}</span>
-															</td>
-		                                            <td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br><span *ngIf="mode != 'view'" ><input placeholder="date of submission"
+													</td>
+													<td><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br><span *ngIf="mode != 'view'" ><input placeholder="date of submission"
 															[owlDateTimeTrigger]="subDt" [owlDateTime]="subDt" 
 															[(ngModel)]="result.proposal.submissionDate"
 															[ngClass]="editClass" />
@@ -73,6 +73,7 @@
 																No keywords added with this proposal
 															</div>
 													</td>
+													<td><label>Grant Call Type:</label><br><span>{{result?.proposal?.grantCallType?.description}}</span></td>
 													<td><label>Is this Project under SMU ICLs?</label><br><ul class="tablelayout radioElement" *ngIf="mode != 'view'">
 		                                        														  	<li><input type="radio" name="underICL" (click)="toggleICL(true)" [checked]="result?.proposal?.isSmu == true"/>&nbsp;Yes</li>
 		                                        														  	<li><input type="radio" name="underICL" (click)="toggleICL(false)" [checked]="result?.proposal?.isSmu == false || result?.proposal?.isSmu == null"/>&nbsp;No</li>
@@ -85,7 +86,6 @@
 																					  </select></span>
 																					  <span *ngIf="mode == 'view' && result?.proposal?.isSmu == true">{{selectedICLLab}}</span>
 													</td>
-													<td></td> 
 												</tr>
 											</tbody>
 										</table>
@@ -114,8 +114,8 @@
 								</tr>
 								<tbody *ngIf="result?.proposal?.grantCall != null">
 									<tr>
-										<th >Grant Call Id</th>
-										<th >Name of Grant Call</th>
+										<th >Id</th>
+										<th >Name</th>
 			                            <th >Funding Agency</th>
 			                            <th >Funding Scheme</th>
 			                            <th >Grant Theme</th>
@@ -136,7 +136,7 @@
 							</table>
 						</div>
                          <div class="borderBox col-12">
-								<h4 class="borderBoxHeading">Area of Research</h4>
+								<h4 class="borderBoxHeading"><span class="mandatory" *ngIf="mode != 'view'">*</span>Area of Research</h4>
                                     <table class="table table-responsive tableSkin">
 										<tr id="addAreaOfResearchRow" *ngIf=" mode != 'view'">
 											<td class="text-right">Type:</td>
@@ -195,7 +195,7 @@
                                   </table>
                              </div>
                             <div class="borderBox col-12">
-                    			<h4 class="borderBoxHeading">Project Team</h4>
+                    			<h4 class="borderBoxHeading"><span class="mandatory" *ngIf="mode != 'view'">*</span>Project Team</h4>
                                     <table class="table table-responsive tableSkin">
                                     	<tr id="addTeamMemberRow" *ngIf="mode != 'view'">
                                     		<td>Member Type:</td>
@@ -528,7 +528,7 @@
 									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposal" *ngIf="mode !='view' && result?.proposal?.proposalId" (click)="submitProposal()">Submit</button>
                                		<button type="button" class="btnSkin btn-secondary" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="disapproveProposal()" >Disapprove</button>
                                		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="approveProposal()">Approve</button>
-									<button type="button" class="btnSkin btnPublish" *ngIf="mode =='view' && result?.isGrantAdmin == true && result?.isReviewed != true && result?.isApproved != true && workflowStopThree?.length == 0" (click)="addReviewer()">Add a Reviewer</button>
+									<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#reviewerModal" *ngIf="mode =='view' && result?.isGrantAdmin == true && result?.isReviewed != true && result?.isApproved != true && workflowStopThree?.length == 0" (click)="getAllReviewer()">Assign to Reviewer</button>
 									<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isReviewer == true && result?.isReviewed == false" (click)="approveProposal()">Complete Review</button>
                                		<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="(mode == 'view') || (mode != 'view' && result?.proposal?.proposalStatus?.statusCode == 9)" (click)="openRouteLog()" >Route Log</button>
                                		</div>
@@ -576,19 +576,19 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 				</div>
 			</div>
 			
-			<div class="borderBox col-12">
+			<div class="borderBox col-12" id="routeLogBody">
 				<div class="pullSide">
-                    <table class="table table-responsive tableSkin">
+                    <table class="table table-responsive tableSkin" id="routeLogTable">
 	                           	<tr id="routelogHeader">
 	                                <th >Name</th>
-	                                <th >Routing Status</th>
+	                                <th >Review Status</th>
 	                                <th >Action Date</th>
 	                                <th >Comments</th>
 	                                <th >Attachments</th>
 	                                <th >Actions</th>
 	                            </tr>
 	                             <tr>
-	                            	<td colspan="6" class="borderBoxHeading"><label>Stop 1:&nbsp;</label>Grant Manager</td>
+	                            	<td colspan="6" class="borderBoxHeading"><label>Stop 1:&nbsp;&nbsp;</label>Grant Manager</td>
 	                           	 </tr>
 	                            <tr *ngFor = "let workflow of workflowStopOne;let i = index">
 	                            	<td >{{workflow?.approverPersonName}}</td>
@@ -607,46 +607,66 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 									</ul></td>
 	                            </tr>
 	                            <tr>
-	                            	<td colspan="6"  class="borderBoxHeading"><label>Stop 2:&nbsp;</label>Grant Administrator</td>
+	                            	<td colspan="6"  class="borderBoxHeading"><label>Stop 2:&nbsp;&nbsp;</label>Grant Administrator</td>
 	                           	 </tr>
-	                            <tr  *ngFor = "let workflow of workflowStopTwo;let i = index">
-	                            	<td >{{workflow?.approverPersonName}}</td>
-	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
-	                            	<td >{{workflow?.approvalDate}}</td>
-	                                <td >{{workflow?.approvalComment}}</td>
-	                                <td >
-	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="selectedAttachmentStopTwo[i]">
-													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
-												</select>
-	                                </td>
-	                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopTwo[i], workflow.workflowAttachments)"><i title="download this document"
-												class="fa fa-download" aria-hidden="true"></i></a></li>
-									</ul></td>
-	                            </tr>
-	                            <tr>
-	                            	<td colspan="6"  class="borderBoxHeading"><label>Stop 3:&nbsp;</label>Grant Reviewer</td>
-	                           	 </tr>
-	                           	 <tr *ngIf="workflowStopThree?.length == 0">
-	                           	 	<td colspan="6">No reviewers added yet</td>
-	                           	 </tr>
-	                            <tr *ngFor = "let workflow of workflowStopThree;let i = index">
-	                            	<td >{{workflow?.approverPersonName}}</td>
-	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
-	                            	<td >{{workflow?.approvalDate}}</td>
-	                                <td >{{workflow?.approvalComment}}</td>
-	                                <td >
-                                				<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'WR'" class="noDataExists">No attachments added</span>
-	                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="selectedAttachmentStopThree[i]">
-													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
-												</select>
-	                                </td>
-	                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
-										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopThree[i], workflow.workflowAttachments)"><i title="download this document"
-												class="fa fa-download" aria-hidden="true"></i></a></li>
-									</ul></td>
-	                            </tr>
+	                            <tbody  *ngFor = "let workflow of workflowStopTwo;let i = index">
+	                            	<tr>
+		                            	<td >{{workflow?.approverPersonName}}</td>
+		                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
+		                            	<td >{{workflow?.approvalDate}}</td>
+		                                <td >{{workflow?.approvalComment}}</td>
+		                                <td >
+		                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
+		                                			<select *ngIf="workflow?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="selectedAttachmentStopTwo[i]">
+														<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
+													</select>
+		                                </td>
+		                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
+											<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopTwo[i], workflow.workflowAttachments)"><i title="download this document"
+													class="fa fa-download" aria-hidden="true"></i></a></li>
+										</ul></td>
+									</tr>
+									<tr *ngIf="workflow?.workflowReviewerDetails != null && workflow?.workflowReviewerDetails?.length > 0">
+										<td colspan="6">
+											<table class="table table-responsive tableSkin reviewTable">
+												<tr>
+					                            	<td colspan="6" class="borderBoxHeading" id="reviewHeading">Reviewers<a class="collapseExpand" href="#" (click)="toggleReviewers($event, i)">
+														<i [ngClass]="(isRevExpanded[i] == true) ? 'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
+													</td>
+					                           	</tr>
+					                           	<tbody *ngIf="isRevExpanded[i]">
+													<tr >
+						                                <th >Name</th>
+						                                <th >Routing Status</th>
+						                                <th >Action Date</th>
+						                                <th >Comments</th>
+						                                <th >Attachments</th>
+						                                <th >Action</th>
+						                            </tr>
+						                            <tr *ngFor="let reviewerItem of workflow?.workflowReviewerDetails; let j=index">
+						                            	<td>{{reviewerItem?.reviewerPersonName}}</td>
+						                            	<td>{{reviewerItem?.workflowStatus?.approveStatus}}</td>
+						                            	<td>{{reviewerItem?.reviewDate}}</td>
+						                            	<td>{{reviewerItem?.comments}}</td>
+						                            	<td>
+						                            		<span *ngIf="reviewerItem?.workflowAttachments?.length == 0 && reviewerItem?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
+				                                			<select *ngIf="reviewerItem?.workflowAttachments?.length > 0" [ngClass]="editClass" [(ngModel)]="selectedAttachmentReviewer[j]">
+																<option *ngFor="let attachment of reviewerItem?.workflowAttachments">{{attachment.fileName}}</option>
+															</select>
+						                            	</td>
+						                            	<td><ul class="actionButtonGroup"*ngIf="reviewerItem?.workflowAttachments?.length > 0" >
+																<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentReviewer[j], reviewerItem.workflowAttachments)"><i title="download this document"
+																class="fa fa-download" aria-hidden="true"></i></a></li>
+																<!-- <li><a href="#" (click)="deleteRouteAttachment($event, selectedAttachmentReviewer[j], reviewerItem.workflowAttachments)"><i title="remove this reviewer"
+																class="fa fa-trash-o" aria-hidden="true"></i></a></li> -->
+															</ul></td>
+						                            </tr>
+					                            </tbody>
+											</table>
+										
+										</td>
+		                            </tr>
+	                            </tbody>
                            </table> 
 				</div>
 			</div>
@@ -654,8 +674,8 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 			<!--  -->
 		</div>
 		<div class="modal-footer" >
-			<button type="button" class="btnSkin btnSkinPrimary"
-				data-dismiss="modal" data-toggle="modal" (click)="isRoutelogOpened = false">Ok</button>
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="isRoutelogOpened = false">Close</button>
 		</div>
 	</div>
 </div>
@@ -711,6 +731,60 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 		</div>
 	</div>
 	
+	<!-- ASSIGN REVIEWER MODAL -->
+	
+	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showReviewerModal" tabindex="-1"
+		id="reviewerModal" tabindex="-1" role="dialog"
+		aria-labelledby="deleteModalTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Assign to Reviewer</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+							<table class="table table-responsive tableSkin" id="reviewAssignModalTable">
+								<tr >
+									<td class="text-right">Name of Reviewer:</td>
+									<td class="pull-left"><span><ng2-completer style="border:none; padding:0px"
+															[inputClass]="completerID" placeholder="search a reviewer name"
+															[(ngModel)]="selectedReviewer"
+															[datasource]="reviewerList" [minSearchLength]="0"
+															(selected)="reviewerChangeFunction()" [ngClass]="editClass" ></ng2-completer></span>
+										
+									</td>
+									<td colspan="2">&nbsp;</td>
+								</tr>
+								<tbody *ngIf="result?.reviewers != null">
+									<tr>
+										<th >Sl No</th>
+			                            <th >Reviewer Person Id</th>
+										<th >Reviewer Name</th>
+			                            <th >Action</th>
+									</tr>
+									<tr *ngFor="let reviewer of result?.reviewers; let i=index">
+										<td style="padding-left: 10px"><span>{{i+1}}</span></td>
+										<td ><span >{{reviewer?.approverPersonId}}</span></td>
+										<td ><span >{{reviewer?.approverPersonName}}</span></td>
+										<td ><ul class="actionButtonGroup">
+												<li><a href="#" (click)="removeSelectedReviewer($event, reviewer, i)"><i class="fa fa-trash-o" aria-hidden="true" title="remove this reviewer"></i></a></li>
+											</ul>
+									</tr>
+								</tbody>
+							</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary"
+						data-dismiss="modal" data-toggle="modal" (click)="showReviewerModal = false">Cancel</button>
+					<button type="button" class="btnSkin btnSkinPrimary"
+						(click)="addReviewer()" data-dismiss="modal">Add Reviewer(s)</button>
+				</div>
+			</div>
+		</div>
+		</div>
 	<!-- DELETE MEMBER WARNING MODAL -->
 <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteMember || showDeleteBudget" tabindex="-1"
 id="deleteMemberModal" tabindex="-1" role="dialog"
