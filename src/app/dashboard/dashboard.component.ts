@@ -14,10 +14,11 @@ import { ExpandedViewDataService } from '../research_summary/expanded-view-data-
 import { DashboardData } from '../dashboard/dashboard-data.service';
 import { ExpandedviewService } from '../research_summary/expanded-view.service';
 import { DashboardConfigurationService } from '../common/dashboard-configuration-service';
+import { ProposalCreateEditService } from "../proposal/proposal-create-view.service";
 
 @Component( {
     templateUrl: 'dashboard.component.html',
-    providers: [SessionManagementService, Constants, DashboardData],
+    providers: [SessionManagementService, Constants, DashboardData, ProposalCreateEditService],
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
 } )
 
@@ -123,18 +124,31 @@ export class DashboardComponent implements OnInit {
     public dashboardinProgressproposalBySponsorWidget: boolean = true;
     public message: string;
     public onDestroy$ = new Subject<void>();
-    selectedReportName: string = 'Select';
+    selectedReportName: string;
     openGrantList: any= [];
     selectedGrantId: string = null;
     reportObject: any = null;
     proposals:any[] = [];
   
+    grantManager: string;
+    provost: string;
+    finalStatus: string = null;
+    selectedProposalId: string;
+    proposal: any = {};
+    showConfirmModal: boolean = false;
+    confirmHeading: string;
+    confirmMessage: string;
+    isForward: boolean = false;
+    isEndorse: boolean = false;
+  
 
-    constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService ) {
+    constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService, private proposalCreateService: ProposalCreateEditService ) {
         this.outputPath = this.constant.outputPath;
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         }
+        this.grantManager = localStorage.getItem('grantManager');
+        this.provost = localStorage.getItem('provost');
         this.getResearchSummaryData();
     }
     
@@ -291,7 +305,7 @@ export class DashboardComponent implements OnInit {
             this.isFilterDatePrevious = false;
             this.isMandatoryFilterFilled = true; 
         } else if (currentTabPosition == 'GRANTREPORT') {
-          
+            this.fetchReportData();
         }else {
             this.initialLoad( this.currentPage );
             this.adminClear = false;
@@ -576,24 +590,61 @@ export class DashboardComponent implements OnInit {
         this.router.navigate( ['/proposal/createProposal'], { queryParams: { 'proposalId': proposalId, 'grantId': grantCallId } } );
     }
 
-    reportNameChange() {
-        this.reportObject = null;
-        this.selectedGrantId = null;
-        this.dashboardService.fetchOpenGrantIds().subscribe(data=>{
-            var temp = data;
-            this.openGrantList = this.completerService.local(  temp.grantIds, 'grantCallId', 'grantCallId' )
-        });
-    }
-
     grantIdChange() {
         this.dashboardService.applicationReport(this.selectedGrantId,this.selectedReportName).subscribe(data=>{
-          
             var temp = data;
             this.reportObject = temp;
             this.proposals = this.reportObject.proposals;
         });
-       
+
     }
 
+    fetchReportData() {
+      this.reportObject = null;
+      this.selectedGrantId = null;
+      this.dashboardService.fetchAllReportData().takeUntil(this.onDestroy$).subscribe(data => {
+        var temp: any = {};
+        temp = data || [];
+        if (temp != null) {
+          this.openGrantList = this.completerService.local(temp.grantIds, 'grantCallId', 'grantCallId');
+          this.dashboardData.setReportData(temp);
+        }
+      });
+    }
    
+   
+    openConfirm(actionType: string, proposalId: string, proposal: any) {
+      this.selectedProposalId = proposalId;
+      this.proposal = proposal;
+      this.showConfirmModal = true;
+      if (actionType == 'submit') {
+        this.isForward = true;
+        this.confirmHeading = "Submit to Provost";
+        this.confirmMessage = 'Are you sure you want to forward this proposal for endorsement ?';
+      } else {
+        this.isEndorse = true;
+        this.confirmHeading = "Endorse";
+        this.confirmMessage = 'Are you sure you want to endorse this proposal ?';
+      }
+    }
+  
+    submitToProvost() {
+      if (this.selectedProposalId != null && this.proposal != null) {
+        this.proposalCreateService.submitForEndorsement(this.selectedProposalId, this.proposal).subscribe((data)=> {
+          var temp: any = {};
+          temp = data;
+          this.initialLoad(1);
+        });
+        this.showConfirmModal = false;
+      }
+    }
+  
+    approveEndorse() {
+      this.proposalCreateService.approveByProvost(this.selectedProposalId, this.proposal, this.userName).subscribe((data) => {
+        var temp: any = {};
+        temp = data;
+          this.initialLoad(1);
+      });
+      this.showConfirmModal = false;
+    }
 }

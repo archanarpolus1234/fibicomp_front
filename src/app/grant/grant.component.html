@@ -5,7 +5,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="result.grantCall!={}">
 				<br>
 				<div class="row">
-					<div class="col-6 text-left"><span >Grant Call #<span *ngIf="grantId!=null">{{grantId}}</span></span></div>
+					<div class="col-6 text-left"><span class="topHeading">Grant Call <span *ngIf="grantId!=null">#{{grantId}}</span></span></div>
 					<div class="col-6 text-right ">
 					<span *ngIf="result?.grantCall?.grantCallStatus?.description == 'Open'" class = "grantCall_create_proposal_link">
 					<button class="grantCallCreateProposalLink bg-white" (click)="navigate($event, 'create')">Create Proposal</button>

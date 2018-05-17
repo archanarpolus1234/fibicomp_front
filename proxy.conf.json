@@ -288,20 +288,34 @@
 		"secure": false
 	},
 	"/assignReviewer": {
-
 		"target": "http://192.168.1.76:8080/fibi-comp",
 		"secure": false
 	},
 	"/reviewCompleted": {
-
 		"target": "http://192.168.1.76:8080/fibi-comp",
 		"secure": false
 	},
-	"/fetchOpenGrantIds": {
+	"/fetchReportData": {
 		"target": "http://192.168.1.76:8080/fibi-comp",
 		"secure": false
 	},
 	"/applicationReport": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/fetchReviewers": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/deleteReviewer": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/submitForEndorsement": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/approveProvost": {
 		"target": "http://192.168.1.76:8080/fibi-comp",
 		"secure": false
 	}

@@ -9,6 +9,8 @@ export class DashboardData {
     dashboardPieChartData1Variable = this.dashboardPieChartData1.asObservable();
     public dashboardAreaChartData1 = new BehaviorSubject<any>( [[]] );
     dashboardAreaChartData1Variable = this.dashboardAreaChartData1.asObservable();
+    public reportData = new BehaviorSubject<any>( {} );
+    reportDataVariable = this.reportData.asObservable();
 
     constructor() { }
 
@@ -42,5 +44,13 @@ export class DashboardData {
 
     setDashboardAreaChartData1( dashboardAreaChartData1: any ) {
         this.dashboardAreaChartData1.next( dashboardAreaChartData1 );
+    }
+  
+    getReportData() {
+        return this.reportData;
+    }
+
+    setReportData( reportData: any ) {
+        this.reportData.next( reportData );
     }
 }

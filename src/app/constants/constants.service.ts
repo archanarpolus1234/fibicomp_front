@@ -5,10 +5,10 @@ export class Constants {
     //baseUrl : string = "http://192.168.1.76";
     //baseUrl : string = "http://52.20.110.7";
     //baseUrl : string = "http://14.140.179.70";
-    // baseUrl : string = "http://demo.fibiweb.com/fibi-comp";
+    //baseUrl : string = "http://demo.fibiweb.com/fibi-comp";
     baseUrl: string = "";
 
-     //portAndPath: string = ":8080/fibi-comp";
+    //portAndPath: string = ":8080/fibi-comp";
     //portAndPath: string = ":1550/fibi-comp";
     portAndPath: string = "";
 
@@ -95,6 +95,9 @@ export class Constants {
     applicationReport: string;
     fetchOpenGrantIds: string;
     fetchReviewerUrl: string;
+    removeAssignedReviewerUrl: string;
+    submitEndorsementUrl: string;
+    approveByProvost: string;
 
 
     constructor() {
@@ -253,9 +256,15 @@ export class Constants {
 
         this.completeReviewUrl = this.baseUrl + this.portAndPath + '/reviewCompleted';
         
-        this.fetchOpenGrantIds = this.baseUrl + this.portAndPath + '/fetchOpenGrantIds';
+        this.fetchOpenGrantIds = this.baseUrl + this.portAndPath + '/fetchReportData';
 
         this.applicationReport = this.baseUrl + this.portAndPath + '/applicationReport';
+
+        this.removeAssignedReviewerUrl = this.baseUrl + this.portAndPath + '/deleteReviewer';
+
+        this.submitEndorsementUrl = this.baseUrl + this.portAndPath + '/submitForEndorsement';
+
+        this.approveByProvost = this.baseUrl + this.portAndPath + '/approveProvost';
 
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';

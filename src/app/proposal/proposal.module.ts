@@ -15,6 +15,7 @@ import { ProposalCreateEditService } from '../proposal/proposal-create-view.serv
 let routes = [{ path: '', component: ProposalComponent },
               { path: 'proposal', component: ProposalComponent },
               { path: 'createProposal', component: ProposalComponent },
+              { path: 'editProposal', component: ProposalComponent },
               { path: 'viewSubmittedProposal', component: ProposalComponent}];
 
 @NgModule({

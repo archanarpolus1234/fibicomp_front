@@ -313,7 +313,7 @@ input[type=number]::-webkit-outer-spin-button {
 .reviewTable>tbody>tr>td {
 	font-size: .95em !important;
 }
-#reviewHeading, #reviewAssignModalTable {
+#reviewHeading, #reviewAssignModalTable, #reviewAssignModalTd {
 	border-top : 0px;
 	padding-top: 0px;
 }
@@ -328,3 +328,8 @@ input[type=number]::-webkit-outer-spin-button {
 	color: #26A69A;
 }
 
+.topHeading {
+	color: #26A69A;
+	font-weight: bold;
+	padding-left: 3px;
+}
