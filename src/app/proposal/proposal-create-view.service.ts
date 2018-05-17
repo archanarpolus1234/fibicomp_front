@@ -83,12 +83,16 @@ export class ProposalCreateEditService {
         return this.http.post( this.constant.deleteIrbProtocol, params )
     }
 
-    deleteProposalSponsor( proposalId, sponsorId ) {
+    deleteProposalSponsor( proposalId, sponsorId ): Observable<JSON> {
         var params = {
             proposalId: proposalId,
             sponsorId: sponsorId
         }
         return this.http.post( this.constant.deleteProposalSponsor, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
     }
 
     deleteProposalPerson( proposalId, personId ): Observable<JSON> {
@@ -185,21 +189,20 @@ export class ProposalCreateEditService {
             responseType: 'blob'
         } );
     }
-    
-    assignReviewer( proposal: Object, reviewers: Object, proposalId: string, userName: string ) {
+
+    assignReviewer( proposal: Object, loggedInWorkflowDetail: Object, proposalId: string ): Observable<JSON> {
         var params = {
                 proposal: proposal,
                 proposalId: proposalId,
-                reviewers: reviewers,
-                userName: userName
-        }
+                loggedInWorkflowDetail: loggedInWorkflowDetail
+        };
         return this.http.post( this.constant.addReviewerUrl, params )
         .catch( error => {
             console.error( error.message || error );
             return Observable.throw( error.message || error )
         } );
     }
-    
+
     completeReviewAction( sendObject: Object, uploadedFile) {
         this.approveFormData.delete( 'files' );
         this.approveFormData.delete( 'formDataJson' );
@@ -214,10 +217,11 @@ export class ProposalCreateEditService {
             return Observable.throw( error.message || error )
         } );
     }
-    
-    fetchAvailableReviewers( proposal: Object ) {
+
+    fetchAvailableReviewers( proposal: Object, personId: string ): Observable<JSON> {
         var params = {
-                proposal: proposal
+                proposal: proposal,
+                personId: personId
         }
         return this.http.post( this.constant.fetchReviewerUrl, params )
         .catch( error => {
@@ -225,4 +229,41 @@ export class ProposalCreateEditService {
             return Observable.throw( error.message || error )
         } );
     }
+
+    deleteAssignedReviewer( proposalId, reviewerId ): Observable<JSON> {
+        var params = {
+            proposalId: proposalId,
+            reviewerId: reviewerId
+        };
+        return this.http.post( this.constant.removeAssignedReviewerUrl, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    submitForEndorsement( proposalId, proposal ): Observable<JSON> {
+        var params = {
+            proposalId: proposalId,
+            proposal: proposal
+        };
+        return this.http.post( this.constant.submitEndorsementUrl, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error )
+            } );
+    }
+
+    approveByProvost( proposalId, proposal, userName ): Observable<JSON> {
+          var params = {
+              proposalId: proposalId,
+              proposal: proposal,
+              userName: userName
+          };
+          return this.http.post( this.constant.approveByProvost, params )
+              .catch( error => {
+                  console.error( error.message || error );
+                  return Observable.throw( error.message || error )
+              } );
+      }
 }

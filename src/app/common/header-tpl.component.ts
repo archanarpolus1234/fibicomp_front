@@ -110,10 +110,12 @@ export class HeaderComponent implements OnInit {
         localStorage.removeItem( 'researchSummaryIndex' );
         localStorage.removeItem( 'dashboardproposalBySponsorTypesWidget' );
         localStorage.removeItem( 'dashboardinProgressproposalBySponsorWidget' );
-        localStorage.removeItem( 'dashboardAwardBysponsorTypesWidget' );
-        localStorage.removeItem( 'dashboardawardedProposalBySponsorWidget' );
-        localStorage.removeItem( 'dashboardResearchSummaryWidget' );
-        localStorage.removeItem( 'dashboardExpenditureVolumeWidget' );
+        localStorage.removeItem('dashboardAwardBysponsorTypesWidget');
+        localStorage.removeItem('dashboardawardedProposalBySponsorWidget');
+        localStorage.removeItem('dashboardResearchSummaryWidget');
+        localStorage.removeItem('dashboardExpenditureVolumeWidget');
+        localStorage.removeItem('provost');
+        localStorage.removeItem('grantManager');
         this.loginCheckService.logout();
         this.router.navigate( ['/loginpage'] );
     }

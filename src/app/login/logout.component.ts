@@ -18,7 +18,7 @@ export class LogoutComponent {
     logout() {
         this.dashboardService.logout().subscribe( 
                 data => {
-                    if(data != null){ 
+                    if(data != null){
                         if (data == 'SUCCESS') {
                             localStorage.removeItem( 'currentUser' );
                             localStorage.removeItem( 'personId' );
@@ -36,7 +36,9 @@ export class LogoutComponent {
                             localStorage.removeItem( 'dashboardAwardBysponsorTypesWidget' );
                             localStorage.removeItem( 'dashboardawardedProposalBySponsorWidget' );
                             localStorage.removeItem( 'dashboardResearchSummaryWidget' );
-                            localStorage.removeItem( 'dashboardExpenditureVolumeWidget' );
+                            localStorage.removeItem('dashboardExpenditureVolumeWidget');
+                            localStorage.removeItem( 'provost' );
+                            localStorage.removeItem('grantManager');
                             this.loginCheckService.logout();
                             this.router.navigate( ['/loginpage'] );
                         }

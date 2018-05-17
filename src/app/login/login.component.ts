@@ -71,6 +71,8 @@ export class LoginComponent implements AfterViewInit {
                         localStorage.setItem( 'lastName', this.result.lastName );
                         localStorage.setItem( 'isAdmin', String( this.isAdmin ) );
                         localStorage.setItem( 'unitNumber', String(this.unitNumber ) );
+                        localStorage.setItem( 'provost', String( this.result.provost ) );
+                        localStorage.setItem( 'grantManager', String(this.result.grantManager ) );
                         this.loginCheck.login();
                         this.router.navigate( ['/dashboard'] );
                     } else {

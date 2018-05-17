@@ -76,7 +76,6 @@ export class DashboardService {
     }
 
     applicationReport(grantCallId,reportName) {
-
         var params = {
             grantCallId : grantCallId,
             reportName : reportName
@@ -87,16 +86,13 @@ export class DashboardService {
             console.error( error.message || error );
             return Observable.throw( error.message || error );
         } );
-        
     }
 
-    fetchOpenGrantIds() {
-
+    fetchAllReportData(): Observable<JSON> {
         return this.http.post( this.constant.fetchOpenGrantIds,{} )
         .catch( error => {
             console.error( error.message || error );
             return Observable.throw( error.message || error );
         } );
-
     }
 }

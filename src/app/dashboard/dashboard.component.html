@@ -460,6 +460,7 @@
 						class="noDataOnChart">No awards Found</div>
 				</div>
 			</div>
+
 			<!-- Proposal -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'PROPOSAL')">
@@ -535,6 +536,7 @@
 						class="noDataOnChart">No proposals Found</div>
 				</div>
 			</div>
+
 			<!-- IRB -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'IRB')">
@@ -604,6 +606,7 @@
 						class="noDataOnChart">No IRB data Found</div>
 				</div>
 			</div>
+
 			<!-- IACUC -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'IACUC')">
@@ -675,6 +678,7 @@
 						class="noDataOnChart">No IACUC data Found</div>
 				</div>
 			</div>
+
 			<!-- DISCLOSURE -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'DISCLOSURE')">
@@ -750,7 +754,6 @@
 						class="noDataOnChart">No Disclosure data Found</div>
 				</div>
 			</div>
-
 
 			<!-- COMMITTEE -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
@@ -912,6 +915,7 @@
 						class="noDataOnChart">No Schedule data Found</div>
 				</div>
 			</div>
+
 			<!-- Grant -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="(currentPosition == 'GRANT')">
@@ -990,8 +994,6 @@
 				<div class="borderBox" *ngIf="serviceRequestList.length!=0">
 					<table class="table table-responsive tableSkin">
 						<thead>
-							
-							
 							<tr>
 								<th (click)="sortResult('proposalId',currentPosition)"
 								title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
@@ -1003,7 +1005,8 @@
 								</th>
 								<th (click)="sortResult('endDate',currentPosition)"
 								title="Click to sort by End Date">Closing Date<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'endDate')}"></span></th>
-								<th>Status</th>
+								<th (click)="sortResult('proposalStatus.statusCode',currentPosition)"
+								title="Click to sort by status">Status<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalStatus.statusCode')}"></span></th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -1016,8 +1019,12 @@
 								<td>{{proposal.proposalStatus?.description}}</td>
 								<td>
 									<ul class="actionButtonGroup">
-										<li><a title="Open"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
+										<li><a title="Open proposal"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
 												class="fa fa-eye pointer"></i></a></li>
+										<li><a title="forward for endorsement" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="grantManager == 'true' && proposal?.proposalStatus?.statusCode == 4" (click)="openConfirm('submit', proposal.proposalId,proposal)"><i
+												class="fa fa-mail-forward"></i></a></li>
+										<li><a title="endorse" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="provost == 'true' && proposal?.proposalStatus?.statusCode == 10" (click)="openConfirm('endorse', proposal.proposalId,proposal)"><i
+												class="fa fa-check-square-o"></i></a></li>
 									</ul>
 								</td>
 							</tr>
@@ -1029,79 +1036,101 @@
 
 			<!-- GRANT REPORTS -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-			*ngIf="(currentPosition == 'GRANTREPORT')">
-				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-					<div class="row">
-						<div  class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-					<div class="borderBox" >
-						<label>Report Name : </label>
-								<select [(ngModel)] = "selectedReportName" (change)="reportNameChange()"  class = "committeeBox">
-									<option>Select</option>
-									<option>Submitted Applications by Grant</option>
-									<option>Awards by Grant</option>
-									<option>Expenditure by Award</option>
-								</select>
-						</div>
-					</div>
-					<div  class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">
-						<div class="borderBox" *ngIf="openGrantList.length!=0">
-								<label>Grant : </label>
-										<ng2-completer  title="Search grant" 
-															[inputClass]="completerID"
-															[(ngModel)]="selectedGrantId" placeholder="Search by Id or Name"
-															[datasource]="openGrantList" [minSearchLength]="0"
-															(selected)="grantIdChange()"  class="widthLimiterNg2Completer p-0 border-0"></ng2-completer>
-									
-								
-								</div>
-								</div>
-								<div class="col-xl-5 col-xl-offset-5 col-lg-5 col-md-5 col-sm-5 col-5" *ngIf="reportObject!=null">
-										<div class="borderBox" ><br/>
-											<span>{{selectedReportName}} {{reportObject.grantCallId}} :&nbsp;{{reportObject.proposalCount}}</span>
+					*ngIf="(currentPosition == 'GRANTREPORT')">
+							
+							<div class="row">
+								<div  class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+									<div class="borderBox">
+										<h4 class="borderBoxHeading">Applications by Grant Call Type</h4>
+										<application-grantcall-type-piechart></application-grantcall-type-piechart>
 									</div>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+										<div class="borderBox">
+											<h4 class="borderBoxHeading">IRB Protocols by Type</h4>
+											<protocol-grantcall-type-piechart></protocol-grantcall-type-piechart>
+										</div>
+								</div>
+								<div  class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
+										<div class="borderBox">
+											<h4 class="borderBoxHeading">Awards by Grant Call Type</h4>
+											<span class="noDataExists">No data found</span>
+											<!-- <award-by-grantcall-type-piechart></award-by-grantcall-type-piechart> -->
+										</div>
+								</div>
+							</div>
+							
+							<div class="row">
+							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+								<div class="borderBox">
+									<h4 class="borderBoxHeading">Report: <span class="greenLabel">{{selectedReportName}}</span></h4>
+									<table class="table table-responsive tableSkin">
+											<tr id="reportFilterRow">
+													<td class="text-right">Report Name :</td>
+													<td colspan="2">
+												  			<select [(ngModel)] = "selectedReportName" class = "committeeBox">
+																<!-- <option>{{select}}</option> -->
+																<option>Submitted Applications by Grant</option>
+																<option>Awards by Grant</option>
+																<option>Expenditure by Award</option>
+															</select>
+												  	</td>
+												  	<td class="text-right">Grant:</td>
+													<td colspan="2">
+														<div>
+																<ng2-completer  title="Search grant" 
+																		[inputClass]="completerID"
+																		[(ngModel)]="selectedGrantId" placeholder="Search by Id or Name"
+																		[datasource]="openGrantList" [minSearchLength]="0"
+																		(selected)="grantIdChange()"  class="widthLimiterNg2Completer p-0 border-0"></ng2-completer>
+														</div>
+													</td>
+													<td><span *ngIf="selectedReportName != null">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}</span>
+													</td>
+			<!-- 										<td>
+														<button class="btnSkin btnSkinPrimary" (click)="addArea()">Filter</button>
+													</td> -->
+												</tr>
+												<tbody *ngIf="proposals?.length > 0">
+													<tr>
+														<th (click)="sortResult('proposalId',currentPosition)"
+														title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
+														</th>
+														<th >Name
+														</th>
+														<th (click)="sortResult('startDate',currentPosition)"
+														title="Click to sort by Application Id">Opening Date <span [ngClass]="{reverse:reverse, sortorder: (sortBy == 'startDate')}"></span>
+														</th>
+														<th (click)="sortResult('endDate',currentPosition)"
+														title="Click to sort by End Date">Closing Date<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'endDate')}"></span></th>
+														<th>Lead Unit</th>
+														<th>Status</th>
+														<th>Action</th>
+													</tr>
+													<tr *ngFor="let proposal of proposals">
+														<td>{{proposal.proposalId}}</td>
+														<td>{{proposal.title}}</td>
+														<td>{{proposal.startDate}}</td>
+														<td>{{proposal.endDate}}</td>
+														<td>{{proposal.grantCall.homeUnitName}}</td>
+														<td>{{proposal.proposalStatus?.description}}</td>
+														<td>
+															<ul class="actionButtonGroup">
+																<li><a title="Open"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
+																		class="fa fa-eye pointer"></i></a></li>
+															</ul>
+														</td>
+													</tr>
+												</tbody>
+												
+													<tr><td><div class="noDataExists" *ngIf="proposals?.length == 0">
+																			No reports found
+																		</div></td>
+													</tr>
+										</table>
 									</div>
 							</div>
-				</div>
-
-				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="reportObject!=null">
-					<div class="borderBox">
-						<table class="table table-responsive tableSkin">
-								<thead>
-									<tr>
-										<th (click)="sortResult('proposalId',currentPosition)"
-										title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
-										</th>
-										<th >Name
-										</th>
-										<th (click)="sortResult('startDate',currentPosition)"
-										title="Click to sort by Application Id">Opening Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'startDate')}"></span>
-										</th>
-										<th (click)="sortResult('endDate',currentPosition)"
-										title="Click to sort by End Date">Closing Date<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'endDate')}"></span></th>
-										<th>Lead Unit</th>
-										<th>Status</th>
-										<th>Action</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr *ngFor="let proposal of proposals">
-										<td>{{proposal.proposalId}}</td>
-										<td>{{proposal.title}}</td>
-										<td>{{proposal.startDate}}</td>
-										<td>{{proposal.endDate}}</td>
-										<td>{{proposal.grantCall.homeUnitName}}</td>
-										<td>{{proposal.proposalStatus?.description}}</td>
-										<td>
-											<ul class="actionButtonGroup">
-												<li><a title="Open"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
-														class="fa fa-eye pointer"></i></a></li>
-											</ul>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-				</div>
+							</div>
 				
 
 						
@@ -1128,4 +1157,37 @@
 		</section>
 		<div class="footerPush"></div>
 	</div>
+</div>
+
+<!-- CONFIRM SUBMISSION MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showConfirmModal" tabindex="-1"
+id="confirmSubmit" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">{{confirmHeading}}</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>{{confirmMessage}}</p>
+		</div>
+		<div class="modal-footer" *ngIf="isForward">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showConfirmModal = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="submitToProvost()" data-dismiss="modal">Yes</button>
+		</div>
+		<div class="modal-footer" *ngIf="isEndorse">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showConfirmModal = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="approveEndorse()" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
 </div>

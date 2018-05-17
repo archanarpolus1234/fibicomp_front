@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SessionManagementService } from "../session/session-management.service";
 import { Subject, Observable } from "rxjs";
@@ -7,6 +7,7 @@ import { UploadFile, UploadEvent } from "ngx-file-drop";
 import { CommitteeMemberEmployeeElasticService } from '../elastic-search/committee-members-employees-elastic-search.service';
 import { CommitteeMemberNonEmployeeElasticService } from '../elastic-search/committee-members-nonEmployee-elastic-search.service';
 import { FormsModule, FormGroup, FormControl, FormControlName } from '@angular/forms';
+import * as _ from "lodash";
 
 import { ProposalCreateEditService } from "./proposal-create-view.service";
 import { GrantService } from "../grant/grant.service";
@@ -29,13 +30,11 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     mode: string = 'view';
     showGrantSearch: boolean = true;
     isAOREnabled: boolean = true;
-    editScheduleattachment: boolean = true;
     editClass: string = "committeeBox";
     editAreaClass: string = 'scheduleBoxes';
     sendObject: any = {};
     result: any = {};
     proposalTypeSelected: string;
-    grantCallType: any = [];
     proposalCategorySelected: string;
     durInYears: number;
     durInMonths: number;
@@ -70,16 +69,20 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     approveComments: string;
     workflowStopOne: any = [];
     workflowStopTwo: any = [];
-    workflowStopThree: any = [];
-    workflowStopFour: any = [];
     proposalPIName: string;
     proposalLeadUnit: string;
     isRevExpanded: any = {};
     showReviewerModal: boolean = false;
     reviewerList: any = [];
-    reviewerListTemp: any = [];
+    availableReviewers: any = [];
     selectedReviewer: string;
-
+    tempLoggedWorkflowDetail: any = {};
+    showConfirmModal: boolean = false;
+    confirmHeading: string;
+    confirmMessage: string;
+    isForward: boolean = false;
+    isEndorse: boolean = false;
+  
     showAddAttachment: boolean = false;
     uploadedFile: any[] = [];
     attachmentDescription: string;
@@ -155,35 +158,42 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     proposalId: string;
     grantId: string = null;
     workflow: any = {};
-
+    grantManager: string;
+    provost: string;
+    finalStatus: string = null;
+    userName: string;
+  
     public onDestroy$ = new Subject<void>();
 
     constructor( public grantService: GrantService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public _ngZone: NgZone, public changeRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private sessionService: SessionManagementService, private proposalCreateService: ProposalCreateEditService, public completerService: CompleterService ) {
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         }
+        this.grantManager = localStorage.getItem('grantManager');
+        this.provost = localStorage.getItem('provost');
         this.sendObject = {};
         this.result.proposal = {};
     }
 
     ngOnInit() {
-        this.keywordsList = [];
-        this.currentDate.setDate( this.currentDate.getDate() - 1 );
-        this.mode = this.route.snapshot.queryParamMap.get( 'mode' );
-        this.grantId = this.route.snapshot.queryParamMap.get( 'grantId' );
+      this.userName = localStorage.getItem('currentUser');
+      this.keywordsList = [];
+      this.currentDate.setDate(this.currentDate.getDate() - 1);
+      this.mode = this.route.snapshot.queryParamMap.get('mode');
+      this.grantId = this.route.snapshot.queryParamMap.get('grantId');
 
-        this.proposalId = this.route.snapshot.queryParamMap.get( 'proposalId' );
-        if ( this.proposalId == null ) {
-            this.mode = 'create';
-            this.editClass = "committeeBox";
-            this.editAreaClass = "scheduleBoxes";
-            this.createProposalCall();
-        } else {
-            this.proposalCreateService.loadProposalById( this.proposalId, localStorage.getItem( 'personId' ), localStorage.getItem( 'currentUser' ) ).subscribe( success => {
-                this.result = success;
-                this.initialiseProposalFormElements();
-            } );
-        }
+      this.proposalId = this.route.snapshot.queryParamMap.get('proposalId');
+      if (this.proposalId == null) {
+        this.mode = 'create';
+        this.editClass = "committeeBox";
+        this.editAreaClass = "scheduleBoxes";
+        this.createProposalCall();
+      } else {
+        this.proposalCreateService.loadProposalById(this.proposalId, localStorage.getItem('personId'), localStorage.getItem('currentUser')).subscribe(success => {
+          this.result = success;
+          this.initialiseProposalFormElements();
+        });
+      }
     }
 
     initialiseProposalFormElements() {
@@ -194,20 +204,28 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.selectedAreaType = this.result.proposalResearchTypes[0].description;
             this.researchTypeSelected = this.result.proposalResearchTypes[0].description;
             this.selectedAttachmentType = this.select;
+            //this.router.navigate( ['/proposal/editProposal'], { queryParams: { 'mode': this.mode, 'proposalId': this.result.proposal.proposalId } } );
         } else {
             this.mode = 'view';
             this.editClass = "committeeBoxNotEditable";
             this.editAreaClass = "scheduleBoxes";
-
+            //this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'mode': this.mode, 'proposalId': this.result.proposal.proposalId } } );
         }
         this.updateWorkflowStops();
         this.updateRouteLogHeader();
 
-        this.grantCallType = this.result.grantCallTypes;
+        // set default grantCallType to Others if no grant call is associated with the proposal
+        if ( this.result.proposal.grantCall == null ) {
+            this.result.proposal.grantCallType = this.result.defaultGrantCallType;
+            this.result.proposal.grantTypeCode = this.result.defaultGrantCallType.grantTypeCode;
+        } else {
+            this.result.proposal.grantCallType = this.result.proposal.grantCall.grantCallType;
+            this.result.proposal.grantTypeCode = this.result.proposal.grantCall.grantCallType.grantTypeCode;
+        }
+
         this.personRolesList = this.result.proposalPersonRoles;
         this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
         this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
-        this.grantCallType = this.result.grantCallTypes;
         this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
         this.personRoleSelected = this.select;
         this.budgetCategorySelected = this.select;
@@ -215,16 +233,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
         this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
         this.selectedSponsorType = this.select;
-        //this.budgetCategoryChanged();
-        /*this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
-            var temp: any = {};
-            temp = data;
-            this.result.sponsors = temp.sponsors;
-            this.selectedSponsorName = this.select;
-            this.fundingStartDate = null;
-            this.fundingEndDate = null;
-            this.sponsorAmount = 0;
-        } );*/
         this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
         this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
         this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
@@ -243,15 +251,11 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     updateWorkflowStops() {
         this.workflowStopOne = [];
         this.workflowStopTwo = [];
-        this.workflowStopThree = [];
-        this.workflowStopFour = [];
         if ( this.result.workflow != null && this.result.workflow.workflowDetails.length > 0 ) {
             this.result.workflow.workflowDetails.forEach(( value, index ) => {
-                switch ( value.approvalStopNumber ) {
+                switch ( value.roleTypeCode ) {
                     case 1: this.workflowStopOne.push( value ); break;
                     case 2: this.workflowStopTwo.push( value ); break;
-                    case 3: this.workflowStopThree.push( value ); break;
-                    case 4: this.workflowStopFour.push( value ); break;
                 }
             } );
             this.workflowStopOne.forEach(( value, index ) => {
@@ -272,11 +276,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                     } );
                 }
             } );
-            this.workflowStopThree.forEach(( value, index ) => {
-                if ( value.workflowAttachments != null && value.workflowAttachments.length > 0 ) {
-                    this.selectedAttachmentStopThree[index] = value.workflowAttachments[0].fileName;
-                }
-            } );
         }
     }
 
@@ -288,7 +287,26 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                     this.proposalLeadUnit = value.leadUnitName;
                 }
             } );
+            if(this.result.proposal.proposalStatus.statusCode == 4) {
+                this.finalStatus = 'The proposal is submitted to Grant Manager and is waiting for forwading to endorsement';
+            } else if(this.result.proposal.proposalStatus.statusCode == 10) {
+              this.finalStatus = 'The proposal is waiting for endorsement by provost';
+            } else if(this.result.proposal.proposalStatus.statusCode == 11) {
+              this.finalStatus = 'The proposal is endorsed and now awarded';
+            } else {
+              this.finalStatus = null;
+            }
         }
+    }
+    
+    updateFlags( response: any ) {
+        this.result.isApproved = response.isApproved;
+        this.result.isApprover = response.isApprover;
+        this.result.isGrantAdmin = response.isGrantAdmin;
+        this.result.isGrantManager = response.isGrantManager;
+        this.result.isProvost = response.isProvost;
+        this.result.isReviewed = response.isReviewed;
+        this.result.isReviewer = response.isReviewer;
     }
 
     createProposalCall() {
@@ -300,11 +318,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
         this.proposalCreateService.loadCreateProposalData( this.sendObject ).takeUntil( this.onDestroy$ ).subscribe( data => {
             this.result = data || [];
-            this.grantCallType = this.result.grantCallTypes;
             this.personRolesList = this.result.proposalPersonRoles;
             this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
             this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
-            this.grantCallType = this.result.grantCallTypes;
             this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
             this.personRoleSelected = this.select;
             this.budgetCategorySelected = this.select;
@@ -315,17 +331,16 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
             this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
             this.selectedSponsorType = this.select;
-            //this.budgetCategoryChanged();
 
-            /*this.grantService.fetchSponsorsBySponsorType( this.result.sponsorTypes[0].code ).subscribe( data => {
-                var temp: any = {};
-                temp = data;
-                this.result.sponsors = temp.sponsors;
-                this.selectedSponsorName = this.select;
-                this.fundingStartDate = null;
-                this.fundingEndDate = null;
-                this.sponsorAmount = 0;
-            } );*/
+            // set default grantCallType to Others if no grant call is associated with the proposal
+            if ( this.result.proposal.grantCall == null ) {
+                this.result.proposal.grantCallType = this.result.defaultGrantCallType;
+                this.result.proposal.grantTypeCode = this.result.defaultGrantCallType.grantTypeCode;
+            } else {
+                this.result.proposal.grantCallType = this.result.proposal.grantCall.grantCallType;
+                this.result.proposal.grantTypeCode = this.result.proposal.grantCall.grantCallType.grantTypeCode;
+            }
+
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
             this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
@@ -341,8 +356,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.costElementSelected = this.select;
         } );
     }
-    ngAfterViewInit() {
 
+    ngAfterViewInit() {
         this.searchText
             .valueChanges
             .map(( text: any ) => text ? text.trim() : '' )
@@ -477,28 +492,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
     }
 
-    editAttachments( $event, i, attachments ) {
-        $event.preventDefault();
-        this.editScheduleattachment = !this.editScheduleattachment;
-    }
-
-    saveEditedattachments( $event, i, attachments ) {
-        $event.preventDefault();
-        this.editScheduleattachment = !this.editScheduleattachment;
-    }
-
-    cancelEditedattachments( $event, i, attachments ) {
-        $event.preventDefault();
-        this.editScheduleattachment = !this.editScheduleattachment;
-    }
-
-    navigate( mode ) {
-        this.router.navigate( ['/proposal/proposal'], { queryParams: { 'mode': mode } } );
-    }
-
     differenceBetweenDates( startDate, endDate ) {
         var diffInMs = Math.round( Date.parse( endDate ) - Date.parse( startDate ) );
-        // diffInMs = Math.round(1523507183000); for testing
+        // diffInMs = Math.round(1523507183000); static data for testing
         var difference = Math.floor( diffInMs / 1000 / 60 / 60 / 24 | 0 );
         this.durInYears = Math.floor( difference / 365 | 0 );
         difference = Math.floor( difference % 365 | 0 )
@@ -775,8 +771,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
     }
 
-
-
     ////// Methods by Ashik Varma
     addAttachments() {
         var d = new Date();
@@ -852,6 +846,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.showAddAttachment = false;
         this.uploadedFile = [];
     }
+    ////// Methods by Ashik Varma ends for Attachments
 
     deleteAttachments( e ) {
         e.preventDefault();
@@ -1018,7 +1013,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     submitProposal() {
-        // this.saveProposal();
         if ( this.result.proposal.title == "" || this.result.proposal.title == null ) {
             this.isMandatory = true;
             this.mandatoryText = '* Please enter a title';
@@ -1309,32 +1303,55 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     
     getAllReviewer() {
         this.showReviewerModal = true;
-        this.proposalCreateService.fetchAvailableReviewers( this.result.proposal ).subscribe( data => {
+        this.proposalCreateService.fetchAvailableReviewers( this.result.proposal, this.result.personId ).subscribe( data => {
             var temp: any = {};
             temp = data;
-            this.reviewerListTemp = temp.reviewers;
-            this.reviewerList = this.completerService.local( this.reviewerListTemp, 'approverPersonName', 'approverPersonName' );
-            this.result.reviewers = null;
+            this.availableReviewers = temp.availableReviewers;
+            this.tempLoggedWorkflowDetail = temp.loggedInWorkflowDetail;
+            this.result.loggedInWorkflowDetail = _.cloneDeep(temp.loggedInWorkflowDetail);
+            this.reviewerList = this.completerService.local( this.availableReviewers, 'approverPersonName', 'approverPersonName' );
             this.changeRef.detectChanges();
         } );
     }
 
     removeSelectedReviewer( $event, reviewer, i ) {
         $event.preventDefault();
-        if(this.result.reviewers != null) {
-            this.result.reviewers.splice(i, 1);
+        if ( this.result.loggedInWorkflowDetail.workflowReviewerDetails.length > 0 ) {
+            if ( reviewer.reviewerPersonId != null ) {
+                this.proposalCreateService.deleteAssignedReviewer( this.result.proposal.proposalId, reviewer.reviewerPersonId ).subscribe( data => {
+                    var temp: any;
+                    temp = data;
+                    this.updateFlags(temp);
+                    this.result.workflow = temp.workflow;
+                    this.updateWorkflowStops();
+                } );
+                this.result.loggedInWorkflowDetail.workflowReviewerDetails.splice( i, 1 );
+            } else {
+                this.result.loggedInWorkflowDetail.workflowReviewerDetails.splice( i, 1 );
+            }
         }
     }
     
     reviewerChangeFunction() {
         var d = new Date();
         var timeStamp = d.getTime();
-        if(this.result.reviewers == null) {
-            this.result.reviewers = [];
+        if ( this.result.loggedInWorkflowDetail == null ) {
+            this.result.loggedInWorkflowDetail = {};
         }
-        for ( let reviewer of this.reviewerListTemp ) {
+        if ( this.result.loggedInWorkflowDetail.workflowReviewerDetails == null ) {
+            this.result.loggedInWorkflowDetail.workflowReviewerDetails = [];
+        }
+        for ( let reviewer of this.availableReviewers ) {
             if ( reviewer.approverPersonName == this.selectedReviewer ) {
-                this.result.reviewers.push(reviewer);
+                var assignedReviewer: any = {};
+                assignedReviewer.reviewerPersonId = reviewer.approverPersonId;
+                assignedReviewer.reviewerPersonName = reviewer.approverPersonName;
+                assignedReviewer.approvalStatusCode = "W";
+                assignedReviewer.workflowDetail = _.cloneDeep(this.tempLoggedWorkflowDetail);
+                assignedReviewer.workflowStatus = this.tempLoggedWorkflowDetail.workflowStatus;
+                assignedReviewer.updateTimeStamp = ( new Date() ).getTime();
+                assignedReviewer.updateUser = localStorage.getItem( 'currentUser' );
+                this.result.loggedInWorkflowDetail.workflowReviewerDetails.push( assignedReviewer );
             }
         }
         this.changeRef.detectChanges();
@@ -1342,10 +1359,13 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
     
     addReviewer() {
-        this.proposalCreateService.assignReviewer( this.result.proposal, this.result.reviewers, this.result.proposal.proposalId, this.currentUser ).subscribe( data => {
+        this.proposalCreateService.assignReviewer( this.result.proposal, this.result.loggedInWorkflowDetail, this.result.proposal.proposalId ).subscribe( data => {
             var temp: any = {};
             temp = data;
-            this.result = temp;
+            this.result.proposal = temp.proposal;
+            this.result.workflow = temp.workflow;
+            this.result.loggedInWorkflowDetail = temp.loggedInWorkflowDetail;
+            this.updateFlags(temp);
             this.updateWorkflowStops();
             this.updateRouteLogHeader();
             this.changeRef.detectChanges();
@@ -1362,7 +1382,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.proposalCreateService.completeReviewAction( this.sendObject, this.uploadedFile ).subscribe( data => {
             var temp: any = {};
             temp = data;
-            this.result = temp;
+            this.result.workflow = temp.workflow;
+            this.updateFlags(temp);
             this.updateWorkflowStops();
             this.updateRouteLogHeader();
             this.changeRef.detectChanges();
@@ -1397,5 +1418,38 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     toggleReviewers($event, i) {
         $event.preventDefault();
         this.isRevExpanded[i] = !this.isRevExpanded[i];
+    }
+
+    openConfirm(actionType: string) {
+      this.showConfirmModal = true;
+      if (actionType == 'submit') {
+        this.isForward = true;
+        this.confirmHeading = "Submit to Provost";
+        this.confirmMessage = 'Are you sure you want to forward this proposal for endorsement ?';
+      } else {
+        this.isEndorse = true;
+        this.confirmHeading = "Endorse";
+        this.confirmMessage = 'Are you sure you want to endorse this proposal ?';
+      }
+    }
+
+    submitToProvost() {
+      this.proposalCreateService.submitForEndorsement(this.result.proposal.proposalId, this.result.proposal).subscribe((data)=> {
+        var temp: any = {};
+        temp = data;
+        this.result.proposal = temp.proposal;
+        this.updateRouteLogHeader();
+      });
+      this.showConfirmModal = false;
+    }
+
+    approveEndorse() {debugger;
+      this.proposalCreateService.approveByProvost(this.result.proposal.proposalId, this.result.proposal, this.userName).subscribe((data) => {
+        var temp: any = {};
+        temp = data;
+        this.result.proposal = temp.proposal;
+        this.updateRouteLogHeader();
+      });
+      this.showConfirmModal = false;
     }
 }

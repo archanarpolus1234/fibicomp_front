@@ -18,6 +18,10 @@ import { LoginComponent } from './login/login.component';
 import { ExpenditureVolumeChartComponent } from './research_summary/expenditure-volume-chart.component';
 import { ProposalBySponsorPieChartComponent } from './research_summary/proposal-by-sponsor-piechart.component';
 import { AwardedProposalDonutChartComponent } from './research_summary/awarded-proposal-donut-chart.component';
+
+import { ApplicationByGrantcallTypePieChartComponent } from './research_summary/application-by-grantcall-type-piechart.component';
+import { ProtocolByGrantcallTypePieChartComponent } from './research_summary/protocol-by-grantcall-type-piechart.component';
+
 import { WarningModalComponent } from './session/warning-modal.component';
 import { TimeoutModalComponent } from './session/timeout-modal.component';
 import { SessionTimeoutComponent } from './session/session-timeout.component';
@@ -85,7 +89,9 @@ let appRoutes = [{ path: '', redirectTo: 'loginpage', pathMatch: 'full' },
         HeaderComponent,
         AwardBySponsorPieChartComponent,
         InProgressProposalDonutChartComponent,
-        LogoutComponent
+        LogoutComponent, 
+        ApplicationByGrantcallTypePieChartComponent,
+        ProtocolByGrantcallTypePieChartComponent
     ],
     imports: [
         BrowserModule,
