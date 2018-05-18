@@ -63,6 +63,7 @@ export class AwardedProposalDonutChartComponent extends GoogleChartService imple
         this.resultPie = this.dashboardData.getDashboardPieChartData();
         if ( this.resultPie != null && this.resultPie.summaryAwardDonutChart !== undefined ) {
             this.awardList = this.resultPie.summaryAwardDonutChart;
+            this.awardStateList = [];
             this.awardStateList.push( ['Task', 'Hours per Day'] );
             this.awardLength = this.awardList.length;
             for ( let i = 0; i < this.awardLength; i++ ) {

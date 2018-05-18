@@ -62,6 +62,7 @@ export class ProposalBySponsorPieChartComponent extends GoogleChartService imple
         this.resultPie = this.dashboardData.getDashboardPieChartData();
         if ( this.resultPie != null && this.resultPie.summaryProposalPieChart !== undefined ) {
             this.proposalList = this.resultPie.summaryProposalPieChart;
+            this.proposalStateList = [];
             this.proposalStateList.push( ['Task', 'Hours per Day'] );
             this.proposalLength = this.proposalList.length;
             for ( let j = 0; j < this.proposalLength; j++ ) {

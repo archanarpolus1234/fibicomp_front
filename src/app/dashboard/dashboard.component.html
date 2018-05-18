@@ -990,7 +990,11 @@
 					</div>
 						
 				</div>
-				
+						<!-- Success message fade out -->
+						<div class="row" id="fadeOutMessage">
+							<div class="col-12 text-left"><span class="successWarning" *ngIf="showSuccessMessage">{{successMessage}}</span></div>
+						</div>
+						
 				<div class="borderBox" *ngIf="serviceRequestList.length!=0">
 					<table class="table table-responsive tableSkin">
 						<thead>
@@ -1063,13 +1067,13 @@
 							<div class="row">
 							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 								<div class="borderBox">
-									<h4 class="borderBoxHeading">Report: <span class="greenLabel">{{selectedReportName}}</span></h4>
+									<h4 class="borderBoxHeading">Report: <span class="greenLabel" *ngIf="selectedReportName != select">{{selectedReportName}}</span></h4>
 									<table class="table table-responsive tableSkin">
 											<tr id="reportFilterRow">
 													<td class="text-right">Report Name :</td>
 													<td colspan="2">
 												  			<select [(ngModel)] = "selectedReportName" class = "committeeBox">
-																<!-- <option>{{select}}</option> -->
+																<option>{{select}}</option>
 																<option>Submitted Applications by Grant</option>
 																<option>Awards by Grant</option>
 																<option>Expenditure by Award</option>
@@ -1085,7 +1089,7 @@
 																		(selected)="grantIdChange()"  class="widthLimiterNg2Completer p-0 border-0"></ng2-completer>
 														</div>
 													</td>
-													<td><span *ngIf="selectedReportName != null">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}</span>
+													<td><span *ngIf="selectedReportName != select">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}</span>
 													</td>
 			<!-- 										<td>
 														<button class="btnSkin btnSkinPrimary" (click)="addArea()">Filter</button>
@@ -1123,17 +1127,15 @@
 													</tr>
 												</tbody>
 												
-													<tr><td><div class="noDataExists" *ngIf="proposals?.length == 0">
-																			No reports found
+													<tr><td><div class="noDataExists" *ngIf="proposals?.length == 0 || proposals == null">
+																			No report data found
 																		</div></td>
 													</tr>
 										</table>
 									</div>
 							</div>
 							</div>
-				
 
-						
 			</div>
 
 			

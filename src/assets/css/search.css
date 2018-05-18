@@ -333,3 +333,11 @@ input[type=number]::-webkit-outer-spin-button {
 	font-weight: bold;
 	padding-left: 3px;
 }
+
+.successWarning {
+	background-color: #26A69A;
+	color: #fff;
+	float: right;
+	padding: 5px 10px;
+	border-radius: 15px;
+}

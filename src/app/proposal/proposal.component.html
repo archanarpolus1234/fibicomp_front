@@ -5,7 +5,11 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
 						<div class="row">
-							<div class="col-12 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">Application&nbsp;#{{result?.proposal?.proposalId}}</span></div>
+							<div class="col-6 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">Application&nbsp;#{{result?.proposal?.proposalId}}</span></div>
+							<div class="col-6 text-left"><span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
+						</div>
+						<div class="row" id="fadeOutMessage">
+							<div class="col-12 text-left"><span class="successWarning" *ngIf="showSuccessMessage">{{successMessage}}</span></div>
 						</div>
 						<br>
 						<div class="row">
@@ -877,34 +881,6 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 </div>
 </div>
 
-<!-- SAVE PROPOSAL MODAL -->
-<div class="modal fade mySkinDialog modalFallBack" *ngIf="showAddedModal" tabindex="-1"
-id="addProposal" tabindex="-1" role="dialog"
-aria-labelledby="deleteModalTitle" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-	<div class="modal-content">
-		<div class="modal-header">
-			<h5 class="modal-title" *ngIf="isProposalSaved">Saved</h5>
-			<h5 class="modal-title" *ngIf="!isProposalSaved">Warning</h5>
-
-			<button type="button" class="close" data-dismiss="modal"
-				aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="modal-body">
-			<p *ngIf="isProposalSaved">Proposal has been saved successfully.</p>
-			<p *ngIf="!isProposalSaved">Error in saving your proposal, please review mandatory details</p>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="isProposalSaved"
-				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
-			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="!isProposalSaved"
-				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
-		</div>
-	</div>
-</div>
-</div>
 
 <!-- DELETE SPONSOR WARNING MODAL -->
 <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteSponsor" tabindex="-1"
@@ -1000,9 +976,39 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 			</div>
 		</div>
 	</div>
-	
+
+
+<!-- SAVE PROPOSAL MODAL -->
+<!-- <div class="modal fade mySkinDialog modalFallBack" *ngIf="showAddedModal" tabindex="-1"
+id="addProposal" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" *ngIf="isProposalSaved">Saved</h5>
+			<h5 class="modal-title" *ngIf="!isProposalSaved">Warning</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p *ngIf="isProposalSaved">Proposal has been saved successfully.</p>
+			<p *ngIf="!isProposalSaved">Error in saving your proposal, please review mandatory details</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="isProposalSaved"
+				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
+			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="!isProposalSaved"
+				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
+		</div>
+	</div>
+</div>
+</div> -->
+
 	<!-- SUBMITTED MODAL -->
-	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmittedModal" tabindex="-1"
+	<!-- <div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmittedModal" tabindex="-1"
 id="submitProposal" tabindex="-1" role="dialog"
 aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1028,7 +1034,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 		</div>
 	</div>
 </div>
-</div>
+</div> -->
 
 	<!-- CONFIRM SUBMISSION MODAL -->
 <div class="modal fade mySkinDialog modalFallBack" *ngIf="showConfirmModal" tabindex="-1"

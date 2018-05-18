@@ -51,6 +51,7 @@ export class ExpenditureVolumeChartComponent extends GoogleChartService implemen
             if ( this.areachartLength == 0 ) {
                 this.noData = true;
             }
+            this.areaChartList = [];
             this.areaChartList.push( ['Year', 'Direct', 'FA'] );
             for ( let i = 0; i < this.areachartLength; i++ ) {
                 this.areaChartList.push( [this.researchSummaryList[i][0], this.researchSummaryList[i][1], this.researchSummaryList[i][2]] );
