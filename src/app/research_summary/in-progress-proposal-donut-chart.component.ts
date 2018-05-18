@@ -62,6 +62,7 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService im
         this.resultPie = this.dashboardData.getDashboardPieChartData();
         if ( this.resultPie != null && this.resultPie.summaryProposalDonutChart !== undefined ) {
             this.proposalList = this.resultPie.summaryProposalDonutChart;
+            this.proposalStateList = [];
             this.proposalStateList.push( ['Task', 'Hours per Day'] );
             this.proposalLength = this.proposalList.length;
             for ( let j = 0; j < this.proposalLength; j++ ) {

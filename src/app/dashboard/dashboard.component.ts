@@ -129,6 +129,7 @@ export class DashboardComponent implements OnInit {
     selectedGrantId: string = null;
     reportObject: any = null;
     proposals:any[] = [];
+    select: string = '--Select--';
   
     grantManager: string;
     provost: string;
@@ -140,7 +141,8 @@ export class DashboardComponent implements OnInit {
     confirmMessage: string;
     isForward: boolean = false;
     isEndorse: boolean = false;
-  
+    showSuccessMessage: boolean = false;
+    successMessage: string;
 
     constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService, private proposalCreateService: ProposalCreateEditService ) {
         this.outputPath = this.constant.outputPath;
@@ -602,10 +604,13 @@ export class DashboardComponent implements OnInit {
     fetchReportData() {
       this.reportObject = null;
       this.selectedGrantId = null;
+      this.proposals = null;
+      this.selectedReportName = this.select;
       this.dashboardService.fetchAllReportData().takeUntil(this.onDestroy$).subscribe(data => {
         var temp: any = {};
         temp = data || [];
         if (temp != null) {
+          this.proposals = temp.proposals;
           this.openGrantList = this.completerService.local(temp.grantIds, 'grantCallId', 'grantCallId');
           this.dashboardData.setReportData(temp);
         }
@@ -634,6 +639,12 @@ export class DashboardComponent implements OnInit {
           var temp: any = {};
           temp = data;
           this.initialLoad(1);
+          this.showSuccessMessage = true;
+          this.successMessage = 'Proposal forwarded successfully for endorsement';
+          setTimeout(() => {
+              this.showSuccessMessage = false;
+          }, 8000);
+          window.scrollTo( 0, 0 );
         });
         this.showConfirmModal = false;
       }
@@ -643,7 +654,13 @@ export class DashboardComponent implements OnInit {
       this.proposalCreateService.approveByProvost(this.selectedProposalId, this.proposal, this.userName).subscribe((data) => {
         var temp: any = {};
         temp = data;
-          this.initialLoad(1);
+        this.initialLoad(1);
+        this.showSuccessMessage = true;
+        this.successMessage = 'Proposal awarded successfully. Institute Proposal #' + temp.ipNumber;
+        setTimeout(() => {
+            this.showSuccessMessage = false;
+        }, 8000);
+        window.scrollTo( 0, 0 );
       });
       this.showConfirmModal = false;
     }

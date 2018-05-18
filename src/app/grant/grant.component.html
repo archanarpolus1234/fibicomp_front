@@ -12,11 +12,14 @@
 					</span>&nbsp;<i class="fa fa-bell fa-large mr-4 fibiDefaultColor"></i></div>
 				</div>
 				<br>
+					<div class="row" id="fadeOutMessage">
+						<div class="col-12 text-left"><span class="successWarning" *ngIf="showSavedSuccessfully">Saved Successfully</span></div>
+					</div>
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
 						<div class="borderBox">
 							<h4 class="borderBoxHeading">Overview</h4> <p *ngIf = "showWarning"><span class="mandatory warningMessage">*Please fill all the mandatory fields marked</span></p>
-							<p class="float-right" *ngIf = "showSavedSuccessfully"><span class="mandatory warningMessage">Saved Successfully</span></p>
+							<!-- <p class="float-right" *ngIf = "showSavedSuccessfully"><span class="mandatory warningMessage"></span></p> -->
 							<div class="pullSide">
 								<table class="table tableSkin grid2">
 									<tbody>

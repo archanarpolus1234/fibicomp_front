@@ -64,6 +64,7 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService implemen
         this.resultPie = this.dashboardData.getDashboardPieChartData();
         if ( this.resultPie != null && this.resultPie.summaryAwardPieChart !== undefined ) {
             this.awardList = this.resultPie.summaryAwardPieChart;
+            this.awardStateList = [];
             this.awardStateList.push( ['Task', 'Hours per Day'] );
             this.awardLength = this.awardList.length;
             for ( let i = 0; i < this.awardLength; i++ ) {
