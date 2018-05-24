@@ -1478,7 +1478,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.result.proposal = temp.proposal;
         this.updateRouteLogHeader();
         this.showSuccessMessage = true;
-        this.successMessage = 'Proposal awarded successfully. Institute Proposal #' + temp.ipNumber;
+        this.successMessage = 'Proposal awarded successfully. Institute Proposal #' + this.result.proposal.ipNumber;
         setTimeout(() => {
             this.showSuccessMessage = false;
         }, 8000);

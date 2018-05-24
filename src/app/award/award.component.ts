@@ -22,6 +22,7 @@ export class AwardComponent {
     public lastUpdate: string;
     result: any = {};
     outputPath: string;
+    outputPathAB: string;
     userName: string;
     documentNumber: string;
     public currentValueSub : Subscription;
@@ -29,6 +30,7 @@ export class AwardComponent {
     
     constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, public awardconfigurationService: AwardconfigurationService ) {
         this.outputPath = this.constant.outputPath;
+        this.outputPathAB = this.constant.outputPathAB;
     }
 
     ngOnInit() {

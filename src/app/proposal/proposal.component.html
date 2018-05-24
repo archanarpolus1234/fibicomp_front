@@ -6,7 +6,7 @@
 				<br>
 						<div class="row">
 							<div class="col-6 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">Application&nbsp;#{{result?.proposal?.proposalId}}</span></div>
-							<div class="col-6 text-left"><span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
+							<div class="col-6 text-right"><span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
 						</div>
 						<div class="row" id="fadeOutMessage">
 							<div class="col-12 text-left"><span class="successWarning" *ngIf="showSuccessMessage">{{successMessage}}</span></div>

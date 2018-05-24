@@ -22,6 +22,7 @@ export class Constants {
     notificationUrl: string;
     logoutUrl: string;
     outputPath: string;
+    outputPathAB: string;
     awardSummaryUrl: string;
     awardHierarchyUrl: string;
     awardTermsAndReportsUrl: string;
@@ -270,5 +271,6 @@ export class Constants {
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
         //this.outputPath = 'http://52.20.110.7:8080/kc-dev';
         this.outputPath = 'http://192.168.1.76:8080/kc-dev';
+        this.outputPathAB = 'http://192.168.1.76:8080/AwardBudgetTool';
     }
 }
