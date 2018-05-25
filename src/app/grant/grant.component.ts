@@ -93,6 +93,7 @@ export class GrantComponent {
     
 
     constructor( public changeRef :ChangeDetectorRef,public completerService : CompleterService, public router : Router,public route : ActivatedRoute, private grantService: GrantService, private sessionService: SessionManagementService) {
+        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         }

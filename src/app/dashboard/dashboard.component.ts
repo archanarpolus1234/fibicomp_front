@@ -146,6 +146,7 @@ export class DashboardComponent implements OnInit {
 
     constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService, private proposalCreateService: ProposalCreateEditService ) {
         this.outputPath = this.constant.outputPath;
+        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         }

@@ -168,6 +168,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     public onDestroy$ = new Subject<void>();
 
     constructor( public grantService: GrantService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public _ngZone: NgZone, public changeRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private sessionService: SessionManagementService, private proposalCreateService: ProposalCreateEditService, public completerService: CompleterService ) {
+        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         }
@@ -1367,6 +1368,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             if ( reviewer.approverPersonName == this.selectedReviewer ) {
                 var assignedReviewer: any = {};
                 assignedReviewer.reviewerPersonId = reviewer.approverPersonId;
+                assignedReviewer.emailAddress = reviewer.emailAddress;
                 assignedReviewer.reviewerPersonName = reviewer.approverPersonName;
                 assignedReviewer.approvalStatusCode = "W";
                 assignedReviewer.workflowDetail = _.cloneDeep(this.tempLoggedWorkflowDetail);

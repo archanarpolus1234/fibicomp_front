@@ -116,6 +116,7 @@ export class HeaderComponent implements OnInit {
         localStorage.removeItem('dashboardExpenditureVolumeWidget');
         localStorage.removeItem('provost');
         localStorage.removeItem('grantManager');
+        localStorage.removeItem('currentUrl');
         this.loginCheckService.logout();
         this.router.navigate( ['/loginpage'] );
     }
