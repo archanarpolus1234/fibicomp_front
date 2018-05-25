@@ -21,6 +21,7 @@ import { AwardedProposalDonutChartComponent } from './research_summary/awarded-p
 
 import { ApplicationByGrantcallTypePieChartComponent } from './research_summary/application-by-grantcall-type-piechart.component';
 import { ProtocolByGrantcallTypePieChartComponent } from './research_summary/protocol-by-grantcall-type-piechart.component';
+import { AwardByGrantcallTypePieChartComponent } from './research_summary/award-by-grantcall-type-piechart.component';
 
 import { WarningModalComponent } from './session/warning-modal.component';
 import { TimeoutModalComponent } from './session/timeout-modal.component';
@@ -91,7 +92,8 @@ let appRoutes = [{ path: '', redirectTo: 'loginpage', pathMatch: 'full' },
         InProgressProposalDonutChartComponent,
         LogoutComponent, 
         ApplicationByGrantcallTypePieChartComponent,
-        ProtocolByGrantcallTypePieChartComponent
+        ProtocolByGrantcallTypePieChartComponent,
+        AwardByGrantcallTypePieChartComponent
     ],
     imports: [
         BrowserModule,

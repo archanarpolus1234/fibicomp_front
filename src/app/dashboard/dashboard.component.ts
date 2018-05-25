@@ -594,11 +594,11 @@ export class DashboardComponent implements OnInit {
     }
 
     grantIdChange() {
-        this.dashboardService.applicationReport(this.selectedGrantId,this.selectedReportName).subscribe(data=>{
+        this.dashboardService.applicationReport( this.selectedGrantId, this.selectedReportName, this.personId ). subscribe(data=>{
             var temp = data;
             this.reportObject = temp;
             this.proposals = this.reportObject.proposals;
-        });
+        } );
 
     }
 
