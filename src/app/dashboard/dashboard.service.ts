@@ -75,10 +75,11 @@ export class DashboardService {
             } );
     }
 
-    applicationReport(grantCallId,reportName) {
+    applicationReport(grantCallId,reportName, personId) {
         var params = {
             grantCallId : grantCallId,
-            reportName : reportName
+            reportName : reportName,
+            personId: personId
         }
 
         return this.http.post( this.constant.applicationReport,params )
