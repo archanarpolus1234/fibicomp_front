@@ -27,6 +27,7 @@ export class AppComponent implements OnInit {
                 }
             }
         } );
+        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         }

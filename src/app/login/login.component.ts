@@ -37,7 +37,7 @@ export class LoginComponent implements AfterViewInit {
     res:Response;
     unitNumber:string;
     constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionManagementService, private renderer: Renderer, private loginCheck: LoginCheckService) {
-     if ( !this.sessionService.canActivate() ) {
+        if ( !this.sessionService.canActivate() ) {
             this.router.navigate( ['/loginpage'] );
         } else {
             this.router.navigate( ['/dashboard'] );
@@ -74,7 +74,12 @@ export class LoginComponent implements AfterViewInit {
                         localStorage.setItem( 'provost', String( this.result.provost ) );
                         localStorage.setItem( 'grantManager', String(this.result.grantManager ) );
                         this.loginCheck.login();
-                        this.router.navigate( ['/dashboard'] );
+                        var url = localStorage.getItem('currentUrl');
+                        if(url != null) {
+                            window.location.href = url;
+                        } else {
+                            this.router.navigate( ['/dashboard'] );
+                        }
                     } else {
                         this.loginFail = true;
                         this.credentials.username = '';
