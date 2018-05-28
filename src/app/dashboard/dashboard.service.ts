@@ -22,6 +22,8 @@ export class DashboardService {
 
     loadDashBoard( property1: string, property2: string, property3: string, property4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number, filterStartDate: Date, filterEndDate: Date ): Observable<JSON> {
         this.personId = localStorage.getItem( 'personId' );
+        var provost = ( localStorage.getItem( 'provost' ) == 'true' ) ? true : false;
+        var reviewer = ( localStorage.getItem( 'reviewer' ) == 'true' ) ? true : false;
         var params = {
             property1: property1,
             property2: property2,
@@ -35,7 +37,9 @@ export class DashboardService {
             personId: this.personId,
             currentPage: currentPage,
             isUnitAdmin:localStorage.getItem('isAdmin'),
-            unitNumber: localStorage.getItem('unitNumber')
+            unitNumber: localStorage.getItem('unitNumber'),
+            provost: provost,
+            reviewer: reviewer
         };
         return this.http.post( this.constant.dashboardUrl, params )
             .catch( error => {

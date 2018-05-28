@@ -27,8 +27,12 @@ export class AppComponent implements OnInit {
                 }
             }
         } );
-        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
+            var url = window.location.href;
+            if(url.indexOf('loginpage') !== -1) {
+            } else {
+                localStorage.setItem('currentUrl', window.location.href);
+            }
             this.router.navigate( ['/loginpage'] );
         }
     }

@@ -270,7 +270,8 @@ export class Constants {
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
         //this.outputPath = 'http://52.20.110.7:8080/kc-dev';
-        this.outputPath = this.baseUrl + this.portAndPath +'/kc-dev';
-        this.outputPathAB = this.baseUrl + this.portAndPath +'/AwardBudgetTool';
+        this.outputPath = 'http://192.168.1.76:8080/kc-dev';
+        
+        this.outputPathAB = 'http://192.168.1.76:8080/AwardBudgetTool';
     }
 }

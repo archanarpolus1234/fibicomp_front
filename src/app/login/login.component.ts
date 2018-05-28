@@ -38,6 +38,11 @@ export class LoginComponent implements AfterViewInit {
     unitNumber:string;
     constructor( private loginService: LoginService, private router: Router, private dashboardService: DashboardService, private sessionService: SessionManagementService, private renderer: Renderer, private loginCheck: LoginCheckService) {
         if ( !this.sessionService.canActivate() ) {
+            var url = window.location.href;
+            if(url.indexOf('loginpage') !== -1) {
+            } else {
+                localStorage.setItem('currentUrl', window.location.href);
+            }
             this.router.navigate( ['/loginpage'] );
         } else {
             this.router.navigate( ['/dashboard'] );
@@ -52,7 +57,7 @@ export class LoginComponent implements AfterViewInit {
     @ViewChild( 'input' ) input: ElementRef;
     login() {
         this.loginService.login( this.credentials.username, this.credentials.password ).takeUntil(this.onDestroy$).subscribe(
-            data => { 
+            data => {
                 this.result = data.body; 
                 if(this.result != null){
                     localStorage.setItem('authToken', data.headers.get("Authorization"));
@@ -72,6 +77,7 @@ export class LoginComponent implements AfterViewInit {
                         localStorage.setItem( 'isAdmin', String( this.isAdmin ) );
                         localStorage.setItem( 'unitNumber', String(this.unitNumber ) );
                         localStorage.setItem( 'provost', String( this.result.provost ) );
+                        localStorage.setItem( 'reviewer', String( this.result.reviewer ) );
                         localStorage.setItem( 'grantManager', String(this.result.grantManager ) );
                         this.loginCheck.login();
                         var url = localStorage.getItem('currentUrl');

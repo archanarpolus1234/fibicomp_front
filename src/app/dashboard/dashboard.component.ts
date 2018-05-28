@@ -146,8 +146,8 @@ export class DashboardComponent implements OnInit {
 
     constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService, private proposalCreateService: ProposalCreateEditService ) {
         this.outputPath = this.constant.outputPath;
-        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
+            localStorage.setItem('currentUrl', window.location.href);
             this.router.navigate( ['/loginpage'] );
         }
         this.grantManager = localStorage.getItem('grantManager');
@@ -657,7 +657,7 @@ export class DashboardComponent implements OnInit {
         temp = data;
         this.initialLoad(1);
         this.showSuccessMessage = true;
-        this.successMessage = 'Proposal awarded successfully. Institute Proposal #' + temp.ipNumber;
+        this.successMessage = 'Proposal awarded successfully. Institute Proposal #' + temp.proposal.ipNumber;
         setTimeout(() => {
             this.showSuccessMessage = false;
         }, 8000);
