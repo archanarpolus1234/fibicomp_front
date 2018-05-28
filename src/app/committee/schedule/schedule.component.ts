@@ -32,8 +32,8 @@ export class ScheduleComponent implements OnInit {
     minuteEditFlag = false;
 
     constructor( public changeRef : ChangeDetectorRef,private scheduleService: ScheduleService, private router: Router, private sessionService: SessionManagementService, private route: ActivatedRoute, private scheduleConfigurationService: ScheduleConfigurationService ) { 
-        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
+            localStorage.setItem('currentUrl', window.location.href);
             this.router.navigate( ['/loginpage'] );
         }
     }

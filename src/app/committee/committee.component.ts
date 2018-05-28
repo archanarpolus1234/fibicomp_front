@@ -53,9 +53,9 @@ export class CommitteeComponent implements OnInit {
     private committeeHomeObj: CommitteeHomeComponent;
 
     constructor( public route: ActivatedRoute, public router: Router, private sessionService: SessionManagementService, public committeCreateService: CommitteCreateEditService, private completerService: CompleterService, public committeeSaveService: CommitteeSaveService, public committeeConfigurationService: CommitteeConfigurationService ) {
-        localStorage.setItem('currentUrl', window.location.href);
-        if ( !sessionService.canActivate() ) {
-            this.router.navigate( ['/loginpage'] );
+       if ( !sessionService.canActivate() ) {
+           localStorage.setItem('currentUrl', window.location.href);
+           this.router.navigate( ['/loginpage'] );
         }
         this.result.committee = {};
         this.result.committee.committeeType = {};

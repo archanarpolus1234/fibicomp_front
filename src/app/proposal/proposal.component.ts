@@ -168,8 +168,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     public onDestroy$ = new Subject<void>();
 
     constructor( public grantService: GrantService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public _ngZone: NgZone, public changeRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private sessionService: SessionManagementService, private proposalCreateService: ProposalCreateEditService, public completerService: CompleterService ) {
-        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
+            localStorage.setItem('currentUrl', window.location.href);
             this.router.navigate( ['/loginpage'] );
         }
         this.grantManager = localStorage.getItem('grantManager');

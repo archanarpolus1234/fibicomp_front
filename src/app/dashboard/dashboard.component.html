@@ -1070,8 +1070,8 @@
 									<table class="table table-responsive tableSkin">
 											<tr id="reportFilterRow">
 													<td class="text-right">Report Name :</td>
-													<td colspan="2">
-												  			<select [(ngModel)] = "selectedReportName" class = "committeeBox">
+													<td>
+												  			<select [(ngModel)] = "selectedReportName" class = "committeeBox" (change)="selectedGrantId = null; reportObject = null; proposals = null">
 																<option>{{select}}</option>
 																<option>Submitted Applications by Grant</option>
 																<option>Awards by Grant</option>
@@ -1079,7 +1079,7 @@
 															</select>
 												  	</td>
 												  	<td class="text-right">Grant:</td>
-													<td colspan="2">
+													<td >
 														<div>
 																<ng2-completer  title="Search grant" 
 																		[inputClass]="completerID"
@@ -1088,11 +1088,8 @@
 																		(selected)="grantIdChange()"  class="widthLimiterNg2Completer p-0 border-0"></ng2-completer>
 														</div>
 													</td>
-													<td><span *ngIf="selectedReportName != select">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}</span>
+													<td colspan="3"><span *ngIf="selectedReportName != select">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}</span>
 													</td>
-			<!-- 										<td>
-														<button class="btnSkin btnSkinPrimary" (click)="addArea()">Filter</button>
-													</td> -->
 												</tr>
 												<tbody *ngIf="proposals?.length > 0">
 													<tr>
@@ -1126,7 +1123,7 @@
 													</tr>
 												</tbody>
 												
-													<tr><td><div class="noDataExists" *ngIf="proposals?.length == 0 || proposals == null">
+													<tr *ngIf="proposals?.length == 0 || proposals == null"><td><div class="noDataExists" >
 																			No report data found
 																		</div></td>
 													</tr>

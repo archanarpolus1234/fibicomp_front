@@ -63,8 +63,8 @@ export class ExpandedviewComponent implements OnInit {
         this.logo = './assets/images/logo.png';
         this.footerLogo = './assets/images/footerLogo.png';
         this.outputPath = this.constant.outputPath;
-        localStorage.setItem('currentUrl', window.location.href);
         if ( !sessionService.canActivate() ) {
+            localStorage.setItem('currentUrl', window.location.href);
             this.router.navigate( ['/loginpage'] );
         } 
     }
