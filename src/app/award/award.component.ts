@@ -27,6 +27,8 @@ export class AwardComponent {
     documentNumber: string;
     public currentValueSub : Subscription;
     public loadAwardSub : Subscription;
+    public is_awd_budget: string = 'F';
+    public latest_version_number: string;
     
     constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, public awardconfigurationService: AwardconfigurationService ) {
         this.outputPath = this.constant.outputPath;
@@ -49,7 +51,9 @@ export class AwardComponent {
                 this.awardStatus = this.result.awardDetails[0].award_status;
                 this.sponsorName = this.result.awardDetails[0].sponsor_name;
                 this.lastUpdate = this.result.awardDetails[0].last_update;
-                this.documentNumber = this.result.awardDetails[0].document_number;
+                this.documentNumber = this.result.awardDetails[0].document_number;           
+                this.is_awd_budget = this.result.awardDetails[0].is_awd_budget;
+                this.latest_version_number = this.result.awardDetails[0].latest_version_number;
             }
         } );
     }

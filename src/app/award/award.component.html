@@ -46,9 +46,13 @@
 							<li [ngClass]="{'active':currentTab=='award_commitments'}"><a
 								href="#" (click)="show_current_tab($event,'award_commitments');"><i
 									class="fa fa-handshake-o"></i><span>Commitments</span></a></li>
-							<a class="view_external_link" title="Create Award Budget {{awardNumber}}"
-								[href]="outputPathAB+'/award.search?username='+userName+'&isSMU=true#/budget?awardNumber=000154-00001&from=CREATE_NEW_BUDGET&mode=CREATE'">
+							<a class="view_external_link" *ngIf="is_awd_budget == 'F'" title="View Award Budget {{awardNumber}}"
+								[href]="outputPathAB+'/award.search?username='+userName+'&isSMU=true#/budget?awardNumber='+awardNumber+'&from=CREATE_NEW_BUDGET&mode=CREATE'">
 								<i class="fa fa-external-link"></i> Create Award Budget
+							</a>
+							<a class="view_external_link" *ngIf="is_awd_budget == 'T'" title="Create Award Budget {{awardNumber}}"
+								[href]="outputPathAB+'/award.search?username='+userName+'&isSMU=true#/budget?awardNumber='+awardNumber+'&from=EDIT_DETAILS&versionNumber='+latest_version_number">
+								<i class="fa fa-external-link"></i> View Award Budget
 							</a>
 							<a class="view_external_link" title="Open {{awardNumber}}"
 								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+this.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">
