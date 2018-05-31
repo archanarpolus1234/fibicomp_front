@@ -79,18 +79,27 @@ export class DashboardService {
             } );
     }
 
-    applicationReport(grantCallId,reportName, personId) {
-        var params = {
-            grantCallId : grantCallId,
-            reportName : reportName,
-            personId: personId
+    applicationReport( reportItemId, reportName, personId ) {
+        var params = {};
+        if ( reportName == 'Expenditure by Award' ) {
+            params = {
+                awardNumber: reportItemId,
+                reportName: reportName,
+                personId: personId
+            }
+        } else {
+            params = {
+                grantCallId: reportItemId,
+                reportName: reportName,
+                personId: personId
+            }
         }
 
-        return this.http.post( this.constant.applicationReport,params )
-        .catch( error => {
-            console.error( error.message || error );
-            return Observable.throw( error.message || error );
-        } );
+        return this.http.post( this.constant.applicationReport, params )
+            .catch( error => {
+                console.error( error.message || error );
+                return Observable.throw( error.message || error );
+            } );
     }
 
     fetchAllReportData(): Observable<JSON> {

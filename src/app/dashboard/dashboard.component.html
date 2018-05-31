@@ -450,7 +450,7 @@
 										<li><a title="Open {{awardDetails.awardNumber}}"
 											routerLink='/award'
 											[queryParams]={awardId:awardDetails.awardId}><i
-												class="fa fa-eye "></i> </a></li>
+												class="fa fa-eye pointer"></i> </a></li>
 									</ul>
 								</td>
 							</tr>
@@ -1071,24 +1071,26 @@
 											<tr id="reportFilterRow">
 													<td class="text-right">Report Name :</td>
 													<td>
-												  			<select [(ngModel)] = "selectedReportName" class = "committeeBox" (change)="selectedGrantId = null; reportObject = null; proposals = null">
+												  			<select [(ngModel)] = "selectedReportName" class = "committeeBox" (change)="reportTypeChange()">
 																<option>{{select}}</option>
 																<option>Submitted Applications by Grant</option>
 																<option>Awards by Grant</option>
 																<option>Expenditure by Award</option>
 															</select>
 												  	</td>
-												  	<td class="text-right">Grant:</td>
+												  	<td class="text-right"><span *ngIf="selectedReportName != 'Expenditure by Award'">Grant:</span>
+												  						   <span *ngIf="selectedReportName == 'Expenditure by Award'">Award:</span>
+												  	</td>
 													<td >
 														<div>
 																<ng2-completer  title="Search grant" 
 																		[inputClass]="completerID"
-																		[(ngModel)]="selectedGrantId" placeholder="Search by Id or Name"
-																		[datasource]="openGrantList" [minSearchLength]="0"
+																		[(ngModel)]="selectedReportItemId" [placeholder]="(selectedReportName == 'Expenditure by Award')? 'Search by award number': 'Search by Id or Name'"
+																		[datasource]="dataList" [minSearchLength]="0"
 																		(selected)="grantIdChange()"  class="widthLimiterNg2Completer p-0 border-0"></ng2-completer>
 														</div>
 													</td>
-													<td colspan="3"><span *ngIf="selectedReportName != select">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}</span>
+													<td colspan="3"><span *ngIf="selectedReportName != select && selectedReportName != 'Expenditure by Award'">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}{{reportObject?.awardCount}}</span>
 													</td>
 												</tr>
 												<tbody *ngIf="proposals?.length > 0">
@@ -1108,12 +1110,12 @@
 														<th>Action</th>
 													</tr>
 													<tr *ngFor="let proposal of proposals">
-														<td>{{proposal.proposalId}}</td>
-														<td>{{proposal.title}}</td>
-														<td>{{proposal.startDate}}</td>
-														<td>{{proposal.endDate}}</td>
-														<td>{{proposal.grantCall.homeUnitName}}</td>
-														<td>{{proposal.proposalStatus?.description}}</td>
+														<td>{{proposal?.proposalId}}</td>
+														<td>{{proposal?.title}}</td>
+														<td>{{proposal?.startDate}}</td>
+														<td>{{proposal?.endDate}}</td>
+														<td>{{proposal?.grantCall?.homeUnitName}}</td>
+														<td>{{proposal?.proposalStatus?.description}}</td>
 														<td>
 															<ul class="actionButtonGroup">
 																<li><a title="Open"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
@@ -1121,12 +1123,73 @@
 															</ul>
 														</td>
 													</tr>
-												</tbody>
-												
 													<tr *ngIf="proposals?.length == 0 || proposals == null"><td><div class="noDataExists" >
 																			No report data found
 																		</div></td>
 													</tr>
+												</tbody>
+												
+												<tbody *ngIf="awards?.length > 0">
+													<tr>
+														<th (click)="sortResult('awardNumber',currentPosition)"
+														title="Click to sort by award number">Award #<span [ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}" ></span>
+														</th>
+														<th (click)="sortResult('accountNumber',currentPosition)"
+														title="Click to sort by account number">Account #<span [ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}" ></span>
+														</th>
+														<th (click)="sortResult('title',currentPosition)"
+														title="Click to sort by title">Title<span [ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+														</th>
+														<th (click)="sortResult('unitName',currentPosition)"
+														title="Click to sort by lead unit">Lead Unit<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+														</th>
+														<th (click)="sortResult('sponsor',currentPosition)"
+														title="Click to sort by sponsor name">Sponsor<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span>
+														</th>
+														<th (click)="sortResult('fullName',currentPosition)"
+														title="Click to sort by PI name">PI<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'fullName')}"></span>
+														</th>
+														<th>Action</th>
+													</tr>
+													<tr *ngFor="let award of awards">
+														<td>{{award?.awardNumber}}</td>
+														<td>{{award?.accountNumber}}</td>
+														<td>{{award?.title}}</td>
+														<td>{{award?.unitName}}</td>
+														<td>{{award?.sponsor}}</td>
+														<td>{{award?.fullName}}</td>
+														<td>
+															<ul class="actionButtonGroup">
+																<li><a title="Open {{award?.awardNumber}}"
+																	routerLink='/award'
+																	[queryParams]={awardId:award.awardId}><i
+																		class="fa fa-eye pointer"></i> </a></li>
+															</ul>
+														</td>
+													</tr>
+													<tr *ngIf="awards?.length == 0 || awards == null"><td><div class="noDataExists" >
+																			No report data found
+																		</div></td>
+													</tr>
+												</tbody>
+												<tbody *ngIf="expenditureByAward?.length > 0">
+													<tr>
+														<th >Sl No.</th>
+														<th >Cost Element</th>
+														<th >Description</th>
+														<th >Line Item Cost</th>
+													</tr>
+													<tr *ngFor="let expenditure of expenditureByAward; let i=index">
+														<td>{{i+1}}</td>
+														<td>{{expenditure[1]}}</td>
+														<td>{{expenditure[2]}}</td>
+														<td>{{expenditure[0] | currency:'USD':true}}</td>
+													</tr>
+													<tr *ngIf="expenditureByAward?.length == 0 || expenditureByAward == null"><td><div class="noDataExists" >
+																			No expenditure data found
+																		</div></td>
+													</tr>
+												</tbody>
 										</table>
 									</div>
 							</div>

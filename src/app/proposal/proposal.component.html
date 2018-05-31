@@ -367,7 +367,7 @@
 				                                            <td >{{proposalSponsor?.sponsor?.sponsorName}}</td>
 				                                            <td >{{proposalSponsor?.startDate | date:'MM/dd/yyyy'}}</td>
 				                                            <td >{{proposalSponsor?.endDate | date:'MM/dd/yyyy'}}</td>
-				                                            <td >$ {{proposalSponsor?.amount}}</td>
+				                                            <td >{{proposalSponsor?.amount | currency:'USD':true}}</td>
 				                                         	<td  *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 																	<li><a href="#" data-toggle="modal"
 																		data-target="#deleteSponsor"
@@ -475,7 +475,7 @@
 		                                            <td colspan="2">{{budget?.budgetCategory?.description}}</td>
 		                                            <td colspan="2">{{budget?.proposalCostElement?.description}}</td>
 		                                            <td colspan="2">{{budget?.description}}</td>
-		                                            <td>$ {{budget.cost}}</td>
+		                                            <td>{{budget.cost| currency:'USD':true}}</td>
 		                                         	<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 															<li><a href="#" data-toggle="modal"
 																data-target="#deleteMemberModal"
