@@ -126,9 +126,13 @@ export class DashboardComponent implements OnInit {
     public onDestroy$ = new Subject<void>();
     selectedReportName: string;
     openGrantList: any= [];
-    selectedGrantId: string = null;
+    awardNumberList: any = [];
+    dataList: any = [];
+    selectedReportItemId: string = null;
     reportObject: any = null;
     proposals:any[] = [];
+    expenditureByAward: any = [];
+    awards: any = [];
     select: string = '--Select--';
   
     grantManager: string;
@@ -594,25 +598,39 @@ export class DashboardComponent implements OnInit {
     }
 
     grantIdChange() {
-        this.dashboardService.applicationReport( this.selectedGrantId, this.selectedReportName, this.personId ). subscribe(data=>{
+        this.dashboardService.applicationReport( this.selectedReportItemId, this.selectedReportName, this.personId ). subscribe(data=>{
             var temp = data;
             this.reportObject = temp;
-            this.proposals = this.reportObject.proposals;
+            this.proposals = temp.proposals;
+            this.awards = temp.awards;
+            this.expenditureByAward = temp.expenditureByAward;
         } );
 
     }
 
+    reportTypeChange() {
+        this.selectedReportItemId = null;
+        this.reportObject = null;
+        this.proposals = null;
+        this.awards = null;
+        this.expenditureByAward = null;
+        this.dataList = (this.selectedReportName != 'Expenditure by Award')? this.openGrantList : this.awardNumberList;
+    }
+
     fetchReportData() {
       this.reportObject = null;
-      this.selectedGrantId = null;
+      this.selectedReportItemId = null;
       this.proposals = null;
+      this.awards = null;
       this.selectedReportName = this.select;
       this.dashboardService.fetchAllReportData().takeUntil(this.onDestroy$).subscribe(data => {
         var temp: any = {};
         temp = data || [];
         if (temp != null) {
           this.proposals = temp.proposals;
+          this.awards = temp.awards;
           this.openGrantList = this.completerService.local(temp.grantIds, 'grantCallId', 'grantCallId');
+          this.awardNumberList = this.completerService.local(temp.awardNumbers, 'awardNumber', 'awardNumber');
           this.dashboardData.setReportData(temp);
         }
       });
