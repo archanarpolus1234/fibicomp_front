@@ -29,10 +29,14 @@ export class AwardComponent {
     public loadAwardSub : Subscription;
     public is_awd_budget: string = 'F';
     public latest_version_number: string;
+    outputPathOST: string;
+    currentUser: string;
     
     constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, public awardconfigurationService: AwardconfigurationService ) {
         this.outputPath = this.constant.outputPath;
         this.outputPathAB = this.constant.outputPathAB;
+        this.outputPathOST = this.constant.outputPathOST;
+        this.currentUser = localStorage.getItem( 'currentUser' );
     }
 
     ngOnInit() {

@@ -389,13 +389,26 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'AWARD')">
 				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 text-left">
 						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DAwardDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'">
 								<i class="fa fa-plus"></i> Create Award
 						</a>
 						</span>
+					</div>
+					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 text-center">
+								<span class="linkButtonGroup" *ngIf="adminStatus == 'true' || provost == 'true' || grantManager == 'true'"> <a
+									[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/dashboard' ">
+										<i class="fa fa-eye"></i> View Variation Request
+								</a>
+								</span>
+					</div>
+					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 text-right">
+								<span class="linkButtonGroup"> <a
+									[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/createform' ">
+										<i class="fa fa-plus"></i> Create Project Variation Request
+								</a>
+								</span>
 					</div>
 				</div>
 				<div class="borderBox"
@@ -1094,7 +1107,7 @@
 													</td>
 												</tr>
 												<tbody *ngIf="proposals?.length > 0">
-													<tr>
+													<tr >
 														<th (click)="sortResult('proposalId',currentPosition)"
 														title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
 														</th>
@@ -1123,12 +1136,11 @@
 															</ul>
 														</td>
 													</tr>
-													<tr *ngIf="proposals?.length == 0 || proposals == null"><td><div class="noDataExists" >
+												</tbody>
+													<tr *ngIf="selectedReportName == 'Submitted Applications by Grant' && (proposals?.length == 0 || proposals == null )"><td><div class="noDataExists" >
 																			No report data found
 																		</div></td>
 													</tr>
-												</tbody>
-												
 												<tbody *ngIf="awards?.length > 0">
 													<tr>
 														<th (click)="sortResult('awardNumber',currentPosition)"
@@ -1167,11 +1179,12 @@
 															</ul>
 														</td>
 													</tr>
-													<tr *ngIf="awards?.length == 0 || awards == null"><td><div class="noDataExists" >
+												</tbody>
+													<tr *ngIf="selectedReportName == 'Awards by Grant' && (awards?.length == 0 || awards == null)"><td><div class="noDataExists" >
 																			No report data found
 																		</div></td>
 													</tr>
-												</tbody>
+													
 												<tbody *ngIf="expenditureByAward?.length > 0">
 													<tr>
 														<th >Sl No.</th>
@@ -1185,11 +1198,11 @@
 														<td>{{expenditure[2]}}</td>
 														<td>{{expenditure[0] | currency:'USD':true}}</td>
 													</tr>
-													<tr *ngIf="expenditureByAward?.length == 0 || expenditureByAward == null"><td><div class="noDataExists" >
+												</tbody>
+													<tr *ngIf="selectedReportName == 'Expenditure by Award' && (expenditureByAward?.length == 0 || expenditureByAward == null)"><td><div class="noDataExists" >
 																			No expenditure data found
 																		</div></td>
 													</tr>
-												</tbody>
 										</table>
 									</div>
 							</div>

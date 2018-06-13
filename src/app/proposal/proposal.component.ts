@@ -249,6 +249,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.budgetCost = 0;
         this.budgetDescription = "";
         this.costElementSelected = this.select;
+
+        if ( this.result.proposal.isSmu == null ) {
+            this.result.proposal.isSmu = false;
+        }
     }
 
     updateWorkflowStops() {
@@ -1003,10 +1007,13 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
         //this.showAddedModal = true;
         if ( !this.isMandatory && !this.isDateWarningText && !this.isAreaWarning && !this.personWarningFlag && this.result.proposal.proposalPersons.length > 0 && this.result.proposal.proposalResearchAreas.length > 0 ) {
+            this.result.proposal.createUser = this.currentUser;
+            this.result.proposal.createTimeStamp = new Date().getTime();
+            this.result.proposal.updateUser = this.currentUser;
+            this.result.proposal.updateTimeStamp = new Date().getTime();
             this.proposalCreateService.saveProposal( this.result.proposal, type ).subscribe( data => {
                 var temp: any = data;
                 this.result.proposal = temp.proposal;
-                //this.isProposalSaved = true;
                 this.showSuccessMessage = true;
                 this.successMessage = 'Proposal has been saved successfully.';
                 setTimeout(()=> {
@@ -1015,7 +1022,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 window.scrollTo( 0, 0 );
             } );
         } else {
-              //this.isProposalSaved = false;
               this.showSuccessMessage = true;
               this.successMessage = 'Error in saving proposal, please review whether mandatory fields are filled';
               setTimeout(() => {
@@ -1074,6 +1080,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             } else {
                 this.result.proposalStatusCode = 2; // proposal status is set to Approval In Progress
             }
+            this.result.proposal.updateTimeStamp = new Date().getTime();
+            this.result.proposal.updateUser = this.currentUser;
             //this.showAddedModal = false;
             this.proposalCreateService.submitProposal( this.result.proposal, localStorage.getItem( 'currentUser' ), this.result.proposalStatusCode ).subscribe( data => {
                 var temp: any = data;
@@ -1313,6 +1321,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.sendObject.proposal = this.result.proposal;
         this.sendObject.approverStopNumber = this.result.approverStopNumber;
         this.sendObject.approveComment = this.approveComments;
+        this.sendObject.updateTimeStamp = new Date().getTime();
+        this.sendObject.updateUser = this.currentUser;
         this.proposalCreateService.approveDisapproveProposal( this.sendObject, this.uploadedFile ).subscribe( data => {
             var temp: any = {};
             temp = data;
@@ -1383,6 +1393,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
     
     addReviewer() {
+        this.result.proposal.updateTimeStamp = new Date().getTime();
+        this.result.proposal.updateUser = this.currentUser;
         this.proposalCreateService.assignReviewer( this.result.proposal, this.result.loggedInWorkflowDetail, this.result.proposal.proposalId ).subscribe( data => {
             var temp: any = {};
             temp = data;
@@ -1403,6 +1415,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.sendObject.userName = this.currentUser;
         this.sendObject.approveComment = this.approveComments;
         this.sendObject.personId = this.result.personId;
+        this.sendObject.updateTimeStamp = new Date().getTime();
+        this.sendObject.updateUser = this.currentUser;
         this.proposalCreateService.completeReviewAction( this.sendObject, this.uploadedFile ).subscribe( data => {
             var temp: any = {};
             temp = data;
@@ -1458,6 +1472,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     submitToProvost() {
+      this.result.proposal.updateTimeStamp = new Date().getTime();
+      this.result.proposal.updateUser = this.currentUser;
       this.proposalCreateService.submitForEndorsement(this.result.proposal.proposalId, this.result.proposal).subscribe((data)=> {
         var temp: any = {};
         temp = data;
@@ -1474,6 +1490,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     approveEndorse() {
+      this.result.proposal.updateTimeStamp = new Date().getTime();
+      this.result.proposal.updateUser = this.currentUser;
       this.proposalCreateService.approveByProvost(this.result.proposal.proposalId, this.result.proposal, this.userName).subscribe((data) => {
         var temp: any = {};
         temp = data;

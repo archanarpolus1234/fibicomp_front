@@ -23,6 +23,7 @@ export class Constants {
     logoutUrl: string;
     outputPath: string;
     outputPathAB: string;
+    outputPathOST: string;
     awardSummaryUrl: string;
     awardHierarchyUrl: string;
     awardTermsAndReportsUrl: string;
@@ -270,8 +271,16 @@ export class Constants {
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
         //this.outputPath = 'http://52.20.110.7:8080/kc-dev';
+        //this.outputPath = 'http://14.140.179.70:1550/kc-dev';
         this.outputPath = 'http://192.168.1.76:8080/kc-dev';
         
+        //this.outputPathAB = 'http://demo.fibiweb.com/AwardBudgetTool';
+        //this.outputPathAB = 'http://14.140.179.70:1550/AwardBudgetTool';
         this.outputPathAB = 'http://192.168.1.76:8080/AwardBudgetTool';
+
+        this.outputPathOST = 'http://192.168.1.76:8080/osr'
+        //this.outputPathOST = 'http://192.168.1.104:8070/osr';
+        //this.outputPathOST = 'http://14.140.179.70:1550/osr';
+        //this.outputPathOST = 'http://demo.fibiweb.com/osr';
     }
 }

@@ -294,7 +294,7 @@
 													</div>
 												</td>
 												<td><label>Deliverables:</label><br>
-													<textarea name="deliverables" class="forTextAreaEntry" placeholder="project deliverables like manpoer training, research outcomes, etc." [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<textarea name="deliverables" class="forTextAreaEntry" placeholder="project deliverables like manpower training, research outcomes, etc." [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.deliverables}}</span>
 													<div class="noDataExists" *ngIf="result?.proposal?.deliverables == null && mode == 'view'">
 														No deliverables for this proposal
