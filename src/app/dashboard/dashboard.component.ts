@@ -47,6 +47,7 @@ export class DashboardComponent implements OnInit {
     propertyName: string;
     reverse: boolean = true;
     outputPath: string;
+    outputPathOST: string;
     userName: string;
     firstName: string;
     lastName: string;
@@ -150,6 +151,7 @@ export class DashboardComponent implements OnInit {
 
     constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService, private proposalCreateService: ProposalCreateEditService ) {
         this.outputPath = this.constant.outputPath;
+        this.outputPathOST = this.constant.outputPathOST;
         if ( !sessionService.canActivate() ) {
             localStorage.setItem('currentUrl', window.location.href);
             this.router.navigate( ['/loginpage'] );
@@ -653,6 +655,8 @@ export class DashboardComponent implements OnInit {
     }
   
     submitToProvost() {
+      this.result.proposal.updateTimeStamp = new Date().getTime();
+      this.result.proposal.updateUser = this.currentUser;
       if (this.selectedProposalId != null && this.proposal != null) {
         this.proposalCreateService.submitForEndorsement(this.selectedProposalId, this.proposal).subscribe((data)=> {
           var temp: any = {};
@@ -670,6 +674,8 @@ export class DashboardComponent implements OnInit {
     }
   
     approveEndorse() {
+      this.result.proposal.updateTimeStamp = new Date().getTime();
+      this.result.proposal.updateUser = this.currentUser;
       this.proposalCreateService.approveByProvost(this.selectedProposalId, this.proposal, this.userName).subscribe((data) => {
         var temp: any = {};
         temp = data;
