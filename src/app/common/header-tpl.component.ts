@@ -30,7 +30,9 @@ export class HeaderComponent implements OnInit {
     isLoggedIn$: Observable<Boolean>;
     isAdmin: boolean = false;
     outputPath: string;
+    IRBOutputPath: string;
     logo: string;
+    currentUser: string;
     showConfiguringOption: boolean = false;
 
     expenditureVolumWidget: boolean = true;
@@ -48,6 +50,7 @@ export class HeaderComponent implements OnInit {
         document.addEventListener( 'mouseup', this.offClickHandler.bind( this ) );
         document.addEventListener( 'mouseup', this.offClickHandlerDashboardConf.bind( this ) );
         this.outputPath = this.constant.outputPath;
+        this.IRBOutputPath = this.constant.IRBOutputPath;
         this.logo = './assets/images/logo-smu.jpg';
         // this.logo = './assets/images/logo.png';
     }
