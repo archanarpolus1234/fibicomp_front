@@ -247,9 +247,10 @@ header a:hover {
 }
 
 .borderBoxHeading {
-	font-size: .8em;
+	font-size: .85em;
 	font-weight: bold;
-	color: #5F5F5F;
+	background-color: #F5F5F5;
+	color: #26A69A;
 	margin: 0 auto;
 	padding: 10px;
 	border-bottom: 1px #E9E9E9 solid;
@@ -898,9 +899,8 @@ input[type="text"] {
 }
 
 .grid2 label {
-	color: #26A69A;
+	color: #616161;
 	margin-bottom: .2em;
-	font-size: 1.1em;
 }
 
 .grid2>tbody>tr:nth-child(odd) td {

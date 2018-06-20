@@ -73,13 +73,14 @@ export class AwardBySponsorPieChartComponent extends GoogleChartService implemen
             }
             this.awardData = google.visualization.arrayToDataTable( this.awardStateList );
             this.awardOptions = {
-                title: 'Award By Sponsor Types',
+                //title: 'Award By Sponsor Types',
+                legend: { position: 'right', alignment: 'center', textStyle: { color: '#424242', fontSize: 13, fontName: 'Segoe UI' } },
                 is3D: true,
-                legend: 'right',
                 colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',
                     '#7BCFFF', '#2AB6F4', '#25C8D9', '#24A095', '#68B96A',
                     '#9CCC66', '#E5F37A', '#FFF15A', '#FDD154', '#FFA827',
-                    '#FF7143', '#8C6E63', '#BDBDBD', '#78909C']
+                    '#FF7143', '#8C6E63', '#BDBDBD', '#78909C'],
+                chartArea: { width: '140%', height: '140%'}
             };
             var statusCode;
             this.awardChart = this.createPiChart( document.getElementById( 'pichart_award' ) );

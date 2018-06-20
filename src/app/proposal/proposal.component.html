@@ -5,7 +5,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
 						<div class="row">
-							<div class="col-6 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">Application&nbsp;#{{result?.proposal?.proposalId}}</span></div>
+							<div class="col-6 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">#{{result?.proposal?.proposalId}}: {{result?.proposal?.title}}</span></div>
 							<div class="col-6 text-right"><span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
 						</div>
 						<div class="row" id="fadeOutMessage">
@@ -101,7 +101,7 @@
 							<h4 class="borderBoxHeading">Grant Call Details</h4>
 							<table class="table table-responsive tableSkin">
 								<tr *ngIf="result?.proposal?.grantCall == null && mode !='view'">
-									<td class="text-right">Name of Grant Call:</td>
+									<td class="text-right">Title of Grant Call:</td>
 									<td class="pull-left"><span><ng2-completer style="border:none; padding:0px"
 															[inputClass]="completerID" placeholder="search a grant call name"
 															[(ngModel)]="selectedGrantCall"
@@ -119,7 +119,7 @@
 								<tbody *ngIf="result?.proposal?.grantCall != null">
 									<tr>
 										<th >Id</th>
-										<th >Name</th>
+										<th >Title</th>
 			                            <th >Funding Agency</th>
 			                            <th >Funding Scheme</th>
 			                            <th >Grant Theme</th>
@@ -228,15 +228,23 @@
 												<option *ngFor="let role of personRolesList">{{role.description}}</option>
 													  </select>
 											</td>
+											<td class="text-right">Department:</td>
+											<td class="pull-left"><span><ng2-completer style="border:none; padding:0px"
+															[inputClass]="completerID" placeholder="search a department name"
+															[(ngModel)]="selectedHomeUnit"
+															[datasource]="homeUnits" [minSearchLength]="0"
+															[ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
+										
+											</td>
 											<td class="text-left">
 												<button class="btnSkin btnSkinPrimary" (click)="addProposalTeamMember()">Add</button>
 											</td>
 										</tr>
 										<tr *ngIf="personWarningFlag">
-											<td colspan="7"><span class="mandatory">{{personWarningMsg}}</span></td>
+											<td colspan="9"><span class="mandatory">{{personWarningMsg}}</span></td>
 										</tr>
 										<tr *ngIf="result?.proposal?.proposalPersons?.length == 0">
-											<td colspan="7"><div class="noDataExists">
+											<td colspan="9"><div class="noDataExists">
 													No members are associated with this proposal
 												</div></td>
 										</tr>
@@ -245,7 +253,8 @@
 	                                            <th >Sl no</th>
 	                                            <th colspan="2">Name</th>
 	                                            <th >Role</th>
-	                                            <th colspan="2">Lead Unit</th>
+	                                            <th colspan="2">Home Unit</th>
+	                                            <th colspan="2">Department</th>
 	                                            <th *ngIf="mode != 'view'">Action</th>
 	                                        </tr>
 	                                        <tr *ngFor="let person of result?.proposal?.proposalPersons; let i = index">
@@ -253,6 +262,7 @@
 	                                            <td colspan="2">{{person.fullName}}</td>
 	                                            <td>{{person?.proposalPersonRole?.description}}</td>
 	                                            <td colspan="2">{{person.leadUnitName}}</td>
+	                                            <td colspan="2">{{person.department}}</td>
 	                                            <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 																				<li><a href="#" data-toggle="modal"
 																					data-target="#deleteMemberModal"
