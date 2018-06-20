@@ -10,12 +10,16 @@
 					<li role="presentation"
 						[ngClass]="{'active': currentPosition == 'SUMMARY'}"><a
 						(click)="showTab('SUMMARY')"> Research Summary </a></li>
+					<li [ngClass]="{'active': currentPosition == 'GRANT'}"><a
+							(click)="showTab('GRANT')"> Grant Call</a></li>
+					<li [ngClass]="{'active': currentPosition == 'SMU_PROPOSAL'}"><a
+								(click)="showTab('SMU_PROPOSAL')"> Application</a></li>
 					<li [ngClass]="{'active': currentPosition == 'AWARD'}"><a
-						(click)="showTab('AWARD')"> Award </a></li>
+						(click)="showTab('AWARD')"> Project </a></li>
 					<!-- <li [ngClass]="{'active': currentPosition == 'PROPOSAL'}"><a
 						(click)="showTab('PROPOSAL')"> Proposal </a></li> -->
-					<li [ngClass]="{'active': currentPosition == 'IRB'}"><a
-						(click)="showTab('IRB')"> IRB{{message}} </a></li>
+					<!-- <li [ngClass]="{'active': currentPosition == 'IRB'}"><a
+						(click)="showTab('IRB')"> IRB{{message}} </a></li> -->
 					<li [ngClass]="{'active': currentPosition == 'IACUC'}"><a
 						(click)="showTab('IACUC')"> IACUC </a></li>
 					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
@@ -24,10 +28,6 @@
 						(click)="showTab('COMMITTEE')"> Committee</a></li>
 					<li [ngClass]="{'active': currentPosition == 'SCHEDULE'}"><a
 						(click)="showTab('SCHEDULE')"> Schedules</a></li>
-					<li [ngClass]="{'active': currentPosition == 'GRANT'}"><a
-							(click)="showTab('GRANT')"> Grant Call</a></li>
-					<li [ngClass]="{'active': currentPosition == 'SMU_PROPOSAL'}"><a
-								(click)="showTab('SMU_PROPOSAL')"> Application</a></li>
 					<li *ngIf="isAdmin" [ngClass]="{'active': currentPosition == 'GRANTREPORT'}"><a
 						(click)="showTab('GRANTREPORT')"> Reports</a></li>
 				</ul>
@@ -82,8 +82,26 @@
 									[tabPosition]="currentPosition"
 									[placeText]="'Search: Disclosure#,  PI Name, Disposition, Status'"></app-elastic-search>
 							</div>
+							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+								*ngIf="currentPosition == 'GRANT'">
+								<app-elastic-search
+									(selected)="autocompleteGrantChanged($event)"
+									(found)="foundItemsChanged($event)"
+									(messageEvent)="receiveResultCard($event)"
+									[tabPosition]="currentPosition"
+									[placeText]="'Search: Grant#, Title, Keyword, Grant Type, Sponsor'"></app-elastic-search>
+							</div>
+							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+								*ngIf="currentPosition == 'SMU_PROPOSAL'">
+								<app-elastic-search [placeText]="'Search: Application#, Title, Keyword, Grant Type, Sponsor'"></app-elastic-search>
+									<!-- (selected)="autocompleteGrantChanged($event)"
+									(found)="foundItemsChanged($event)"
+									(messageEvent)="receiveResultCard($event)"
+									[tabPosition]="currentPosition" -->
+									
+							</div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"
-								*ngIf="currentPosition !== 'SCHEDULE' && currentPosition !== 'COMMITTEE' &&  currentPosition !== 'GRANT' &&  currentPosition !== 'SMU_PROPOSAL' &&  currentPosition !== 'GRANTREPORT'">
+								*ngIf="currentPosition !== 'SCHEDULE' && currentPosition !== 'COMMITTEE' &&  currentPosition !== 'GRANTREPORT'">
 								<a id="advcanceSearch" href="#" class="linkButton"
 									(click)="advanceSearch($event)"> <i class="fa fa-cog"></i>
 									Advanced Search
@@ -130,7 +148,7 @@
 				</div>
 				<div
 					class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard"
-					*ngIf="(resultAward==true)">
+					*ngIf="(showResultCard == true)">
 					<button class="closeResultCard" (click)="closeResultTab()">
 						<i class="fa fa-times"></i>
 					</button>
@@ -173,6 +191,8 @@
 							</span>
 						</div>
 					</div>
+					<!-- grant elastic search  results-->
+
 					<!-- proposal elastic search  results-->
 					<div class="row" *ngIf="currentPosition == 'PROPOSAL'">
 						<div class="col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
@@ -328,16 +348,20 @@
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
 							<h4 class="borderBoxHeading">Expenditures Volume</h4>
-							<areachart></areachart>
+							<areachart *ngIf="isDataExpenditureVolume"></areachart>
+							<div class="noDataExists regularFont" *ngIf="!isDataExpenditureVolume">
+								No expenditure data exists
+							</div>
 						</div>
 					</div>
 					<div *ngIf="dashboardResearchSummaryWidget"
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
+							<h4 class="borderBoxHeading">Research Summary</h4>
 							<table class="table table-responsive tableSkin">
 								<thead>
 									<tr>
-										<th>Research Summary</th>
+										<th>Summary</th>
 										<th class="text-right">Count</th>
 										<th class="text-right">Total Amount</th>
 									</tr>
@@ -360,25 +384,41 @@
 					<div *ngIf="dashboardawardedProposalBySponsorWidget"
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
-							<awarded-proposal-donut-chart></awarded-proposal-donut-chart>
+							<h4 class="borderBoxHeading">Awarded Proposal by Sponsors</h4>
+							<awarded-proposal-donut-chart *ngIf="isDataAwardedProposalBySponsor"></awarded-proposal-donut-chart>
+							<div class="noDataExists regularFont" *ngIf="!isDataAwardedProposalBySponsor">
+								No awarded proposals exist
+							</div>
 						</div>
 					</div>
 					<div *ngIf="dashboardAwardBysponsorTypesWidget"
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
-							<award-by-sponsor-piechart></award-by-sponsor-piechart>
+							<h4 class="borderBoxHeading">Projects by Sponsor Types</h4>
+							<award-by-sponsor-piechart *ngIf="isDataAwardBySponsor"></award-by-sponsor-piechart>
+							<div class="noDataExists regularFont" *ngIf="!isDataAwardBySponsor">
+								No awards by sponsor type exist
+							</div>
 						</div>
 					</div>
 					<div *ngIf="dashboardinProgressproposalBySponsorWidget"
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
-							<in-progress-proposal-donut-chart></in-progress-proposal-donut-chart>
+							<h4 class="borderBoxHeading">In Progress Proposals by Sponsors</h4>
+							<in-progress-proposal-donut-chart *ngIf="isDataInProgressProposal"></in-progress-proposal-donut-chart>
+							<div class="noDataExists regularFont" *ngIf="!isDataInProgressProposal">
+								No In Progress porposals exist
+							</div>
 						</div>
 					</div>
 					<div *ngIf="dashboardproposalBySponsorTypesWidget"
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
-							<proposal-by-sponsor-piechart></proposal-by-sponsor-piechart>
+							<h4 class="borderBoxHeading">Proposal by Sponsor Types</h4>
+							<proposal-by-sponsor-piechart *ngIf="isDataProposalBySponsor"></proposal-by-sponsor-piechart>
+							<div class="noDataExists regularFont" *ngIf="!isDataProposalBySponsor">
+								No In Progress porposals exist
+							</div>
 						</div>
 					</div>
 				</div>
@@ -389,26 +429,22 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'AWARD')">
 				<div class="row">
-					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 text-left">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DAwardDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'">
-								<i class="fa fa-plus"></i> Create Award
+								<i class="fa fa-plus"></i> Create New Project
 						</a>
 						</span>
-					</div>
-					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 text-center">
-								<span class="linkButtonGroup" *ngIf="adminStatus == 'true' || provost == 'true' || grantManager == 'true'"> <a
-									[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/dashboard' ">
-										<i class="fa fa-eye"></i> View Variation Request
-								</a>
-								</span>
-					</div>
-					<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 text-right">
-								<span class="linkButtonGroup"> <a
-									[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/createform' ">
-										<i class="fa fa-plus"></i> Create Project Variation Request
-								</a>
-								</span>
+						<span class="linkButtonGroup" *ngIf="adminStatus == 'true' || provost == 'true' || grantManager == 'true'"> <a
+							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/dashboard' ">
+								<i class="fa fa-eye"></i> View Variation Request
+						</a>
+						</span>
+						<span class="linkButtonGroup"> <a
+							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/createform' ">
+								<i class="fa fa-plus"></i> Create Project Variation Request
+						</a>
+						</span>
 					</div>
 				</div>
 				<div class="borderBox"
@@ -933,15 +969,16 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="(currentPosition == 'GRANT')">
 			<div class="row">
-					
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup" *ngIf = "isAdmin == true"> <a
 							[href]="" (click)="loadGrants($event,'create')">
-								<i class="fa fa-plus pointer" ></i> Create Grant
+								<i class="fa fa-plus pointer" ></i> Create New Grant
 						</a>
 						</span>
+					</div>
 				</div>
 				
-				<div class="borderBox" *ngIf="serviceRequestList.length!=0">
+				<div class="borderBox" *ngIf="serviceRequestList?.length!=0">
 					<table class="table table-responsive tableSkin" >
 						<thead>
 							
@@ -950,7 +987,7 @@
 								<th (click)="sortResult('grantCallId',currentPosition)"
 								title="Click to sort by Grant Id">Id<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallId')}"></span>
 								</th>
-								<th >Name
+								<th >Title
 								</th>
 								<th>Description
 								</th>
@@ -998,7 +1035,7 @@
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a title="Open"
 							routerLink='/proposal' [queryParams]="{mode:'create'}"><i
-								class="fa fa-plus"></i> Create Application</a>
+								class="fa fa-plus"></i> Create New Application</a>
 						</span>
 					</div>
 						

@@ -280,12 +280,11 @@ export class Constants {
         this.outputPathAB = 'http://192.168.1.76:8080/AwardBudgetTool';
 
         this.outputPathOST = 'http://192.168.1.76:8080/osr'
-       
         //this.outputPathOST = 'http://192.168.1.104:8070/osr';
         //this.outputPathOST = 'http://14.140.179.70:1550/osr';
         //this.outputPathOST = 'http://demo.fibiweb.com/osr';
 
-       // this.IRBOutputPath = this.baseUrl+':8080/mit-irb/login#/irb/dashboard?username=admin&password='
-        this.IRBOutputPath = this.baseUrl+'/mit-irb/login#/irb/dashboard'
+        this.IRBOutputPath = 'http://192.168.1.76:8080/mit-irb/login#/irb/dashboard';
+        //this.IRBOutputPath = 'http://demo.fibiweb.com/mit-irb/login#/irb/dashboard';
     }
 }

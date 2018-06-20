@@ -164,6 +164,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     provost: string;
     finalStatus: string = null;
     userName: string;
+    homeUnits: any = [];
+    selectedHomeUnit: string;
   
     public onDestroy$ = new Subject<void>();
 
@@ -233,13 +235,13 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.personRoleSelected = this.select;
         this.budgetCategorySelected = this.select;
         this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
-        this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
         this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
         this.selectedSponsorType = this.select;
         this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
         this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
         this.areaList = this.completerService.local( this.result.proposalExcellenceAreas, 'description', 'description' );
         this.protocolsList = this.completerService.local( this.result.protocols, 'title', 'title' );
+        this.homeUnits =  this.completerService.local( this.result.homeUnits, 'unitName', 'unitName' );
 
         this.selectedSponsorName = this.select;
         this.fundingStartDate = null;
@@ -337,6 +339,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' );
             this.grantCallList = this.completerService.local( this.result.grantCalls, 'grantCallName', 'grantCallName' );
+            this.homeUnits =  this.completerService.local( this.result.homeUnits, 'unitName', 'unitName' )
             this.selectedSponsorType = this.select;
 
             // set default grantCallType to Others if no grant call is associated with the proposal
@@ -632,6 +635,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 tempObj.leadUnitNumber = null;
                 tempObj.leadUnitName = this.selectedMember.organization;
             }
+            tempObj.department = this.selectedHomeUnit;
 
             this.personRolesList.forEach(( value, index ) => {
                 if ( value.description == this.personRoleSelected ) {
@@ -664,6 +668,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 this.memberTypeSelected = 'Employee';
                 this.memberTypeChanged();
                 this.personRoleSelected = this.select;
+                this.selectedHomeUnit = null;
 
                 this.personWarningFlag = false;
                 this.personWarningMsg = null;
@@ -1321,8 +1326,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.sendObject.proposal = this.result.proposal;
         this.sendObject.approverStopNumber = this.result.approverStopNumber;
         this.sendObject.approveComment = this.approveComments;
-        this.sendObject.updateTimeStamp = new Date().getTime();
-        this.sendObject.updateUser = this.currentUser;
         this.proposalCreateService.approveDisapproveProposal( this.sendObject, this.uploadedFile ).subscribe( data => {
             var temp: any = {};
             temp = data;

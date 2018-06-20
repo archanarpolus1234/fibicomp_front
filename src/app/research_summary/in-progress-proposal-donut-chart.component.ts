@@ -71,12 +71,23 @@ export class InProgressProposalDonutChartComponent extends GoogleChartService im
             }
             this.proposalData = google.visualization.arrayToDataTable( this.proposalStateList );
             this.proposalOptions = {
-                title: 'In Progress Proposals By Sponsors',
+                //title: 'In Progress Proposals By Sponsors',
                 colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',
                     '#7BCFFF', '#2AB6F4', '#25C8D9', '#24A095', '#68B96A',
                     '#9CCC66', '#E5F37A', '#FFF15A', '#FDD154', '#FFA827',
                     '#FF7143', '#8C6E63', '#BDBDBD', '#78909C'],
                 pieHole: 0.2,
+               /* slices: {
+                    2: { offset: 0.1 },
+                    3: { offset: 0.1 },
+                    4: { offset: 0.2 },
+                    6: { offset: 0.1 },
+                    8: { offset: 0.1 },
+                    9: { offset: 0.1 },
+                },*/
+                pieStartAngle: 90,
+                chartArea: { width:'120%', height:'120%'},
+                legend: { position: 'right', alignment: 'center', textStyle: {color: '#424242', fontSize: 13, fontName: 'Segoe UI'} },
             };
             this.proposalChart = this.createPiChart( document.getElementById( 'donut_proposal_chart' ) );
             this.proposalChart.draw( this.proposalData, this.proposalOptions );

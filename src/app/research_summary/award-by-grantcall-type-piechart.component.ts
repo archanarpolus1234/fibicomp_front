@@ -63,7 +63,8 @@ export class AwardByGrantcallTypePieChartComponent extends GoogleChartService im
             this.piechartDrawData = google.visualization.arrayToDataTable( this.piechartDrawList );
             this.piechartOptions = {
                 title: '',
-                legend: 'right',
+                legend: { position: 'right', alignment: 'center', textStyle: {color: '#424242', fontSize: 13, fontName: 'Segoe UI'} },
+                chartArea: { width:'120%', height:'120%'},
                 is3D: true,
                 colors: ['#E25B5F', '#EC407A', '#C76FD7', '#7E57C2', '#5E6ABE',
                     '#7BCFFF', '#2AB6F4', '#25C8D9', '#24A095', '#68B96A',

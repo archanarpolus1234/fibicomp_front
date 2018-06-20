@@ -5,10 +5,10 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="result.grantCall!={}">
 				<br>
 				<div class="row">
-					<div class="col-6 text-left"><span class="topHeading">Grant Call <span *ngIf="grantId!=null">#{{grantId}}</span></span></div>
+					<div class="col-6 text-left"><span *ngIf="grantId != null" class="topHeading">#{{grantId}} : {{result?.grantCall?.grantCallName}}</span></div>
 					<div class="col-6 text-right ">
 					<span *ngIf="result?.grantCall?.grantCallStatus?.description == 'Open'" class = "grantCall_create_proposal_link">
-					<button class="grantCallCreateProposalLink bg-white" (click)="navigate($event, 'create')">Create Proposal</button>
+					<button class="grantCallCreateProposalLink bg-white" (click)="navigate($event, 'create')">Create Application</button>
 					</span>&nbsp;<i class="fa fa-bell fa-large mr-4 fibiDefaultColor"></i></div>
 				</div>
 				<br>
@@ -19,12 +19,23 @@
 					<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
 						<div class="borderBox">
 							<h4 class="borderBoxHeading">Overview</h4> <p *ngIf = "showWarning"><span class="mandatory warningMessage">*Please fill all the mandatory fields marked</span></p>
+							
 							<!-- <p class="float-right" *ngIf = "showSavedSuccessfully"><span class="mandatory warningMessage"></span></p> -->
 							<div class="pullSide">
 								<table class="table tableSkin grid2">
 									<tbody>
+										<!-- <tr>
+											<td colspan="4">
+												<label><span *ngIf="mode != 'view'" class="mandatory">*</span>Description:</label><br>
+												<textarea  placeholder = "Description" [(ngModel)] = "result.grantCall.description" [ngClass]="editAreaClass" class="forTextAreaEntry" *ngIf="mode != 'view'" [disabled]="mode == 'view' ? true : false"></textarea>
+												<span *ngIf="mode == 'view'">{{result?.grantCall?.description}}</span>
+												<div class="noDataExists" *ngIf="result?.grantCall?.description == null && mode == 'view'">
+													&thinsp;No descriptions for this grant
+												</div>
+											</td>
+										</tr> -->
 										<tr>
-											<td ><label><span class="mandatory">*</span>Type:</label><br><select *ngIf="mode!='view'; else view_type" [(ngModel)]="grantCallTypeSelected" [ngClass]="editClass"  [disabled]="mode == 'view' ? true : false" (change) = "grantCallTypeChange($event.target.value)">
+											<td><label><span class="mandatory">*</span>Type:</label><br><select *ngIf="mode!='view'; else view_type" [(ngModel)]="grantCallTypeSelected" [ngClass]="editClass"  [disabled]="mode == 'view' ? true : false" (change) = "grantCallTypeChange($event.target.value)">
 												<option>Select</option>
 												<option *ngFor="let type of result?.grantCallTypes" (value)="type">
 												{{type.description}}
@@ -32,35 +43,33 @@
 											</select>
 											<ng-template #view_type>{{result?.grantCall?.grantCallType?.description}}</ng-template>
 											</td>
-											<td><label><span class="mandatory">*</span>Status:</label><br> 
-												<span *ngIf = "result?.grantCall?.grantCallId!=null;else view_status">&nbsp;&nbsp;{{result?.grantCall?.grantCallStatus?.description}}</span>
-												<ng-template #view_status>{{result?.grantCall?.grantCallStatus?.description}}</ng-template>
-											</td>
+											<td colspan="2"><label><span class="mandatory">*</span>Title:</label><br><input type="text" placeholder="Name" [(ngModel)] = "result.grantCall.grantCallName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
+											
 											<td><label><span class="mandatory">*</span>Opening Date:</label><br><input type="text" placeholder="Opening Date" [(ngModel)] = "result.grantCall.openingDate" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [owlDateTimeTrigger]="openingDt" [owlDateTime]="openingDt"  class="committeeBox "/>&nbsp;
 												<span *ngIf="mode != 'view'" class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="openingDt"></span> <owl-date-time #openingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()" ></owl-date-time></td>
-												<td><label><span class="mandatory">*</span>Closing Date:</label><br><input type="text" placeholder="Closing Date" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass"  [disabled]="mode == 'view' ? true : false" [owlDateTimeTrigger]="closingDt" [owlDateTime]="closingDt"  class="committeeBox "/>&nbsp;
-													<span *ngIf="mode != 'view'" class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="closingDt"></span> <owl-date-time #closingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></td>
+											<td><label><span class="mandatory">*</span>Closing Date:</label><br><input type="text" placeholder="Closing Date" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass"  [disabled]="mode == 'view' ? true : false" [owlDateTimeTrigger]="closingDt" [owlDateTime]="closingDt"  class="committeeBox "/>&nbsp;
+												<span *ngIf="mode != 'view'" class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="closingDt"></span> <owl-date-time #closingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></td>
+											<td><label>Status:</label><br/>{{result?.grantCall?.grantCallStatus?.description}}</td>
 										</tr>
 										<tr  *ngIf="isDateWarningText"><span class="mandatory font">*{{dateWarningText}}</span>
-
 										</tr>
 										<tr>
-											<td colspan="1"><label><span class="mandatory">*</span>Name:</label><br><textarea type="text" placeholder="Name" [(ngModel)] = "result.grantCall.grantCallName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
-											<td><label><span class="mandatory">*</span>Lead Unit:</label>&nbsp;&nbsp;<br>
+											<td colspan="4"><label><span class="mandatory">*</span>Description:</label><br><textarea rows="2" placeholder = "Description" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.description" class="forTextAreaEntry" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+															<span *ngIf="mode == 'view'">{{result?.grantCall?.description}}</span>
+											</td>
+											<td><label><span class="mandatory">*</span>Grant Theme</label><input type="text" [(ngModel)] = "result.grantCall.grantTheme" placeholder="Grant Theme" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></td>
+											<td><label>Lead Unit:</label>&nbsp;&nbsp;<br>
 												<ng2-completer *ngIf="mode!='view';else viewHomeUnitName" title="Add Unit" 
 													[inputClass]="completerID"
-													[(ngModel)]="selectedHomeUnit" placeholder="Home Units"
+													[(ngModel)]="selectedHomeUnit" placeholder="lead unit"
 													[datasource]="homeUnits" [minSearchLength]="0"
 													(selected)="homeUnitChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0" [disabled]="mode == 'view' ? true : false"></ng2-completer>
 												<ng-template #viewHomeUnitName>{{result.grantCall.homeUnitName}}</ng-template>
-												</td>
-											<td colspan="1"><label><span class="mandatory">*</span>Description:</label><br><textarea  placeholder = "Description" [(ngModel)] = "result.grantCall.description" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
-											<td><label><span class="mandatory">*</span>Grant Theme</label><input type="text" [(ngModel)] = "result.grantCall.grantTheme" placeholder="Grant Theme" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></td>
+											</td>
 										</tr>
                                         <tr>
                                             <td ><label><span class="mandatory">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="Max Budget" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td>
 											<td ><label>Quantum:</label><br><input type="number" [(ngModel)] = "result.grantCall.quantum" [placeholder]="(result.grantCall.quantum==null && mode!='view')?'Quantum':'0'"   [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/>
-												
 											</td>
 											<td colspan="2"><label>Keywords:</label>&nbsp;&nbsp;<br>
 												<ng2-completer  title="Add Keyword" 
@@ -68,20 +77,19 @@
 													[(ngModel)]="selectedKeyword" placeholder="Keyword"
 													[datasource]="keywordsList" [minSearchLength]="0"
 													(selected)="keywordChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0" [disabled]="mode == 'view' ? true : false" *ngIf="mode!='view';else showNoKeyword"></ng2-completer>
-													<ng-template #showNoKeyword><input type="text" *ngIf="result?.grantCall?.grantCallKeywords?.length==0" disabled=true placeholder="(result?.grantCall?.grantCallKeywords?.length!=0)?'':'No keywords are present for this grant'" [ngClass]="editClass" /></ng-template>
-													<ul *ngIf="result?.grantCall?.grantCallKeywords?.length!=0" class="d-inline-flex p-2" style="word-break: break-all;"><li *ngFor="let keyword of result?.grantCall?.grantCallKeywords;let i = index" class="pr-4"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
+														<span *ngIf="result?.grantCall?.grantCallKeywords?.length == 0 && mode == 'view'" class="noDatExists">No keywords are present for this grant</span>
+													<ul *ngIf="result?.grantCall?.grantCallKeywords?.length != 0" class="d-inline-flex p-2" style="word-break: break-all;"><li *ngFor="let keyword of result?.grantCall?.grantCallKeywords;let i = index" class="pr-4"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
 											</td>
-										<!-- List for showing added keywords -->
-										
-										</tr>
+											<td ><label>Application Procedure:</label><br>&nbsp;<textarea *ngIf="mode != 'view'" [placeholder]="(result.grantCall.applicationProcedure==null && mode!='view')?'Procedure Details': ''" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editClass"></textarea>
+														<span *ngIf="mode == 'view'">{{result?.grantCall?.applicationProcedure}}</span>
+											</td>
+                                            <td ><label>Other Information:</label><br>&nbsp;<textarea *ngIf="mode != 'view'" [placeholder] = "(result.grantCall.otherInformation==null && mode!='view')?'Other Information': ''" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editClass" ></textarea>
+                                            			<span *ngIf="mode == 'view'">{{result?.grantCall?.otherInformation}}</span>
+                                            </td>
+                                        </tr>	
 										<tr  *ngIf="keyWordWarningMessage!=null"><td><span class="mandatory">*{{keyWordWarningMessage}}</span></td></tr>
-										
-                                        <tr>
-                                            <td colspan="2"><label>Application Procedure:</label><br><textarea [placeholder] = "(result.grantCall.applicationProcedure==null && mode!='view')?'Procedure Details': ''" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
-                                            <td colspan="2"><label>Other Information:</label><br><textarea [placeholder] = "(result.grantCall.otherInformation==null && mode!='view')?'Other Information': ''" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></textarea></td>
-                                        </tr>
-                                        <tr *ngIf="grantCallTypeSelected == 'External'">
-                                        	<td colspan="8"><label>External Weblink:</label><br><input type="text" placeholder="Web Link" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td> 
+										 <tr *ngIf="grantCallTypeSelected == 'External'">
+                                        	<td colspan="6"><label>External Weblink:</label><br><input type="text" placeholder="Web Link" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"/></td> 
                                         </tr>
 
 									</tbody>
@@ -90,72 +98,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="borderBox col-12">
-					<h4 class="borderBoxHeading">Point of Contact</h4>
-					<button id="pointOfContactAddBtn" class="addBtn font hoverColor" (click)="showaddPointOfContact()" *ngIf="mode != 'view'">
-						<i class="fa fa-plus"></i>
-					</button>
-					<table class="table table-responsive tableSkin grid2">
-						<tr id="addPointOfContactRow" *ngIf="showAddPointOfContact">
-							<td>
-								<label>
-									Name:
-								</label> <br>
-								<input type="text" [ngClass]="editClass" placeholder="Name" [(ngModel)] = "pointOfContactObject.fullName" [disabled]="mode == 'view' ? true : false">
-								
-							</td>
-							<td>
-								<label>
-									Designation:
-								</label> <br>
-								<input type="text" [ngClass]="editClass" placeholder="Designation" [(ngModel)] = "pointOfContactObject.designation" [disabled]="mode == 'view' ? true : false">
-							</td>
-							<td>
-								<label>
-									Email:
-								</label> <br>
-								<input type="text" [ngClass]="editClass" placeholder="Email" [(ngModel)] = "pointOfContactObject.email" [disabled]="mode == 'view' ? true : false" >
-							</td>
-							<td>
-								<label>
-									Phone:
-								</label> <br>
-								<input type="number" [ngClass]="editClass" placeholder="Phone" [(ngModel)] = "pointOfContactObject.mobile" [disabled]="mode == 'view' ? true : false">
-							</td>
-							<td colspan="2">
-								<button class="btnSkin btnSkinPrimary"  (click)="addPointOfContact(pointOfContactObject)">Add</button>
-							</td>
-						</tr>
-						
-						<tr *ngIf="this.result?.grantCall?.grantCallContacts?.length!=0">
-							<th title="Click to sort by Sl no">Sl No</th>
-							<th title="Click to sort by Name">Name</th>
-							<th title="Click to sort by Designation">Designation</th>
-							<th title="Click to sort by Email">Email</th>
-							<th title="Click to sort by Phone">Phone</th>
-							<th title="" *ngIf="mode != 'view'">Action</th>
-
-						</tr>
-						<tr *ngFor = "let pointOfContact of result?.grantCall?.grantCallContacts; let i = index">
-                            <td>{{i+1}}</td>
-							<td>{{pointOfContact.fullName}}</td>
-							<td>{{pointOfContact.designation}}</td>
-							<td>{{pointOfContact.email}}</td>
-							<td>{{pointOfContact.mobile}}</td>
-							<td *ngIf="mode != 'view'">
-								<ul class="actionButtonGroup">
-									<li><a href="#" data-toggle="modal"
-										data-target="#deletePointOfContact"
-										(click)="tempSavePointOfContact($event,pointOfContact,i)"><i
-											class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
-								</ul>
-							</td>
-							
-						</tr>
-						<div *ngIf="!valid"><span class="mandatory warningMessage">*{{validationError}}</span></div>
-						<tr *ngIf="pocDuplicationMessage"><span class="mandatory warningMessage">*Email already added</span></tr>
-					</table> 
-                                </div>
+				
                                 <div class="borderBox">
                                                 <h4 class="borderBoxHeading">Funding Agency Information</h4>
                                                 <div class="pullSide">
@@ -202,9 +145,91 @@
                                                       
                                                 </div>
                                  </div>   
-                                 
-                                         <div class="row">
-                                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                                 <div class="borderBox col-12">
+					<h4 class="borderBoxHeading">Point of Contact</h4>
+					<button id="pointOfContactAddBtn" class="addBtn font hoverColor" (click)="showaddPointOfContact()" *ngIf="mode != 'view'">
+						<i class="fa fa-plus"></i>
+					</button>
+					<table class="table table-responsive tableSkin grid2">
+						<tr id="addPointOfContactRow" *ngIf="showAddPointOfContact">
+							<td>
+								<label>Is SMU Person:</label><br/>
+								<input class="text-center" #isSMUPersonCheck type="checkbox" [checked]="isSMUChecked" (change)="personTypeChanged(isSMUPersonCheck.checked)">
+							</td>
+							<td>
+								<label>
+									Name:
+								</label> <br>
+								<input type="text" *ngIf="!isSMUChecked" [ngClass]="editClass" placeholder="Name" [(ngModel)] = "pointOfContactObject.fullName" [disabled]="mode == 'view'">
+								<div class="searchBox memberSearchBox" *ngIf="isSMUChecked">
+													<input type="text" placeholder="search a person" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+														[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
+														class="searchButton" (click)="clearSearchBox($event)"><i
+														[ngClass]="iconClass"></i></a>
+													<div class="sb-seachresults"  *ngIf="searchActive">
+														<ul class="sb-results-dropdown-menu text-left">
+															<li *ngFor="let result of this.elasticSearchresults "
+																(mousedown)="selected(result)"><span
+																[innerHTML]="result.label"></span></li>
+														</ul>
+													</div>
+												</div>
+							</td>
+							<td>
+								<label>
+									Designation:
+								</label> <br>
+								<input type="text" [ngClass]="editClass" placeholder="Designation" [(ngModel)] = "pointOfContactObject.designation" [disabled]="mode == 'view'">
+							</td>
+							<td>
+								<label>
+									Email:
+								</label> <br>
+								<input type="text" [ngClass]="pocClass" [(ngModel)] = "pointOfContactObject.email" [disabled]="mode == 'view' || isSMUChecked" >
+							</td>
+							<td>
+								<label>
+									Phone:
+								</label> <br>
+								<input *ngIf="isSMUChecked" type="text" [ngClass]="pocClass" [(ngModel)] = "pointOfContactObject.mobile" [disabled]="mode == 'view' || isSMUChecked">
+								<input type="text" *ngIf="!isSMUChecked" [ngClass]="pocClass" [(ngModel)] = "pointOfContactObject.mobile" [disabled]="mode == 'view' || isSMUChecked">
+							</td>
+							<td colspan="2"> <br>
+								<button class="btnSkin btnSkinPrimary"  (click)="addPointOfContact(pointOfContactObject)">Add</button>
+							</td>
+						</tr>
+						
+						<tr *ngIf="this.result?.grantCall?.grantCallContacts?.length!=0">
+							<th title="Click to sort by Sl no">Sl No</th>
+							<th title="Click to sort by Name">Name</th>
+							<th title="Click to sort by Designation">Designation</th>
+							<th title="Click to sort by Email">Email</th>
+							<th title="Click to sort by Phone">Phone</th>
+							<th title="" *ngIf="mode != 'view'">Action</th>
+
+						</tr>
+						<tr *ngFor = "let pointOfContact of result?.grantCall?.grantCallContacts; let i = index">
+                            <td>{{i+1}}</td>
+							<td>{{pointOfContact.fullName}}</td>
+							<td>{{pointOfContact.designation}}</td>
+							<td>{{pointOfContact.email}}</td>
+							<td>{{pointOfContact.mobile}}</td>
+							<td *ngIf="mode != 'view'">
+								<ul class="actionButtonGroup">
+									<li><a href="#" data-toggle="modal"
+										data-target="#deletePointOfContact"
+										(click)="tempSavePointOfContact($event,pointOfContact,i)"><i
+											class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
+								</ul>
+							</td>
+							
+						</tr>
+						<div *ngIf="!valid"><span class="mandatory warningMessage">*{{validationError}}</span></div>
+						<tr *ngIf="pocDuplicationMessage"><span class="mandatory warningMessage">*Same person already added</span></tr>
+					</table> 
+                   </div>
+                         <div class="row">
+                                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                      <div class="borderBox">
 
                                                                 <h4 class="borderBoxHeading">Area of Research</h4>

@@ -15,7 +15,7 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
 } )
 
 export class HeaderComponent implements OnInit {
-    morethanThreeNotification: boolean;
+    morethanThreeNotification: boolean = false;
     docId: string;
     notificationList: any[];
     result: any = {};

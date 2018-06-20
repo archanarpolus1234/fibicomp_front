@@ -1,19 +1,22 @@
-import { Component, OnDestroy,ChangeDetectionStrategy,ChangeDetectorRef  } from '@angular/core';
+import { Component, OnDestroy,ChangeDetectionStrategy,ChangeDetectorRef, NgZone  } from '@angular/core';
 import { ActivatedRoute,Router } from '@angular/router'
 import {Subscription} from 'rxjs/Subscription';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 import { Subject } from 'rxjs';
 import { Console } from '@angular/core/src/console';
+import { FormsModule, FormGroup, FormControl, FormControlName } from '@angular/forms';
 
 import { GrantService } from "./grant.service";
 import { SessionManagementService } from '../session/session-management.service';
+import { CommitteeMemberEmployeeElasticService } from '../elastic-search/committee-members-employees-elastic-search.service';
 
 
 @Component( {
     selector: 'grant',
     templateUrl: 'grant.component.html',
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css'],
+    providers: [ CommitteeMemberEmployeeElasticService ],
     changeDetection: ChangeDetectionStrategy.Default
 } )
 
@@ -21,6 +24,8 @@ export class GrantComponent {
     mode: string = "create";
     grantId: string ="";
     editClass: string = "committeeBox";
+    pocClass: string = 'committeeBoxNotEditable';
+    editAreaClass: string = 'scheduleBoxes';
     addResearch: boolean = false;
     showAddAttachment: boolean = false;
     isEligibleAddopen: boolean = false;
@@ -88,11 +93,19 @@ export class GrantComponent {
     showSavedSuccessfully: boolean =false;
     homeUnits: any = [];
     selectedHomeUnit: string;
+    isSMUChecked: boolean = true;
+    searchActive: boolean = false;
+    searchTextModel: string;
+    message: string;
+    searchText: FormControl = new FormControl( '' );
+    elasticSearchresults: any[] = [];
+    hits_source: any;
+    fullName: any;
+    prncpl_id: string;
+    _results: any;
+    iconClass: string;
 
-    
-    
-
-    constructor( public changeRef :ChangeDetectorRef,public completerService : CompleterService, public router : Router,public route : ActivatedRoute, private grantService: GrantService, private sessionService: SessionManagementService) {
+    constructor( public changeRef :ChangeDetectorRef, public _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public completerService : CompleterService, public router : Router,public route : ActivatedRoute, private grantService: GrantService, private sessionService: SessionManagementService) {
         if ( !sessionService.canActivate() ) {
             localStorage.setItem('currentUrl', window.location.href);
             this.router.navigate( ['/loginpage'] );
@@ -106,6 +119,8 @@ export class GrantComponent {
         if(this.grantId==null) {
             this.mode='create';
             this.editClass="committeeBox";
+            this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
+            this.editAreaClass = 'scheduleBoxes';
             this.loadGrantInitData();
         } else {
             this.grantService.loadGrantById(this.grantId).takeUntil(this.onDestroy$).subscribe(response=>{ 
@@ -114,7 +129,10 @@ export class GrantComponent {
                         
                         if(this.result.grantCall.grantCallStatus.description == 'Draft') {
                             this.mode = 'edit';
-                            this.editClass="committeeBox";this.dateValidation();
+                            this.editClass="committeeBox";
+                            this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
+                            this.editAreaClass = 'scheduleBoxes';
+                            this.dateValidation();
                             if(this.result.grantCall.sponsorCode!=null) {
                                 this.grantService.fetchSponsorsBySponsorType(this.result.grantCall.sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
                                     var temp :any= {};
@@ -150,6 +168,8 @@ export class GrantComponent {
                         } else {
                             this.mode='view';
                             this.editClass="committeeBoxNotEditable";
+                            this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
+                            this.editAreaClass = 'scheduleBoxes';
                             this.selectedHomeUnit = this.result.grantCall.homeUnitName;
                         }
                         
@@ -162,6 +182,78 @@ export class GrantComponent {
         }
      
     }
+    
+    ngAfterViewInit() {
+        this.searchText
+            .valueChanges
+            .map(( text: any ) => text ? text.trim() : '' )
+            .do( searchString => searchString ? this.message = 'searching...' : this.message = '' )
+            .debounceTime( 500 )
+            .distinctUntilChanged()
+            .switchMap( searchString => {
+                return new Promise<Array<String>>(( resolve, reject ) => {
+                        this._ngZone.runOutsideAngular(() => {
+                            this.committeeMemberEmployeeElasticService.search( searchString )
+                                .then(( searchResult ) => {
+                                    this.elasticSearchresults = [];
+                                    this._ngZone.run(() => {
+                                        this.hits_source = ( ( searchResult.hits || {} ).hits || [] )
+                                            .map(( hit ) => hit._source );
+
+                                        this.hits_source.forEach(( elmnt, j ) => {
+                                            this.prncpl_id = this.hits_source[j].prncpl_id;
+                                            this.fullName = this.hits_source[j].full_name;
+                                            this.elasticSearchresults.push( {
+                                                label: this.fullName,
+                                                id: this.prncpl_id,
+                                                data: this.hits_source[j]
+                                            } );
+                                        } );
+                                        if ( this.elasticSearchresults.length > 0 ) {
+                                            this.message = '';
+                                        } else if ( this.searchTextModel && this.searchTextModel.trim() ) {
+                                            this.message = '';
+                                        }
+                                        resolve( this.elasticSearchresults );
+                                    } );
+
+                                } )
+                                .catch(( error ) => {
+                                    alert( "catch error" );
+                                } );
+                        } );
+                } );
+            } )
+            .catch( this.handleError )
+            .takeUntil( this.onDestroy$ ).subscribe( this._results );
+    }
+
+    handleError(): any {
+        this.message = 'something went wrong';
+    }
+
+    selected( value ) {
+        this.searchTextModel = value.label;
+        this.pointOfContactObject = {};
+        this.pointOfContactObject.fullName = value.data.full_name;
+        this.pointOfContactObject.email = value.data.email_addr;
+        this.pointOfContactObject.mobile = value.data.phone_nbr;
+        this.pointOfContactObject.designation = '';
+        this.message = '';
+    }
+
+    //elastic search value change
+    onSearchValueChange() {
+        this.iconClass = this.searchTextModel ? 'fa fa-times fa-med' : '';
+        this.elasticSearchresults = [];
+    }
+
+    clearSearchBox( e ) {
+        e.preventDefault();
+        this.searchTextModel = '';
+        this.pointOfContactObject = {};
+    }
+
 
     differenceBetweenDates( startDate, endDate ) {
         if(startDate == null ) {
@@ -241,7 +333,7 @@ export class GrantComponent {
     
     addPointOfContact(pointOfContactObject) {
         this.pocDuplicationMessage = false;
-        if(this.validateEmailAndMobile(this.pointOfContactObject.email.trim(),this.pointOfContactObject.mobile) && this.pointOfContactObject.fullName.trim().length>0 && this.pointOfContactObject.designation.trim().length>0 ) {
+        if(this.validateEmailAndMobile(this.pointOfContactObject.email.trim(),this.pointOfContactObject.mobile) && this.pointOfContactObject.fullName.trim().length>0 ) {
             if(this.result.grantCall.grantCallContacts.length!=0) {
             for(let poc of this.result.grantCall.grantCallContacts) {
                 if(poc.email.trim() == this.pointOfContactObject.email.trim()) {
@@ -254,6 +346,7 @@ export class GrantComponent {
                 this.pointOfContactObject.personId = "";
             this.result.grantCall.grantCallContacts.push(pointOfContactObject);
             this.pointOfContactObject = {};
+            this.searchTextModel = '';
             this.valid = true;
             this.changeRef.detectChanges();
             } 
@@ -264,7 +357,7 @@ export class GrantComponent {
        
     }
     validateEmailAndMobile(mail,mobile) {
-		if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(mail) && String(mobile).length >= 10)
+		if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(mail) )
 		{
 		  return (true)
 		}
@@ -659,7 +752,7 @@ export class GrantComponent {
 
     saveGrant() {
         
-        if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.selectedHomeUnit==null || this.result.grantCall.grantTheme==null) {
+        if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.result.grantCall.grantTheme==null) {
             var scrollTop;
             this.showWarning = true;
             this.showSavedSuccessfully = false;
@@ -765,7 +858,7 @@ export class GrantComponent {
 
     publishCall() {
                     
-        if(this.result.grantCall.grantCallId ==null || this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.selectedHomeUnit==null || this.result.grantCall.grantTheme==null ) {
+        if(this.result.grantCall.grantCallId ==null || this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.result.grantCall.grantTheme==null ) {
             var scrollTop;
             //Scroll to Top Javascript Function
             this.showWarning = true;
@@ -789,6 +882,8 @@ export class GrantComponent {
                 this.result.grantCall = temp.grantCall;
                 this.mode='view';
                 this.editClass="committeeBoxNotEditable";
+                this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
+                this.editAreaClass = 'scheduleBoxes';
             });
         }
         
@@ -807,4 +902,14 @@ export class GrantComponent {
             }
         }
     }
+
+    personTypeChanged(value) {
+        this.isSMUChecked = value;
+        if ( this.isSMUChecked ) {
+            this.pocClass = 'committeeBoxNotEditable';
+        } else {
+            this.pocClass = 'committeeBox';
+        }
+    }
+    
 }

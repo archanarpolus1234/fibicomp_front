@@ -15,6 +15,7 @@ import { DashboardData } from '../dashboard/dashboard-data.service';
 import { ExpandedviewService } from '../research_summary/expanded-view.service';
 import { DashboardConfigurationService } from '../common/dashboard-configuration-service';
 import { ProposalCreateEditService } from "../proposal/proposal-create-view.service";
+import { ISubscription } from "rxjs/Subscription";
 
 @Component( {
     templateUrl: 'dashboard.component.html',
@@ -64,7 +65,7 @@ export class DashboardComponent implements OnInit {
     adminStatus: string;
     selectedValue: JSON;
     resultObject: JSON;
-    resultAward: boolean = false;
+    showResultCard: boolean = false;
 
     accountNo: string;
     awardNo: string;
@@ -148,6 +149,13 @@ export class DashboardComponent implements OnInit {
     isEndorse: boolean = false;
     showSuccessMessage: boolean = false;
     successMessage: string;
+    isDataExpenditureVolume: boolean = false;
+    isDataAwardedProposalBySponsor: boolean = false;
+    isDataAwardBySponsor: boolean = false;
+    isDataInProgressProposal: boolean = false;
+    isDataProposalBySponsor: boolean = false;
+
+    private subscription: ISubscription;
 
     constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService, private proposalCreateService: ProposalCreateEditService ) {
         this.outputPath = this.constant.outputPath;
@@ -192,6 +200,31 @@ export class DashboardComponent implements OnInit {
         if ( this.adminStatus == 'true' ) {
             this.isAdmin = true;
         }
+        this.subscription = this.dashboardData.dashboardAreaChartData1Variable.subscribe( dashboardAreaChartData1 => {
+            if ( dashboardAreaChartData1.length > 1 ) {
+                this.isDataExpenditureVolume = true;
+            }
+        } );
+        this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData => {
+            if ( dashboardPieChartData.summaryAwardDonutChart != undefined && dashboardPieChartData.summaryAwardDonutChart.length > 1) {
+                    this.isDataAwardedProposalBySponsor = true;
+            }
+        } );
+        this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
+            if ( dashboardPieChartData1.summaryAwardPieChart != undefined && dashboardPieChartData1.summaryAwardPieChart.length > 0 ) {
+                this.isDataAwardBySponsor = true;
+            }
+        } );
+        this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
+            if ( dashboardPieChartData1.summaryProposalDonutChart != undefined && dashboardPieChartData1.summaryProposalDonutChart.length > 0 ) {
+                this.isDataInProgressProposal = true;
+            }
+        } );
+        this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
+            if ( dashboardPieChartData1.summaryProposalPieChart != undefined && dashboardPieChartData1.summaryProposalPieChart.length > 0 ) {
+                this.isDataProposalBySponsor = true;
+            }
+        } );
     }
 
     initialLoad( currentPage ) {
@@ -269,7 +302,7 @@ export class DashboardComponent implements OnInit {
     showTab( currentTabPosition ) { 
         this.personId = localStorage.getItem( 'personId' );
         this.result = null;
-        this.resultAward = false;
+        this.showResultCard = false;
         this.serviceRequestList = [];
         this.currentPage = 1;
         this.displayToggle = false;
@@ -355,8 +388,8 @@ export class DashboardComponent implements OnInit {
 
     searchUsingAdvanceOptions( currentPage ) {
         this.adminClear = false;
-        if ( this.resultAward === true ) {
-            this.resultAward = false;
+        if ( this.showResultCard === true ) {
+            this.showResultCard = false;
         }
         if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
@@ -381,6 +414,12 @@ export class DashboardComponent implements OnInit {
                     }
                     if ( this.currentPosition == "DISCLOSURE" ) {
                         this.serviceRequestList = this.result.disclosureViews;
+                    }
+                    if ( this.currentPosition == "GRANT" ) {
+                        this.serviceRequestList = this.result.grantCalls;
+                    }
+                    if ( this.currentPosition == "SMU_PROPOSAL" ) {
+                        this.serviceRequestList = this.result.proposal;
                     }
                 }
             } );
@@ -439,6 +478,18 @@ export class DashboardComponent implements OnInit {
             this.placeholder3 = 'Lead Unit';
             this.placeholder4 = 'Protocol type';
         }
+        if ( this.currentPosition === 'GRANT' ) {
+            this.placeholder1 = 'Grant Call Number';
+            this.placeholder2 = 'Title';
+            this.placeholder3 = 'Grant Call Type';
+            this.placeholder4 = 'Sponsor Name';
+        }
+        if ( this.currentPosition === 'SMU_PROPOSAL' ) {
+            this.placeholder1 = 'Application #';
+            this.placeholder2 = 'Title';
+            this.placeholder3 = 'Application Status';
+            this.placeholder4 = 'Category';
+        }
     }
 
     pageChange( currentPage ) {
@@ -446,7 +497,7 @@ export class DashboardComponent implements OnInit {
     }
 
     autocompleteAwardChanged( value ) {
-        this.resultAward = true;
+        this.showResultCard = true;
         this.resultObject = value.obj;
         this.awardNo = value.obj.award_number;
         this.accountNo = value.obj.account_number;
@@ -458,8 +509,14 @@ export class DashboardComponent implements OnInit {
         this.sponsor = value.obj.sponsor;
     }
 
+    autocompleteGrantChanged(value) {
+        this.showResultCard = true;
+        this.resultObject = value.obj;
+        this.title = value.obj.title;
+    }
+
     autocompleteProposalChanged( value ) {
-        this.resultAward = true;
+        this.showResultCard = true;
         this.resultObject = value.obj;
         this.proposalNo = value.obj.proposal_number;
         this.piName = value.obj.person_name;
@@ -471,7 +528,7 @@ export class DashboardComponent implements OnInit {
     }
 
     autocompleteIrbChanged( value ) {
-        this.resultAward = true;
+        this.showResultCard = true;
         this.resultObject = value.obj;
         this.protocolNo = value.obj.protocol_number;
         this.title = value.obj.title;
@@ -484,7 +541,7 @@ export class DashboardComponent implements OnInit {
     }
 
     autocompleteIacucChanged( value ) {
-        this.resultAward = true;
+        this.showResultCard = true;
         this.resultObject = value.obj;
         this.protocolNo = value.obj.protocol_number;
         this.title = value.obj.title;
@@ -496,7 +553,7 @@ export class DashboardComponent implements OnInit {
     }
 
     autocompleteDisclosureChanged( value ) {
-        this.resultAward = true;
+        this.showResultCard = true;
         this.resultObject = value.obj;
         this.disclosureNo = value.obj.coi_disclosure_number;
         this.disFullName = value.obj.full_name;
@@ -508,13 +565,13 @@ export class DashboardComponent implements OnInit {
     foundItemsChanged( items ) { }
 
     closeResultTab() {
-        if ( this.resultAward === true ) {
-            this.resultAward = false;
+        if ( this.showResultCard === true ) {
+            this.showResultCard = false;
         }
     }
 
     receiveResultCard( $event ) {
-        this.resultAward = $event;
+        this.showResultCard = $event;
     }
 
     expandedView( summaryView ) {
@@ -656,7 +713,7 @@ export class DashboardComponent implements OnInit {
   
     submitToProvost() {
       this.result.proposal.updateTimeStamp = new Date().getTime();
-      this.result.proposal.updateUser = this.currentUser;
+      this.result.proposal.updateUser = this.userName;
       if (this.selectedProposalId != null && this.proposal != null) {
         this.proposalCreateService.submitForEndorsement(this.selectedProposalId, this.proposal).subscribe((data)=> {
           var temp: any = {};
@@ -675,7 +732,7 @@ export class DashboardComponent implements OnInit {
   
     approveEndorse() {
       this.result.proposal.updateTimeStamp = new Date().getTime();
-      this.result.proposal.updateUser = this.currentUser;
+      this.result.proposal.updateUser = this.userName;
       this.proposalCreateService.approveByProvost(this.selectedProposalId, this.proposal, this.userName).subscribe((data) => {
         var temp: any = {};
         temp = data;
