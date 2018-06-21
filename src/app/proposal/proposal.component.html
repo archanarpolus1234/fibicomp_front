@@ -15,7 +15,8 @@
 						<div class="row">
 							<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
 								<div class="borderBox">
-									<h4 class="borderBoxHeading">Application Details</h4>
+									<h4 class="borderBoxHeading">Application Details<span class="on-line">Status: {{result?.proposal?.proposalStatus?.description}}</span></h4>									
+									<!-- <h4 class="borderBoxHeading text-right">Status: {{result?.proposal?.proposalStatus?.description}}</h4> -->
 									<div class="pullSide">
 										<table class="table tableSkin grid2">
 											<tbody>
@@ -29,7 +30,7 @@
 																						<option (value)="select">{{select}}</option>
 																						<option *ngFor="let type of result?.proposalTypes" >{{type.description}}</option>
 																					  </select><span *ngIf="mode == 'view'">{{result?.proposal?.proposalType?.description}}</span></td>
-													<td><label class="greenLabel">Status:&nbsp;</label><br><span>{{result?.proposal?.proposalStatus?.description}}</span></td>
+													<!-- <td><label class="greenLabel">Status:&nbsp;</label><br><span>{{result?.proposal?.proposalStatus?.description}}</span></td> -->
 												</tr>
 		                                        <tr  *ngIf="isMandatory">
 		                                        	<td colspan="2"><span class="mandatory">{{mandatoryText}}</span></td>
