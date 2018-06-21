@@ -341,3 +341,86 @@ input[type=number]::-webkit-outer-spin-button {
 	padding: 5px 10px;
 	border-radius: 15px;
 }
+
+.topGrid {
+	border-top: 1px solid #e9ecef;
+}
+.topGrid label {
+	color: #616161;
+	margin-bottom: .2em;
+}
+
+/*  */
+
+.topGrid>.row:nth-child(odd) div {
+	background: #fafafa;
+}
+
+.topGrid>.row:nth-child(odd) div {
+	background: #fafafa;
+}
+
+.topGrid {
+	margin-bottom: -14px;
+}
+
+.topGrid>.row>div {
+	color: #505050;
+}
+
+.topGrid>.row:nth-child(odd) div .committeeBoxNotEditable {
+	background: #fafafa;
+}
+
+.topGrid>.row:nth-child(even) div .committeeBoxNotEditable {
+	background: transparent;
+}
+
+/* tableSkin */
+.borderBox>.tableSkin {
+	margin-top: -11px;
+}
+
+.gridSkin .heading div {
+	color: #26A69A;
+	font-size: .85em;
+	font-weight: bold;
+	padding: 10px;
+	border-bottom: 1px #b2dfdb solid;
+	border-top: 0;
+	vertical-align: middle;
+	line-height: normal;
+}
+
+.gridSkin .row .heading {
+	color: #26A69A;
+	font-size: .85em;
+	font-weight: bold;
+}
+
+.gridSkin>.row>div {
+	padding: 10px;
+	font-size: .8em;
+	border-color: #E9E9E9;
+	color: #424242;
+	vertical-align: middle;
+}
+
+.gridSkin>.row>div>label {
+	font-weight: bold;
+}
+
+.gridSkin .row {
+	padding: 0px 14px;
+}
+
+.dateWidth {
+	width: 85% !important;
+}
+
+
+/*My Style Changes-----Remya*/
+.on-line {
+	display: inline;
+	float: right;
+}
