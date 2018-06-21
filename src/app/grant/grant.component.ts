@@ -890,6 +890,7 @@ export class GrantComponent {
     }
 
     navigate($event, mode) {
+        $event.preventDefault();
         this.router.navigate(['/proposal/createProposal'], { queryParams: {'grantId':this.result.grantCall.grantCallId,'mode': mode} });
     }
 

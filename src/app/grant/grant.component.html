@@ -5,11 +5,14 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="result.grantCall!={}">
 				<br>
 				<div class="row">
-					<div class="col-6 text-left"><span *ngIf="grantId != null" class="topHeading">#{{grantId}} : {{result?.grantCall?.grantCallName}}</span></div>
-					<div class="col-6 text-right ">
-					<span *ngIf="result?.grantCall?.grantCallStatus?.description == 'Open'" class = "grantCall_create_proposal_link">
-					<button class="grantCallCreateProposalLink bg-white" (click)="navigate($event, 'create')">Create Application</button>
-					</span>&nbsp;<i class="fa fa-bell fa-large mr-4 fibiDefaultColor"></i></div>
+					<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-left"><span *ngIf="grantId != null" class="topHeading">#{{grantId}} : {{result?.grantCall?.grantCallName}}</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 text-right ">
+						<span *ngIf="result?.grantCall?.grantCallStatus?.description == 'Open'" class = "grantCall_create_proposal_link"> </span>
+						<button class="btnSkin btnSkinPrimary" (click)="navigate($event, 'create')">Create Application</button>
+						<!-- <span class="linkButtonGroup"> <a (click)="navigate($event, 'create')">
+								<i class="fa fa-plus"></i> Create New Project
+						</a>
+						</span> --></div>
 				</div>
 				<br>
 					<div class="row" id="fadeOutMessage">
@@ -18,22 +21,9 @@
 				<div class="row">
 					<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
 						<div class="borderBox">
-							<h4 class="borderBoxHeading">Overview<span class="on-line">Status: {{result?.grantCall?.grantCallStatus?.description}}</span></h4> 
-							<p *ngIf = "showWarning"><span class="mandatory warningMessage">*Please fill all the mandatory fields marked</span></p>
-							
-							<!-- <p class="float-right" *ngIf = "showSavedSuccessfully"><span class="mandatory warningMessage"></span></p> -->
+							<h4 class="borderBoxHeading">Overview<span class="on-line">Status: {{result?.grantCall?.grantCallStatus?.description}}</span></h4> <p *ngIf = "showWarning"><span class="mandatory warningMessage">*Please fill all the mandatory fields marked</span></p>
 							<div class="pullSide">
 								<div class="topGrid gridSkin">
-										<!-- <tr>
-											<td colspan="4">
-												<label><span *ngIf="mode != 'view'" class="mandatory">*</span>Description:</label><br>
-												<textarea  placeholder = "Description" [(ngModel)] = "result.grantCall.description" [ngClass]="editAreaClass" class="forTextAreaEntry" *ngIf="mode != 'view'" [disabled]="mode == 'view' ? true : false"></textarea>
-												<span *ngIf="mode == 'view'">{{result?.grantCall?.description}}</span>
-												<div class="noDataExists" *ngIf="result?.grantCall?.description == null && mode == 'view'">
-													&thinsp;No descriptions for this grant
-												</div>
-											</td>
-										</tr> -->
 										<div class="row">
 											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory">*</span>Type:</label><br><select *ngIf="mode!='view'; else view_type" [(ngModel)]="grantCallTypeSelected" [ngClass]="editClass"  [disabled]="mode == 'view'" (change) = "grantCallTypeChange($event.target.value)">
 												<option>Select</option>
@@ -49,16 +39,17 @@
 												<span *ngIf="mode != 'view'" class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="openingDt"></span> <owl-date-time #openingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()" ></owl-date-time></div>
 											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory">*</span>Closing Date:</label><br><input type="text" placeholder="Closing Date" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass" [disabled]="mode == 'view'" [owlDateTimeTrigger]="closingDt" [owlDateTime]="closingDt"  class="committeeBox dateWidth"/>&nbsp;
 												<span *ngIf="mode != 'view'" class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="closingDt"></span> <owl-date-time #closingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></div>
-											<!-- <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label>Status:</label><br/>{{result?.grantCall?.grantCallStatus?.description}}</div> -->
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="Max Budget" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" [disabled]="mode == 'view'"/></div>
 										</div>
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"  *ngIf="isDateWarningText"><span class="mandatory font">*{{dateWarningText}}</span>
 										</div>
 										<div class="row">
 											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" colspan="4"><label><span class="mandatory">*</span>Description:</label><br><textarea rows="2" placeholder = "Description" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.description" class="forTextAreaEntry" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
-															<span *ngIf="mode == 'view'">{{result?.grantCall?.description}}</span>
+															<p *ngIf="mode == 'view'">{{result?.grantCall?.description}}</p>
 											</div>
-											<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4"><label><span class="mandatory">*</span>Grant Theme</label><input type="text" [(ngModel)] = "result.grantCall.grantTheme" placeholder="Grant Theme" [ngClass]="editClass" [disabled]="mode == 'view'"></div>
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-4"><label><span class="mandatory">*</span>Grant Theme</label><input type="text" [(ngModel)] = "result.grantCall.grantTheme" placeholder="Grant Theme" [ngClass]="editClass" [disabled]="mode == 'view'"></div>
 											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label>Lead Unit:</label>&nbsp;&nbsp;<br>
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2" ><label>Quantum:</label><br><input type="number" [(ngModel)] = "result.grantCall.quantum" [placeholder]="(result.grantCall.quantum==null && mode!='view')?'Quantum':'0'" [ngClass]="editClass" [disabled]="mode == 'view'"/></div>
 												<ng2-completer *ngIf="mode!='view';else viewHomeUnitName" title="Add Unit" 
 													[inputClass]="completerID"
 													[(ngModel)]="selectedHomeUnit" placeholder="lead unit"
@@ -67,9 +58,17 @@
 												<ng-template #viewHomeUnitName>{{result.grantCall.homeUnitName}}</ng-template>
 											</div>
 										</div>
+										<div class="row">
+                                        	<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+                                       			<label>Other Information:</label><br>&nbsp;<textarea *ngIf="mode != 'view'" [placeholder] = "(result.grantCall.otherInformation==null && mode!='view')?'Other Information': ''" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editClass" ></textarea>
+                                           		<span *ngIf="mode == 'view'">{{result?.grantCall?.otherInformation}}</span>
+                                   			</div>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-4" ><label>Application Procedure:</label><br>&nbsp;<textarea *ngIf="mode != 'view'" [placeholder]="(result.grantCall.applicationProcedure==null && mode!='view')?'Procedure Details': ''" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editClass"></textarea>
+														<span *ngIf="mode == 'view'">{{result?.grantCall?.applicationProcedure}}</span>
+											</div>
+                                        </div>
                                         <div class="row">
-                                            <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2" ><label><span class="mandatory">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="Max Budget" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" [disabled]="mode == 'view'"/></div>
-											<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4"><label>Keywords:</label>&nbsp;&nbsp;<br>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-4"><label>Keywords:</label>&nbsp;&nbsp;<br>
 												<ng2-completer  title="Add Keyword" 
 													[inputClass]="completerID"
 													[(ngModel)]="selectedKeyword" placeholder="Keyword"
@@ -78,23 +77,12 @@
 														<span *ngIf="result?.grantCall?.grantCallKeywords?.length == 0 && mode == 'view'" class="noDatExists">No keywords are present for this grant</span>
 													<ul *ngIf="result?.grantCall?.grantCallKeywords?.length != 0" class="d-inline-flex p-2" style="word-break: break-all;"><li *ngFor="let keyword of result?.grantCall?.grantCallKeywords;let i = index" class="pr-4"><span class="border border-1 rounded">{{keyword.scienceKeyword.description}}</span>&nbsp;<i class="fa fa-times pointer" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)"></i>&nbsp;</li></ul>
 											</div>
-											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2" ><label>Quantum:</label><br><input type="number" [(ngModel)] = "result.grantCall.quantum" [placeholder]="(result.grantCall.quantum==null && mode!='view')?'Quantum':'0'" [ngClass]="editClass" [disabled]="mode == 'view'"/>
-											</div>
-											<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4" ><label>Application Procedure:</label><br>&nbsp;<textarea *ngIf="mode != 'view'" [placeholder]="(result.grantCall.applicationProcedure==null && mode!='view')?'Procedure Details': ''" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editClass"></textarea>
-														<span *ngIf="mode == 'view'">{{result?.grantCall?.applicationProcedure}}</span>
-											</div>
-                                        </div>	
-                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="keyWordWarningMessage!=null"><span class="mandatory">*{{keyWordWarningMessage}}</span></div>
-                                        <div class="row">
-                                        	<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
-                                       			<label>Other Information:</label><br>&nbsp;<textarea *ngIf="mode != 'view'" [placeholder] = "(result.grantCall.otherInformation==null && mode!='view')?'Other Information': ''" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editClass" ></textarea>
-                                           		<span *ngIf="mode == 'view'">{{result?.grantCall?.otherInformation}}</span>
-                                   			</div>
                                         	<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" *ngIf="grantCallTypeSelected == 'External'">
                                         		<label>External Weblink:</label><br><input type="text" placeholder="Web Link" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass" [disabled]="mode == 'view'"/>
                                        		</div>
+                                        </div>	
+                                        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="keyWordWarningMessage!=null"><span class="mandatory">*{{keyWordWarningMessage}}</span></div>
                                         </div>
-								</div>
 							</div>
 						</div>
 					</div>
