@@ -15,8 +15,7 @@
 						<div class="row">
 							<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
 								<div class="borderBox">
-									<h4 class="borderBoxHeading">Application Details<span class="on-line">Status: {{result?.proposal?.proposalStatus?.description}}</span></h4>									
-									<!-- <h4 class="borderBoxHeading text-right">Status: {{result?.proposal?.proposalStatus?.description}}</h4> -->
+									<h4 class="borderBoxHeading">Application Details<span class="on-line">Status: {{result?.proposal?.proposalStatus?.description}}</span></h4>	
 									<div class="pullSide">
 										<table class="table tableSkin grid2">
 											<tbody>
@@ -954,7 +953,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered"
 			role="document">
 			<div class="modal-content">
-				<div class="modal-header">
+				<div class="modal-header routeLogModalHeader">
 					<h5 class="modal-title" id="skippedSchedulesLongTitle">{{modalAproveHeading}} <span>Application #{{result?.proposal?.proposalId}}</span></h5>
 					<!-- <button type="button" class="close" data-dismiss="modal"
 						aria-label="Close" (click)="showAddAttachment = false">
@@ -962,11 +961,31 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					</button> -->
 				</div>
 				<div class="modal-body">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+						<div class="row">
+							<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+								<label>Application #</label> <span>{{result?.proposal?.proposalId}}</span>
+							</div>
+							<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+								<label>Title</label> <span>{{result?.proposal?.title}}</span>
+							</div>
+							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+								<label>Status</label> <span>{{result?.proposal?.proposalStatus?.description}}</span>
+							</div>
+							<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+								<label>PI</label> <span>{{proposalPIName}}</span>
+							</div>
+							<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+								<label>Home Unit</label> <span>{{proposalLeadUnit}}</span>
+							</div>
+						</div>
+					</div>
+					
 					<table class="table table-responsive tableSkin">
-					Comments:
-					<textarea [placeholder]="approveDisapprovePlaceHolder" class="col-12 col-lg-12 commentBox" rows="2" cols="20" [(ngModel)]="approveComments"></textarea>
-					</table>
-					Add files:
+						Comments:
+						<textarea [placeholder]="approveDisapprovePlaceHolder" class="col-12 col-lg-12 commentBox" rows="2" cols="20" [(ngModel)]="approveComments"></textarea>
+						</table>
+						Add files:
 					<file-drop headertext="Drop files here"
 						(onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
 						(onFileLeave)="fileLeave($event)"> <input type="file"

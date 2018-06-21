@@ -6,7 +6,7 @@ import { DashboardData } from '../dashboard/dashboard-data.service';
 
 @Component( {
     selector: 'areachart',
-    template: `<div id="chart_divEvolution" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" [ngClass]="{'noDataOnChart':noData==true}" (window:resize)="onResize($event)"></div>`,
+    template: `<div id="chart_divEvolution" class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12" (window:resize)="onResize($event)"></div>`,
     styleUrls: ['../../assets/css/style.css']
 } )
 

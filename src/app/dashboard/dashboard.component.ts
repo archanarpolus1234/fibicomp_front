@@ -346,9 +346,30 @@ export class DashboardComponent implements OnInit {
             this.filterValidationMessage = "";
             this.isFilterDatePrevious = false;
             this.isMandatoryFilterFilled = true; 
-        } else if (currentTabPosition == 'GRANTREPORT') {
+            this.initialLoad( this.currentPage );
+        } else if (currentTabPosition === 'GRANTREPORT') {
             this.fetchReportData();
-        }else {
+        } else if ( currentTabPosition === 'SMU_PROPOSAL') {
+            this.advanceSearchCriteria.property1 = '';
+            this.advanceSearchCriteria.property2 = '';
+            this.advanceSearchCriteria.property3 = '';
+            this.advanceSearchCriteria.property4 = '';
+            this.placeholder1 = 'Application #';
+            this.placeholder2 = 'Title';
+            this.placeholder3 = 'Application Status';
+            this.placeholder4 = 'Category';
+            this.initialLoad( this.currentPage );
+        } else if ( currentTabPosition === 'GRANT' ) {
+            this.advanceSearchCriteria.property1 = '';
+            this.advanceSearchCriteria.property2 = '';
+            this.advanceSearchCriteria.property3 = '';
+            this.advanceSearchCriteria.property4 = '';
+            this.placeholder1 = 'Grant Call Number';
+            this.placeholder2 = 'Title';
+            this.placeholder3 = 'Grant Call Type';
+            this.placeholder4 = 'Sponsor Name';
+            this.initialLoad( this.currentPage );
+        } else {
             this.initialLoad( this.currentPage );
             this.adminClear = false;
         }
@@ -420,6 +441,12 @@ export class DashboardComponent implements OnInit {
                     }
                     if ( this.currentPosition == "SMU_PROPOSAL" ) {
                         this.serviceRequestList = this.result.proposal;
+                    }
+                    if ( this.currentPosition == "COMMITTEE" ) {
+                        this.serviceRequestList = this.result.committees;
+                    }
+                    if ( this.currentPosition == "SCHEDULE" ) {
+                        this.serviceRequestList = this.result.committeeSchedules;
                     }
                 }
             } );

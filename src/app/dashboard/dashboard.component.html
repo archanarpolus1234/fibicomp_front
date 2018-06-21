@@ -82,7 +82,7 @@
 									[tabPosition]="currentPosition"
 									[placeText]="'Search: Disclosure#,  PI Name, Disposition, Status'"></app-elastic-search>
 							</div>
-							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+							<!-- <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'GRANT'">
 								<app-elastic-search
 									(selected)="autocompleteGrantChanged($event)"
@@ -94,14 +94,14 @@
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'SMU_PROPOSAL'">
 								<app-elastic-search [placeText]="'Search: Application#, Title, Keyword, Grant Type, Sponsor'"></app-elastic-search>
-									<!-- (selected)="autocompleteGrantChanged($event)"
+									(selected)="autocompleteGrantChanged($event)"
 									(found)="foundItemsChanged($event)"
 									(messageEvent)="receiveResultCard($event)"
-									[tabPosition]="currentPosition" -->
+									[tabPosition]="currentPosition"
 									
-							</div>
+							</div> -->
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"
-								*ngIf="currentPosition !== 'SCHEDULE' && currentPosition !== 'COMMITTEE' &&  currentPosition !== 'GRANTREPORT'">
+								*ngIf="currentPosition !== 'SCHEDULE' && currentPosition !== 'COMMITTEE' &&  currentPosition !== 'GRANT' && currentPosition !== 'SMU_PROPOSAL' && currentPosition !== 'GRANTREPORT'">
 								<a id="advcanceSearch" href="#" class="linkButton"
 									(click)="advanceSearch($event)"> <i class="fa fa-cog"></i>
 									Advanced Search
@@ -112,7 +112,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<div *ngIf="displayToggle"
+					<div *ngIf="displayToggle || currentPosition == 'GRANT' || currentPosition == 'SMU_PROPOSAL'"
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 advancedTools">
 						<!-- advance search options -->
 						<div class="row">
@@ -704,7 +704,7 @@
 						</thead>
 						<tbody>
 							<tr *ngIf="nullIacucData; else noNullIacucData">
-								<td colspan=6>No Requests Found !</td>
+								<td colspan="6" class="noDataExists">No Requests Found !</td>
 							</tr>
 							<tr #noNullIacucData
 								*ngFor="let IACUCDetails of serviceRequestList">
@@ -724,7 +724,7 @@
 						</tbody>
 					</table>
 					<div *ngIf="this.result?.iacucViews?.length == 0"
-						class="noDataOnChart">No IACUC data Found</div>
+						class="noDataOnChart noDataExists">No IACUC data Found</div>
 				</div>
 			</div>
 
@@ -800,7 +800,7 @@
 						</tbody>
 					</table>
 					<div *ngIf="this.result?.disclosureViews?.length == 0"
-						class="noDataOnChart">No Disclosure data Found</div>
+						class="noDataOnChart noDataExists">No Disclosure data Found</div>
 				</div>
 			</div>
 

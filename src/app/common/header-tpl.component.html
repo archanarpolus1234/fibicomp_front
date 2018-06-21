@@ -11,7 +11,7 @@
 			</a></li>
 			<li><a
 				[href]="outputPath+'/portal.do?selectedTab=portalSystemAdminBody&__login_user='+userName+'&kcComp=true'">
-					<i class="fa fa-cog"></i> <span>System Admin Portal</span>
+					<i class="fa fa-cogs"></i> <span>System Admin Portal</span>
 			</a></li>
 			<li><a  [href]="IRBOutputPath+'?username='+userName+'&password='">
 					<i class="fa fa-tachometer"></i> <span>IRB Dashboard</span>
@@ -109,7 +109,8 @@
 					<li title="configuration" #configurationBar><a href="#"
 						(click)="configureDashboard($event)"><i class="fa fa-cog"></i></a>
 						<ul class="notificationBox" *ngIf="showConfiguringOption">
-							<li>Expenditure Volume <input
+							<li>Expenditure Volume
+							 <input
 								#expenditureVolumWidgetCheckBox
 								id="expenditureVolumWidgetCheckBox" type="checkbox"
 								[checked]="expenditureVolumWidget"

@@ -418,6 +418,10 @@ input[type=number]::-webkit-outer-spin-button {
 	width: 85% !important;
 }
 
+.gridSkin .row div p {
+	text-align: justify;
+}
+
 
 /*My Style Changes-----Remya*/
 .on-line {
