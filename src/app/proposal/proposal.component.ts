@@ -13,6 +13,8 @@ import { ProposalCreateEditService } from "./proposal-create-view.service";
 import { GrantService } from "../grant/grant.service";
 import 'rxjs/Rx';
 
+declare var $: any;
+
 @Component( {
     selector: 'proposal',
     templateUrl: './proposal.component.html',
@@ -1509,4 +1511,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
       });
       this.showConfirmModal = false;
     }
+    
+    triggerAdd() {
+        $('#addAttach').trigger('click');
+    }
+    
 }
