@@ -364,7 +364,7 @@ export class DashboardComponent implements OnInit {
             this.advanceSearchCriteria.property2 = '';
             this.advanceSearchCriteria.property3 = '';
             this.advanceSearchCriteria.property4 = '';
-            this.placeholder1 = 'Grant Call Number';
+            this.placeholder1 = 'Grant Call #';
             this.placeholder2 = 'Title';
             this.placeholder3 = 'Grant Call Type';
             this.placeholder4 = 'Sponsor Name';
@@ -506,7 +506,7 @@ export class DashboardComponent implements OnInit {
             this.placeholder4 = 'Protocol type';
         }
         if ( this.currentPosition === 'GRANT' ) {
-            this.placeholder1 = 'Grant Call Number';
+            this.placeholder1 = 'Grant Call #';
             this.placeholder2 = 'Title';
             this.placeholder3 = 'Grant Call Type';
             this.placeholder4 = 'Sponsor Name';
