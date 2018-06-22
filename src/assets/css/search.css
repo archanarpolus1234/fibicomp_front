@@ -342,9 +342,6 @@ input[type=number]::-webkit-outer-spin-button {
 	border-radius: 15px;
 }
 
-.topGrid {
-	border-top: 1px solid #e9ecef;
-}
 .topGrid label {
 	color: #616161;
 	margin-bottom: .2em;
@@ -422,9 +419,15 @@ input[type=number]::-webkit-outer-spin-button {
 	text-align: justify;
 }
 
-
-/*My Style Changes-----Remya*/
-.on-line {
-	display: inline;
-	float: right;
+.tableBox {/* 
+	border: 1px #DADAD6 solid; */
 }
+
+/* .colorBlack {
+	color: #616161;
+	font-weight: normal;
+}
+
+.colorBlack label {
+	font-weight: bold;
+} */

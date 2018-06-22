@@ -1443,6 +1443,7 @@ a:hover {
 	padding: 0;
 	cursor: pointer;
 	color: #5e5e5e;
+	outline: none !important;
 }
 
 .borderBoxHeading:hover .addBtn {
@@ -1622,6 +1623,7 @@ a:hover {
 
 .mandatory {
 	color: red;
+	padding-right: 2px;
 }
 
 :host>>> .completer-dropdown {
@@ -1659,9 +1661,15 @@ a:hover {
 .fibiDefaultColor {
 	color:#26A69A;
 }
+
 .fibiDefaultColor:hover {
 	cursor:pointer;
 }
+
 .warningMessage{
-font-size: 0.85em !important;
+	font-size: 0.85em !important;
+}
+
+.hand-cursor {
+	cursor: pointer;
 }

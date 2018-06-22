@@ -104,6 +104,7 @@ export class GrantComponent {
     prncpl_id: string;
     _results: any;
     iconClass: string;
+    select: string = '--Select--';
 
     constructor( public changeRef :ChangeDetectorRef, public _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public completerService : CompleterService, public router : Router,public route : ActivatedRoute, private grantService: GrantService, private sessionService: SessionManagementService) {
         if ( !sessionService.canActivate() ) {

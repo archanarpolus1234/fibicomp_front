@@ -18,8 +18,8 @@
 						(click)="showTab('AWARD')"> Project </a></li>
 					<!-- <li [ngClass]="{'active': currentPosition == 'PROPOSAL'}"><a
 						(click)="showTab('PROPOSAL')"> Proposal </a></li> -->
-					<!-- <li [ngClass]="{'active': currentPosition == 'IRB'}"><a
-						(click)="showTab('IRB')"> IRB{{message}} </a></li> -->
+					<li [ngClass]="{'active': currentPosition == 'IRB'}"><a
+						(click)="showTab('IRB')"> IRB{{message}} </a></li>
 					<li [ngClass]="{'active': currentPosition == 'IACUC'}"><a
 						(click)="showTab('IACUC')"> IACUC </a></li>
 					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
@@ -978,7 +978,7 @@
 					</div>
 				</div>
 				
-				<div class="borderBox" *ngIf="serviceRequestList?.length!=0">
+				<div class="borderBox " *ngIf="serviceRequestList?.length!=0">
 					<table class="table table-responsive tableSkin" >
 						<thead>
 							
@@ -987,10 +987,12 @@
 								<th (click)="sortResult('grantCallId',currentPosition)"
 								title="Click to sort by Grant Id">Id<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallId')}"></span>
 								</th>
-								<th >Title
-								</th>
-								<th>Description
-								</th>
+								<th >Title</th>
+								<th>Sponsor</th>
+								<th (click)="sortResult('grantCallType.description',currentPosition)"
+								title="Click to sort by Opening Date">Type<span
+									  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallType.description')}" ></span>
+							  	</th>
 								<th (click)="sortResult('openingDate',currentPosition)"
 								title="Click to sort by Opening Date">Opening Date <span
 									  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'openingDate')}" ></span>
@@ -998,19 +1000,20 @@
 								<th (click)="sortResult('closingDate',currentPosition)"
 								title="Click to sort by Closing Date">Closing Date  <span
 								 [ngClass]="{reverse:reverse, sortorder: (sortBy == 'closingDate')}" ></span></th>
-								<th (click)="sortResult('description',currentPosition)" title="Click to sort by Status">Status <span
-						  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'description')}" ></span></th>
+								<th (click)="sortResult('grantCallStatusDesc',currentPosition)" title="Click to sort by Status">Status <span
+						  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallStatusDesc')}" ></span></th>
 								<th>Action</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr *ngFor="let grant of serviceRequestList">
-								<td>{{grant.grantCallId}}</td>
-								<td>{{grant.grantCallName}}</td>
-								<td>{{grant?.description}}</td>
-								<td>{{grant.openingDate}}</td>
-								<td>{{grant.closingDate}}</td>
-								<td>{{grant.grantCallStatus?.description}}</td>
+								<td>{{grant?.grantCallId}}</td>
+								<td [title]="(grant?.grantCallName).length>60 ? grant?.grantCallName: ''">{{ (grant?.grantCallName).length>60 ? (grant?.grantCallName | slice:0:60)+'...' : grant?.grantCallName}}</td>
+								<td>{{grant?.sponsorName}}</td>
+								<td>{{grant?.grantCallTypeDesc}}</td>
+								<td>{{grant?.openingDate}}</td>
+								<td>{{grant?.closingDate}}</td>
+								<td>{{grant?.grantCallStatusDesc}}</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open" (click)="viewGrantById($event,grant.grantCallId)" class="pointer"><i
@@ -1052,15 +1055,17 @@
 								<th (click)="sortResult('proposalId',currentPosition)"
 								title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
 								</th>
-								<th >Name
+								<th >Title
 								</th>
+								<th>Category</th>
+								<th>Type</th>
+								<th (click)="sortResult('proposalStatus.statusCode',currentPosition)"
+								title="Click to sort by status">Status<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalStatus.statusCode')}"></span></th>
 								<th (click)="sortResult('startDate',currentPosition)"
-								title="Click to sort by Application Id">Opening Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'startDate')}"></span>
+								title="Click to sort by Application Id">Submission Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'startDate')}"></span>
 								</th>
 								<th (click)="sortResult('endDate',currentPosition)"
 								title="Click to sort by End Date">Closing Date<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'endDate')}"></span></th>
-								<th (click)="sortResult('proposalStatus.statusCode',currentPosition)"
-								title="Click to sort by status">Status<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalStatus.statusCode')}"></span></th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -1068,9 +1073,10 @@
 							<tr *ngFor="let proposal of serviceRequestList">
 								<td>{{proposal.proposalId}}</td>
 								<td>{{proposal.title}}</td>
-								<td>{{proposal.startDate}}</td>
-								<td>{{proposal.endDate}}</td>
-								<td>{{proposal.proposalStatus?.description}}</td>
+								<td>{{proposal.applicationCategory}}</td>
+								<td>{{proposal.applicationType}}</td>
+								<td>{{proposal.applicationStatus}}</td>
+								<td>{{proposal.submissionDate}}</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open proposal"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
