@@ -356,7 +356,7 @@ export class DashboardComponent implements OnInit {
             this.advanceSearchCriteria.property4 = '';
             this.placeholder1 = 'Application #';
             this.placeholder2 = 'Title';
-            this.placeholder3 = 'Application Status';
+            this.placeholder3 = 'Status';
             this.placeholder4 = 'Category';
             this.initialLoad( this.currentPage );
         } else if ( currentTabPosition === 'GRANT' ) {
@@ -462,10 +462,8 @@ export class DashboardComponent implements OnInit {
         if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
-        if ( this.adminStatus != 'true' ) {
-            this.adminClear = false;
-            this.initialLoad( this.currentPage );
-        }
+        this.adminClear = false;
+        this.initialLoad( this.currentPage );
     }
 
     advanceSearch( event: any ) {
@@ -514,7 +512,7 @@ export class DashboardComponent implements OnInit {
         if ( this.currentPosition === 'SMU_PROPOSAL' ) {
             this.placeholder1 = 'Application #';
             this.placeholder2 = 'Title';
-            this.placeholder3 = 'Application Status';
+            this.placeholder3 = 'Status';
             this.placeholder4 = 'Category';
         }
     }

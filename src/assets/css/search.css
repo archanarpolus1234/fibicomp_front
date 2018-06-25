@@ -349,14 +349,6 @@ input[type=number]::-webkit-outer-spin-button {
 
 /*  */
 
-.topGrid>.row:nth-child(odd) div {
-	background: #fafafa;
-}
-
-.topGrid>.row:nth-child(odd) div {
-	background: #fafafa;
-}
-
 .topGrid {
 	margin-bottom: -14px;
 }
@@ -423,11 +415,41 @@ input[type=number]::-webkit-outer-spin-button {
 	border: 1px #DADAD6 solid; */
 }
 
-/* .colorBlack {
+.colorBlack {
 	color: #616161;
 	font-weight: normal;
 }
 
 .colorBlack label {
 	font-weight: bold;
-} */
+}
+
+.gridSkin>.row:nth-child(odd) div .committeeBoxNotEditable {
+	background: #fafafa;
+}
+
+.gridSkin>.row:nth-child(even) div .committeeBoxNotEditable {
+	background: transparent;
+}
+
+.fileChips span {
+    display: inline-block;
+    background: gainsboro;
+    padding: 3px 8px 3px 3px;
+    border-radius: 11px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.fileChips span i {
+    display: inline-block;
+    margin: -1px -2px 0 3px;
+    border-radius: 50%;
+    background-color: white;
+    padding: 2px;
+    color: red;
+}	
+
+.italian {
+	font-style: italic;
+}
