@@ -105,6 +105,10 @@ export class GrantComponent {
     _results: any;
     iconClass: string;
     select: string = '--Select--';
+    isDescReadMore: boolean = false;
+    isThemeReadMore: boolean = false;
+    isOtherInfoReadMore: boolean = false;
+    isApplProcReadMore: boolean = false;
 
     constructor( public changeRef :ChangeDetectorRef, public _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public completerService : CompleterService, public router : Router,public route : ActivatedRoute, private grantService: GrantService, private sessionService: SessionManagementService) {
         if ( !sessionService.canActivate() ) {
@@ -913,5 +917,5 @@ export class GrantComponent {
             this.pocClass = 'committeeBox';
         }
     }
-    
+
 }

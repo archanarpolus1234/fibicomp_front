@@ -384,7 +384,7 @@
 					<div *ngIf="dashboardawardedProposalBySponsorWidget"
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
-							<h4 class="borderBoxHeading">Awarded Proposal by Sponsors</h4>
+							<h4 class="borderBoxHeading">Awarded Applications by Sponsors</h4>
 							<awarded-proposal-donut-chart *ngIf="isDataAwardedProposalBySponsor"></awarded-proposal-donut-chart>
 							<div class="noDataExists regularFont" *ngIf="!isDataAwardedProposalBySponsor">
 								No awarded proposals exist
@@ -404,7 +404,7 @@
 					<div *ngIf="dashboardinProgressproposalBySponsorWidget"
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
-							<h4 class="borderBoxHeading">In Progress Proposals by Sponsors</h4>
+							<h4 class="borderBoxHeading">In Progress Applications by Sponsors</h4>
 							<in-progress-proposal-donut-chart *ngIf="isDataInProgressProposal"></in-progress-proposal-donut-chart>
 							<div class="noDataExists regularFont" *ngIf="!isDataInProgressProposal">
 								No In Progress porposals exist
@@ -414,7 +414,7 @@
 					<div *ngIf="dashboardproposalBySponsorTypesWidget"
 						class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-xs-6">
 						<div class="borderBox">
-							<h4 class="borderBoxHeading">Proposal by Sponsor Types</h4>
+							<h4 class="borderBoxHeading">Application by Sponsor Types</h4>
 							<proposal-by-sponsor-piechart *ngIf="isDataProposalBySponsor"></proposal-by-sponsor-piechart>
 							<div class="noDataExists regularFont" *ngIf="!isDataProposalBySponsor">
 								No In Progress porposals exist
@@ -972,36 +972,34 @@
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup" *ngIf = "isAdmin == true"> <a
 							[href]="" (click)="loadGrants($event,'create')">
-								<i class="fa fa-plus pointer" ></i> Create New Grant
+								<i class="fa fa-plus pointer" ></i> Create New Grant Call
 						</a>
 						</span>
 					</div>
 				</div>
 				
-				<div class="borderBox " *ngIf="serviceRequestList?.length!=0">
+				<div class="borderBox" *ngIf="serviceRequestList?.length!=0">
 					<table class="table table-responsive tableSkin" >
 						<thead>
-							
-							
 							<tr>
-								<th (click)="sortResult('grantCallId',currentPosition)"
+								<th (click)="sortResult('grantCallId',currentPosition)" class="hand-cursor"
 								title="Click to sort by Grant Id">Id<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallId')}"></span>
 								</th>
 								<th >Title</th>
 								<th>Sponsor</th>
-								<th (click)="sortResult('grantCallType.description',currentPosition)"
-								title="Click to sort by Opening Date">Type<span
+								<th (click)="sortResult('grantCallType.description',currentPosition)" class="hand-cursor"
+								title="Click to sort by Type">Type<span
 									  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallType.description')}" ></span>
 							  	</th>
-								<th (click)="sortResult('openingDate',currentPosition)"
+								<th (click)="sortResult('openingDate',currentPosition)" class="hand-cursor"
 								title="Click to sort by Opening Date">Opening Date <span
 									  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'openingDate')}" ></span>
 								</th>
-								<th (click)="sortResult('closingDate',currentPosition)"
+								<th (click)="sortResult('closingDate',currentPosition)" class="hand-cursor"
 								title="Click to sort by Closing Date">Closing Date  <span
 								 [ngClass]="{reverse:reverse, sortorder: (sortBy == 'closingDate')}" ></span></th>
-								<th (click)="sortResult('grantCallStatusDesc',currentPosition)" title="Click to sort by Status">Status <span
-						  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallStatusDesc')}" ></span></th>
+								<th (click)="sortResult('grantCallStatusDesc',currentPosition)" class="hand-cursor" title="Click to sort by Status">Status <span
+						  				[ngClass]="{reverse:reverse, sortorder: (sortBy == 'grantCallStatusDesc')}" ></span></th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -1052,20 +1050,20 @@
 					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
-								<th (click)="sortResult('proposalId',currentPosition)"
+								<th (click)="sortResult('proposalId',currentPosition)" class="hand-cursor"
 								title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
 								</th>
 								<th >Title
 								</th>
-								<th>Category</th>
-								<th>Type</th>
-								<th (click)="sortResult('proposalStatus.statusCode',currentPosition)"
-								title="Click to sort by status">Status<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalStatus.statusCode')}"></span></th>
-								<th (click)="sortResult('startDate',currentPosition)"
-								title="Click to sort by Application Id">Submission Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'startDate')}"></span>
+								<th (click)="sortResult('proposalCategory.description',currentPosition)" class="hand-cursor"
+								title="Click to sort by category">Category<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalCategory.description')}"></span></th>
+								<th (click)="sortResult('proposalType.description',currentPosition)" class="hand-cursor"
+								title="Click to sort by type">Type<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalType.description')}"></span></th>
+								<th (click)="sortResult('proposalStatus.description',currentPosition)" class="hand-cursor"
+								title="Click to sort by status">Status<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalStatus.description')}"></span></th>
+								<th (click)="sortResult('submissionDate',currentPosition)" class="hand-cursor"
+								title="Click to sort by Submission Date">Submission Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'submissionDate')}"></span>
 								</th>
-								<th (click)="sortResult('endDate',currentPosition)"
-								title="Click to sort by End Date">Closing Date<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'endDate')}"></span></th>
 								<th>Action</th>
 							</tr>
 						</thead>
@@ -1081,9 +1079,9 @@
 									<ul class="actionButtonGroup">
 										<li><a title="Open proposal"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
 												class="fa fa-eye pointer"></i></a></li>
-										<li><a title="forward for endorsement" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="grantManager == 'true' && proposal?.proposalStatus?.statusCode == 4" (click)="openConfirm('submit', proposal.proposalId,proposal)"><i
+										<li><a title="forward for endorsement" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="grantManager == 'true' && proposal?.applicationStatus == 'Approved'" (click)="openConfirm('submit', proposal.proposalId,proposal)"><i
 												class="fa fa-mail-forward"></i></a></li>
-										<li><a title="endorse" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="provost == 'true' && proposal?.proposalStatus?.statusCode == 10" (click)="openConfirm('endorse', proposal.proposalId,proposal)"><i
+										<li><a title="endorse" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="provost == 'true' && proposal?.applicationStatus == 'Waiting For Endorsement'" (click)="openConfirm('endorse', proposal.proposalId,proposal)"><i
 												class="fa fa-check-square-o"></i></a></li>
 									</ul>
 								</td>
@@ -1259,7 +1257,7 @@
 			<!-- Pagination -->
 
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-				*ngIf="(currentPosition != 'SUMMARY') && ((isAdmin==false) || (adminAdvanceSearch == true)) && ((serviceRequestList != null) && (serviceRequestList?.length != 0)) && (adminClear==false)">
+				*ngIf="(currentPosition != 'SUMMARY') && ((serviceRequestList != null) && (serviceRequestList?.length != 0)) ">
 				<div class="text-right pagiSkin">
 					<nav class="paginationSkin text-right" href="#scrollToTop"
 						pageScroll [pageScrollSpeed]="400">
