@@ -45,6 +45,7 @@ export class ElasticSearchComponent implements AfterViewInit {
     iconClass: string = 'fa fa-search';
     rolePerson: string;
     personId: string = localStorage.getItem( 'personId' );
+    isAdmin: string = localStorage.getItem('isAdmin');
 
     constructor( private es: AwardElasticsearchService, private ps: ProposalElasticsearchService,
         private irb: IrbElasticsearchService, private iacuc: IacucElasticsearchService,
@@ -106,7 +107,7 @@ export class ElasticSearchComponent implements AfterViewInit {
                                         hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
                                             .map(( hit ) => hit.highlight );
                                         hits_source.forEach(( elmnt, j ) => {
-                                            if ( hits_source[j].pi_name === this.rolePerson ) {
+                                            if( hits_source[j].pi_name === this.rolePerson || this.isAdmin === 'true' ) {
                                                 awardNumber = hits_source[j].award_number;
                                                 title = hits_source[j].title;
                                                 account_number = hits_source[j].account_number;

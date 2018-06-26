@@ -45,9 +45,9 @@
 									(found)="foundItemsChanged($event)"
 									(messageEvent)="receiveResultCard($event)"
 									[tabPosition]="currentPosition"
-									[placeText]="'Search: Award#, Account#, Title, PI Name, Lead Unit, Sponsor'"></app-elastic-search>
+									[placeText]="'Search: Project #, Account#, Title, PI Name, Lead Unit, Sponsor'"></app-elastic-search>
 							</div>
-							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
+							<!-- <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'PROPOSAL'">
 								<app-elastic-search
 									(selected)="autocompleteProposalChanged($event)"
@@ -55,7 +55,7 @@
 									(messageEvent)="receiveResultCard($event)"
 									[tabPosition]="currentPosition"
 									[placeText]="'Search: Proposal#, Title, PI Name, Lead Unit, Sponsor, Status'"></app-elastic-search>
-							</div>
+							</div> -->
 							<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8"
 								*ngIf="currentPosition == 'IRB'">
 								<app-elastic-search (selected)="autocompleteIrbChanged($event)"
@@ -435,7 +435,7 @@
 								<i class="fa fa-plus"></i> Create New Project
 						</a>
 						</span>
-						<span class="linkButtonGroup" *ngIf="adminStatus == 'true' || provost == 'true' || grantManager == 'true'"> <a
+						<span class="linkButtonGroup"> <a
 							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/dashboard' ">
 								<i class="fa fa-eye"></i> View Variation Request
 						</a>
@@ -740,8 +740,7 @@
 						</span>
 					</div>
 				</div>
-				<div class="borderBox"
-					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+				<div class="borderBox">
 					<table class="table table-responsive tableSkin"
 						*ngIf="this.result?.disclosureViews?.length !== 0">
 						<thead>
@@ -817,7 +816,7 @@
 					</div>
 				</div>
 				<div class="borderBox"
-					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear == false)">
+					*ngIf="((isAdmin==true) || (adminAdvanceSearch == true)) && (adminClear == false)">
 					<table class="table table-responsive tableSkin"
 						*ngIf="this.result?.committees?.length !== 0">
 						<thead>
@@ -884,7 +883,7 @@
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'SCHEDULE')">
 				<div class="borderBox"
-					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
+					*ngIf="((isAdmin==true) || (adminAdvanceSearch == true)) && (adminClear==false)">
 					<table class="table table-responsive tableSkin"
 						*ngIf="this.result?.committeeSchedules?.length !== 0">
 						<thead>
@@ -1014,7 +1013,7 @@
 								<td>{{grant?.grantCallStatusDesc}}</td>
 								<td>
 									<ul class="actionButtonGroup">
-										<li><a title="Open" (click)="viewGrantById($event,grant.grantCallId)" class="pointer"><i
+										<li><a title="Open grant call {{grant?.grantCallId}}" (click)="viewGrantById($event,grant.grantCallId)" class="pointer"><i
 												class="fa fa-eye pointer"></i></a></li>
 
 										
@@ -1077,11 +1076,11 @@
 								<td>{{proposal.submissionDate}}</td>
 								<td>
 									<ul class="actionButtonGroup">
-										<li><a title="Open proposal"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
+										<li><a title="Open application {{proposal?.proposalId}}"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
 												class="fa fa-eye pointer"></i></a></li>
-										<li><a title="forward for endorsement" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="grantManager == 'true' && proposal?.applicationStatus == 'Approved'" (click)="openConfirm('submit', proposal.proposalId,proposal)"><i
+										<li><a title="forward application {{proposal?.proposalId}} for endorsement" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="grantManager == 'true' && proposal?.applicationStatus == 'Approved'" (click)="openConfirm('submit', proposal.proposalId,proposal)"><i
 												class="fa fa-mail-forward"></i></a></li>
-										<li><a title="endorse" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="provost == 'true' && proposal?.applicationStatus == 'Waiting For Endorsement'" (click)="openConfirm('endorse', proposal.proposalId,proposal)"><i
+										<li><a title="endorse application {{proposal?.proposalId}}" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="provost == 'true' && proposal?.applicationStatus == 'Waiting For Endorsement'" (click)="openConfirm('endorse', proposal.proposalId,proposal)"><i
 												class="fa fa-check-square-o"></i></a></li>
 									</ul>
 								</td>
@@ -1111,7 +1110,7 @@
 								</div>
 								<div  class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
 										<div class="borderBox">
-											<h4 class="borderBoxHeading">Awards by Grant Call Type</h4>
+											<h4 class="borderBoxHeading">Projects by Grant Call Type</h4>
 											<award-by-grantcall-type-piechart></award-by-grantcall-type-piechart>
 										</div>
 								</div>
@@ -1127,24 +1126,24 @@
 													<td>
 												  			<select [(ngModel)] = "selectedReportName" class = "committeeBox" (change)="reportTypeChange()">
 																<option>{{select}}</option>
-																<option>Submitted Applications by Grant</option>
-																<option>Awards by Grant</option>
-																<option>Expenditure by Award</option>
+																<option>Submitted Applications by Grant Call</option>
+																<option>Projects by Grant Call</option>
+																<option>Expenditure by Project</option>
 															</select>
 												  	</td>
-												  	<td class="text-right"><span *ngIf="selectedReportName != 'Expenditure by Award'">Grant:</span>
-												  						   <span *ngIf="selectedReportName == 'Expenditure by Award'">Award:</span>
+												  	<td class="text-right" *ngIf="selectedReportName != select"><span *ngIf="selectedReportName != 'Expenditure by Project'">Grant Call:</span>
+												  						   <span *ngIf="selectedReportName == 'Expenditure by Project'">Project:</span>
 												  	</td>
 													<td >
-														<div>
+														<div *ngIf="selectedReportName != select">
 																<ng2-completer  title="Search grant" 
 																		[inputClass]="completerID"
-																		[(ngModel)]="selectedReportItemId" [placeholder]="(selectedReportName == 'Expenditure by Award')? 'Search by award number': 'Search by Id or Name'"
+																		[(ngModel)]="selectedReportItemId" [placeholder]="(selectedReportName == 'Expenditure by Project')? 'Search by project number': 'Search by id or name'"
 																		[datasource]="dataList" [minSearchLength]="0"
 																		(selected)="grantIdChange()"  class="widthLimiterNg2Completer p-0 border-0"></ng2-completer>
 														</div>
 													</td>
-													<td colspan="3"><span *ngIf="selectedReportName != select && selectedReportName != 'Expenditure by Award'">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}{{reportObject?.awardCount}}</span>
+													<td colspan="3"><span *ngIf="selectedReportName != select && selectedReportName != 'Expenditure by Project'">{{selectedReportName}} #{{reportObject?.grantCallId}} : &nbsp;{{reportObject?.proposalCount}}{{reportObject?.awardCount}}</span>
 													</td>
 												</tr>
 												<tbody *ngIf="proposals?.length > 0">
@@ -1178,7 +1177,7 @@
 														</td>
 													</tr>
 												</tbody>
-													<tr *ngIf="selectedReportName == 'Submitted Applications by Grant' && (proposals?.length == 0 || proposals == null )"><td><div class="noDataExists" >
+													<tr *ngIf="selectedReportName == 'Submitted Applications by Grant Call' && (proposals?.length == 0 || proposals == null )"><td><div class="noDataExists" >
 																			No report data found
 																		</div></td>
 													</tr>
@@ -1221,7 +1220,7 @@
 														</td>
 													</tr>
 												</tbody>
-													<tr *ngIf="selectedReportName == 'Awards by Grant' && (awards?.length == 0 || awards == null)"><td><div class="noDataExists" >
+													<tr *ngIf="selectedReportName == 'Projects by Grant Call' && (awards?.length == 0 || awards == null)"><td><div class="noDataExists" >
 																			No report data found
 																		</div></td>
 													</tr>
@@ -1240,7 +1239,7 @@
 														<td>{{expenditure[0] | currency:'USD':true}}</td>
 													</tr>
 												</tbody>
-													<tr *ngIf="selectedReportName == 'Expenditure by Award' && (expenditureByAward?.length == 0 || expenditureByAward == null)"><td><div class="noDataExists" >
+													<tr *ngIf="selectedReportName == 'Expenditure by Project' && (expenditureByAward?.length == 0 || expenditureByAward == null)"><td><div class="noDataExists" >
 																			No expenditure data found
 																		</div></td>
 													</tr>
@@ -1257,7 +1256,7 @@
 			<!-- Pagination -->
 
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-				*ngIf="(currentPosition != 'SUMMARY') && ((serviceRequestList != null) && (serviceRequestList?.length != 0)) ">
+				*ngIf="((currentPosition != 'SUMMARY') && ((serviceRequestList != null) && (serviceRequestList?.length != 0)) && ((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)) || ((currentPosition == 'SMU_PROPOSAL' || currentPosition == 'GRANT' ) && ((serviceRequestList != null) && (serviceRequestList?.length != 0)))">
 				<div class="text-right pagiSkin">
 					<nav class="paginationSkin text-right" href="#scrollToTop"
 						pageScroll [pageScrollSpeed]="400">

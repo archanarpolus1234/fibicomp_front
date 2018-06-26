@@ -765,6 +765,7 @@ input[type="text"] {
 	color: #26A69A;
 	font-size: .85em;
 	margin-bottom: 2px;
+	font-weight: bold;
 }
 
 .viewMode>div>div>span {

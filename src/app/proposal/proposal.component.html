@@ -774,7 +774,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					<div class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 							<div class="fileChips">
-								<span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+								<span class="regularFont" *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
 									<i class="fa fa-close hand-cursor" title="Remove File" (click)="deleteFromUploadedFileList(item)"></i>
 								</span>
 							</div>

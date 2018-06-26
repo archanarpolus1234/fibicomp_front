@@ -461,3 +461,22 @@ input[type=number]::-webkit-outer-spin-button {
 :host ::ng-deep .owl-dt-calendar-control {
 	margin-top: 10px !important;
 }
+
+.resultCard a {
+	color: #424242;
+}
+
+.resultCard a:hover {
+	color: #00bcd4;
+}
+
+.topGrid .row .heading {
+	color: #26A69A;
+	font-size: .85em;
+	font-weight: bold;
+	padding: 10px;
+	border-bottom: 1px #b2dfdb solid;
+	border-top: 0;
+	line-height: normal;
+	text-align: left;
+}
