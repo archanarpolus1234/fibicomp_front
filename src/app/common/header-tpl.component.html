@@ -5,6 +5,9 @@
 			<li class="active"><a href="#" (click)="myDashboard($event)">
 					<i class="fa fa-tachometer"></i> <span>My Dashboard</span>
 			</a></li>
+			<li><a  [href]="IRBOutputPath+'?username='+userName+'&password='">
+					<i class="fa fa-tachometer"></i> <span>IRB Dashboard</span>
+			</a></li>
 			<li><a
 				[href]="outputPath+'/kc-krad/landingPage?__login_user='+userName+'&kcComp=true'">
 					<i class="fa fa-user"></i> <span>My Portal</span>
@@ -12,9 +15,6 @@
 			<li><a
 				[href]="outputPath+'/portal.do?selectedTab=portalSystemAdminBody&__login_user='+userName+'&kcComp=true'">
 					<i class="fa fa-cogs"></i> <span>System Admin Portal</span>
-			</a></li>
-			<li><a  [href]="IRBOutputPath+'?username='+userName+'&password='">
-					<i class="fa fa-tachometer"></i> <span>IRB Dashboard</span>
 			</a></li>
 		</ul>
 		<div class="pullBack d-md-none d-lg-none d-xl-none">

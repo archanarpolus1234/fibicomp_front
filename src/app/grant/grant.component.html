@@ -30,7 +30,7 @@
 							<div class="pullSide">
 								<div class="topGrid gridSkin">
 										<div class="row">
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Title:</label><br><input *ngIf="mode != 'view'" type="text" placeholder="Provide a title for grant call" class="dateBox" [(ngModel)] = "result.grantCall.grantCallName" [ngClass]="editClass" />
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Title:</label><br><input *ngIf="mode != 'view'" type="text" placeholder="" class="dateBox" [(ngModel)] = "result.grantCall.grantCallName" [ngClass]="editClass" />
 												<span *ngIf="mode == 'view'">{{result?.grantCall?.grantCallName}}</span>
 											</div>					
 											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Type:</label><br>
@@ -51,7 +51,7 @@
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"  *ngIf="isDateWarningText"><span class="mandatory font">*{{dateWarningText}}</span>
 										</div>
 										<div class="row">
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" ><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Description:</label><br><textarea rows="3" placeholder = "Provide a description" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.description" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" ><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Description:</label><br><textarea rows="3" placeholder = "" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.description" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
 															<p *ngIf="mode == 'view' && !isDescReadMore">{{(result?.grantCall?.description).length>240 ? (result?.grantCall?.description | slice:0:240)+'...' : result?.grantCall?.description}}
 															<span *ngIf="(result?.grantCall?.description.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDescReadMore = !isDescReadMore">Read more<i [ngClass]="isDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -59,7 +59,7 @@
 															<span *ngIf="(result?.grantCall?.description.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDescReadMore = !isDescReadMore">Show less<i [ngClass]="isDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
 															</div>
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Grant Theme</label><textarea rows="3" placeholder="Provide grant theme" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.grantTheme" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Grant Theme</label><textarea rows="3" placeholder="" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.grantTheme" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
 															<p *ngIf="mode == 'view' && !isThemeReadMore">{{(result?.grantCall?.grantTheme).length>240 ? (result?.grantCall?.grantTheme | slice:0:240)+'...' : result?.grantCall?.grantTheme}}
 															<span *ngIf="(result?.grantCall?.grantTheme.length>300)" class="hand-cursor fibiDefaultColor italian" (click)="isThemeReadMore = !isThemeReadMore">Read more<i [ngClass]="isThemeReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -71,10 +71,10 @@
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"  *ngIf="showWarning"><span class="mandatory font">* Please fill the mandatory fields</span>
 										</div>
 										<div class="row">
-											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="Provide Maximum Budget in USD" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" class="dateBox" />
+											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" class="dateBox" />
 												<span *ngIf="mode == 'view'">{{result?.grantCall?.maximumBudget | currency:'USD':true}}</span>
 											</div>
-											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" ><label>Quantum:</label><br><input *ngIf="mode != 'view'" type="number" [(ngModel)] = "result.grantCall.quantum" placeholder="Provide quantum" [ngClass]="editClass" class="dateBox"/>
+											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" ><label>Quantum:</label><br><input *ngIf="mode != 'view'" type="number" [(ngModel)] = "result.grantCall.quantum" placeholder="" [ngClass]="editClass" class="dateBox"/>
 													<span *ngIf="mode == 'view'">{{result?.grantCall?.quantum}}</span>
 													<span *ngIf="result.grantCall.quantum == null && mode == 'view'" class="noDataExists">
 														No quantum specified</span>
@@ -82,7 +82,7 @@
 											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3"><label>Lead Unit:</label><br>
 												<ng2-completer *ngIf="mode!='view'" 
 													[inputClass]="completerID"
-													[(ngModel)]="selectedHomeUnit" placeholder="Specify lead unit"
+													[(ngModel)]="selectedHomeUnit" placeholder=""
 													[datasource]="homeUnits" [minSearchLength]="0"
 													(selected)="homeUnitChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0 dateBox" ></ng2-completer>
 												<span *ngIf="mode == 'view'">{{result?.grantCall?.homeUnitName}}</span>
@@ -90,13 +90,13 @@
 														No lead unit specified</span>
 											</div>
                                         	<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" *ngIf="grantCallTypeSelected == 'External'">
-                                        		<label>External Weblink:</label><br><input *ngIf="mode != 'view'" type="text" placeholder="Provide external weblink" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass"/>
+                                        		<label>External Weblink:</label><br><input *ngIf="mode != 'view'" type="text" placeholder="" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass"/>
                                        			<span *ngIf="mode == 'view'">{{result?.grantCall?.externalUrl}}</span>
                                        			<span *ngIf="mode == 'view' && result.grantCall.externalUrl == null" class="noDataExists">No external link provided</span>
                                        		</div>
                                         </div>
                                         <div class="row">
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-4" ><label>Application Procedure:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="Provide step by step application procedure" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-4" ><label>Application Procedure:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
 														<span *ngIf="mode == 'view' && result?.grantCall?.applicationProcedure != null"><p *ngIf="mode == 'view' && !isApplProcReadMore">{{(result?.grantCall?.applicationProcedure).length>240 ? (result?.grantCall?.applicationProcedure | slice:0:240)+'...' : result?.grantCall?.applicationProcedure}}
 															<span *ngIf="(result?.grantCall?.applicationProcedure.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isApplProcReadMore = !isApplProcReadMore">Read more<i [ngClass]="isApplProcReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -107,7 +107,7 @@
 														<span *ngIf="mode == 'view' && result?.grantCall?.applicationProcedure == null" class="noDataExists">No procedure details provided</span>
 											</div>
 											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
-                                       			<label>Other Information:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="provide other information regarding this Grant Call" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
+                                       			<label>Other Information:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
                                            		<span *ngIf="mode == 'view' && result?.grantCall?.otherInformation != null"><p *ngIf="mode == 'view' && !isOtherInfoReadMore">{{(result?.grantCall?.otherInformation).length>240 ? (result?.grantCall?.otherInformation | slice:0:240)+'...' : result?.grantCall?.otherInformation}}
 													<span *ngIf="(result?.grantCall?.otherInformation.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isOtherInfoReadMore = !isOtherInfoReadMore">Read more<i [ngClass]="isOtherInfoReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 													</p>
@@ -124,7 +124,7 @@
 													<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2" *ngIf="mode!='view'" style="padding-left: 0px">
 														<ng2-completer  title="Add Keyword" 
 															[inputClass]="completerID"
-															[(ngModel)]="selectedKeyword" placeholder="Search for keyword"
+															[(ngModel)]="selectedKeyword" placeholder=""
 															[datasource]="keywordsList" [minSearchLength]="0"
 															(selected)="keywordChangeFunction()"  class="widthLimiterNg2Completer dateBox" [disabled]="mode == 'view'" *ngIf="mode!='view';else showNoKeyword"></ng2-completer>
 														<span *ngIf="result?.grantCall?.grantCallKeywords?.length == 0 && mode == 'view'" class="noDatExists">No keywords are present for this grant</span>
@@ -147,177 +147,187 @@
                                 <div class="borderBox">
                                                 <h4 class="borderBoxHeading">Funding Agency Information</h4>
                                                 <div class="pullSide">
-                                                        <table class="table tableSkin grid2">
-                                                                <tbody>
-                                                                   <tr *ngIf="mode!=view && this.result?.grantCall?.sponsor==null || mode==view && this.result?.grantCall?.sponsor!=null || mode!=view && this.result?.grantCall?.sponsor!=null">
-                                                                          <td><label> Type:</label><br>
-																				<select *ngIf="mode!='view';else view_sponsorType" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" (change) = "sponsorTypeChange($event.target.value)" [(ngModel)] = "selectedSponsorType">
-																					<option *ngFor="let type of this.result?.sponsorTypes" (value)="type">
-																					{{type.description}}
-																				</option>
-																			</select>
-																			<ng-template #view_sponsorType>{{result?.grantCall?.sponsorType?.description}}</ng-template>
-																				</td>
-																		 <td ><label>Name:</label><br> <select *ngIf="mode!='view';else view_sponsorName" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)] = "selectedSponsor"  (change) = "sponsorNameChange($event.target.value)" >
-																			<option>Select
-																			</option>
-																			<option *ngFor="let sponsor of this.sponsorList" (value)="sponsor" >
-																				{{sponsor.sponsorName}}
-																			</option>
-																			</select>
-																		<ng-template #view_sponsorName>{{result?.grantCall?.sponsor?.sponsorName}}</ng-template></td>
-                                                                          <td><label>Research Type:</label><br>
-								                                           <select *ngIf="mode!='view';else view_researchType" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" (change)="researchTypeChange($event.target.value)" [(ngModel)] = "selectedActivityType">
-																			
-																			<option *ngFor="let type of this.result?.activityTypes" (value)="type" >
-																				{{type.description}}
-																			</option>
-																			</select>
-																			<ng-template #view_researchType>{{result?.grantCall?.activityType.description}}</ng-template>
-																				</td>
-                                                                          <td><label>Funding Type:</label><br>
-                                                                         <select [ngClass]="editClass"  *ngIf="mode!='view';else view_fundingType" [disabled]="mode == 'view' ? true : false" (change)="fundingTypeChange($event.target.value)" [(ngModel)] = "selectedFundingType">
-																			
-																			<option *ngFor="let type of this.result?.fundingSourceTypes" (value)="type">
-																		{{type.description}}
-																	</option>
-																	</select>
-																	<ng-template #view_fundingType>{{result?.grantCall?.fundingSourceType.description}}</ng-template>
-																		</td>
-                                                                   </tr>
-                                                                </tbody>
-                                                        </table>
-                                                      
+                                                        <div class="topGrid gridSkin">
+                                                                   <div class="row" *ngIf="!(mode == 'view' && result?.grantCall?.sponsor == null)">
+                                                                          	<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4"><label>Type:</label><br>
+																				<select *ngIf="mode!='view'" class="dateBox" [(ngModel)]="selectedSponsorType" [ngClass]="editClass" (change) = "sponsorTypeChange($event.target.value)">
+																					<option>{{select}}</option>
+																					<option *ngFor="let type of this.result?.sponsorTypes" (value)="type">{{type.description}}</option>
+																				</select>
+																				<span *ngIf="mode == 'view'">{{result?.grantCall?.sponsorType?.description}}</span>
+																			</div>	
+																		 	<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4"><label>Name:</label><br> 
+																		 		<select *ngIf="mode != 'view'" class="dateBox" [ngClass]="editClass" [(ngModel)]="selectedSponsor"  (change) = "sponsorNameChange($event.target.value)" >
+																					<option>{{select}}</option>
+																					<option *ngFor="let sponsor of this.sponsorList"(value)="sponsor" >{{sponsor.sponsorName}}
+																					</option>
+																				</select>
+																				<span *ngIf="mode == 'view'">{{result?.grantCall?.sponsor?.sponsorName}}</span>
+																			</div>
+                                                                          	<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label>Research Type:</label><br>
+									                                           <select *ngIf="mode != 'view'" [ngClass]="editClass" class="dateBox" (change)="researchTypeChange($event.target.value)" [(ngModel)] = "selectedActivityType">
+																					<option>{{select}}</option>
+																					<option *ngFor="let type of this.result?.activityTypes" (value)="type" >
+																						{{type.description}}
+																					</option>
+																				</select>
+																				<span *ngIf="mode == 'view'">{{result?.grantCall?.activityType?.description}}</span>
+																			</div>
+                                                                          	<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label>Funding Type:</label><br>
+		                                                                         <select [ngClass]="editClass"  *ngIf="mode != 'view'" class="dateBox" (change)="fundingTypeChange($event.target.value)" [(ngModel)] = "selectedFundingType">
+																					<option>{{select}}</option>
+																					<option *ngFor="let type of this.result?.fundingSourceTypes" (value)="type"> {{type.description}}
+																					</option>
+																				 </select>
+																				<span *ngIf="mode == 'view'">{{result?.grantCall?.fundingSourceType?.description}}</span>
+																			</div>
+                                                                   </div>
+                                                                   <div class="row" style="padding-left: 25px" *ngIf="(mode == 'view' && result?.grantCall?.sponsor == null)">
+                                                                   		<div class="col-12">
+                                                                   			<span class="noDataExists" >No funding agency specified</span>
+                                                                   		</div>
+                                                                   </div>
+                                                      </div>
                                                 </div>
                                  </div>   
                                  <div class="borderBox col-12">
-					<h4 class="borderBoxHeading">Point of Contact</h4>
-					<button id="pointOfContactAddBtn" class="addBtn font hoverColor" (click)="showaddPointOfContact()" *ngIf="mode != 'view'">
-						<i class="fa fa-plus"></i>
-					</button>
-					<table class="table table-responsive tableSkin grid2">
-						<tr id="addPointOfContactRow" *ngIf="showAddPointOfContact">
-							<td>
-								<label>Is SMU Person:</label><br/>
-								<input class="text-center" #isSMUPersonCheck type="checkbox" [checked]="isSMUChecked" (change)="personTypeChanged(isSMUPersonCheck.checked)">
-							</td>
-							<td>
-								<label>
-									Name:
-								</label> <br>
-								<input type="text" *ngIf="!isSMUChecked" [ngClass]="editClass" placeholder="Name" [(ngModel)] = "pointOfContactObject.fullName" [disabled]="mode == 'view'">
-								<div class="searchBox memberSearchBox" *ngIf="isSMUChecked">
-													<input type="text" placeholder="search a person" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
-														[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
-														class="searchButton" (click)="clearSearchBox($event)"><i
-														[ngClass]="iconClass"></i></a>
-													<div class="sb-seachresults"  *ngIf="searchActive">
-														<ul class="sb-results-dropdown-menu text-left">
-															<li *ngFor="let result of this.elasticSearchresults "
-																(mousedown)="selected(result)"><span
-																[innerHTML]="result.label"></span></li>
-														</ul>
-													</div>
-												</div>
-							</td>
-							<td>
-								<label>
-									Designation:
-								</label> <br>
-								<input type="text" [ngClass]="editClass" placeholder="Designation" [(ngModel)] = "pointOfContactObject.designation" [disabled]="mode == 'view'">
-							</td>
-							<td>
-								<label>
-									Email:
-								</label> <br>
-								<input type="text" [ngClass]="pocClass" [(ngModel)] = "pointOfContactObject.email" [disabled]="mode == 'view' || isSMUChecked" >
-							</td>
-							<td>
-								<label>
-									Phone:
-								</label> <br>
-								<input *ngIf="isSMUChecked" type="text" [ngClass]="pocClass" [(ngModel)] = "pointOfContactObject.mobile" [disabled]="mode == 'view' || isSMUChecked">
-								<input type="text" *ngIf="!isSMUChecked" [ngClass]="pocClass" [(ngModel)] = "pointOfContactObject.mobile" [disabled]="mode == 'view' || isSMUChecked">
-							</td>
-							<td colspan="2"> <br>
-								<button class="btnSkin btnSkinPrimary"  (click)="addPointOfContact(pointOfContactObject)">Add</button>
-							</td>
-						</tr>
+										<h4 class="borderBoxHeading">Point of Contact</h4>
+										<button id="pointOfContactAddBtn" class="addBtn font hoverColor" (click)="showaddPointOfContact()" 
+											*ngIf="(result?.grantCall?.grantCallContacts?.length > 0 && mode == 'view') || (mode != 'view')"><i class="fa-large" [ngClass]="showAddPointOfContact?'fa fa-angle-double-up':'fa fa-angle-double-down'"></i>
+										</button>
+										<table class="table table-responsive tableSkin grid2">
+											<tr id="addPointOfContactRow" *ngIf="showAddPointOfContact && mode != 'view'">
+												<td>
+													<label>Is SMU Person:</label><br/>
+													<input class="text-center" #isSMUPersonCheck type="checkbox" [checked]="isSMUChecked" (change)="personTypeChanged(isSMUPersonCheck.checked)">
+												</td>
+												<td>
+													<label>
+														Name:
+													</label> <br>
+													<input type="text" *ngIf="!isSMUChecked" [ngClass]="editClass" placeholder="" [(ngModel)] = "pointOfContactObject.fullName" [disabled]="mode == 'view'">
+													<div class="searchBox memberSearchBox" *ngIf="isSMUChecked">
+																		<input type="text" placeholder="" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+																			[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
+																			class="searchButton" (click)="clearSearchBox($event)"><i
+																			[ngClass]="iconClass"></i></a>
+																		<div class="sb-seachresults"  *ngIf="searchActive">
+																			<ul class="sb-results-dropdown-menu text-left">
+																				<li *ngFor="let result of this.elasticSearchresults "
+																					(mousedown)="selected(result)"><span
+																					[innerHTML]="result.label"></span></li>
+																			</ul>
+																		</div>
+																	</div>
+												</td>
+												<td>
+													<label>
+														Designation:
+													</label> <br>
+													<input type="text" class="dateBox" [ngClass]="editClass" placeholder="" [(ngModel)] = "pointOfContactObject.designation" [disabled]="mode == 'view'">
+												</td>
+												<td>
+													<label>
+														Email:
+													</label> <br>
+													<input type="text" class="dateBox" [ngClass]="pocClass" [(ngModel)] = "pointOfContactObject.email" [disabled]="mode == 'view' || isSMUChecked" >
+												</td>
+												<td>
+													<label>
+														Phone:
+													</label> <br>
+													<input type="text" class="dateBox" [ngClass]="pocClass" [(ngModel)] = "pointOfContactObject.mobile" [disabled]="mode == 'view' || isSMUChecked">
+												</td>
+												<td colspan="2"> <br>
+													<button class="btnSkin btnSkinPrimary"  (click)="addPointOfContact(pointOfContactObject)">Add</button>
+												</td>
+											</tr>
+											<tbody *ngIf="showAddPointOfContact && result?.grantCall?.grantCallContacts?.length > 0">
+												<tr >
+													<th >Sl no</th>
+													<th >Name</th>
+													<th >Designation</th>
+													<th >Email</th>
+													<th >Phone</th>
+													<th *ngIf="mode != 'view'">Action</th>
 						
-						<tr *ngIf="this.result?.grantCall?.grantCallContacts?.length!=0">
-							<th title="Click to sort by Sl no">Sl No</th>
-							<th title="Click to sort by Name">Name</th>
-							<th title="Click to sort by Designation">Designation</th>
-							<th title="Click to sort by Email">Email</th>
-							<th title="Click to sort by Phone">Phone</th>
-							<th title="" *ngIf="mode != 'view'">Action</th>
-
-						</tr>
-						<tr *ngFor = "let pointOfContact of result?.grantCall?.grantCallContacts; let i = index">
-                            <td>{{i+1}}</td>
-							<td>{{pointOfContact.fullName}}</td>
-							<td>{{pointOfContact.designation}}</td>
-							<td>{{pointOfContact.email}}</td>
-							<td>{{pointOfContact.mobile}}</td>
-							<td *ngIf="mode != 'view'">
-								<ul class="actionButtonGroup">
-									<li><a href="#" data-toggle="modal"
-										data-target="#deletePointOfContact"
-										(click)="tempSavePointOfContact($event,pointOfContact,i)"><i
-											class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
-								</ul>
-							</td>
-							
-						</tr>
-						<div *ngIf="!valid"><span class="mandatory warningMessage">*{{validationError}}</span></div>
-						<tr *ngIf="pocDuplicationMessage"><span class="mandatory warningMessage">*Same person already added</span></tr>
-					</table> 
-                   </div>
+												</tr>
+												<tr *ngFor = "let pointOfContact of result?.grantCall?.grantCallContacts; let i = index">
+						                            <td>{{i+1}}</td>
+													<td>{{pointOfContact.fullName}}</td>
+													<td>{{pointOfContact.designation}}</td>
+													<td>{{pointOfContact.email}}</td>
+													<td>{{pointOfContact.mobile}}</td>
+													<td *ngIf="mode != 'view'">
+														<ul class="actionButtonGroup">
+															<li><a href="#" data-toggle="modal"
+																data-target="#deletePointOfContact"
+																(click)="tempSavePointOfContact($event,pointOfContact,i)"><i
+																	class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
+														</ul>
+													</td>
+												</tr>
+												<div *ngIf="!valid"><span class="mandatory warningMessage">*{{validationError}}</span></div>
+												<tr *ngIf="pocDuplicationMessage"><span class="mandatory warningMessage">*Same person already added</span></tr>
+											</tbody>
+											<tr *ngIf="result?.grantCall?.grantCallContacts?.length == 0 && mode == 'view'">
+												<td colspan="6"><div class="noDataExists">
+														No point of contact specified
+													</div></td>
+											</tr>
+										</table>
+                   			</div>
                          <div class="row">
                                  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                                      <div class="borderBox">
 
                                                                 <h4 class="borderBoxHeading">Area of Research</h4>
-                                                                <button id="areaOfResearchAddBtn" class="addBtn font hoverColor" (click)="showaddAreaOfResearch()" *ngIf="mode != 'view'">
-																	<i class="fa fa-plus"></i>
+                                                                <button id="areaOfResearchAddBtn" class="addBtn font hoverColor" (click)="showaddAreaOfResearch()" 
+                                                                	*ngIf="(result?.grantCall?.grantCallResearchAreas?.length > 0 && mode == 'view') || (mode != 'view')">
+																	<i [ngClass]="addResearch?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
 																</button>
                                                                 
-                                                                <table class="table table-responsive tableSkin">
-                                                                	<tr id="addAreaOfResearchRow" *ngIf="addResearch">
-																			<td>Area of Research</td>
-																			<td colspan="2">
+                                                                <table class="table table-responsive tableSkin grid2">
+                                                                		<tr id="addAreaOfResearchRow" *ngIf="addResearch && mode != 'view'">
+																			<td colspan="3"><label>Research Area:</label><br/>
 																				<div>
 																					 <ng2-completer title="Add area of research"
 																						[inputClass]="completerID"
-																						[(ngModel)]="selectedResearchArea" placeholder="Area Name"
+																						[(ngModel)]="selectedResearchArea" placeholder=""
 																						[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
 																						
 																				</div>
 																			</td>
-																			<td>
+																			<td><br/>
 																				<button class="btnSkin btnSkinPrimary" (click)="addResearchArea()">Add</button>
 																			</td>
 																		</tr>
-                                                                
-                                                                        <tr *ngIf = "result?.grantCall?.grantCallResearchAreas?.length!=0">
-                                                                                <th title="Click to sort by Sl no">Sl no</th>
-                                                                                <th title="Click to sort by Research Area Code">Research Area Code</th>
-                                                                                <th title="Click to sort by Code/Description">Code/Description</th>
-                                                                                <th title="" *ngIf="mode != 'view'">Action</th>
-                                                                        </tr>
-                                                                        <tr *ngFor="let researchArea of this.result?.grantCall?.grantCallResearchAreas;let i = index">
-                                                                                <td>{{i+1}}</td>
-                                                                                <td>{{researchArea.researchAreaCode}}</td>
-                                                                                <td>{{researchArea.researchArea.description}}</td>
-                                                                                <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
-																						<li><a href="#" data-toggle="modal"
-																							data-target="#deleteResearchArea"
-																							(click)="tempSaveResearchAreaObject($event,researchArea)"><i
-																								class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
-																					</ul>
-																				</td>
+                                                               			<tbody *ngIf="addResearch && result?.grantCall?.grantCallResearchAreas?.length > 0">
+	                                                                        <tr >
+	                                                                                <th >Sl no</th>
+	                                                                                <th >Research Area Code</th>
+	                                                                                <th >Code/Description</th>
+	                                                                                <th *ngIf="mode != 'view'">Action</th>
+	                                                                        </tr>
+	                                                                        <tr *ngFor="let researchArea of result?.grantCall?.grantCallResearchAreas;let i = index">
+	                                                                                <td>{{i+1}}</td>
+	                                                                                <td>{{researchArea.researchAreaCode}}</td>
+	                                                                                <td>{{researchArea.researchArea.description}}</td>
+	                                                                                <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																							<li><a href="#" data-toggle="modal"
+																								data-target="#deleteResearchArea"
+																								(click)="tempSaveResearchAreaObject($event,researchArea)"><i
+																									class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
+																						</ul>
+																					</td>
+																			</tr>
+																			<tr *ngIf = "areaWarning"><td><span class="warningMessage mandatory">*Research area already added</span></td></tr>
+	                                                                	</tbody>
+	                                                                	<tr *ngIf="result?.grantCall?.grantCallResearchAreas?.length == 0 && mode == 'view'">
+																			<td colspan="4"><div class="noDataExists">
+																					No area of research specified
+																				</div></td>
 																		</tr>
-																		<tr *ngIf = "areaWarning"><td><span class="warningMessage mandatory">*Research area already added</span></td></tr>
                                                                 </table>
                                                         </div>
                                                 </div>
@@ -325,32 +335,33 @@
                                                         <div class="borderBox">
                         
                                                                         <h4 class="borderBoxHeading">Eligibility</h4>
-                                                                        <button id="areaOfResearchAddBtn" class="addBtn font hoverColor" (click)="showaddEligibility()" *ngIf="mode != 'view'">
-																			<i class="fa fa-plus"></i>
+                                                                        <button id="areaOfResearchAddBtn" class="addBtn font hoverColor" (click)="showaddEligibility()" 
+                                                                        	*ngIf="(result?.grantCall?.grantCallEligibilities?.length > 0 && mode == 'view') || (mode != 'view')">
+																			<i [ngClass]="isEligibleAddopen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
 																		</button>
-                                                                        <table class="table table-responsive tableSkin">
-                                                                        		<tr id="addEligibilityRow" *ngIf="isEligibleAddopen">
-																					<td><label>Criteria:</label></td>
-																					<td><select class="committeeBox" [(ngModel)] = "selectedCriteria">
-																						<option>Select</option>
-																								<option *ngFor="let criteria of result?.grantCallCriterias">{{criteria.description}}</option>
+                                                                        <table class="table table-responsive tableSkin grid2">
+                                                                        		<tr id="addEligibilityRow" *ngIf="isEligibleAddopen && mode != 'view'">
+																					<td colspan="2"><label>Criteria:</label><br/>
+																						<select class="committeeBox dateBox" [(ngModel)] = "selectedCriteria">
+																							<option>{{select}}</option>
+																							<option *ngFor="let criteria of result?.grantCallCriterias">{{criteria.description}}</option>
 																						</select></td>
-																					<td><label>Type:</label></td>
-																					<td><select class="committeeBox" [(ngModel)] = "selectedEligibilityType" >
-																							<option>Select</option>
-																								<option *ngFor="let type of result?.grantCallEligibilityTypes">{{type.description}}</option>
-																								
+																					<td colspan="2"><label>Type:</label><br/>
+																						<select class="committeeBox dateBox" [(ngModel)] = "selectedEligibilityType" >
+																							<option>{{select}}</option>
+																							<option *ngFor="let type of result?.grantCallEligibilityTypes">{{type.description}}</option>
 																						</select>
 																					</td>
-																					<td>
+																					<td><br/>
 																						<button class="btnSkin btnSkinPrimary" (click)="addEligibility()">Add</button>
 																					</td>
 																				</tr>
-                                                                                <tr *ngIf="result?.grantCall?.grantCallEligibilities?.length!=0">
-                                                                                        <th title="Click to sort by Sl no">Sl no</th>
-                                                                                        <th title="Click to sort by Criteria">Criteria</th>
-                                                                                        <th title="Click to sort by Type" colspan="2">Type</th>
-                                                                                        <th title="" *ngIf="mode != 'view'">Action</th>
+																				<tbody *ngIf="result?.grantCall?.grantCallEligibilities?.length > 0 && isEligibleAddopen">
+                                                                                <tr >
+                                                                                        <th >Sl no</th>
+                                                                                        <th >Criteria</th>
+                                                                                        <th  colspan="2">Type</th>
+                                                                                        <th  *ngIf="mode != 'view'">Action</th>
                                                                                 </tr>
                                                                                 <tr *ngFor="let eligibility of  result?.grantCall?.grantCallEligibilities;let i = index">
                                                                                         <td>{{i+1}}</td>
@@ -364,26 +375,32 @@
 																							</ul>
 																						</td>
 																				</tr>
-																				<tr *ngIf = "eligibilityWarning"><td><span class="mandatory warningMessage">*Eligibility already added</span></td></tr>
-                                                                                
+																				<tr *ngIf = "eligibilityWarning"><td><span class="mandatory warningMessage">* Eligibility already added</span></td></tr>
+                                                                             </tbody>  
+                                                                             <tr *ngIf="result?.grantCall?.grantCallEligibilities?.length == 0 && mode == 'view'">
+																				<td colspan="5"><div class="noDataExists">
+																						No eleigibility criteria specified
+																					</div></td>
+																			</tr> 
                                                                         </table>
                                                                 </div>
                                                                 </div>
                                                         </div>
-                                                        <div class="borderBox col-12" *ngIf = "result?.grantCall?.grantCallStatus?.description !='Open'  && result?.grantCall?.grantCallAttachments?.length!=0 || result?.grantCall?.grantCallStatus?.description !='Open'  && result?.grantCall?.grantCallAttachments?.length==0 || result?.grantCall?.grantCallStatus?.description =='Open'  && result?.grantCall?.grantCallAttachments?.length!=0; else showNoAttachments">
+                                                        <div class="borderBox col-12">
                                                                         <h4 class="borderBoxHeading">Supporting Documents</h4>
                                                                         <button title="add new attachment" class="addBtn font hoverColor" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
 																				<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
 																			</button>
-                                                                        <table class="table table-responsive tableSkin">
-                                                                                <tr *ngIf = "result?.grantCall?.grantCallAttachments?.length!=0">
-                                                                                        <th title="Click to sort by Sl no">Sl No</th>
-                                                                                        <th title="Click to sort by Name">Attachment Type</th>
-                                                                                        <th title="Click to sort by Designation">Description</th>
-                                                                                        <th title="Click to sort by Email">File Name</th>
-                                                                                        <th title="" *ngIf="mode != 'view'">Action</th>
+                                                                        <table class="table table-responsive tableSkin grid2">
+                                                                        	<tbody *ngIf = "result?.grantCall?.grantCallAttachments?.length > 0">
+                                                                                <tr >
+                                                                                        <th >Sl No</th>
+                                                                                        <th >Attachment Type</th>
+                                                                                        <th >Description</th>
+                                                                                        <th >File Name</th>
+                                                                                        <th *ngIf="mode != 'view'">Action</th>
                                                                                 </tr>
-                                                                                <tr *ngFor = "let attachment of this.result?.grantCall?.grantCallAttachments;let i = index">
+                                                                                <tr *ngFor = "let attachment of result?.grantCall?.grantCallAttachments;let i = index">
                                                                                         <td>{{i+1}}</td>
                                                                                         <td>{{attachment?.grantCallAttachType?.description}}</td>
                                                                                         <td>{{attachment?.description}}</td>
@@ -396,6 +413,12 @@
 																							</ul>
                                                                                 		</td>
 																				</tr>
+																			</tbody>
+																			<tr *ngIf="result?.grantCall?.grantCallAttachments?.length == 0 && mode == 'view'">
+																				<td colspan="5"><div class="noDataExists">
+																						No supporting documents added
+																					</div></td>
+																			</tr> 
                                                                         </table>
 																</div>
 																
@@ -440,7 +463,7 @@
 								</option>
 							</select>
 							</td>
-							<td class="filterElement"><textarea id="desc" [(ngModel)] = "attachmentDescription" placeholder="Description" class="scheduleBoxes"></textarea></td>
+							<td class="filterElement"><textarea id="desc" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes"></textarea></td>
 						</tr>
 					</table>
 

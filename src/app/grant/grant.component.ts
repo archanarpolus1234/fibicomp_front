@@ -56,8 +56,8 @@ export class GrantComponent {
     selectedResearchArea: string;
     researchAreaList : any[] = [];
     saveType:string="SAVE";
-    selectedCriteria: string = "Select";
-    selectedEligibilityType: string = "Select";
+    selectedCriteria: string;
+    selectedEligibilityType: string;
     eligibilityList:any[] = [];
     attachmentDescription: string;
     public onDestroy$ = new Subject<void>();
@@ -121,7 +121,7 @@ export class GrantComponent {
     ngOnInit() { 
      this.currentDate.setDate(this.currentDate.getDate()-1);
        this.grantId = this.route.snapshot.queryParamMap.get('grantId');
-        if(this.grantId==null) {
+        if(this.grantId == null) {
             this.mode='create';
             this.editClass="committeeBox";
             this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
@@ -138,26 +138,30 @@ export class GrantComponent {
                             this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
                             this.editAreaClass = 'scheduleBoxes';
                             this.dateValidation();
-                            if(this.result.grantCall.sponsorCode!=null) {
+                            this.selectedSponsorType = this.select;
+                            this.selectedSponsor = this.select;
+                            this.selectedActivityType = this.select;
+                            this.selectedFundingType =  this.select;
+                            if(this.result.grantCall.sponsorCode != null) {
                                 this.grantService.fetchSponsorsBySponsorType(this.result.grantCall.sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
                                     var temp :any= {};
                                     temp = success;
-                                        this.sponsorList = temp.sponsors;
-                                    this.selectedSponsorType = this.result.grantCall.sponsorType.description;
+                                    this.sponsorList = temp.sponsors;
+                                    /*this.selectedSponsorType = this.result.grantCall.sponsorType.description;
                                     this.selectedSponsor = this.result.grantCall.sponsor.sponsorName;
                                     this.selectedActivityType = this.result.grantCall.activityType.description;
-                                    this.selectedFundingType = this.result.grantCall.fundingSourceType.description; 
+                                    this.selectedFundingType = this.result.grantCall.fundingSourceType.description;*/ 
                                 });
                             
-                            } else {
+                            } /*else {
                                 this.grantService.fetchSponsorsBySponsorType(this.result.sponsorTypes[0].code).takeUntil(this.onDestroy$).subscribe(success=>{
                                     var temp :any= {};
                                     temp = success; 
                                     this.sponsorList = temp.sponsors;
-                                    this.selectedSponsorType = this.result.sponsorTypes[0].description;
-                                   this.selectedSponsor = temp.sponsors[0].sponsorName;
-                                    this.selectedActivityType = this.result.activityTypes[0].description;
-                                    this.selectedFundingType =  this.result.fundingSourceTypes[0].description;
+                                    this.selectedSponsorType = this.select;
+                                    this.selectedSponsor = this.select;
+                                    this.selectedActivityType = this.select;
+                                    this.selectedFundingType =  this.select;
                                     
                                     this.sponsorTypeChange( this.selectedSponsorType);
                                     this.sponsorNameChange( this.selectedSponsor);
@@ -165,7 +169,7 @@ export class GrantComponent {
                                     this.fundingTypeChange(this.selectedFundingType);
 
                                 });
-                            }
+                            }*/
                            this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
                            this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' )
                            this.homeUnits =  this.completerService.local( this.result.homeUnits, 'unitName', 'unitName' )
@@ -185,9 +189,9 @@ export class GrantComponent {
                     },error=>{
                     }); 
         }
-     
+
     }
-    
+
     ngAfterViewInit() {
         this.searchText
             .valueChanges
@@ -311,31 +315,36 @@ export class GrantComponent {
         this.onDestroy$.complete();
     }
     
-    loadGrantInitData(){ 
+    loadGrantInitData(){
         this.grantService.createGrantCall().takeUntil(this.onDestroy$).subscribe(data=>{
             this.result = data;
-            this.grantService.fetchSponsorsBySponsorType(this.result.sponsorTypes[0].code).takeUntil(this.onDestroy$).subscribe(success=>{
+            this.selectedSponsorType = this.select;
+            this.selectedSponsor = this.select;
+            this.selectedActivityType = this.select;
+            this.selectedFundingType =  this.select;
+           /* this.grantService.fetchSponsorsBySponsorType(this.result.sponsorTypes[0].code).takeUntil(this.onDestroy$).subscribe(success=>{
                 var temp :any= {};
                 temp = success;
                 this.sponsorList = temp.sponsors;
-                this.selectedSponsorType = this.result.sponsorTypes[0].description;
-                this.selectedSponsor = temp.sponsors[0].sponsorName;
-                this.selectedActivityType = this.result.activityTypes[0].description;
-                this.selectedFundingType =  this.result.fundingSourceTypes[0].description;
+                this.selectedSponsorType = this.select;
+                this.selectedSponsor = this.select;
+                this.selectedActivityType = this.select;
+                this.selectedFundingType =  this.select;
                 this.sponsorTypeChange( this.selectedSponsorType);
                 this.sponsorNameChange( this.selectedSponsor);
                 this.researchTypeChange(this.selectedActivityType)
                 this.fundingTypeChange(this.selectedFundingType);
-            });
+            });*/
            this.keywordsList = this.completerService.local( this.result.scienceKeywords, 'description', 'description' )
            this.areaList = this.completerService.local( this.result.researchAreas, 'description', 'description' )
            this.homeUnits =  this.completerService.local( this.result.homeUnits, 'unitName', 'unitName' )
         });
     }
+
     showaddPointOfContact() {
         this.showAddPointOfContact = !this.showAddPointOfContact;
     }
-    
+
     addPointOfContact(pointOfContactObject) {
         this.pocDuplicationMessage = false;
         if(this.validateEmailAndMobile(this.pointOfContactObject.email.trim(),this.pointOfContactObject.mobile) && this.pointOfContactObject.fullName.trim().length>0 ) {
@@ -407,14 +416,16 @@ export class GrantComponent {
     
     showaddEligibility() {
         this.isEligibleAddopen = !this.isEligibleAddopen;
+        this.selectedCriteria = this.select;
+        this.selectedEligibilityType = this.select;
     }
     
     addEligibility() {
         var tempObj:any = {};
         var d = new Date();
         var timestamp = d.getTime();
-       this.eligibilityWarning= false;
-        if(this.selectedCriteria == null || this.selectedEligibilityType == null) {
+        this.eligibilityWarning= false;
+        if(this.selectedCriteria == this.select || this.selectedEligibilityType == this.select) {
           
         } else {
                     for(let eligibility of this.result.grantCall.grantCallEligibilities) {
@@ -443,8 +454,8 @@ export class GrantComponent {
                 }
             }
         }
-        this.selectedCriteria = "Select";
-        this.selectedEligibilityType = "Select";
+        this.selectedCriteria = this.select;
+        this.selectedEligibilityType = this.select;
        
     }
 
@@ -652,21 +663,27 @@ export class GrantComponent {
             }
         }
     }
+
     sponsorTypeChange(type) {
-        for(let sponsorType of this.result.sponsorTypes) {
-            if(sponsorType.description == type) {
-                this.grantService.fetchSponsorsBySponsorType(sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
-                    var temp :any= {};
-                    temp = success;
-                    this.sponsorList = temp.sponsors;
-                    this.result.grantCall.sponsor = this.sponsorList[0];
-                    this.result.grantCall.sponsorCode = this.sponsorList[0].code;
-                });
-                this.result.grantCall.sponsorType = sponsorType;
-                this.result.grantCall.sponsorTypeCode = sponsorType.code;
-                this.sponsorNameChange(this.selectedSponsor);
+        if(type == this.select) {
+            this.selectedSponsor = this.select;
+        } else {
+            for(let sponsorType of this.result.sponsorTypes) {
+                if(sponsorType.description == type) {
+                    this.grantService.fetchSponsorsBySponsorType(sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
+                        var temp :any= {};
+                        temp = success;
+                        this.sponsorList = temp.sponsors;
+                        this.result.grantCall.sponsorType = sponsorType;
+                        this.result.grantCall.sponsorTypeCode = sponsorType.code;
+                       /* this.result.grantCall.sponsor = this.sponsorList[0];
+                        this.result.grantCall.sponsorCode = this.sponsorList[0].code;*/
+                    });
+                    //this.sponsorNameChange(this.selectedSponsor);
+                }
             }
         }
+        
     }
     researchTypeChange(type) {
         for(let activityType of this.result.activityTypes) {
@@ -735,6 +752,7 @@ export class GrantComponent {
     }
 
     deleteKeyword(keyword,k) {
+        this.keyWordWarningMessage = null;
         for(let i=0;i<this.result.grantCall.grantCallKeywords.length;i++) {
            
                 if(this.result.grantCall.grantCallKeywords[i].grantKeywordId!=null) {
