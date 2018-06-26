@@ -517,29 +517,29 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     dateValidation() {
         if ( this.result.proposal.startDate == null ) {
             this.isDateWarningText = true;
-            this.dateWarningText = 'Please select a start date';
+            this.dateWarningText = '* Please select a start date';
         } else if ( this.result.proposal.startDate < this.currentDate ) {
             this.isDateWarningText = true;
-            this.dateWarningText = 'Please select a start date from today';
+            this.dateWarningText = '* Please select a start date from today';
         } else if ( this.result.proposal.startDate != null && this.result.proposal.endDate != null && this.result.proposal.startDate <= this.result.proposal.endDate ) {
             this.isDateWarningText = false;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             if ( this.result.proposal.submissionDate != null && ( this.result.proposal.startDate > this.result.proposal.submissionDate || this.result.proposal.submissionDate > this.result.proposal.endDate ) ) {
                 this.isDateWarningText = true;
-                this.dateWarningText = 'Please choose a submission date between proposal start date and proposal end date';
+                this.dateWarningText = '* Please choose a submission date between proposal start date and proposal end date';
             }
         } else if ( this.result.proposal.endDate == null ) {
             this.isDateWarningText = true;
-            this.dateWarningText = 'Please select an end date';
+            this.dateWarningText = '* Please select an end date';
         } else if ( this.result.proposal.startDate > this.result.proposal.endDate ) {
             this.isDateWarningText = true;
-            this.dateWarningText = 'Please select an end date after start date';
+            this.dateWarningText = '* Please select an end date after start date';
         } else if ( this.result.proposal.startDate != null && this.result.proposal.endDate != null && this.result.proposal.startDate <= this.result.proposal.endDate ) {
             this.isDateWarningText = false;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             if ( this.result.proposal.submissionDate != null && ( this.result.proposal.startDate > this.result.proposal.submissionDate || this.result.proposal.submissionDate > this.result.proposal.endDate ) ) {
                 this.isDateWarningText = true;
-                this.dateWarningText = 'Please choose a submission date between proposal start date and proposal end date';
+                this.dateWarningText = '* Please choose a submission date between proposal start date and proposal end date';
             }
         } else {
             this.isDateWarningText = false;
@@ -574,7 +574,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 if ( word.scienceKeyword.description == this.selectedKeyword ) {
                     keywordFlag = true;
                     this.isKeywordWarning = true;
-                    this.keywordWarningText = "Keyword already added";
+                    this.keywordWarningText = "* Keyword already added";
                     break;
                 }
             }
@@ -594,7 +594,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             }
         } else {
             this.isKeywordWarning = true;
-            this.keywordWarningText = "Keyword already added";
+            this.keywordWarningText = "* Keyword already added";
         }
         this.selectedKeyword = null;
     }
