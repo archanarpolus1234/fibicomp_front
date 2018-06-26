@@ -458,7 +458,6 @@ export class DashboardComponent implements OnInit {
         this.advanceSearchCriteria.property2 = '';
         this.advanceSearchCriteria.property3 = '';
         this.advanceSearchCriteria.property4 = '';
-        this.adminClear = true;
         if ( localStorage.getItem( 'isAdmin' ) ) {
             this.adminAdvanceSearch = true;
         }
@@ -698,7 +697,7 @@ export class DashboardComponent implements OnInit {
         this.proposals = null;
         this.awards = null;
         this.expenditureByAward = null;
-        this.dataList = (this.selectedReportName != 'Expenditure by Award')? this.openGrantList : this.awardNumberList;
+        this.dataList = (this.selectedReportName != 'Expenditure by Project')? this.openGrantList : this.awardNumberList;
     }
 
     fetchReportData() {

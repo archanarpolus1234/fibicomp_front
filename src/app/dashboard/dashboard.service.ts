@@ -24,6 +24,7 @@ export class DashboardService {
         this.personId = localStorage.getItem( 'personId' );
         var provost = ( localStorage.getItem( 'provost' ) == 'true' ) ? true : false;
         var reviewer = ( localStorage.getItem( 'reviewer' ) == 'true' ) ? true : false;
+        var personId = (localStorage.getItem('isAdmin') != 'true') ? this.personId : '';
         var params = {
             property1: property1,
             property2: property2,
@@ -34,7 +35,7 @@ export class DashboardService {
             reverse: reverse,
             tabIndex: tabIndex,
             userName: this.username,
-            personId: this.personId,
+            personId: personId,
             currentPage: currentPage,
             isUnitAdmin:localStorage.getItem('isAdmin'),
             unitNumber: localStorage.getItem('unitNumber'),
