@@ -740,7 +740,7 @@
 						</span>
 					</div>
 				</div>
-				<div class="borderBox">
+				<div class="borderBox" *ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
 					<table class="table table-responsive tableSkin"
 						*ngIf="this.result?.disclosureViews?.length !== 0">
 						<thead>
@@ -1256,7 +1256,8 @@
 			<!-- Pagination -->
 
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
-				*ngIf="((currentPosition != 'SUMMARY') && ((serviceRequestList != null) && (serviceRequestList?.length != 0)) && ((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)) || ((currentPosition == 'SMU_PROPOSAL' || currentPosition == 'GRANT' ) && ((serviceRequestList != null) && (serviceRequestList?.length != 0)))">
+				*ngIf="(currentPosition != 'SUMMARY' && (serviceRequestList != null && serviceRequestList?.length != 0) && (isAdmin==false || adminAdvanceSearch == true) && adminClear==false) || 
+					((currentPosition == 'SMU_PROPOSAL' || currentPosition == 'GRANT' ) && (serviceRequestList != null && serviceRequestList?.length != 0))">
 				<div class="text-right pagiSkin">
 					<nav class="paginationSkin text-right" href="#scrollToTop"
 						pageScroll [pageScrollSpeed]="400">
