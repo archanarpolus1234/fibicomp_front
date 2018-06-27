@@ -1099,13 +1099,13 @@
 								<div  class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
 									<div class="borderBox">
 										<h4 class="borderBoxHeading">Applications by Grant Call Type</h4>
-										<application-grantcall-type-piechart></application-grantcall-type-piechart>
+										<application-grantcall-type-piechart (pieChartReportList) = "changeReportPiechartList($event)"></application-grantcall-type-piechart>
 									</div>
 								</div>
 								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
 										<div class="borderBox">
 											<h4 class="borderBoxHeading">IRB Protocols by Type</h4>
-											<protocol-grantcall-type-piechart></protocol-grantcall-type-piechart>
+											<protocol-grantcall-type-piechart (pieChartReportProtocolList) = "changeReportPiechartProtocolList($event)"></protocol-grantcall-type-piechart>
 										</div>
 								</div>
 								<div  class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -1119,10 +1119,10 @@
 							<div class="row">
 							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 								<div class="borderBox">
-									<h4 class="borderBoxHeading">Report: <span class="greenLabel" *ngIf="selectedReportName != select">{{selectedReportName}}</span></h4>
+									<h4 class="borderBoxHeading"><span class="greenLabel" *ngIf="selectedReportName != select;else showreportLabel">{{selectedReportName}}</span><ng-template #showreportLabel>Report</ng-template></h4>
 									<table class="table table-responsive tableSkin">
 											<tr id="reportFilterRow">
-													<td class="text-right">Report Name :</td>
+													<td class="text-right"><b>Report Name :</b></td>
 													<td>
 												  			<select [(ngModel)] = "selectedReportName" class = "committeeBox" (change)="reportTypeChange()">
 																<option>{{select}}</option>
@@ -1136,10 +1136,10 @@
 												  	</td>
 													<td >
 														<div *ngIf="selectedReportName != select">
-																<ng2-completer  title="Search grant" 
+																<ng2-completer 
 																		[inputClass]="completerID"
-																		[(ngModel)]="selectedReportItemId" [placeholder]="(selectedReportName == 'Expenditure by Project')? 'Search by project number': 'Search by id or name'"
-																		[datasource]="dataList" [minSearchLength]="0"
+																		[(ngModel)]="selectedReportItemId" [placeholder]="(selectedReportName == 'Expenditure by Project')? 'Search by project number': 'Search by id'"
+																		[datasource]="dataList" [minSearchLength]="1"
 																		(selected)="grantIdChange()"  class="widthLimiterNg2Completer p-0 border-0"></ng2-completer>
 														</div>
 													</td>
@@ -1177,7 +1177,7 @@
 														</td>
 													</tr>
 												</tbody>
-													<tr *ngIf="selectedReportName == 'Submitted Applications by Grant Call' && (proposals?.length == 0 || proposals == null )"><td><div class="noDataExists" >
+													<tr *ngIf="selectedReportName == 'Submitted Applications by Grant Call' && reportObject?.personId!=null && proposals == null"><td><div class="noDataExists" >
 																			No report data found
 																		</div></td>
 													</tr>
@@ -1220,7 +1220,7 @@
 														</td>
 													</tr>
 												</tbody>
-													<tr *ngIf="selectedReportName == 'Projects by Grant Call' && (awards?.length == 0 || awards == null)"><td><div class="noDataExists" >
+													<tr *ngIf="selectedReportName == 'Projects by Grant Call' && reportObject?.personId!=null && awards == null"><td><div class="noDataExists" >
 																			No report data found
 																		</div></td>
 													</tr>
@@ -1239,7 +1239,7 @@
 														<td>{{expenditure[0] | currency:'USD':true}}</td>
 													</tr>
 												</tbody>
-													<tr *ngIf="selectedReportName == 'Expenditure by Project' && (expenditureByAward?.length == 0 || expenditureByAward == null)"><td><div class="noDataExists" >
+													<tr *ngIf="selectedReportName == 'Expenditure by Project' &&   reportObject?.personId!=null && expenditureByAward == null"><td><div class="noDataExists" >
 																			No expenditure data found
 																		</div></td>
 													</tr>
@@ -1247,6 +1247,108 @@
 									</div>
 							</div>
 							</div>
+
+
+							<div class="row"  *ngIf="proposalsPiechartList?.length > 0">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+									<div class="borderBox">
+										<h4 class="borderBoxHeading">Applications by Grant Call Type ({{pieChartReportType}})</h4>
+										<table class="table table-responsive tableSkin">
+											<tbody *ngIf="proposalsPiechartList?.length > 0">
+												<tr>
+													<th (click)="sortResult('proposalId',currentPosition)" class="hand-cursor"
+													title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
+													</th>
+													<th >Title
+													</th>
+													<th (click)="sortResult('proposalCategory.description',currentPosition)" class="hand-cursor"
+													title="Click to sort by category">Category<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalCategory.description')}"></span></th>
+													<th (click)="sortResult('proposalType.description',currentPosition)" class="hand-cursor"
+													title="Click to sort by type">Type<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalType.description')}"></span></th>
+													<th (click)="sortResult('proposalStatus.description',currentPosition)" class="hand-cursor"
+													title="Click to sort by status">Status<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalStatus.description')}"></span></th>
+													<th (click)="sortResult('submissionDate',currentPosition)" class="hand-cursor"
+													title="Click to sort by Submission Date">Submission Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'submissionDate')}"></span>
+													</th>
+													<th>Action</th>
+												</tr>
+												<tr *ngFor="let proposal of proposalsPiechartList">
+													<td>{{proposal.proposalId}}</td>
+								<td>{{proposal.title}}</td>
+								<td>{{proposal.applicationCategory}}</td>
+								<td>{{proposal.applicationType}}</td>
+								<td>{{proposal.applicationStatus}}</td>
+								<td>{{proposal.submissionDate}}</td>
+								<td>
+									<ul class="actionButtonGroup">
+										<li><a title="Open application {{proposal?.proposalId}}"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
+												class="fa fa-eye pointer"></i></a></li>
+										
+									</ul>
+								</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+							<div class="row"  *ngIf="protocolPiechartList?.length > 0">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+									<div class="borderBox">
+										<h4 class="borderBoxHeading">IRB Protocols By Type ({{pieChartReportProtocolType}})</h4>
+										<table class="table table-responsive tableSkin">
+											<tbody *ngIf="protocolPiechartList?.length > 0">
+												<tr>
+													<th (click)="sortResult('protocolNumber',currentPosition)"
+														title="Click to sort by Protocol">Protocol <span
+														class="sortorder"
+														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolNumber')}"></span>
+													</th>
+													<th (click)="sortResult('title',currentPosition)"
+														title="Click to sort by Title" width="40%">Title <span
+														class="sortorder"
+														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+													</th>
+													<th (click)="sortResult('leadUnit',currentPosition)"
+														title="Click to sort by Lead Unit">Lead Unit <span
+														class="sortorder"
+														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span>
+													</th>
+													<th (click)="sortResult('protocolType',currentPosition)"
+														title="Click to sort by Protocol Type">Protocol Type <span
+														class="sortorder"
+														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolType')}"></span>
+													</th>
+													<th (click)="sortResult('status',currentPosition)"
+														title="Click to sort by Status">Status <span
+														class="sortorder"
+														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
+													</th>
+													<th>Action</th>
+												</tr>
+												<tr
+													*ngFor="let IRBDetails of protocolPiechartList | slice:begin:end">
+													<td>{{IRBDetails.protocolNumber}}</td>
+													<td>{{IRBDetails.title}}</td>
+													<td>{{IRBDetails.leadUnit}}</td>
+													<td>{{IRBDetails.protocolType}}</td>
+													<td>{{IRBDetails.status}}</td>
+													<td>
+														<ul class="actionButtonGroup">
+															<li><a title="Open {{IRBDetails.protocolNumber}}"
+																[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26docId%3D'+IRBDetails.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.irb.Protocol%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'"><i
+																	class="fa fa-eye"></i> </a></li>
+														</ul>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+
 
 			</div>
 

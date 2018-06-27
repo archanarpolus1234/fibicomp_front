@@ -7,6 +7,8 @@ import { DashboardData } from '../dashboard/dashboard-data.service';
 import { ExpandedviewService } from '../research_summary/expanded-view.service';
 import { ExpandedViewDataService } from './expanded-view-data-service';
 import { ISubscription } from "rxjs/Subscription";
+import { EventEmitter } from '@angular/core';
+import { Output } from '@angular/core';
 
 declare var google: any;
 
@@ -24,13 +26,14 @@ export class ProtocolByGrantcallTypePieChartComponent extends GoogleChartService
     private piechartList: any[];
     private proposalList: any[];
     private piechartDrawList: any[] = [];
+    public protocolType: string;
 
     private subscription: ISubscription;
 
     constructor( private ref: ChangeDetectorRef, private dashboardService: DashboardService, private router: Router, public expandedViewDataservice: ExpandedViewDataService, public dashboardData: DashboardData ) {
         super();
     }
-
+    @Output() pieChartReportProtocolList:EventEmitter<any> = new EventEmitter<any>();
     ngOnInit() {
        this.subscription = this.dashboardData.reportDataVariable.subscribe( dashboardReportData => {
             if ( dashboardReportData.applicationsByGrantCallType != undefined ) {
@@ -52,7 +55,7 @@ export class ProtocolByGrantcallTypePieChartComponent extends GoogleChartService
         if ( this.resultPie != null && this.resultPie._value.protocolsByType !== undefined ) {
             let tempObject: any = {};
             tempObject = this.resultPie._value.protocolsByType;
-            this.piechartList = Object.entries(tempObject).map(([key, value]) => ([key,value]));
+            this.piechartList = Object.entries(tempObject).map(([key, value]) => ([key,value.length]));
             //this.awardList = this.resultPie._value.applicationsByGrantCallType;
             this.piechartDrawList = [];
             this.piechartDrawList.push( ['Type', 'Count'] );
@@ -74,6 +77,39 @@ export class ProtocolByGrantcallTypePieChartComponent extends GoogleChartService
             this.grantCallChart = this.createPiChart( document.getElementById( 'pichart_protocol_grantcall' ) );
             this.grantCallChart.draw( this.piechartDrawData, this.piechartOptions );
         }
+
+        google.visualization.events.addListener( this.grantCallChart, 'onmouseover', ( event ) => {
+            document.getElementById( 'pichart_protocol_grantcall' ).style.cursor = 'pointer';
+        } );
+        google.visualization.events.addListener( this.grantCallChart, 'onmouseout', ( event ) => {
+            document.getElementById( 'pichart_protocol_grantcall' ).style.cursor = '';
+        } );
+
+        google.visualization.events.addListener( this.grantCallChart, 'select', ( event ) => {
+            
+            var selection = this.grantCallChart.getSelection();
+            console.log(selection)
+            for ( var i = 0; i < selection.length; i++ ) {
+                var item = selection[i];
+                if ( item.row != null ) {
+                    this.protocolType = this.piechartDrawData.getFormattedValue( item.row, 0 );
+                    console.log(this.piechartList)
+                    
+                }
+            }
+            for(var i=0;i<this.piechartList.length;i++) {
+                if(this.protocolType === this.piechartList[i][0]) {
+                    console.log(this.resultPie._value.protocolsByType[this.protocolType])
+              // this.reportPiecharService.setList(this.resultPie._value.applicationsByGrantCallType[this.grantCallType])
+              var temporaryObj = {};
+              temporaryObj["list"] = this.resultPie._value.protocolsByType[this.protocolType];
+              temporaryObj["type"] = this.protocolType;
+                    this.pieChartReportProtocolList.emit(temporaryObj)
+                    break;
+                }
+            }
+            
+        } );
     }
 
     onResize( event ) {

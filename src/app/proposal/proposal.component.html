@@ -28,7 +28,7 @@
 											<div class="row">
 												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
 													<label><span class="mandatory" *ngIf="mode != 'view'">*</span>Title:</label><br>
-													<input type="text" placeholder="Type here the Application Title" class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="result.proposal.title"/>
+													<input type="text" placeholder="" class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="result.proposal.title"/>
 													<span *ngIf="mode == 'view'" >{{result?.proposal?.title}}</span>
 												</div>
 												<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
@@ -58,7 +58,7 @@
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br>
 													 <span *ngIf="mode != 'view'" >
-													    <input placeholder="MM/DD/YYYY"
+													    <input placeholder="MM/dd/YYYY"
 															[owlDateTimeTrigger]="subDt" [owlDateTime]="subDt" 
 															[(ngModel)]="result.proposal.submissionDate"
 															[ngClass]="editClass" />
@@ -70,7 +70,7 @@
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed Start Date:</label><br>
 													 <span *ngIf="mode != 'view'" >
-													 	<input placeholder="MM/DD/YYYY"
+													 	<input placeholder="MM/dd/YYYY"
 															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" 
 															[(ngModel)]="result.proposal.startDate" 
 															[ngClass]="editClass" />
@@ -82,7 +82,7 @@
 												<div  [ngClass] = "mode == 'view'?'col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2':'col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4'">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed End Date:</label><br>
 													 <span *ngIf="mode != 'view'" >
-													 	<input placeholder="MM/DD/YYYY"
+													 	<input placeholder="MM/dd/YYYY"
 															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" 
 															[(ngModel)]="result.proposal.endDate"
 															[ngClass]="editClass" style="width: 65%" />
@@ -124,7 +124,7 @@
 													 	 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"  *ngIf="mode!='view'" style="padding-left: 0px">
 													 	 	<ng2-completer style="border:none; padding:0px"
 															[inputClass]="completerID"
-															[(ngModel)]="selectedKeyword" placeholder="Search for Keyword"
+															[(ngModel)]="selectedKeyword" placeholder=""
 															[datasource]="keywordsList" [minSearchLength]="0"
 															(selected)="keywordChangeFunction()" [disabled]="mode == 'view'">
 													 		</ng2-completer>
@@ -154,8 +154,8 @@
 							<table class="table table-responsive tableSkin">
 								<tr *ngIf="result?.proposal?.grantCall == null && mode !='view'">
 									<td class="text-right"><label>Title of Grant Call:</label></td>
-									<td class="pull-left"><span><ng2-completer style="border:none; padding:0px"
-															[inputClass]="completerID" placeholder="Search here for Grant Call Name"
+									<td class="pull-left"><span><ng2-completer style="border:none; padding:0px;"
+															[inputClass]="completerID" placeholder=""
 															[(ngModel)]="selectedGrantCall"
 															[datasource]="grantCallList" [minSearchLength]="0"
 															(selected)="grantCallChangeFunction()" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
@@ -163,7 +163,7 @@
 									</td>
 									<td colspan="4">&nbsp;</td>
 								</tr>
-								<tr *ngIf="result?.proposal?.grantCall == null">
+								<tr *ngIf="result?.proposal?.grantCall == null && mode == 'view'">
 									<td colspan="6"><div class="noDataExists">
 											No grant call associated with this proposal
 										</div></td>
@@ -204,7 +204,7 @@
 											<td>
 												<div>
 													 <ng2-completer title="Add area of research"
-														[inputClass]="completerID" placeholder="Search here for Area of Research"
+														[inputClass]="completerID" placeholder=""
 														[(ngModel)]="selectedArea"
 														[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
 												</div>
@@ -237,14 +237,14 @@
 	                                        </tr>
 	                                        <tr>
 	                                        	<td><label>Description:</label></td>
-	                                        	<td colspan="4"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="Elaborate Contributions of Proposal to Area of Researches" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+	                                        	<td colspan="4"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 	                                        	<span *ngIf="mode == 'view'">{{result?.proposal?.researchDescription}}</span>
 	                                        	<div class="noDataExists" *ngIf="result?.proposal?.researchDescription == null && mode == 'view'">
 													No contributions or descriptions added for this proposal
 												</div>
 	                                        </tr>
                                         </tbody>
-                                        <tr *ngIf="result?.proposal?.proposalResearchAreas?.length == 0">
+                                        <tr *ngIf="result?.proposal?.proposalResearchAreas?.length == 0  && mode == 'view'">
                                         	<td colspan="5"><div class="noDataExists">
 														No area of research/excellence added with this proposal
 													</div></td>
@@ -262,7 +262,7 @@
 											<td class="text-right"><label>Name:</label></td>
 											<td> 
 												<div class="searchBox memberSearchBox">
-													<input type="text" placeholder="{{placeHolderText}}" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+													<input type="text" placeholder="" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
 														[formControl]="searchText"  (ngModelChange)="onSearchValueChange()"/> <a href="#"
 														class="searchButton" (click)="clearSearchBox($event)"><i
 														[ngClass]="iconClass"></i></a>
@@ -283,7 +283,7 @@
 											</td>
 											<td class="text-right"><label>Department:</label></td>
 											<td class="pull-left"><span><ng2-completer style="border:none; padding:0px"
-															[inputClass]="completerID" placeholder="Search for Department"
+															[inputClass]="completerID" placeholder=""
 															[(ngModel)]="selectedHomeUnit"
 															[datasource]="homeUnits" [minSearchLength]="0"
 															[ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
@@ -296,7 +296,7 @@
 										<tr *ngIf="personWarningFlag">
 											<td colspan="9"><span class="mandatory">{{personWarningMsg}}</span></td>
 										</tr>
-										<tr *ngIf="result?.proposal?.proposalPersons?.length == 0">
+										<tr *ngIf="result?.proposal?.proposalPersons?.length == 0 && mode == 'view'">
 											<td colspan="9"><div class="noDataExists">
 													No members are associated with this proposal
 												</div></td>
@@ -334,14 +334,14 @@
 										<tbody>
 											<tr>
 												<td><label>Abstract:</label><br>
-													<textarea name="abstract" class="forTextAreaEntry" placeholder="Research Abstract" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
+													<textarea name="abstract" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.abstractDescription}}</span>
 													<div class="noDataExists" *ngIf="result?.proposal?.abstractDescription == null && mode == 'view'">
 														No abstract for this proposal
 													</div>
 												</td>
 												<td><label>Funding Strategy:</label><br>
-													<textarea name="fundingStrategy" class="forTextAreaEntry" maxlength="50" placeholder="Strategy for Obtaining External Funding" [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<textarea name="fundingStrategy" class="forTextAreaEntry" maxlength="50" placeholder="" [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.fundingStrategy}}</span>
 													<div class="noDataExists" *ngIf="result?.proposal?.fundingStrategy == null && mode == 'view'">
 														No description for funding strategy for this proposal
@@ -350,14 +350,14 @@
 	                                        </tr>
 	                                        <tr>
 												<td><label>Details of Proposal:</label><br>
-													<textarea name="details" class="forTextAreaEntry" placeholder="Type here on Aim, Significance, Approach, Preliminary Studies etc." [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
+													<textarea name="details" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.details}}</span>
 													<div class="noDataExists" *ngIf="result?.proposal?.details == null && mode == 'view'">
 														No additional details for this proposal
 													</div>
 												</td>
 												<td><label>Deliverables:</label><br>
-													<textarea name="deliverables" class="forTextAreaEntry" placeholder="Type here on Project Deliverables like Manpower Training, Research Outcomes, etc." [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<textarea name="deliverables" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.deliverables}}</span>
 													<div class="noDataExists" *ngIf="result?.proposal?.deliverables == null && mode == 'view'">
 														No deliverables for this proposal
@@ -387,14 +387,14 @@
 															</select>
 														</td>
 														<td><label>Start Date:</label><input
-															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" placeholder="Start Date"
+															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" placeholder=""
 															[(ngModel)]="fundingStartDate" 
 															[disabled]="mode == 'view' ? true : false"
 															[ngClass]="editClass" />
 															<i class="fa fa-calendar fa-large hand-cursor" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="startDt"></i>
 															<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></td>
 													<td><label>End Date:</label><input
-															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" placeholder="End Date"
+															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" placeholder=""
 															[(ngModel)]="fundingEndDate"
 															[disabled]="mode == 'view' ? true : false"
 															[ngClass]="editClass" />
@@ -411,7 +411,7 @@
 			                                        	<td colspan="3"><span class="mandatory">{{fundingWarningText}}</span></td>
 														<td colspan="3"></td>
 													</tr>
-													<tr *ngIf="result?.proposal?.proposalSponsors?.length == 0">
+													<tr *ngIf="result?.proposal?.proposalSponsors?.length == 0 && mode == 'view'">
 														<td colspan="6"><div class="noDataExists">
 																You declared no fundings are associated for you before this proposal
 															</div></td>
@@ -452,7 +452,7 @@
 														<td>
 															<div style="width: 40%">
 																<ng2-completer title="Add area of research"
-																	[inputClass]="completerID" placeholder="Search here for Protocol Title"
+																	[inputClass]="completerID" placeholder=""
 																	[(ngModel)]="selectedProtocol" (selected)="addIRB()"
 																	[datasource]="protocolsList" [minSearchLength]="0"></ng2-completer>
 															</div>
@@ -463,7 +463,7 @@
 			                                        	<td colspan="4"><span class="mandatory">{{irbWarningText}}</span></td>
 														<td colspan="3"></td>
 													</tr>
-													<tr *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0">
+													<tr *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && mode == 'view'">
 														<td colspan="7"><div class="noDataExists">
 																No protocols associated before this proposal
 															</div></td>
@@ -547,7 +547,7 @@
 														</ul></td>
 		                                         </tr>
 	                                         </tbody>
-	                                         <tr *ngIf="result?.proposal?.proposalBudgets?.length == 0">
+	                                         <tr *ngIf="result?.proposal?.proposalBudgets?.length == 0 && mode == 'view'">
 												<td colspan="9"><div class="noDataExists">
 														Budget is not estimated with this proposal yet
 													</div></td>
@@ -561,7 +561,7 @@
 									<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
 								</button>
                                <table class="table table-responsive tableSkin">
-                               		<tr *ngIf="result?.proposal?.proposalAttachments?.length == 0">
+                               		<tr *ngIf="result?.proposal?.proposalAttachments?.length == 0 && mode == 'view'">
 										<td colspan="5"><div class="noDataExists">
 												No supporting documents are attached with this proposal
 											</div></td>
@@ -803,10 +803,10 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 									</select>
 								</div>
 								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 attach-desc text-right">
-									<label><span class="mandatory">*</span> Description:</label>
+									<label> Description:</label>
 								</div>
 								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-									<textarea id="desc" cols=2 [(ngModel)] = "attachmentDescription" placeholder="Description" class="scheduleBoxes forTextAreaEntry"></textarea>
+									<textarea id="desc" cols=2 [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
 								</div>
 							</div>
 						</div>
@@ -858,7 +858,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 								<tr >
 									<td colspan="2" class="text-right" id="reviewAssignModalTd">Name of Reviewer:</td>
 									<td colspan="2" class="pull-left" id="reviewAssignModalTd"><span><ng2-completer style="border:none; padding:0px"
-															[inputClass]="completerID" placeholder="Search here for Reviewer Name"
+															[inputClass]="completerID" placeholder=""
 															[(ngModel)]="selectedReviewer"
 															[datasource]="reviewerList" [minSearchLength]="0"
 															(selected)="reviewerChangeFunction()" [ngClass]="editClass" ></ng2-completer></span>
@@ -1071,7 +1071,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					
 					<table class="table table-responsive tableSkin">
 						Comments:
-						<textarea [placeholder]="approveDisapprovePlaceHolder" class="col-12 col-lg-12 commentBox" rows="2" cols="20" [(ngModel)]="approveComments"></textarea>
+						<textarea placeholder="" class="col-12 col-lg-12 commentBox" rows="2" cols="20" [(ngModel)]="approveComments"></textarea>
 						</table>
 						Add files:
 					<file-drop headertext="Drop files here"
