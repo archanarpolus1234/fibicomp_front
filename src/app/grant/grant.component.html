@@ -452,33 +452,45 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<table class="table table-responsive tableSkin">
-						<tr *ngIf="showAddAttachment">
-							<td class="noData filterElement">Add :</td>
-							<td class="filterElement"><span class="mandatory">*</span> 
-							<select class="committeeBox" (change)="attachmentTypeChange($event.target.value)">
-								<option>Select</option>
-								<option *ngFor="let attachType of this.result?.grantCallAttachTypes" (value)="attachType">
-									{{attachType.description}}
-								</option>
-							</select>
-							</td>
-							<td class="filterElement"><textarea id="desc" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes"></textarea></td>
-						</tr>
-					</table>
+					<div class="pullSide">
+						<div class="gridSkin">
+							<div class="row"  *ngIf="showAddAttachment">
+								<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4 attach-desc">
+									<label><span class="mandatory">*</span> Attachment Type:</label><br/>
+									<select class="committeeBox dateBox" [(ngModel)] = "selectedAttachmentType">
+										<option (value)="select">{{select}}</option>
+										<option *ngFor="let attachType of result?.grantCallAttachTypes" (value)="attachType">
+											{{attachType.description}}
+										</option>
+									</select>
+								</div>
+								<div class="col-xl-8 col-lg-8 col-md-6 col-sm-12 col-8 attach-desc">
+									<label>Description:</label><br/>
+									<textarea id="desc" rows="3" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
 
-					<file-drop headertext="Drop files here"
+					<file-drop
 						(onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
-						(onFileLeave)="fileLeave($event)"> <input type="file"
-						#file (change)="onChange(file.files)" multiple /> OR &nbsp;&nbsp;
+						(onFileLeave)="fileLeave($event)">
+						<button class="btnSkin btnSkinPrimary" (click)="triggerAdd()">Choose Files</button>
+						<input type="file" #file (change)="onChange(file.files)" multiple id="addAttach" style="display: none"/>
+						<div style="color: #00BCD4; margin-left: 10px;"> OR Drop files here</div>
 					</file-drop>
-					<ul>
-						<li *ngFor="let item of uploadedFile; let i=index">
-						<span>{{ item.name }}----------------</span><i class="fa fa-trash-o pointer" (click)="deleteFromUploadedFileList(item)"></i>
-						</li>
-					</ul>
-					<div *ngIf="attachmentWarning"><span class="mandatory font">*File already added</span></div>
-					<div *ngIf="attachmentTypeWarning"><span class="mandatory font">*Please fill the mandatory field</span></div>
+					<div class="row">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="fileChips regularFont">
+								<span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+									<i class="fa fa-close hand-cursor" title="Remove File" (click)="deleteFromUploadedFileList(item)"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+					<!-- <div *ngIf="attachmentWarning"><span class="mandatory font">*File already added</span></div>
+					<div *ngIf="attachmentTypeWarning"><span class="mandatory font">*Please fill the mandatory field</span></div> -->
+					<div *ngIf="attachmentWarning"><span class="mandatory font">{{attachmentWarningMsg}}</span></div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>

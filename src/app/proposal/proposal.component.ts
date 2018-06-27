@@ -1420,8 +1420,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.sendObject.userName = this.currentUser;
         this.sendObject.approveComment = this.approveComments;
         this.sendObject.personId = this.result.personId;
-        this.sendObject.updateTimeStamp = new Date().getTime();
-        this.sendObject.updateUser = this.currentUser;
         this.proposalCreateService.completeReviewAction( this.sendObject, this.uploadedFile ).subscribe( data => {
             var temp: any = {};
             temp = data;
