@@ -455,7 +455,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .attach-desc {
-	padding: 10px 0px 0px 10px !important;
+	/* padding: 10px 0px 0px 10px !important; */
 }
 
 /* :host>>> .owl-dt-calendar-control {

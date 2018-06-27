@@ -11,6 +11,7 @@ import { GrantService } from "./grant.service";
 import { SessionManagementService } from '../session/session-management.service';
 import { CommitteeMemberEmployeeElasticService } from '../elastic-search/committee-members-employees-elastic-search.service';
 
+declare var $: any;
 
 @Component( {
     selector: 'grant',
@@ -26,10 +27,10 @@ export class GrantComponent {
     editClass: string = "committeeBox";
     pocClass: string = 'committeeBoxNotEditable';
     editAreaClass: string = 'scheduleBoxes';
-    addResearch: boolean = false;
+    addResearch: boolean = true;
     showAddAttachment: boolean = false;
-    isEligibleAddopen: boolean = false;
-    showAddPointOfContact: boolean = false;
+    isEligibleAddopen: boolean = true;
+    showAddPointOfContact: boolean = true;
     editScheduleattachment: boolean = true;
     subscription: Subscription;
     result: any ={};
@@ -87,6 +88,8 @@ export class GrantComponent {
     areaWarning:boolean = false;
     attachmentWarning:boolean = false;
     attachmentTypeWarning:boolean = false;
+    attachmentWarningMsg: string;
+    selectedAttachmentType: string;
     isDateWarningText:boolean = false;
     dateWarningText:string = null;
     durInYears;durInMonths;durInDays;
@@ -494,6 +497,7 @@ export class GrantComponent {
         this.showAddAttachment = true;
         this.uploadedFile = [];
         this.attachmentDescription = '';
+        this.selectedAttachmentType = this.select;
     }
     
     editAttachments($event,i, attachments) {
@@ -559,62 +563,53 @@ export class GrantComponent {
         this.showAddAttachment=false;
         this.uploadedFile = [];
     }
-    
-    attachmentTypeChange( type ) {
-        var d = new Date();
-        var timestamp = d.getTime();
-        for ( let attachmentType of this.result.grantCallAttachTypes ) {
-            if ( attachmentType.description == type ) {
-                this.attachmentObject = attachmentType;
-            }
-        }
-    }
-    
-    addAttachments(){
+
+    addAttachments() {debugger;
         var d = new Date();
         this.attachmentWarning = false;
-        this.attachmentTypeWarning = false;
-        if(this.result.grantCall.grantCallAttachments.length!=0) {
-            if( this.uploadedFile.length!=0) {
-                label: for (let attachment of this.result.grantCall.grantCallAttachments) {
-                    for(let file of this.uploadedFile) {
-                        if(attachment.fileName == file.name) {
+        if ( this.result.grantCall.grantCallAttachments.length != 0 ) {
+            if ( this.uploadedFile.length != 0 ) {
+                label: for ( let attachment of this.result.grantCall.grantCallAttachments ) {
+                    for ( let file of this.uploadedFile ) {
+                        if ( attachment.fileName == file.name ) {
                             this.attachmentWarning = true;
+                            this.attachmentWarningMsg = '* Already added the file';
                             break label;
                         }
                     }
-                    
                 }
             }
-         
         }
-        if(this.attachmentWarning == false) {
+        if ( this.attachmentWarning == false ) {
             var timestamp = d.getTime();
-            var tempObjectForAdd:any = {};
-            
-            if(this.attachmentObject.description!=null) { 
-                this.attachmentTypeWarning = false;
+            var tempObjectForAdd: any = {};
+
+            if ( this.selectedAttachmentType != this.select ) {
+                this.attachmentWarning = false;
+                for ( let attachmentType of this.result.grantCallAttachTypes ) {
+                    if ( attachmentType.description == this.selectedAttachmentType ) {
+                        this.attachmentObject = attachmentType;
+                    }
+                }
                 tempObjectForAdd.grantCallAttachType = this.attachmentObject;
                 tempObjectForAdd.grantAttachmentTypeCode = this.attachmentObject.grantAttachmentTypeCode;
                 tempObjectForAdd.description = this.attachmentDescription;
                 tempObjectForAdd.updateTimestamp = timestamp;
                 tempObjectForAdd.updateUser = this.currentUser;
                 this.result.newAttachment = tempObjectForAdd;
-                this.grantService.addGrantCallAttachment(this.result.grantCall,this.result.newAttachment,this.uploadedFile).subscribe(success=>{
-                    var temporaryObject:any ={};
+                this.grantService.addGrantCallAttachment( this.result.grantCall, this.result.newAttachment, this.uploadedFile ).subscribe( success => {
+                    var temporaryObject: any = {};
                     temporaryObject = success;
                     this.result.grantCall = temporaryObject.grantCall;
-                },error=>{},()=>{
+                }, error => { }, () => {
                     this.closeAttachments();
-                });
-                
+                } );
+
             } else {
-                this.attachmentTypeWarning = true;
+                this.attachmentWarning = true;
+                this.attachmentWarningMsg = '* Please select an attachment type';
             }
-           
         }
-      
-        
     }
     
   //when file list changes
@@ -880,41 +875,40 @@ export class GrantComponent {
     }
 
     publishCall() {
-                    
-        if(this.result.grantCall.grantCallId ==null || this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.result.grantCall.grantTheme==null ) {
+        if ( this.result.grantCall.grantCallId == null || this.result.grantCall.grantCallType == null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.result.grantCall.grantTheme == null ) {
             var scrollTop;
             //Scroll to Top Javascript Function
             this.showWarning = true;
-             scrollTop = setInterval(function(){ 
-                        if(document.body.scrollTop == document.documentElement.scrollTop) {
-                            clearInterval(scrollTop);
-                        }
-                       
-                        document.body.scrollTop = document.documentElement.scrollTop -=10 ; }, 1000/30);
+            scrollTop = setInterval( function() {
+                if ( document.body.scrollTop == document.documentElement.scrollTop ) {
+                    clearInterval( scrollTop );
+                }
+
+                document.body.scrollTop = document.documentElement.scrollTop -= 10;
+            }, 1000 / 30 );
 
         } else {
             this.scrollToTop = "";
             this.showWarning = false;
             this.keyWordWarningMessage = null;
-            this.grantService.publishCall(this.result.grantCall).subscribe(success=>{
-                var temp:any = {};
+            this.grantService.publishCall( this.result.grantCall ).subscribe( success => {
+                var temp: any = {};
                 temp = success;
-                this.showAddPointOfContact = false;
-                this.addResearch = false;
-                this.isEligibleAddopen = false;
+                this.showAddPointOfContact = true;
+                this.addResearch = true;
+                this.isEligibleAddopen = true;
                 this.result.grantCall = temp.grantCall;
-                this.mode='view';
-                this.editClass="committeeBoxNotEditable";
-                this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
+                this.mode = 'view';
+                this.editClass = "committeeBoxNotEditable";
+                this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable' : 'committeeBox';
                 this.editAreaClass = 'scheduleBoxes';
-            });
+            } );
         }
-        
     }
 
-    navigate($event, mode) {
+    navigate( $event, mode ) {
         $event.preventDefault();
-        this.router.navigate(['/proposal/createProposal'], { queryParams: {'grantId':this.result.grantCall.grantCallId,'mode': mode} });
+        this.router.navigate( ['/proposal/createProposal'], { queryParams: { 'grantId': this.result.grantCall.grantCallId, 'mode': mode } } );
     }
 
     homeUnitChangeFunction() {
@@ -935,5 +929,8 @@ export class GrantComponent {
             this.pocClass = 'committeeBox';
         }
     }
-
+ 
+    triggerAdd() {
+        $('#addAttach').trigger('click');
+    }
 }
