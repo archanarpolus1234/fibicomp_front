@@ -27,7 +27,7 @@ export class AwardByGrantcallTypePieChartComponent extends GoogleChartService im
 
     private subscription: ISubscription;
 
-    constructor( private ref: ChangeDetectorRef, private dashboardService: DashboardService, private router: Router, public expandedViewDataservice: ExpandedViewDataService, public dashboardData: DashboardData ) {
+    constructor( private ref: ChangeDetectorRef, private dashboardService: DashboardService, private router: Router, public expandedViewDataservice: ExpandedViewDataService, public dashboardData: DashboardData) {
         super();
     }
 
@@ -73,7 +73,14 @@ export class AwardByGrantcallTypePieChartComponent extends GoogleChartService im
             };
             this.grantCallChart = this.createPiChart( document.getElementById( 'pichart_awardgrantcall' ) );
             this.grantCallChart.draw( this.piechartDrawData, this.piechartOptions );
+           
         }
+        // google.visualization.events.addListener( this.grantCallChart, 'onmouseover', ( event ) => {
+        //     document.getElementById( 'pichart_awardgrantcall' ).style.cursor = 'pointer';
+        // } );
+        // google.visualization.events.addListener( this.grantCallChart, 'onmouseout', ( event ) => {
+        //     document.getElementById( 'pichart_awardgrantcall' ).style.cursor = '';
+        // } );
     }
 
     onResize( event ) {

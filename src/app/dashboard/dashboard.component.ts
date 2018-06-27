@@ -136,6 +136,11 @@ export class DashboardComponent implements OnInit {
     expenditureByAward: any = [];
     awards: any = [];
     select: string = '--Select--';
+    public proposalsPiechartList:any[] = [];
+    public pieChartReportType : string;
+    public protocolPiechartList:any[] = [];
+    public pieChartReportProtocolType: string;
+ 
   
     grantManager: string;
     provost: string;
@@ -692,6 +697,8 @@ export class DashboardComponent implements OnInit {
     }
 
     reportTypeChange() {
+        this.protocolPiechartList = [];
+        this.proposalsPiechartList = [];
         this.selectedReportItemId = null;
         this.reportObject = null;
         this.proposals = null;
@@ -701,6 +708,8 @@ export class DashboardComponent implements OnInit {
     }
 
     fetchReportData() {
+        this.protocolPiechartList = [];
+        this.proposalsPiechartList = [];
       this.reportObject = null;
       this.selectedReportItemId = null;
       this.proposals = null;
@@ -769,5 +778,29 @@ export class DashboardComponent implements OnInit {
         window.scrollTo( 0, 0 );
       });
       this.showConfirmModal = false;
+    }
+
+    changeReportPiechartList(temporaryObj) {
+       //for hiding report list
+        this.proposals = [];
+        this.selectedReportItemId = "";
+        this.selectedReportName = this.select;
+
+        this.proposalsPiechartList = temporaryObj.list;
+        this.pieChartReportType = temporaryObj.type;
+        this.protocolPiechartList = [];
+        this.pieChartReportProtocolType = "";
+    }
+
+    changeReportPiechartProtocolList(temporaryObj) {
+         //for hiding report list
+        this.proposals = [];
+        this.selectedReportItemId = "";
+        this.selectedReportName = this.select;
+        
+        this.protocolPiechartList = temporaryObj.list;
+        this.pieChartReportProtocolType = temporaryObj.type;
+        this.proposalsPiechartList = [];
+        this.pieChartReportType = "";
     }
 }
