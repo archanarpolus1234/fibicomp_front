@@ -592,7 +592,7 @@ input[type="text"] {
 }
 
 .loginBanner {
-	background-image: url("./images/fibiLogo_white.png"), url("./images/img.jpg");
+	background-image: url("../images/fibiLogo_white.png"), url("../images/img.jpg");
 	background-size: 27%, cover;
 	background-repeat: no-repeat, no-repeat;
 	background-position: center center, 10% center;

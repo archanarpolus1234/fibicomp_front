@@ -155,39 +155,38 @@
 					<!-- award elastic search  results-->
 					<div class="row" *ngIf="currentPosition == 'AWARD'">
 						<div class="col-xl-1 col-lg-2 col-md-8 col-sm-8 col-8">
-							<label> Account# </label> <span> <a
-								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
-									accountNo }}</a>
+							<label> Account# </label> <span> <a routerLink='/award'
+								[queryParams]={awardId:awardId}>{{ accountNo }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
 							<label> Award# </label> <span> <a
-								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
-									awardNo }}</a>
+								routerLink='/award'
+								[queryParams]={awardId:awardId}>{{ awardNo }}</a>
 							</span>
 						</div>
 						<div class="col-xl-3 col-lg-3 col-md-8 col-sm-8 col-8">
 							<label> Title </label> <span> <a
-								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
-									title }}</a>
+								routerLink='/award'
+											[queryParams]={awardId:awardId}>{{title }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-1 col-md-4 col-sm-4 col-4">
 							<label> Sponsor </label> <span> <a
-								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
-									sponsor }}</a>
+								routerLink='/award'
+											[queryParams]={awardId:awardId}>{{sponsor }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-2 col-md-8 col-sm-8 col-8">
 							<label> PI </label> <span> <a
-								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
-									piName }}</a>
+								routerLink='/award'
+											[queryParams]={awardId:awardId}>{{piName }}</a>
 							</span>
 						</div>
 						<div class="col-xl-2 col-lg-2 col-md-4 col-sm-4 col-4">
 							<label> Lead Unit </label> <span> <a
-								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+documentNo+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+userName+'&kcComp=true'">{{
-									departmentName }}</a>
+								routerLink='/award'
+											[queryParams]={awardId:awardId}>{{departmentName }}</a>
 							</span>
 						</div>
 					</div>
@@ -1111,7 +1110,7 @@
 								<div  class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-xs-4">
 										<div class="borderBox">
 											<h4 class="borderBoxHeading">Projects by Grant Call Type</h4>
-											<award-by-grantcall-type-piechart></award-by-grantcall-type-piechart>
+											<award-by-grantcall-type-piechart (pieChartReportProjectList) = "changeReportPiechartProjectList($event)"></award-by-grantcall-type-piechart>
 										</div>
 								</div>
 							</div>
@@ -1148,16 +1147,13 @@
 												</tr>
 												<tbody *ngIf="proposals?.length > 0">
 													<tr >
-														<th (click)="sortResult('proposalId',currentPosition)"
-														title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
+														<th>Id
 														</th>
-														<th >Name
+														<th>Name
 														</th>
-														<th (click)="sortResult('startDate',currentPosition)"
-														title="Click to sort by Application Id">Opening Date <span [ngClass]="{reverse:reverse, sortorder: (sortBy == 'startDate')}"></span>
+														<th>Opening Date
 														</th>
-														<th (click)="sortResult('endDate',currentPosition)"
-														title="Click to sort by End Date">Closing Date<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'endDate')}"></span></th>
+														<th>Closing Date</th>
 														<th>Lead Unit</th>
 														<th>Status</th>
 														<th>Action</th>
@@ -1183,23 +1179,17 @@
 													</tr>
 												<tbody *ngIf="awards?.length > 0">
 													<tr>
-														<th (click)="sortResult('awardNumber',currentPosition)"
-														title="Click to sort by award number">Award #<span [ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}" ></span>
+														<th >Award #
 														</th>
-														<th (click)="sortResult('accountNumber',currentPosition)"
-														title="Click to sort by account number">Account #<span [ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}" ></span>
+														<th >Account #
 														</th>
-														<th (click)="sortResult('title',currentPosition)"
-														title="Click to sort by title">Title<span [ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+														<th >Title
 														</th>
-														<th (click)="sortResult('unitName',currentPosition)"
-														title="Click to sort by lead unit">Lead Unit<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
+														<th>Lead Unit
 														</th>
-														<th (click)="sortResult('sponsor',currentPosition)"
-														title="Click to sort by sponsor name">Sponsor<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span>
+														<th >Sponsor
 														</th>
-														<th (click)="sortResult('fullName',currentPosition)"
-														title="Click to sort by PI name">PI<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'fullName')}"></span>
+														<th>PI
 														</th>
 														<th>Action</th>
 													</tr>
@@ -1239,7 +1229,7 @@
 														<td>{{expenditure[0] | currency:'USD':true}}</td>
 													</tr>
 												</tbody>
-													<tr *ngIf="selectedReportName == 'Expenditure by Project' &&   reportObject?.personId!=null && expenditureByAward == null"><td><div class="noDataExists" >
+													<tr *ngIf="selectedReportName == 'Expenditure by Project' &&   reportObject?.awardNumber  && expenditureByAward.length == 0"><td><div class="noDataExists" >
 																			No expenditure data found
 																		</div></td>
 													</tr>
@@ -1256,19 +1246,14 @@
 										<table class="table table-responsive tableSkin">
 											<tbody *ngIf="proposalsPiechartList?.length > 0">
 												<tr>
-													<th (click)="sortResult('proposalId',currentPosition)" class="hand-cursor"
-													title="Click to sort by Application Id">Id<span   [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalId')}" ></span>
+													<th>Id
 													</th>
 													<th >Title
 													</th>
-													<th (click)="sortResult('proposalCategory.description',currentPosition)" class="hand-cursor"
-													title="Click to sort by category">Category<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalCategory.description')}"></span></th>
-													<th (click)="sortResult('proposalType.description',currentPosition)" class="hand-cursor"
-													title="Click to sort by type">Type<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalType.description')}"></span></th>
-													<th (click)="sortResult('proposalStatus.description',currentPosition)" class="hand-cursor"
-													title="Click to sort by status">Status<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalStatus.description')}"></span></th>
-													<th (click)="sortResult('submissionDate',currentPosition)" class="hand-cursor"
-													title="Click to sort by Submission Date">Submission Date <span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'submissionDate')}"></span>
+													<th >Category</th>
+													<th>Type</th>
+													<th >Status</th>
+													<th >Submission Date
 													</th>
 													<th>Action</th>
 												</tr>
@@ -1300,30 +1285,15 @@
 										<table class="table table-responsive tableSkin">
 											<tbody *ngIf="protocolPiechartList?.length > 0">
 												<tr>
-													<th (click)="sortResult('protocolNumber',currentPosition)"
-														title="Click to sort by Protocol">Protocol <span
-														class="sortorder"
-														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolNumber')}"></span>
+													<th>Protocol 
 													</th>
-													<th (click)="sortResult('title',currentPosition)"
-														title="Click to sort by Title" width="40%">Title <span
-														class="sortorder"
-														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
+													<th width="40%">Title 
 													</th>
-													<th (click)="sortResult('leadUnit',currentPosition)"
-														title="Click to sort by Lead Unit">Lead Unit <span
-														class="sortorder"
-														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span>
+													<th >Lead Unit >
 													</th>
-													<th (click)="sortResult('protocolType',currentPosition)"
-														title="Click to sort by Protocol Type">Protocol Type <span
-														class="sortorder"
-														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolType')}"></span>
+													<th >Protocol Type
 													</th>
-													<th (click)="sortResult('status',currentPosition)"
-														title="Click to sort by Status">Status <span
-														class="sortorder"
-														[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
+													<th >Status 
 													</th>
 													<th>Action</th>
 												</tr>
@@ -1347,6 +1317,50 @@
 									</div>
 								</div>
 							</div>
+<div class="row"  *ngIf="projectPiechartList?.length > 0">
+	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+		<div class="borderBox">
+			<h4 class="borderBoxHeading">Projects by Grant Call Type ({{pieChartReportProjectType}})</h4>
+<table class="table table-responsive tableSkin"
+*ngIf="this.result?.awardViews?.length !== 0">
+<thead>
+	<tr>
+		<th>Award</th>
+		<th>Account</th>
+		<th>Title</th>
+		<th>Lead Unit</th>
+		<th>Sponsor</th>
+		<th>PI </th>
+		<th>Action</th>
+	</tr>
+</thead>
+<tbody>
+	<tr
+		*ngFor="let awardDetails of projectPiechartList | slice:begin:end">
+		<td width="8%">{{awardDetails.awardNumber}}</td>
+		<td>{{awardDetails.accountNumber}}</td>
+		<td>{{awardDetails.title}}</td>
+		<td>{{awardDetails.unitName}}</td>
+		<td>{{awardDetails.sponsor}}</td>
+		<td>{{awardDetails.fullName}}</td>
+		<td>
+			<ul class="actionButtonGroup">
+				<li><a title="Open {{awardDetails.awardNumber}}"
+					routerLink='/award'
+					[queryParams]={awardId:awardDetails.awardId}><i
+						class="fa fa-eye pointer"></i> </a></li>
+			</ul>
+		</td>
+	</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+
+
 
 
 

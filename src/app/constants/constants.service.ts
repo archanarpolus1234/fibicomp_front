@@ -2,15 +2,15 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class Constants {
-    //baseUrl : string = "http://192.168.1.76";
+   //baseUrl : string = "http://192.168.1.76";
     //baseUrl : string = "http://52.20.110.7";
     //baseUrl : string = "http://14.140.179.70";
-    //baseUrl : string = "http://demo.fibiweb.com/fibi-comp";
+   // baseUrl : string = "http://demo.fibiweb.com/fibi-comp";
     baseUrl: string = "";
 
     //portAndPath: string = ":8080/fibi-comp";
     //portAndPath: string = ":1550/fibi-comp";
-    portAndPath: string = "";
+   portAndPath: string = "";
 
     expandedSummaryViewUrl: string;
     expandedDonutViewUrl: string;
@@ -275,15 +275,16 @@ export class Constants {
         //this.outputPath = 'http://14.140.179.70:1550/kc-dev';
         this.outputPath = 'http://192.168.1.76:8080/kc-dev';
         
-        //this.outputPathAB = 'http://demo.fibiweb.com/AwardBudgetTool';
+       // this.outputPathAB = 'http://demo.fibiweb.com/AwardBudgetTool';
         //this.outputPathAB = 'http://14.140.179.70:1550/AwardBudgetTool';
-        this.outputPathAB = 'http://192.168.1.76:8080/AwardBudgetTool';
+       this.outputPathAB = 'http://192.168.1.76:8080/AwardBudgetTool';
 
         this.outputPathOST = 'http://192.168.1.76:8080/osr'
         //this.outputPathOST = 'http://192.168.1.104:8070/osr';
         //this.outputPathOST = 'http://14.140.179.70:1550/osr';
         //this.outputPathOST = 'http://demo.fibiweb.com/osr';
 
+        //this.IRBOutputPath = 'http://localhost:8080/mit-irb/login#/irb/dashboard';
         this.IRBOutputPath = 'http://192.168.1.76:8080/mit-irb/login#/irb/dashboard';
         //this.IRBOutputPath = 'http://demo.fibiweb.com/mit-irb/login#/irb/dashboard';
     }

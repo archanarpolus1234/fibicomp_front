@@ -7,6 +7,8 @@ import { DashboardData } from '../dashboard/dashboard-data.service';
 import { ExpandedviewService } from '../research_summary/expanded-view.service';
 import { ExpandedViewDataService } from './expanded-view-data-service';
 import { ISubscription } from "rxjs/Subscription";
+import { EventEmitter } from '@angular/core';
+import { Output } from '@angular/core';
 
 declare var google: any;
 
@@ -24,13 +26,14 @@ export class AwardByGrantcallTypePieChartComponent extends GoogleChartService im
     private piechartList: any[];
     private proposalList: any[];
     private piechartDrawList: any[] = [];
+    public awardType;
 
     private subscription: ISubscription;
 
     constructor( private ref: ChangeDetectorRef, private dashboardService: DashboardService, private router: Router, public expandedViewDataservice: ExpandedViewDataService, public dashboardData: DashboardData) {
         super();
     }
-
+    @Output() pieChartReportProjectList:EventEmitter<any> = new EventEmitter<any>();
     ngOnInit() {
        this.subscription = this.dashboardData.reportDataVariable.subscribe( dashboardReportData => {
             if ( dashboardReportData.awardByGrantType != undefined ) {
@@ -52,7 +55,7 @@ export class AwardByGrantcallTypePieChartComponent extends GoogleChartService im
         if ( this.resultPie != null && this.resultPie._value.awardByGrantType !== undefined ) {
             let tempObject: any = {};
             tempObject = this.resultPie._value.awardByGrantType;
-            this.piechartList = Object.entries(tempObject).map(([key, value]) => ([key,value]));
+            this.piechartList = Object.entries(tempObject).map(([key, value]) => ([key,value.length]));
             //this.awardList = this.resultPie._value.applicationsByGrantCallType;
             this.piechartDrawList = [];
             this.piechartDrawList.push( ['Type', 'Count'] );
@@ -75,12 +78,36 @@ export class AwardByGrantcallTypePieChartComponent extends GoogleChartService im
             this.grantCallChart.draw( this.piechartDrawData, this.piechartOptions );
            
         }
-        // google.visualization.events.addListener( this.grantCallChart, 'onmouseover', ( event ) => {
-        //     document.getElementById( 'pichart_awardgrantcall' ).style.cursor = 'pointer';
-        // } );
-        // google.visualization.events.addListener( this.grantCallChart, 'onmouseout', ( event ) => {
-        //     document.getElementById( 'pichart_awardgrantcall' ).style.cursor = '';
-        // } );
+        google.visualization.events.addListener( this.grantCallChart, 'onmouseover', ( event ) => {
+            document.getElementById( 'pichart_awardgrantcall' ).style.cursor = 'pointer';
+        } );
+        google.visualization.events.addListener( this.grantCallChart, 'onmouseout', ( event ) => {
+            document.getElementById( 'pichart_awardgrantcall' ).style.cursor = '';
+        } );
+
+        google.visualization.events.addListener( this.grantCallChart, 'select', ( event ) => {
+            
+            var selection = this.grantCallChart.getSelection();
+            for ( var i = 0; i < selection.length; i++ ) {
+                var item = selection[i];
+                if ( item.row != null ) {
+                    this.awardType = this.piechartDrawData.getFormattedValue( item.row, 0 );
+                    
+                }
+            }
+            for(var i=0;i<this.piechartList.length;i++) {
+                if(this.awardType === this.piechartList[i][0]) {
+               
+              // this.reportPiecharService.setList(this.resultPie._value.applicationsByGrantCallType[this.grantCallType])
+              var temporaryObj = {};
+              temporaryObj["list"] = this.resultPie._value.awardByGrantType[this.awardType];
+              temporaryObj["type"] = this.awardType;
+                    this.pieChartReportProjectList.emit(temporaryObj)
+                    break;
+                }
+            }
+            
+        } );
     }
 
     onResize( event ) {
