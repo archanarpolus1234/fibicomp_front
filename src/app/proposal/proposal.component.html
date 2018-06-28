@@ -409,7 +409,14 @@
 	                                        <tr>
 												<td><label>Details of Proposal:</label><br>
 													<textarea name="details" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
-													<span *ngIf="mode == 'view'">{{result?.proposal?.details}}</span>
+													<span *ngIf="mode == 'view' && result?.proposal?.details != null"><p class="textView" *ngIf="mode == 'view' && !isDetailsReadMore">{{(result?.proposal?.details).length>240 ? (result?.proposal?.details | slice:0:240)+'...' : result?.proposal?.details}}
+															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isDetailsReadMore" class="textView">{{result?.proposal?.details}}
+															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Show less<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+													</span>
+													
 													<div class="noDataExists" *ngIf="result?.proposal?.details == null && mode == 'view'">
 														No additional details for this proposal
 													</div>
@@ -417,6 +424,14 @@
 												<td><label>Deliverables:</label><br>
 													<textarea name="deliverables" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view'">{{result?.proposal?.deliverables}}</span>
+													<span *ngIf="mode == 'view' && result?.proposal?.details != null"><p class="textView" *ngIf="mode == 'view' && !isDetailsReadMore">{{(result?.proposal?.details).length>240 ? (result?.proposal?.details | slice:0:240)+'...' : result?.proposal?.details}}
+															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isDetailsReadMore" class="textView">{{result?.proposal?.details}}
+															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Show less<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+													</span>
+													
 													<div class="noDataExists" *ngIf="result?.proposal?.deliverables == null && mode == 'view'">
 														No deliverables for this proposal
 													</div>

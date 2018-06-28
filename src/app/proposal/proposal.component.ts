@@ -175,6 +175,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     isProjectDescWdgtOpen: boolean = true;
     isResDescReadMore: boolean = false;
     isAbsDescReadMore: boolean = false;
+    isFundDescReadMore: boolean = false;
 
     public onDestroy$ = new Subject<void>();
 
