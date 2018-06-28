@@ -431,15 +431,19 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                                             .map(( hit ) => hit._source );
                                         this.hits_source.forEach(( elmnt, j ) => {
                                             this.rolodexId = this.hits_source[j].rolodex_id;
-                                            this.first_name = this.hits_source[j].first_name;
-                                            this.middle_name = this.hits_source[j].middle_name;
-                                            this.last_name = this.hits_source[j].last_name;
-                                            this.elasticSearchresults.push( {
-                                                label: this.first_name + '  ' + this.middle_name
-                                                + '  ' + this.last_name,
-                                                id: this.rolodexId,
-                                                data: this.hits_source[j]
-                                            } );
+                                            this.first_name = (this.hits_source[j].first_name == null)? '':this.hits_source[j].first_name;
+                                            this.middle_name = (this.hits_source[j].middle_name == null)?'': this.hits_source[j].middle_name;
+                                            this.last_name = (this.hits_source[j].last_name == null)?'':this.hits_source[j].last_name;
+                                            if(this.hits_source[j].first_name == null && this.hits_source[j].middle_name == null && this.hits_source[j].last_name == null) {
+                                               
+                                            } else {
+                                                this.elasticSearchresults.push( {
+                                                    label: this.first_name + '  ' + this.middle_name
+                                                    + '  ' + this.last_name,
+                                                    id: this.rolodexId,
+                                                    data: this.hits_source[j]
+                                                } );
+                                            }
                                         } );
                                         if ( this.elasticSearchresults.length > 0 ) {
                                             this.message = '';

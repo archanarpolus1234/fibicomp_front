@@ -88,18 +88,15 @@ export class ProtocolByGrantcallTypePieChartComponent extends GoogleChartService
         google.visualization.events.addListener( this.grantCallChart, 'select', ( event ) => {
             
             var selection = this.grantCallChart.getSelection();
-            console.log(selection)
             for ( var i = 0; i < selection.length; i++ ) {
                 var item = selection[i];
                 if ( item.row != null ) {
                     this.protocolType = this.piechartDrawData.getFormattedValue( item.row, 0 );
-                    console.log(this.piechartList)
                     
                 }
             }
             for(var i=0;i<this.piechartList.length;i++) {
                 if(this.protocolType === this.piechartList[i][0]) {
-                    console.log(this.resultPie._value.protocolsByType[this.protocolType])
               // this.reportPiecharService.setList(this.resultPie._value.applicationsByGrantCallType[this.grantCallType])
               var temporaryObj = {};
               temporaryObj["list"] = this.resultPie._value.protocolsByType[this.protocolType];

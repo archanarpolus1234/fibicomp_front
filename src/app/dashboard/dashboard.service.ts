@@ -82,7 +82,7 @@ export class DashboardService {
 
     applicationReport( reportItemId, reportName, personId ) {
         var params = {};
-        if ( reportName == 'Expenditure by Award' ) {
+        if ( reportName == 'Expenditure by Project' ) {
             params = {
                 awardNumber: reportItemId,
                 reportName: reportName,

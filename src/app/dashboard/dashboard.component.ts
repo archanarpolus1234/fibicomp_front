@@ -140,6 +140,8 @@ export class DashboardComponent implements OnInit {
     public pieChartReportType : string;
     public protocolPiechartList:any[] = [];
     public pieChartReportProtocolType: string;
+    public projectPiechartList:any[] = [];
+    public pieChartReportProjectType: string;
  
   
     grantManager: string;
@@ -369,7 +371,7 @@ export class DashboardComponent implements OnInit {
             this.advanceSearchCriteria.property2 = '';
             this.advanceSearchCriteria.property3 = '';
             this.advanceSearchCriteria.property4 = '';
-            this.placeholder1 = 'Grant Call #';
+            this.placeholder1 = 'Id';
             this.placeholder2 = 'Title';
             this.placeholder3 = 'Type';
             this.placeholder4 = 'Sponsor Name';
@@ -508,7 +510,7 @@ export class DashboardComponent implements OnInit {
             this.placeholder4 = 'Protocol type';
         }
         if ( this.currentPosition === 'GRANT' ) {
-            this.placeholder1 = 'Grant Call #';
+            this.placeholder1 = 'Id';
             this.placeholder2 = 'Title';
             this.placeholder3 = 'Type';
             this.placeholder4 = 'Sponsor Name';
@@ -692,7 +694,7 @@ export class DashboardComponent implements OnInit {
             this.reportObject = temp;
             this.proposals = temp.proposals;
             this.awards = temp.awards;
-            this.expenditureByAward = temp.expenditureByAward;
+            this.expenditureByAward = temp.expenditureList;
         } );
 
     }
@@ -791,6 +793,8 @@ export class DashboardComponent implements OnInit {
         this.pieChartReportType = temporaryObj.type;
         this.protocolPiechartList = [];
         this.pieChartReportProtocolType = "";
+        this.projectPiechartList =[];
+        this.pieChartReportProtocolType = "";
     }
 
     changeReportPiechartProtocolList(temporaryObj) {
@@ -803,5 +807,20 @@ export class DashboardComponent implements OnInit {
         this.pieChartReportProtocolType = temporaryObj.type;
         this.proposalsPiechartList = [];
         this.pieChartReportType = "";
+        this.projectPiechartList =[];
+        this.pieChartReportProtocolType = "";
+    }
+
+    changeReportPiechartProjectList(temporaryObj) {
+        this.proposals = [];
+        this.selectedReportItemId = "";
+        this.selectedReportName = this.select;
+        
+        this.projectPiechartList = temporaryObj.list;
+        this.pieChartReportProjectType = temporaryObj.type;
+        this.proposalsPiechartList = [];
+        this.pieChartReportType = "";
+        this.protocolPiechartList = [];
+        this.pieChartReportProtocolType = "";
     }
 }
