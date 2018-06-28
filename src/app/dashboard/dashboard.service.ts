@@ -16,11 +16,12 @@ export class DashboardService {
     tokenValue: string;
 
     constructor( private http: HttpClient, private sessionService: SessionManagementService, private constant: Constants ) {
-        this.username = localStorage.getItem( 'currentUser' );
-        this.personId = localStorage.getItem( 'personId' );
+        /*this.username = localStorage.getItem( 'currentUser' );
+        this.personId = localStorage.getItem( 'personId' );*/
     }
 
     loadDashBoard( property1: string, property2: string, property3: string, property4: string, pageNumber: number, sortBy: string, reverse: string, tabIndex: string, currentPage: number, filterStartDate: Date, filterEndDate: Date ): Observable<JSON> {
+        this.username = localStorage.getItem( 'currentUser' );
         this.personId = localStorage.getItem( 'personId' );
         var provost = ( localStorage.getItem( 'provost' ) == 'true' ) ? true : false;
         var reviewer = ( localStorage.getItem( 'reviewer' ) == 'true' ) ? true : false;

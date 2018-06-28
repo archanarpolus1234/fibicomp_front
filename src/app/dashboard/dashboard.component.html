@@ -117,19 +117,19 @@
 						<!-- advance search options -->
 						<div class="row">
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type="text" placeholder="{{placeholder1}}"
+								<input type="text" placeholder="{{placeholder1}}" maxlength="40"
 									[(ngModel)]="advanceSearchCriteria.property1" />
 							</div>
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type="text" placeholder="{{placeholder2}}"
+								<input type="text" placeholder="{{placeholder2}}" maxlength="40"
 									[(ngModel)]="advanceSearchCriteria.property2" />
 							</div>
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type="text" placeholder="{{placeholder3}}"
+								<input type="text" placeholder="{{placeholder3}}" maxlength="40"
 									[(ngModel)]="advanceSearchCriteria.property3" />
 							</div>
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type="text" placeholder="{{placeholder4}}"
+								<input type="text" placeholder="{{placeholder4}}" maxlength="40"
 									[(ngModel)]="advanceSearchCriteria.property4" />
 							</div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
@@ -976,8 +976,8 @@
 					</div>
 				</div>
 				
-				<div class="borderBox" *ngIf="serviceRequestList?.length > 0">
-					<table class="table table-responsive tableSkin" >
+				<div class="borderBox" >
+					<table class="table table-responsive tableSkin" *ngIf="serviceRequestList?.length > 0" >
 						<thead>
 							<tr>
 								<th (click)="sortResult('grantCallId',currentPosition)" class="hand-cursor"
@@ -1021,8 +1021,8 @@
 							</tr>
 						</tbody>
 					</table>
-					<div *ngIf="this.result?.committeeSchedules?.length == 0"
-						class="noDataOnChart">No Schedule data Found</div>
+					<div *ngIf="serviceRequestList?.length == 0"
+						class="noDataOnChart noDataExists">There are no grant call for your request</div>
 				</div>
 			</div>
 
