@@ -490,3 +490,19 @@ input[type=number]::-webkit-outer-spin-button {
 	text-align: justify;
 	margin: 0px;
 }
+
+.lowPadd {
+	padding-bottom: 1px;
+}
+
+.normalPadd {
+	padding-bottom: 15px;
+}
+
+.innerBorderBox {
+	border: 2px #E6F8F6 solid;
+}
+
+.innerBorderBox>h4 {
+	background-color: #E6F8F6;
+}
