@@ -4,12 +4,12 @@
 		<section class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
-						<div class="row">
+						<div class="row" *ngIf="result?.proposal?.proposalId || result?.proposal?.ipNumber">
 							<div class="col-6 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">#{{result?.proposal?.proposalId}}: {{result?.proposal?.title}}</span></div>
 							<div class="col-6 text-right"><span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
 						</div>
-						<div class="row" id="fadeOutMessage">
-							<div class="col-12 text-left"><span class="successWarning" *ngIf="showSuccessMessage">{{successMessage}}</span></div>
+						<div class="row" id="fadeOutMessage" *ngIf="showSuccessMessage">
+							<div class="col-12 text-left"><span class="successWarning" >{{successMessage}}</span></div>
 						</div>
 						<br>
 						<div class="row">
@@ -151,8 +151,12 @@
 						<!-- </div> -->
 						<div class="borderBox col-12">
 							<h4 class="borderBoxHeading">Grant Call Details</h4>
-							<table class="table table-responsive tableSkin">
-								<tr *ngIf="result?.proposal?.grantCall == null && mode !='view'">
+							<button id="grantDetailsExpandBtn" class="addBtn font hoverColor" (click)="isGrantCallWdgtOpen = !isGrantCallWdgtOpen" 
+                                 *ngIf="(result?.proposal?.grantCall != null && mode == 'view') || (mode != 'view')">
+								<i [ngClass]="isGrantCallWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+							</button>
+							<table class="table table-responsive tableSkin grid2">
+								<tr *ngIf="result?.proposal?.grantCall == null && mode !='view' && isGrantCallWdgtOpen">
 									<td class="text-right"><label>Title of Grant Call:</label></td>
 									<td class="pull-left"><span><ng2-completer style="border:none; padding:0px;"
 															[inputClass]="completerID" placeholder=""
@@ -168,7 +172,7 @@
 											No grant call associated with this proposal
 										</div></td>
 								</tr>
-								<tbody *ngIf="result?.proposal?.grantCall != null">
+								<tbody *ngIf="result?.proposal?.grantCall != null && isGrantCallWdgtOpen">
 									<tr>
 										<th >Id</th>
 										<th >Title</th>
@@ -179,12 +183,12 @@
 									</tr>
 									<tr>
 										<td style="padding-left: 10px"><span >{{result?.proposal?.grantCallId}}</span></td>
-										<td ><span >{{result?.proposal?.grantCall?.grantCallName}}</span></td>
+										<td title="{{(result?.proposal?.grantCall?.grantCallName?.length > 60)?(result?.proposal?.grantCall?.grantCallName):''}}"><span >{{(result?.proposal?.grantCall?.grantCallName?.length > 60 )?(result?.proposal?.grantCall?.grantCallName | slice:0:60):(result?.proposal?.grantCall?.grantCallName)}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.sponsor?.sponsorName}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.activityType?.description}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.grantTheme}}</span></td>
 										<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
-												<li><a href="#" (click)="removeSelectedGrant($event)"><i class="fa fa-trash-o" aria-hidden="true" title="remove this grant call"></i></a></li>
+												<li><a href="#" data-target="#deleteGrantCall" data-toggle="modal" (click)="showDeleteGrantCall = true"><i class="fa fa-trash-o" aria-hidden="true" title="remove this grant call"></i></a></li>
 											</ul>
 										</td>
 									</tr>
@@ -192,9 +196,35 @@
 							</table>
 						</div>
                          <div class="borderBox col-12">
-								<h4 class="borderBoxHeading"><span class="mandatory" *ngIf="mode != 'view'">*</span>Area of Research</h4>
-                                    <table class="table table-responsive tableSkin">
-										<tr id="addAreaOfResearchRow" *ngIf=" mode != 'view'">
+									<h4 class="borderBoxHeading"><span class="mandatory" *ngIf="mode != 'view'">*</span>Area of Research</h4>
+									<button id="areaofResearchExpandBtn" class="addBtn font hoverColor" (click)="isareaWdgtOpen = !isareaWdgtOpen" 
+	                                 	*ngIf="(result?.proposal?.proposalResearchAreas?.length > 0 && mode == 'view') || (mode != 'view')">
+										<i [ngClass]="isareaWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+									</button>
+										<!-- <div class="pullSide">
+											<div class="topGrid gridSkin">
+                                    	<div class="row" id="addAreaOfResearchRow" *ngIf=" mode != 'view' && isareaWdgtOpen">
+											<div class="col-4"><label>Type:</label><br/>
+												<select [ngClass]="editClass" [(ngModel)]="researchTypeSelected" (change)="changeArea($event.target.value)">
+													<option *ngFor="let type of result?.proposalResearchTypes" (value)="type">{{type.description}}</option>
+												</select></div>
+											<div class="col-4"><label>{{selectedAreaType}}:</label><br/>
+												<div>
+													 <ng2-completer title="Add area of research"
+														[inputClass]="completerID" placeholder=""
+														[(ngModel)]="selectedArea"
+														[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
+												</div>
+											</div>
+											<div class="text-right col-4">
+												<button class="btnSkin btnSkinPrimary" (click)="addArea()">Add</button>
+											</div>
+										</div>
+										</div>
+										</div> -->
+                                    
+									<table class="table table-responsive tableSkin grid2">
+										<tr id="addAreaOfResearchRow" *ngIf=" mode != 'view' && isareaWdgtOpen">
 											<td class="text-right"><label>Type:</label></td>
 											<td><select [ngClass]="editClass" [(ngModel)]="researchTypeSelected" (change)="changeArea($event.target.value)">
 											
@@ -213,11 +243,11 @@
 												<button class="btnSkin btnSkinPrimary" (click)="addArea()">Add</button>
 											</td>
 										</tr>
-                                        <tr  *ngIf="isAreaWarning">
+										<tr *ngIf="isAreaWarning">
                                         	<td colspan="3"><span class="mandatory">{{areaWarningText}}</span></td>
 											<td colspan="2"></td>
 										</tr>
-										<tbody *ngIf="result?.proposal?.proposalResearchAreas?.length > 0 ">
+										<tbody *ngIf="result?.proposal?.proposalResearchAreas?.length > 0 && isareaWdgtOpen">
 	                                        <tr>
 	                                            <th >Sl No.</th>
 	                                            <th >Research Area Code</th>
@@ -238,10 +268,17 @@
 	                                        <tr>
 	                                        	<td><label>Description:</label></td>
 	                                        	<td colspan="4"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
-	                                        	<span *ngIf="mode == 'view'">{{result?.proposal?.researchDescription}}</span>
+	                                        		<span *ngIf="mode == 'view' && result?.proposal?.researchDescription != null"><p class="textView" *ngIf="mode == 'view' && !isResDescReadMore">{{(result?.proposal?.researchDescription).length>240 ? (result?.proposal?.researchDescription | slice:0:240)+'...' : result?.proposal?.researchDescription}}
+															<span *ngIf="(result?.proposal?.researchDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isResDescReadMore = !isResDescReadMore">Read more<i [ngClass]="isResDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isResDescReadMore" class="textView">{{result?.proposal?.researchDescription}}
+															<span *ngIf="(result?.proposal?.researchDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isResDescReadMore = !isResDescReadMore">Show less<i [ngClass]="isResDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+														</span>
 	                                        	<div class="noDataExists" *ngIf="result?.proposal?.researchDescription == null && mode == 'view'">
-													No contributions or descriptions added for this proposal
+													No contributions or descriptions provided for this proposal
 												</div>
+												</td>
 	                                        </tr>
                                         </tbody>
                                         <tr *ngIf="result?.proposal?.proposalResearchAreas?.length == 0  && mode == 'view'">
@@ -252,13 +289,17 @@
                                   </table>
                              </div>
                             <div class="borderBox col-12">
-                    			<h4 class="borderBoxHeading"><span class="mandatory" *ngIf="mode != 'view'">*</span>Project Team</h4>
-                                    <table class="table table-responsive tableSkin">
-                                    	<tr id="addTeamMemberRow" *ngIf="mode != 'view'">
+                    				<h4 class="borderBoxHeading"><span class="mandatory" *ngIf="mode != 'view'">*</span>Project Team</h4>
+                    				<button id="projectExpandBtn" class="addBtn font hoverColor" (click)="isTeamWdgtOpen = !isTeamWdgtOpen" 
+	                                 	*ngIf="(result?.proposal?.proposalPersons?.length > 0 && mode == 'view') || (mode != 'view')">
+										<i [ngClass]="isTeamWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+									</button>
+                                    <table class="table table-responsive tableSkin grid2">
+                                    	<tr id="addTeamMemberRow" *ngIf="mode != 'view' && isTeamWdgtOpen">
                                     		<td><label>Member Type:</label></td>
                                     		<td><select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)]="memberTypeSelected" (change)="memberTypeChanged()">
 													<option *ngFor="let type of memberTypes" (value)="type">{{type.value}}</option>
-													  </select></td>
+												</select></td>
 											<td class="text-right"><label>Name:</label></td>
 											<td> 
 												<div class="searchBox memberSearchBox">
@@ -301,7 +342,7 @@
 													No members are associated with this proposal
 												</div></td>
 										</tr>
-										<tbody *ngIf="result?.proposal?.proposalPersons?.length > 0">
+										<tbody *ngIf="result?.proposal?.proposalPersons?.length > 0 && isTeamWdgtOpen">
 	                                        <tr>
 	                                            <th >Sl No.</th>
 	                                            <th colspan="2">Name</th>
@@ -329,20 +370,37 @@
                                     </div>
 	                        <div class="borderBox col-12">
 								<h4 class="borderBoxHeading">Project Description</h4>
+								<button id="projectDescExpandBtn" class="addBtn font hoverColor" (click)="isProjectDescWdgtOpen = !isProjectDescWdgtOpen" >
+										<i [ngClass]="isProjectDescWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+									</button>
 								<div class="pullSide">
 									<table class="table tableSkin grid2">
-										<tbody>
+										<tbody *ngIf="isProjectDescWdgtOpen">
 											<tr>
 												<td><label>Abstract:</label><br>
 													<textarea name="abstract" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
-													<span *ngIf="mode == 'view'">{{result?.proposal?.abstractDescription}}</span>
+													<span *ngIf="mode == 'view' && result?.proposal?.abstractDescription != null"><p class="textView" *ngIf="mode == 'view' && !isAbsDescReadMore">{{(result?.proposal?.abstractDescription).length>240 ? (result?.proposal?.abstractDescription | slice:0:240)+'...' : result?.proposal?.abstractDescription}}
+															<span *ngIf="(result?.proposal?.abstractDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isAbsDescReadMore = !isAbsDescReadMore">Read more<i [ngClass]="isAbsDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isAbsDescReadMore" class="textView">{{result?.proposal?.abstractDescription}}
+															<span *ngIf="(result?.proposal?.abstractDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isAbsDescReadMore = !isAbsDescReadMore">Show less<i [ngClass]="isAbsDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+													</span>
+													
 													<div class="noDataExists" *ngIf="result?.proposal?.abstractDescription == null && mode == 'view'">
 														No abstract for this proposal
 													</div>
 												</td>
 												<td><label>Funding Strategy:</label><br>
 													<textarea name="fundingStrategy" class="forTextAreaEntry" maxlength="50" placeholder="" [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
-													<span *ngIf="mode == 'view'">{{result?.proposal?.fundingStrategy}}</span>
+													<span *ngIf="mode == 'view' && result?.proposal?.fundingStrategy != null"><p class="textView" *ngIf="mode == 'view' && !isFundDescReadMore">{{(result?.proposal?.fundingStrategy).length>240 ? (result?.proposal?.fundingStrategy | slice:0:240)+'...' : result?.proposal?.fundingStrategy}}
+															<span *ngIf="(result?.proposal?.fundingStrategy?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isFundDescReadMore = !isFundDescReadMore">Read more<i [ngClass]="isFundDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isFundDescReadMore" class="textView">{{result?.proposal?.fundingStrategy}}
+															<span *ngIf="(result?.proposal?.fundingStrategy?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isFundDescReadMore = !isFundDescReadMore">Show less<i [ngClass]="isFundDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+													</span>
+													
 													<div class="noDataExists" *ngIf="result?.proposal?.fundingStrategy == null && mode == 'view'">
 														No description for funding strategy for this proposal
 													</div>
@@ -1007,6 +1065,33 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 </div>
 </div>
 
+<!-- DELETE GRANT CALL WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteGrantCall" tabindex="-1"
+id="deleteGrantCall" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Want to delete?</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to remove this grant call?</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteGrantCall = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="removeSelectedGrant($event)" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+
 <!-- DELETE ATTACHMENT WARNING MODAL -->
 <div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteAttachment" tabindex="-1"
 id="deleteAttachment" tabindex="-1" role="dialog"
@@ -1095,35 +1180,6 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 		</div>
 	</div>
 
-
-<!-- SAVE PROPOSAL MODAL -->
-<!-- <div class="modal fade mySkinDialog modalFallBack" *ngIf="showAddedModal" tabindex="-1"
-id="addProposal" tabindex="-1" role="dialog"
-aria-labelledby="deleteModalTitle" aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered" role="document">
-	<div class="modal-content">
-		<div class="modal-header">
-			<h5 class="modal-title" *ngIf="isProposalSaved">Saved</h5>
-			<h5 class="modal-title" *ngIf="!isProposalSaved">Warning</h5>
-
-			<button type="button" class="close" data-dismiss="modal"
-				aria-label="Close">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="modal-body">
-			<p *ngIf="isProposalSaved">Proposal has been saved successfully.</p>
-			<p *ngIf="!isProposalSaved">Error in saving your proposal, please review mandatory details</p>
-		</div>
-		<div class="modal-footer">
-			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="isProposalSaved"
-				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
-			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="!isProposalSaved"
-				(click)="showAddedModal = false" data-dismiss="modal">Ok</button>
-		</div>
-	</div>
-</div>
-</div> -->
 
 	<!-- SUBMITTED MODAL -->
 	<!-- <div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmittedModal" tabindex="-1"

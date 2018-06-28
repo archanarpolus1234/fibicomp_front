@@ -19,3 +19,7 @@
   position: absolute;
   right: 10px;
 }
+
+.owl-dt-calendar-control {
+	margin-top: 10px !important;
+} 

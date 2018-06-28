@@ -564,7 +564,7 @@ export class GrantComponent {
         this.uploadedFile = [];
     }
 
-    addAttachments() {debugger;
+    addAttachments() {
         var d = new Date();
         this.attachmentWarning = false;
         if ( this.result.grantCall.grantCallAttachments.length != 0 ) {

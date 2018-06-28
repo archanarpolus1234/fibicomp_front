@@ -371,7 +371,7 @@ export class DashboardComponent implements OnInit {
             this.advanceSearchCriteria.property4 = '';
             this.placeholder1 = 'Grant Call #';
             this.placeholder2 = 'Title';
-            this.placeholder3 = 'Grant Call Type';
+            this.placeholder3 = 'Type';
             this.placeholder4 = 'Sponsor Name';
             this.initialLoad( this.currentPage );
         } else {
@@ -510,7 +510,7 @@ export class DashboardComponent implements OnInit {
         if ( this.currentPosition === 'GRANT' ) {
             this.placeholder1 = 'Grant Call #';
             this.placeholder2 = 'Title';
-            this.placeholder3 = 'Grant Call Type';
+            this.placeholder3 = 'Type';
             this.placeholder4 = 'Sponsor Name';
         }
         if ( this.currentPosition === 'SMU_PROPOSAL' ) {
@@ -682,7 +682,8 @@ export class DashboardComponent implements OnInit {
     viewProposalById( event: any, proposalId, grantCallId ) {
         event.preventDefault();
         this.currentPosition = 'SMU_PROPOSAL';
-        this.router.navigate( ['/proposal/createProposal'], { queryParams: { 'proposalId': proposalId, 'grantId': grantCallId } } );
+        this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'proposalId': proposalId } } );
+        //this.router.navigate( ['/proposal/createProposal'], { queryParams: { 'proposalId': proposalId, 'grantId': grantCallId } } );
     }
 
     grantIdChange() {

@@ -652,7 +652,7 @@
 						</tbody>
 					</table>
 					<div *ngIf="this.result?.protocolViews?.length == 0"
-						class="noDataOnChart">No IRB data Found</div>
+						class="noDataOnChart noDataExists">No IRB data Found</div>
 				</div>
 			</div>
 
@@ -977,7 +977,7 @@
 					</div>
 				</div>
 				
-				<div class="borderBox" *ngIf="serviceRequestList?.length!=0">
+				<div class="borderBox" *ngIf="serviceRequestList?.length > 0">
 					<table class="table table-responsive tableSkin" >
 						<thead>
 							<tr>
@@ -1045,7 +1045,7 @@
 							<div class="col-12 text-left"><span class="successWarning" *ngIf="showSuccessMessage">{{successMessage}}</span></div>
 						</div>
 						
-				<div class="borderBox" *ngIf="serviceRequestList.length!=0">
+				<div class="borderBox" *ngIf="serviceRequestList?.length > 0">
 					<table class="table table-responsive tableSkin">
 						<thead>
 							<tr>
