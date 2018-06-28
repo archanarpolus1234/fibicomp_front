@@ -168,7 +168,14 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     userName: string;
     homeUnits: any = [];
     selectedHomeUnit: string;
-  
+    showDeleteGrantCall: boolean = false;
+    isGrantCallWdgtOpen: boolean = true;
+    isareaWdgtOpen: boolean = true;
+    isTeamWdgtOpen: boolean = true;
+    isProjectDescWdgtOpen: boolean = true;
+    isResDescReadMore: boolean = false;
+    isAbsDescReadMore: boolean = false;
+
     public onDestroy$ = new Subject<void>();
 
     constructor( public grantService: GrantService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public _ngZone: NgZone, public changeRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private sessionService: SessionManagementService, private proposalCreateService: ProposalCreateEditService, public completerService: CompleterService ) {
@@ -462,7 +469,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
     //elastic search value change
     onSearchValueChange() {
-        this.iconClass = this.searchTextModel ? 'fa fa-times fa-med' : '';
+        this.iconClass = this.searchTextModel ? 'fa fa-times fa-med' : 'fa fa-search fa-med';
         this.elasticSearchresults = [];
     }
 
@@ -515,7 +522,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     dateValidation() {
-        if ( this.result.proposal.startDate == null ) {
+        if(this.result.proposal.submissionDate == null ) {
+            this.isDateWarningText = true;
+            this.dateWarningText = '* Please select a submission date';
+        } else if ( this.result.proposal.startDate == null ) {
             this.isDateWarningText = true;
             this.dateWarningText = '* Please select a start date';
         } else if ( this.result.proposal.startDate < this.currentDate ) {
@@ -524,10 +534,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         } else if ( this.result.proposal.startDate != null && this.result.proposal.endDate != null && this.result.proposal.startDate <= this.result.proposal.endDate ) {
             this.isDateWarningText = false;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
-            if ( this.result.proposal.submissionDate != null && ( this.result.proposal.startDate > this.result.proposal.submissionDate || this.result.proposal.submissionDate > this.result.proposal.endDate ) ) {
+            /*if ( this.result.proposal.submissionDate != null && ( this.result.proposal.startDate > this.result.proposal.submissionDate || this.result.proposal.submissionDate > this.result.proposal.endDate ) ) {
                 this.isDateWarningText = true;
                 this.dateWarningText = '* Please choose a submission date between proposal start date and proposal end date';
-            }
+            }*/
         } else if ( this.result.proposal.endDate == null ) {
             this.isDateWarningText = true;
             this.dateWarningText = '* Please select an end date';
@@ -537,16 +547,17 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         } else if ( this.result.proposal.startDate != null && this.result.proposal.endDate != null && this.result.proposal.startDate <= this.result.proposal.endDate ) {
             this.isDateWarningText = false;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
-            if ( this.result.proposal.submissionDate != null && ( this.result.proposal.startDate > this.result.proposal.submissionDate || this.result.proposal.submissionDate > this.result.proposal.endDate ) ) {
+            /*if ( this.result.proposal.submissionDate != null && ( this.result.proposal.startDate > this.result.proposal.submissionDate || this.result.proposal.submissionDate > this.result.proposal.endDate ) ) {
                 this.isDateWarningText = true;
                 this.dateWarningText = '* Please choose a submission date between proposal start date and proposal end date';
-            }
+            }*/
         } else {
             this.isDateWarningText = false;
         }
     }
 
     deleteKeyword( keyword, k ) {
+        this.isKeywordWarning = false;
         var length = this.result.proposal.proposalKeywords.length;
         for ( let i = 0; i < length; ++i ) {
             if ( this.result.proposal.proposalKeywords[i].scienceKeywordCode == keyword.scienceKeywordCode ) {

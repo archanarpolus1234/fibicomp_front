@@ -485,3 +485,8 @@ input[type=number]::-webkit-outer-spin-button {
 	line-height: normal;
 	text-align: left;
 }
+
+.textView {
+	text-align: justify;
+	margin: 0px;
+}

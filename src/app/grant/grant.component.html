@@ -4,7 +4,7 @@
 		<section class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="result.grantCall!={}">
 				<br>
-				<div class="row">
+				<div class="row" *ngIf="grantId != null">
 					<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-left"><span *ngIf="grantId != null" class="topHeading">#{{grantId}} : {{result?.grantCall?.grantCallName}}</span></div>
 					<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 text-right ">
 						<span *ngIf="result?.grantCall?.grantCallStatus?.description == 'Open'" class = "grantCall_create_proposal_link">
@@ -15,7 +15,7 @@
 						</span> --></div>
 				</div>
 				<br>
-					<div class="row" id="fadeOutMessage">
+					<div class="row" id="fadeOutMessage" *ngIf="showSavedSuccessfully">
 						<div class="col-12 text-left"><span class="successWarning" *ngIf="showSavedSuccessfully">Saved Successfully</span></div>
 					</div>
 					<div class="row">
@@ -398,13 +398,13 @@
                                                                                         <th >Attachment Type</th>
                                                                                         <th >Description</th>
                                                                                         <th >File Name</th>
-                                                                                        <th *ngIf="mode != 'view'">Action</th>
+                                                                                        <th >Action</th>
                                                                                 </tr>
                                                                                 <tr *ngFor = "let attachment of result?.grantCall?.grantCallAttachments;let i = index">
                                                                                         <td>{{i+1}}</td>
                                                                                         <td>{{attachment?.grantCallAttachType?.description}}</td>
-                                                                                        <td>{{attachment?.description}}</td>
-                                                                                        <td>{{attachment?.fileName}}</td>
+                                                                                        <td title="{{(attachment?.description?.length>60)?(attachment?.description):''}}">{{(attachment?.description?.length > 60)?(attachment?.description | slice:0:60)+'...':(attachment?.description)}}</td>
+                                                                                        <td title="{{(attachment?.fileName?.length>60)?(attachment?.fileName):''}}">{{(attachment?.fileName?.length > 60)?(attachment?.fileName | slice:0:60)+'...':(attachment?.fileName)}}</td>
 	                                                                                    <td ><ul class="actionButtonGroup">
 																								<li *ngIf="mode != 'view'"><a (click)="tempSaveAttachments($event,attachment,i)" *ngIf="editScheduleattachment == true" 
 																									data-toggle="modal" data-target="#deleteAttachment"><i

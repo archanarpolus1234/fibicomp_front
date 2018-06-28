@@ -179,47 +179,48 @@ export class ElasticSearchComponent implements AfterViewInit {
                                             .map(( hit ) => hit._source );
                                         hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
                                             .map(( hit ) => hit.highlight );
-
                                         hits_source.forEach(( elmnt, j ) => {
-                                            proposalNo = hits_source[j].proposal_number;
-                                            title = hits_source[j].title;
-                                            lead_unit_name = hits_source[j].lead_unit_name;
-                                            lead_unit_number = hits_source[j].lead_unit_number;
-                                            sponsor = hits_source[j].sponsor;
-                                            status = hits_source[j].status;
-                                            personName = hits_source[j].person_name;
-                                            test = hits_source[j];
-
-                                            if ( typeof ( hits_highlight[j].proposal_number ) !== 'undefined' ) {
-                                                proposalNo = hits_highlight[j].proposal_number;
+                                            if( hits_source[j].pi_name === this.rolePerson || this.isAdmin === 'true' ) {   
+                                                proposalNo = hits_source[j].proposal_number;
+                                                title = hits_source[j].title;
+                                                lead_unit_name = hits_source[j].lead_unit_name;
+                                                lead_unit_number = hits_source[j].lead_unit_number;
+                                                sponsor = hits_source[j].sponsor;
+                                                status = hits_source[j].status;
+                                                personName = hits_source[j].person_name;
+                                                test = hits_source[j];
+    
+                                                if ( typeof ( hits_highlight[j].proposal_number ) !== 'undefined' ) {
+                                                    proposalNo = hits_highlight[j].proposal_number;
+                                                }
+                                                if ( typeof ( hits_highlight[j].title ) !== 'undefined' ) {
+                                                    title = hits_highlight[j].title;
+                                                }
+                                                if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
+                                                    lead_unit_name = hits_highlight[j].lead_unit_name;
+                                                }
+                                                if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
+                                                    lead_unit_number = hits_highlight[j].lead_unit_number;
+                                                }
+                                                if ( typeof ( hits_highlight[j].sponsor ) !== 'undefined' ) {
+                                                    sponsor = hits_highlight[j].sponsor;
+                                                }
+                                                if ( typeof ( hits_highlight[j].status ) !== 'undefined' ) {
+                                                    status = hits_highlight[j].status;
+                                                }
+                                                if ( typeof ( hits_highlight[j].person_name ) !== 'undefined' ) {
+                                                    personName = hits_highlight[j].person_name;
+                                                }
+                                                results.push( {
+                                                    label: proposalNo + '  :  ' + title
+                                                    + '  |  ' + lead_unit_number 
+                                                    + '  |  ' + lead_unit_name 
+                                                    + '  |  ' + sponsor
+                                                    + '  |  ' + personName,
+                                                    obj: test
+                                                }
+                                                );
                                             }
-                                            if ( typeof ( hits_highlight[j].title ) !== 'undefined' ) {
-                                                title = hits_highlight[j].title;
-                                            }
-                                            if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
-                                                lead_unit_name = hits_highlight[j].lead_unit_name;
-                                            }
-                                            if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
-                                                lead_unit_number = hits_highlight[j].lead_unit_number;
-                                            }
-                                            if ( typeof ( hits_highlight[j].sponsor ) !== 'undefined' ) {
-                                                sponsor = hits_highlight[j].sponsor;
-                                            }
-                                            if ( typeof ( hits_highlight[j].status ) !== 'undefined' ) {
-                                                status = hits_highlight[j].status;
-                                            }
-                                            if ( typeof ( hits_highlight[j].person_name ) !== 'undefined' ) {
-                                                personName = hits_highlight[j].person_name;
-                                            }
-                                            results.push( {
-                                                label: proposalNo + '  :  ' + title
-                                                + '  |  ' + lead_unit_number 
-                                                + '  |  ' + lead_unit_name 
-                                                + '  |  ' + sponsor
-                                                + '  |  ' + personName,
-                                                obj: test
-                                            }
-                                            );
                                         }
                                         );
                                         if ( results.length > 0 ) {
@@ -248,47 +249,48 @@ export class ElasticSearchComponent implements AfterViewInit {
                                             .map(( hit ) => hit._source );
                                         hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
                                             .map(( hit ) => hit.highlight );
-
                                         hits_source.forEach(( elmnt, j ) => {
-                                            protocol_number = hits_source[j].protocol_number;
-                                            title = hits_source[j].title;
-                                            lead_unit = hits_source[j].lead_unit_name;
-                                            unit_number = hits_source[j].lead_unit_number;
-                                            protocol_type = hits_source[j].protocol_type;
-                                            personName = hits_source[j].person_name;
-                                            status = hits_source[j].status;
-                                            test = hits_source[j];
-
-                                            if ( typeof ( hits_highlight[j].protocol_number ) !== 'undefined' ) {
-                                                protocol_number = hits_highlight[j].protocol_number;
+                                            if( hits_source[j].pi_name === this.rolePerson || this.isAdmin === 'true' ) {
+                                                protocol_number = hits_source[j].protocol_number;
+                                                title = hits_source[j].title;
+                                                lead_unit = hits_source[j].lead_unit_name;
+                                                unit_number = hits_source[j].lead_unit_number;
+                                                protocol_type = hits_source[j].protocol_type;
+                                                personName = hits_source[j].person_name;
+                                                status = hits_source[j].status;
+                                                test = hits_source[j];
+    
+                                                if ( typeof ( hits_highlight[j].protocol_number ) !== 'undefined' ) {
+                                                    protocol_number = hits_highlight[j].protocol_number;
+                                                }
+                                                if ( typeof ( hits_highlight[j].title ) !== 'undefined' ) {
+                                                    title = hits_highlight[j].title;
+                                                }
+                                                if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
+                                                    lead_unit = hits_highlight[j].lead_unit_name;
+                                                }
+                                                if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
+                                                    unit_number = hits_highlight[j].lead_unit_number;
+                                                }
+                                                if ( typeof ( hits_highlight[j].protocol_type ) !== 'undefined' ) {
+                                                    protocol_type = hits_highlight[j].protocol_type;
+                                                }
+                                                if ( typeof ( hits_highlight[j].person_name ) !== 'undefined' ) {
+                                                    personName = hits_highlight[j].person_name;
+                                                }
+                                                if ( typeof ( hits_highlight[j].status ) !== 'undefined' ) {
+                                                    status = hits_highlight[j].status;
+                                                }
+                                                results.push( {
+                                                    label: protocol_number + '  :  ' + title 
+                                                    + '  |  ' + unit_number 
+                                                    + '  |  ' + lead_unit 
+                                                    + '  |  ' + protocol_type
+                                                    + '  |  ' + personName
+                                                    + '  |  ' + status,
+                                                    obj: test
+                                                } );
                                             }
-                                            if ( typeof ( hits_highlight[j].title ) !== 'undefined' ) {
-                                                title = hits_highlight[j].title;
-                                            }
-                                            if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
-                                                lead_unit = hits_highlight[j].lead_unit_name;
-                                            }
-                                            if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
-                                                unit_number = hits_highlight[j].lead_unit_number;
-                                            }
-                                            if ( typeof ( hits_highlight[j].protocol_type ) !== 'undefined' ) {
-                                                protocol_type = hits_highlight[j].protocol_type;
-                                            }
-                                            if ( typeof ( hits_highlight[j].person_name ) !== 'undefined' ) {
-                                                personName = hits_highlight[j].person_name;
-                                            }
-                                            if ( typeof ( hits_highlight[j].status ) !== 'undefined' ) {
-                                                status = hits_highlight[j].status;
-                                            }
-                                            results.push( {
-                                                label: protocol_number + '  :  ' + title 
-                                                + '  |  ' + unit_number 
-                                                + '  |  ' + lead_unit 
-                                                + '  |  ' + protocol_type
-                                                + '  |  ' + personName
-                                                + '  |  ' + status,
-                                                obj: test
-                                            } );
                                         } );
                                         if ( results.length > 0 ) {
                                             this.message = '';
@@ -316,47 +318,48 @@ export class ElasticSearchComponent implements AfterViewInit {
                                             .map(( hit ) => hit._source );
                                         hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
                                             .map(( hit ) => hit.highlight );
-
                                         hits_source.forEach(( elmnt, j ) => {
-                                            protocol_number = hits_source[j].protocol_number;
-                                            title = hits_source[j].title;
-                                            lead_unit = hits_source[j].lead_unit_name;
-                                            lead_unit_number = hits_source[j].lead_unit_number;
-                                            protocol_type = hits_source[j].protocol_type;
-                                            status = hits_source[j].status;
-                                            personName = hits_source[j].person_name;
-                                            test = hits_source[j];
-
-                                            if ( typeof ( hits_highlight[j].protocol_number ) !== 'undefined' ) {
-                                                protocol_number = hits_highlight[j].protocol_number;
+                                            if( hits_source[j].pi_name === this.rolePerson || this.isAdmin === 'true' ) {
+                                                protocol_number = hits_source[j].protocol_number;
+                                                title = hits_source[j].title;
+                                                lead_unit = hits_source[j].lead_unit_name;
+                                                lead_unit_number = hits_source[j].lead_unit_number;
+                                                protocol_type = hits_source[j].protocol_type;
+                                                status = hits_source[j].status;
+                                                personName = hits_source[j].person_name;
+                                                test = hits_source[j];
+    
+                                                if ( typeof ( hits_highlight[j].protocol_number ) !== 'undefined' ) {
+                                                    protocol_number = hits_highlight[j].protocol_number;
+                                                }
+                                                if ( typeof ( hits_highlight[j].title ) !== 'undefined' ) {
+                                                    title = hits_highlight[j].title;
+                                                }
+                                                if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
+                                                    lead_unit = hits_highlight[j].lead_unit_name;
+                                                }
+                                                if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
+                                                    lead_unit_number = hits_highlight[j].lead_unit_number;
+                                                }
+                                                if ( typeof ( hits_highlight[j].protocol_type ) !== 'undefined' ) {
+                                                    protocol_type = hits_highlight[j].protocol_type;
+                                                }
+                                                if ( typeof ( hits_highlight[j].status ) !== 'undefined' ) {
+                                                    status = hits_highlight[j].status;
+                                                }
+                                                if ( typeof ( hits_highlight[j].person_name ) !== 'undefined' ) {
+                                                    personName = hits_highlight[j].person_name;
+                                                }
+                                                results.push( {
+                                                    label: protocol_number + '  :  ' + title 
+                                                    + '  |  ' + lead_unit_number 
+                                                    + '  |  ' + lead_unit 
+                                                    + '  |  ' + protocol_type
+                                                    + '  |  ' + status
+                                                    + '  |  ' + personName,
+                                                    obj: test
+                                                } );
                                             }
-                                            if ( typeof ( hits_highlight[j].title ) !== 'undefined' ) {
-                                                title = hits_highlight[j].title;
-                                            }
-                                            if ( typeof ( hits_highlight[j].lead_unit_name ) !== 'undefined' ) {
-                                                lead_unit = hits_highlight[j].lead_unit_name;
-                                            }
-                                            if ( typeof ( hits_highlight[j].lead_unit_number ) !== 'undefined' ) {
-                                                lead_unit_number = hits_highlight[j].lead_unit_number;
-                                            }
-                                            if ( typeof ( hits_highlight[j].protocol_type ) !== 'undefined' ) {
-                                                protocol_type = hits_highlight[j].protocol_type;
-                                            }
-                                            if ( typeof ( hits_highlight[j].status ) !== 'undefined' ) {
-                                                status = hits_highlight[j].status;
-                                            }
-                                            if ( typeof ( hits_highlight[j].person_name ) !== 'undefined' ) {
-                                                personName = hits_highlight[j].person_name;
-                                            }
-                                            results.push( {
-                                                label: protocol_number + '  :  ' + title 
-                                                + '  |  ' + lead_unit_number 
-                                                + '  |  ' + lead_unit 
-                                                + '  |  ' + protocol_type
-                                                + '  |  ' + status
-                                                + '  |  ' + personName,
-                                                obj: test
-                                            } );
                                         } );
                                         if ( results.length > 0 ) {
                                             this.message = '';
@@ -384,39 +387,40 @@ export class ElasticSearchComponent implements AfterViewInit {
                                             .map(( hit ) => hit._source );
                                         hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
                                             .map(( hit ) => hit.highlight );
-
                                         hits_source.forEach(( elmnt, j ) => {
-                                            full_name = hits_source[j].full_name;
-                                            disclosure_number = hits_source[j].coi_disclosure_number;
-                                            disclosure_disposition = hits_source[j].disclosure_disposition;
-                                            disclosure_status = hits_source[j].disclosure_status;
-                                            module_item_key = hits_source[j].module_item_key;
-                                            test = hits_source[j];
-
-                                            if ( typeof ( hits_highlight[j].coi_disclosure_number ) !== 'undefined' ) {
-                                                disclosure_number = hits_highlight[j].coi_disclosure_number;
+                                            if( hits_source[j].pi_name === this.rolePerson || this.isAdmin === 'true' ) {
+                                                full_name = hits_source[j].full_name;
+                                                disclosure_number = hits_source[j].coi_disclosure_number;
+                                                disclosure_disposition = hits_source[j].disclosure_disposition;
+                                                disclosure_status = hits_source[j].disclosure_status;
+                                                module_item_key = hits_source[j].module_item_key;
+                                                test = hits_source[j];
+    
+                                                if ( typeof ( hits_highlight[j].coi_disclosure_number ) !== 'undefined' ) {
+                                                    disclosure_number = hits_highlight[j].coi_disclosure_number;
+                                                }
+                                                if ( typeof ( hits_highlight[j].full_name ) !== 'undefined' ) {
+                                                    full_name = hits_highlight[j].full_name;
+                                                }
+                                                if ( typeof ( hits_highlight[j].disclosure_disposition ) !== 'undefined' ) {
+                                                    disclosure_disposition = hits_highlight[j].disclosure_disposition;
+                                                }
+                                                if ( typeof ( hits_highlight[j].disclosure_status ) !== 'undefined' ) {
+                                                    disclosure_status = hits_highlight[j].disclosure_status;
+                                                }
+                                                if ( typeof ( hits_highlight[j].module_item_key ) !== 'undefined' ) {
+                                                    module_item_key = hits_highlight[j].module_item_key;
+                                                }
+    
+                                                results.push( {
+                                                    label: disclosure_number + '  :  '
+                                                    + '  |  ' + full_name
+                                                    + '  |  ' + disclosure_disposition 
+                                                    + '  |  ' + disclosure_status
+                                                    + '  |  ' + module_item_key,
+                                                    obj: test
+                                                } );
                                             }
-                                            if ( typeof ( hits_highlight[j].full_name ) !== 'undefined' ) {
-                                                full_name = hits_highlight[j].full_name;
-                                            }
-                                            if ( typeof ( hits_highlight[j].disclosure_disposition ) !== 'undefined' ) {
-                                                disclosure_disposition = hits_highlight[j].disclosure_disposition;
-                                            }
-                                            if ( typeof ( hits_highlight[j].disclosure_status ) !== 'undefined' ) {
-                                                disclosure_status = hits_highlight[j].disclosure_status;
-                                            }
-                                            if ( typeof ( hits_highlight[j].module_item_key ) !== 'undefined' ) {
-                                                module_item_key = hits_highlight[j].module_item_key;
-                                            }
-
-                                            results.push( {
-                                                label: disclosure_number + '  :  '
-                                                + '  |  ' + full_name
-                                                + '  |  ' + disclosure_disposition 
-                                                + '  |  ' + disclosure_status
-                                                + '  |  ' + module_item_key,
-                                                obj: test
-                                            } );
                                         } );
 
                                         if ( results.length > 0 ) {
