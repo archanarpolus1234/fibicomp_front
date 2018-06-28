@@ -368,16 +368,15 @@
                                          </tbody>
                                        </table>
                                     </div>
-	                        <div class="borderBox col-12">
+	                        <div class="borderBox col-12" [ngClass]="isProjectDescWdgtOpen?'normalPadd':'lowPadd'">
 								<h4 class="borderBoxHeading">Project Description</h4>
 								<button id="projectDescExpandBtn" class="addBtn font hoverColor" (click)="isProjectDescWdgtOpen = !isProjectDescWdgtOpen" >
 										<i [ngClass]="isProjectDescWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
-									</button>
+								</button>
 								<div class="pullSide">
-									<table class="table tableSkin grid2">
-										<tbody *ngIf="isProjectDescWdgtOpen">
-											<tr>
-												<td><label>Abstract:</label><br>
+									<div class="topGrid gridSkin" *ngIf="isProjectDescWdgtOpen">
+											<div class="row">
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label>Abstract:</label><br>
 													<textarea name="abstract" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view' && result?.proposal?.abstractDescription != null"><p class="textView" *ngIf="mode == 'view' && !isAbsDescReadMore">{{(result?.proposal?.abstractDescription).length>240 ? (result?.proposal?.abstractDescription | slice:0:240)+'...' : result?.proposal?.abstractDescription}}
 															<span *ngIf="(result?.proposal?.abstractDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isAbsDescReadMore = !isAbsDescReadMore">Read more<i [ngClass]="isAbsDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
@@ -390,9 +389,9 @@
 													<div class="noDataExists" *ngIf="result?.proposal?.abstractDescription == null && mode == 'view'">
 														No abstract for this proposal
 													</div>
-												</td>
-												<td><label>Funding Strategy:</label><br>
-													<textarea name="fundingStrategy" class="forTextAreaEntry" maxlength="50" placeholder="" [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+												</div>
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label>Funding Strategy:</label><br>
+													<textarea name="fundingStrategy" class="forTextAreaEntry" maxlength="48" placeholder="" [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view' && result?.proposal?.fundingStrategy != null"><p class="textView" *ngIf="mode == 'view' && !isFundDescReadMore">{{(result?.proposal?.fundingStrategy).length>240 ? (result?.proposal?.fundingStrategy | slice:0:240)+'...' : result?.proposal?.fundingStrategy}}
 															<span *ngIf="(result?.proposal?.fundingStrategy?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isFundDescReadMore = !isFundDescReadMore">Read more<i [ngClass]="isFundDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -404,10 +403,11 @@
 													<div class="noDataExists" *ngIf="result?.proposal?.fundingStrategy == null && mode == 'view'">
 														No description for funding strategy for this proposal
 													</div>
-	                                        	</td>
-	                                        </tr>
-	                                        <tr>
-												<td><label>Details of Proposal:</label><br>
+	                                        	</div>
+	                                        </div>
+	                                        <div class="row">
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+													<label>Details of Proposal:</label><br>
 													<textarea name="details" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
 													<span *ngIf="mode == 'view' && result?.proposal?.details != null"><p class="textView" *ngIf="mode == 'view' && !isDetailsReadMore">{{(result?.proposal?.details).length>240 ? (result?.proposal?.details | slice:0:240)+'...' : result?.proposal?.details}}
 															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
@@ -420,33 +420,36 @@
 													<div class="noDataExists" *ngIf="result?.proposal?.details == null && mode == 'view'">
 														No additional details for this proposal
 													</div>
-												</td>
-												<td><label>Deliverables:</label><br>
+												</div>
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+													<label>Deliverables:</label><br>
 													<textarea name="deliverables" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
-													<span *ngIf="mode == 'view'">{{result?.proposal?.deliverables}}</span>
-													<span *ngIf="mode == 'view' && result?.proposal?.details != null"><p class="textView" *ngIf="mode == 'view' && !isDetailsReadMore">{{(result?.proposal?.details).length>240 ? (result?.proposal?.details | slice:0:240)+'...' : result?.proposal?.details}}
-															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+													<span *ngIf="mode == 'view' && result?.proposal?.deliverables != null"><p class="textView" *ngIf="mode == 'view' && !isDeliverReadMore">{{(result?.proposal?.deliverables).length>240 ? (result?.proposal?.deliverables | slice:0:240)+'...' : result?.proposal?.deliverables}}
+															<span *ngIf="(result?.proposal?.deliverables?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDeliverReadMore = !isDeliverReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
-															<p *ngIf="mode == 'view' && isDetailsReadMore" class="textView">{{result?.proposal?.details}}
-															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Show less<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															<p *ngIf="mode == 'view' && isDeliverReadMore" class="textView">{{result?.proposal?.deliverables}}
+															<span *ngIf="(result?.proposal?.deliverables?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDeliverReadMore = !isDeliverReadMore">Show less<i [ngClass]="isDeliverReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
 													</span>
 													
 													<div class="noDataExists" *ngIf="result?.proposal?.deliverables == null && mode == 'view'">
 														No deliverables for this proposal
 													</div>
-												</td>
-	                                        </tr>
-										</tbody>
-									</table>
+												</div>
+	                                        </div>
+									</div>
 								</div>
 							</div>
 							<div class="borderBox col-12">
 								<h4 class="borderBoxHeading">Declaration</h4>
-										<div class="borderBox col-12">
+								<button id="declarationExpandBtn" class="addBtn font hoverColor" (click)="isDeclareWdgtOpen = !isDeclareWdgtOpen" 
+									*ngIf="((result?.proposal?.proposalIrbProtocols?.length > 0 || result?.proposal?.proposalSponsors?.length > 0) && mode == 'view') || (mode != 'view')">
+										<i [ngClass]="isDeclareWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+								</button>
+										<div class="borderBox col-12 innerBorderBox" *ngIf="isDeclareWdgtOpen && !(result?.proposal?.proposalIrbProtocols?.length == 0 && result?.proposal?.proposalSponsors?.length == 0 && mode == 'view')">
 											<h4 class="borderBoxHeading">Funding Support</h4>
 											<div class="pullSide">
-												<table class="table table-responsive tableSkin">
+												<table class="table table-responsive tableSkin grid2">
 													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
 														
 														<td><label>Type of Funding Agency :</label><br><select [(ngModel)] = "selectedSponsorType" [ngClass]="editClass" (change)="sponsorTypeChange()">
@@ -460,14 +463,14 @@
 															</select>
 														</td>
 														<td><label>Start Date:</label><input
-															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" placeholder=""
+															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" placeholder="MM/dd/YYYY"
 															[(ngModel)]="fundingStartDate" 
 															[disabled]="mode == 'view' ? true : false"
 															[ngClass]="editClass" />
 															<i class="fa fa-calendar fa-large hand-cursor" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="startDt"></i>
 															<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></td>
 													<td><label>End Date:</label><input
-															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" placeholder=""
+															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" placeholder="MM/dd/YYYY"
 															[(ngModel)]="fundingEndDate"
 															[disabled]="mode == 'view' ? true : false"
 															[ngClass]="editClass" />
@@ -486,7 +489,7 @@
 													</tr>
 													<tr *ngIf="result?.proposal?.proposalSponsors?.length == 0 && mode == 'view'">
 														<td colspan="6"><div class="noDataExists">
-																You declared no fundings are associated for you before this proposal
+																No fundings declared
 															</div></td>
 													</tr>
 													<tbody *ngIf="result?.proposal?.proposalSponsors?.length > 0">
@@ -498,7 +501,7 @@
 				                                            <th >Amount</th>
 				                                            <th  *ngIf="mode != 'view'">Action</th>
 				                                        </tr>
-				                                        <tr *ngFor="let proposalSponsor of this.result?.proposal?.proposalSponsors;let i = index">
+				                                        <tr *ngFor="let proposalSponsor of result?.proposal?.proposalSponsors;let i = index">
 				                                            <td>{{i+1}}</td>
 				                                            <td >{{proposalSponsor?.sponsor?.sponsorName}}</td>
 				                                            <td >{{proposalSponsor?.startDate | date:'MM/dd/yyyy'}}</td>
@@ -515,10 +518,10 @@
 	                                      			</table>
 											</div>
 										</div>
-										<div class="borderBox col-12">
+										<div class="borderBox col-12 innerBorderBox" *ngIf="isDeclareWdgtOpen && !(result?.proposal?.proposalIrbProtocols?.length == 0 && result?.proposal?.proposalSponsors?.length == 0 && mode == 'view')">
 											<h4 class="borderBoxHeading">IRB</h4>
 											<div class="pullSide">
-												<table class="table table-responsive tableSkin">
+												<table class="table table-responsive tableSkin grid2">
 													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
 														<td></td>
 														<td class="text-right"><label>Protocol:</label></td>
@@ -538,7 +541,7 @@
 													</tr>
 													<tr *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && mode == 'view'">
 														<td colspan="7"><div class="noDataExists">
-																No protocols associated before this proposal
+																No protocols declared
 															</div></td>
 													</tr>
 													<tbody *ngIf="result?.proposal?.proposalIrbProtocols?.length > 0">
@@ -569,12 +572,20 @@
 	                                      			</table>
 											</div>
 										</div>
+										<div class="col-12" *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && result?.proposal?.proposalSponsors?.length == 0 && mode == 'view'">
+											<div class="noDataExists regularFont" >
+												No declarations for this proposal
+											</div>
+										</div>
 							</div>
 							<div class="borderBox col-12">
 									<h4 class="borderBoxHeading">Budget</h4>
-									<div class="pullSide">
-										<table class="table table-responsive tableSkin">
-											<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
+									<button id="budgetExpandBtn" class="addBtn font hoverColor" (click)="isBudgetWdgtOpen = !isBudgetWdgtOpen" 
+	                                 	*ngIf="(result?.proposal?.proposalBudgets?.length > 0 && mode == 'view') || (mode != 'view')">
+										<i [ngClass]="isBudgetWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+									</button>
+										<table class="table table-responsive tableSkin grid2">
+											<tr id="addFundingSupportRow" *ngIf="mode != 'view' && isBudgetWdgtOpen">
 	                                        	<td class="text-right"><label>Category:</label></td>
 	                                        	<td><select [ngClass]="editClass" [(ngModel)]="budgetCategorySelected" (change)="budgetCategoryChanged()" >
 														<option (value)="select">{{select}}</option>
@@ -597,7 +608,7 @@
 											<tr *ngIf="budgetWarningFlag">
 												<td colspan="9"><span class="mandatory">{{budgetWarningMsg}}</span></td>
 											</tr>
-											<tbody *ngIf="result?.proposal?.proposalBudgets?.length > 0">
+											<tbody *ngIf="result?.proposal?.proposalBudgets?.length > 0 && isBudgetWdgtOpen">
 		                                        <tr >
 		                                            <th >Sl no</th>
 		                                            <th colspan="2">Budget category</th>
@@ -622,18 +633,17 @@
 	                                         </tbody>
 	                                         <tr *ngIf="result?.proposal?.proposalBudgets?.length == 0 && mode == 'view'">
 												<td colspan="9"><div class="noDataExists">
-														Budget is not estimated with this proposal yet
+														No budget estimated with this proposal
 													</div></td>
 											</tr>
 	                                    </table>
-									</div>
 								</div>
 	                            <div class="borderBox col-12">
                                <h4 class="borderBoxHeading">Supporting Documents</h4>
                                 <button title="add new attachment" class="addBtn font hoverColor" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
 									<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
 								</button>
-                               <table class="table table-responsive tableSkin">
+                               <table class="table table-responsive tableSkin grid2">
                                		<tr *ngIf="result?.proposal?.proposalAttachments?.length == 0 && mode == 'view'">
 										<td colspan="5"><div class="noDataExists">
 												No supporting documents are attached with this proposal

@@ -173,9 +173,12 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     isareaWdgtOpen: boolean = true;
     isTeamWdgtOpen: boolean = true;
     isProjectDescWdgtOpen: boolean = true;
+    isBudgetWdgtOpen: boolean = true;
+    isDeclareWdgtOpen: boolean = true;
     isResDescReadMore: boolean = false;
     isAbsDescReadMore: boolean = false;
     isFundDescReadMore: boolean = false;
+    isDeliverReadMore: boolean = false;
 
     public onDestroy$ = new Subject<void>();
 
@@ -526,6 +529,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         if(this.result.proposal.submissionDate == null ) {
             this.isDateWarningText = true;
             this.dateWarningText = '* Please select a submission date';
+        } else if ( this.result.proposal.submissionDate < this.currentDate ) {
+            this.isDateWarningText = true;
+            this.dateWarningText = '* Please select a submission date from today';
         } else if ( this.result.proposal.startDate == null ) {
             this.isDateWarningText = true;
             this.dateWarningText = '* Please select a start date';
@@ -1115,7 +1121,12 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 }, 8000);
                 window.scrollTo( 0, 0 );
                 //this.isProposalSubmitted = true;
-                this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'mode': this.mode, 'proposalId': this.result.proposal.proposalId } } );
+                var url = window.location.href;
+                if(url.indexOf('viewSubmittedProposal') !== -1) {
+                    this.ngOnInit();
+                } else {
+                    this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'mode': this.mode, 'proposalId': this.result.proposal.proposalId } } );
+                }
             } );
         } else {
                 this.showSuccessMessage = true;
