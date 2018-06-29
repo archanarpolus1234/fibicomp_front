@@ -429,7 +429,7 @@ export class GrantComponent {
         var timestamp = d.getTime();
         this.eligibilityWarning= false;
         if(this.selectedCriteria == this.select || this.selectedEligibilityType == this.select) {
-          
+
         } else {
                     for(let eligibility of this.result.grantCall.grantCallEligibilities) {
                         if(eligibility.grantCallCriteria.description  == this.selectedCriteria && eligibility.grantCallEligibilityType.description == this.selectedEligibilityType) {
@@ -564,7 +564,7 @@ export class GrantComponent {
         this.uploadedFile = [];
     }
 
-    addAttachments() {
+    addAttachments() {debugger;
         var d = new Date();
         this.attachmentWarning = false;
         if ( this.result.grantCall.grantCallAttachments.length != 0 ) {
@@ -579,12 +579,16 @@ export class GrantComponent {
                     }
                 }
             }
+        } else if ( this.selectedAttachmentType == this.select ) {
+            this.attachmentWarning = true;
+            this.attachmentWarningMsg = '* Please select an attachment type';
+        } else if ( this.uploadedFile.length == 0 ) {
+            this.attachmentWarning = true;
+            this.attachmentWarningMsg = '* No attachments selected';
         }
-        if ( this.attachmentWarning == false ) {
+        if ( this.attachmentWarning == false) {
             var timestamp = d.getTime();
             var tempObjectForAdd: any = {};
-
-            if ( this.selectedAttachmentType != this.select ) {
                 this.attachmentWarning = false;
                 for ( let attachmentType of this.result.grantCallAttachTypes ) {
                     if ( attachmentType.description == this.selectedAttachmentType ) {
@@ -604,11 +608,6 @@ export class GrantComponent {
                 }, error => { }, () => {
                     this.closeAttachments();
                 } );
-
-            } else {
-                this.attachmentWarning = true;
-                this.attachmentWarningMsg = '* Please select an attachment type';
-            }
         }
     }
     
@@ -692,7 +691,7 @@ export class GrantComponent {
         }
     }
 
-     fundingTypeChange(type) {
+    fundingTypeChange(type) {
         for(let fundingType of this.result.fundingSourceTypes) {
             if(fundingType.description == type) {
                 var tempObj:any={};
@@ -742,7 +741,7 @@ export class GrantComponent {
             } else{
                 this.keyWordWarningMessage = "Keyword already added";
             }
-      
+
         this.selectedKeyword = null;
     }
 
@@ -821,7 +820,6 @@ export class GrantComponent {
                 },8000);
                 
         }
-       
     }
 
     addResearchArea() {
@@ -932,5 +930,10 @@ export class GrantComponent {
  
     triggerAdd() {
         $('#addAttach').trigger('click');
+    }
+    
+    backToList(e){
+        e.preventDefault();
+        this.router.navigate(['/dashboard'], { queryParams: { 'currentTab': 'GRANT' } } )
     }
 }
