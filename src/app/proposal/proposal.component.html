@@ -598,7 +598,7 @@
 													</select>
 												</td>
 												<td class="text-right"><label>Description:</label> </td>
-												<td><input type="text" [ngClass]="editClass" [(ngModel)]="budgetDescription"/></td>
+												<td><textarea [ngClass]="editClass" rows="1" [(ngModel)]="budgetDescription" class="forTextAreaEntry"></textarea></td>
 												<td class="text-right"><label>Cost:</label> </td>
 												<td><input type="number" [ngClass]="editClass" [(ngModel)]="budgetCost"/></td>
 												<td>
