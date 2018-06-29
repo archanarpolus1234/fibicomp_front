@@ -404,7 +404,13 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .dateWidth {
-	width: 85% !important;
+	width: 85% !important;	
+}
+
+.dateWidth::-webkit-inner-spin-button,
+.dateWidth::-webkit-calendar-picker-indicator {
+    display: none;
+    -webkit-appearance: none;
 }
 
 .gridSkin .row div p {
@@ -499,10 +505,31 @@ input[type=number]::-webkit-outer-spin-button {
 	padding-bottom: 15px;
 }
 
+.noPadd {
+	padding: 0px;
+}
+
+.noMarginTop {
+	margin-top: 0px;
+}
+
 .innerBorderBox {
 	border: none;
 }
 
 .innerBorderBox>h4 {
 	background-color: #E6F8F6;
+}
+
+#searchElastic {
+	margin: 5px 0px;
+}
+
+.attachBtn {
+	color: #00bcd4;
+	cursor: pointer;
+}
+
+.attachBtn:hover {
+	color: #9e9e9e;
 }

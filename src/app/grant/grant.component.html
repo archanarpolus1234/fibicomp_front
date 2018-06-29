@@ -7,6 +7,7 @@
 				<div class="row" *ngIf="grantId != null">
 					<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-left"><span *ngIf="grantId != null" class="topHeading">#{{grantId}} : {{result?.grantCall?.grantCallName}}</span></div>
 					<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 text-right ">
+						<button class="btnSkin btnSkinPrimary" (click)="backToList($event)">Back to Grant Call</button>
 						<span *ngIf="result?.grantCall?.grantCallStatus?.description == 'Open'" class = "grantCall_create_proposal_link">
 						<button class="btnSkin btnSkinPrimary" (click)="navigate($event, 'create')">Create Application</button></span>
 						<!-- <span class="linkButtonGroup"> <a (click)="navigate($event, 'create')">
@@ -24,7 +25,7 @@
 							<div class="row">
 								<div class="col-8">Overview 
 								</div>
-								<div class="col-4 text-right colorBlack"><span style="margin-right: 10px"><label style="margin-right: 10px">Status: </label>{{result?.grantCall?.grantCallStatus?.description}}</span></div>
+								<div class="col-4 text-right"><span style="margin-right: 10px"><label style="margin-right: 10px">Status: </label>{{result?.grantCall?.grantCallStatus?.description}}</span></div>
 							</div></h4>
 							<p *ngIf = "showWarning"><span class="mandatory warningMessage">* Please fill all the mandatory fields marked</span></p>
 							<div class="pullSide">
@@ -40,12 +41,12 @@
 												</select>
 												<span *ngIf="mode == 'view'">{{grantCallTypeSelected}}</span>
 											</div>
-											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Opening Date:</label><br><span *ngIf="mode != 'view'" ><input type="text" placeholder="MM/dd/YYYY" [(ngModel)] = "result.grantCall.openingDate" [ngClass]="editClass" [owlDateTimeTrigger]="openingDt" [owlDateTime]="openingDt"  class="committeeBox dateWidth"/>&nbsp;
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Opening Date:</label><br><span *ngIf="mode != 'view'" ><input type="date" placeholder="MM/dd/YYYY" [(ngModel)] = "result.grantCall.openingDate" [ngClass]="editClass" [owlDateTime]="openingDt"  class="committeeBox dateWidth"/>&nbsp;
 												<span class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="openingDt"></span><owl-date-time #openingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()" ></owl-date-time></span>
-												<span *ngIf="mode == 'view'" >{{result?.grantCall?.openingDate}}</span></div>
-											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Closing Date:</label><br><span *ngIf="mode != 'view'"><input type="text" placeholder="MM/dd/YYYY" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass" [owlDateTimeTrigger]="closingDt" [owlDateTime]="closingDt"  class="committeeBox dateWidth"/>&nbsp;
+												<span *ngIf="mode == 'view'" >{{result?.grantCall?.openingDate | date: 'MM/dd/yyyy'}}</span></div>
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Closing Date:</label><br><span *ngIf="mode != 'view'"><input type="date" placeholder="MM/dd/YYYY" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass" [owlDateTime]="closingDt"  class="committeeBox dateWidth"/>&nbsp;
 												<span class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="closingDt"></span> <owl-date-time #closingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
-												<span *ngIf="mode == 'view'" >{{result?.grantCall?.closingDate}}</span>
+												<span *ngIf="mode == 'view'" >{{result?.grantCall?.closingDate | date: 'MM/dd/yyyy'}}</span>
 											</div>
 										</div>
 										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"  *ngIf="isDateWarningText"><span class="mandatory font">*{{dateWarningText}}</span>
@@ -90,7 +91,7 @@
 														No lead unit specified</span>
 											</div>
                                         	<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" *ngIf="grantCallTypeSelected == 'External'">
-                                        		<label>External Weblink:</label><br><input *ngIf="mode != 'view'" type="text" placeholder="" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass"/>
+                                        		<label>External Weblink:</label><br><input *ngIf="mode != 'view'" class="dateBox" type="text" placeholder="" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass"/>
                                        			<span *ngIf="mode == 'view'">{{result?.grantCall?.externalUrl}}</span>
                                        			<span *ngIf="mode == 'view' && result.grantCall.externalUrl == null" class="noDataExists">No external link provided</span>
                                        		</div>
@@ -124,12 +125,12 @@
 													<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2" *ngIf="mode!='view'" style="padding-left: 0px">
 														<ng2-completer  title="Add Keyword" 
 															[inputClass]="completerID"
-															[(ngModel)]="selectedKeyword" placeholder=""
+															[(ngModel)]="selectedKeyword" placeholder="Search here for Keyword"
 															[datasource]="keywordsList" [minSearchLength]="0"
 															(selected)="keywordChangeFunction()"  class="widthLimiterNg2Completer dateBox" [disabled]="mode == 'view'" *ngIf="mode!='view';else showNoKeyword"></ng2-completer>
 														<span *ngIf="result?.grantCall?.grantCallKeywords?.length == 0 && mode == 'view'" class="noDatExists">No keywords are present for this grant</span>
 													</div>
-													<div class="col-xl-10 col-lg-10 col-md-6 col-sm-12 col-10">
+													<div class="col-xl-10 col-lg-10 col-md-6 col-sm-12 col-10" style="padding-left: 0px">
 														<div *ngIf="result?.grantCall?.grantCallKeywords?.length != 0" class="fileChips" style="word-break: break-all;">
 															<span *ngFor="let keyword of result?.grantCall?.grantCallKeywords;let i = index">{{keyword.scienceKeyword.description}}<i class="fa fa-close pointer" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)" title="remove this keyword"></i>&nbsp;</span>
 														</div>
@@ -321,7 +322,7 @@
 																						</ul>
 																					</td>
 																			</tr>
-																			<tr *ngIf = "areaWarning"><td><span class="warningMessage mandatory">*Research area already added</span></td></tr>
+																			<tr *ngIf = "areaWarning"><td colspan="4"><span class="mandatory">Research area already added</span></td></tr>
 	                                                                	</tbody>
 	                                                                	<tr *ngIf="result?.grantCall?.grantCallResearchAreas?.length == 0 && mode == 'view'">
 																			<td colspan="4"><div class="noDataExists">
@@ -375,7 +376,7 @@
 																							</ul>
 																						</td>
 																				</tr>
-																				<tr *ngIf = "eligibilityWarning"><td><span class="mandatory warningMessage">* Eligibility already added</span></td></tr>
+																				<tr *ngIf = "eligibilityWarning"><td colspan="5"><span class="mandatory">Eligibility already added</span></td></tr>
                                                                              </tbody>  
                                                                              <tr *ngIf="result?.grantCall?.grantCallEligibilities?.length == 0 && mode == 'view'">
 																				<td colspan="5"><div class="noDataExists">
@@ -388,9 +389,9 @@
                                                         </div>
                                                         <div class="borderBox col-12">
                                                                         <h4 class="borderBoxHeading">Supporting Documents</h4>
-                                                                        <button title="add new attachment" class="addBtn font hoverColor" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
+                                                                        <button title="add new attachment" class="addBtn font attachBtn" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
 																				<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
-																			</button>
+																		</button>
                                                                         <table class="table table-responsive tableSkin grid2">
                                                                         	<tbody *ngIf = "result?.grantCall?.grantCallAttachments?.length > 0">
                                                                                 <tr >
@@ -416,7 +417,7 @@
 																			</tbody>
 																			<tr *ngIf="result?.grantCall?.grantCallAttachments?.length == 0 && mode == 'view'">
 																				<td colspan="5"><div class="noDataExists">
-																						No supporting documents added
+																						There are no attachments uploaded
 																					</div></td>
 																			</tr> 
                                                                         </table>

@@ -164,7 +164,7 @@ export class DashboardComponent implements OnInit {
 
     private subscription: ISubscription;
 
-    constructor( public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService, private proposalCreateService: ProposalCreateEditService ) {
+    constructor(public route : ActivatedRoute,  public changeRef :  ChangeDetectorRef , public completerService: CompleterService,private dashboardService: DashboardService, private router: Router, private sessionService: SessionManagementService, private constant: Constants, public expandedViewDataservice: ExpandedViewDataService, private dashboardData: DashboardData, private dashboardConfigurationService: DashboardConfigurationService, private proposalCreateService: ProposalCreateEditService ) {
         this.outputPath = this.constant.outputPath;
         this.outputPathOST = this.constant.outputPathOST;
         if ( !sessionService.canActivate() ) {
@@ -181,57 +181,62 @@ export class DashboardComponent implements OnInit {
         this.onDestroy$.complete();
     }
     ngOnInit() {
-        this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.takeUntil(this.onDestroy$).subscribe( status => {
-            this.dashboardExpenditureVolumeWidget = status;
-        } );
-        this.dashboardConfigurationService.currentdashboardResearchSummaryWidget.takeUntil(this.onDestroy$).subscribe( status => {
-            this.dashboardResearchSummaryWidget = status;
-        } );
-        this.dashboardConfigurationService.currentdashboardawardedProposalBySponsorWidget.takeUntil(this.onDestroy$).subscribe( status => {
-            this.dashboardawardedProposalBySponsorWidget = status;
-        } );
-        this.dashboardConfigurationService.currentdashboardAwardBysponsorTypesWidget.takeUntil(this.onDestroy$).subscribe( status => {
-            this.dashboardAwardBysponsorTypesWidget = status;
-        } );
-        this.dashboardConfigurationService.currentdashboardproposalBySponsorTypesWidget.takeUntil(this.onDestroy$).subscribe( status => {
-            this.dashboardproposalBySponsorTypesWidget = status;
-        } );
-        this.dashboardConfigurationService.currentdashboardinProgressproposalBySponsorWidget.takeUntil(this.onDestroy$).subscribe( status => {
-            this.dashboardinProgressproposalBySponsorWidget = status;
-        } );
+        var currentTab = this.route.snapshot.queryParamMap.get('currentTab');
+        if(currentTab != 'SUMMARY' && currentTab != null) {
+            this.showTab(currentTab);
+        } else {
+            this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.takeUntil(this.onDestroy$).subscribe( status => {
+                this.dashboardExpenditureVolumeWidget = status;
+            } );
+            this.dashboardConfigurationService.currentdashboardResearchSummaryWidget.takeUntil(this.onDestroy$).subscribe( status => {
+                this.dashboardResearchSummaryWidget = status;
+            } );
+            this.dashboardConfigurationService.currentdashboardawardedProposalBySponsorWidget.takeUntil(this.onDestroy$).subscribe( status => {
+                this.dashboardawardedProposalBySponsorWidget = status;
+            } );
+            this.dashboardConfigurationService.currentdashboardAwardBysponsorTypesWidget.takeUntil(this.onDestroy$).subscribe( status => {
+                this.dashboardAwardBysponsorTypesWidget = status;
+            } );
+            this.dashboardConfigurationService.currentdashboardproposalBySponsorTypesWidget.takeUntil(this.onDestroy$).subscribe( status => {
+                this.dashboardproposalBySponsorTypesWidget = status;
+            } );
+            this.dashboardConfigurationService.currentdashboardinProgressproposalBySponsorWidget.takeUntil(this.onDestroy$).subscribe( status => {
+                this.dashboardinProgressproposalBySponsorWidget = status;
+            } );
 
-       // localStorage.setItem( 'researchSummaryIndex', null );
-        this.adminStatus = localStorage.getItem( 'isAdmin' );
-        this.userName = localStorage.getItem( 'currentUser' );
-        this.fullName = localStorage.getItem( 'userFullname' );
-        if ( this.adminStatus == 'true' ) {
-            this.isAdmin = true;
+           // localStorage.setItem( 'researchSummaryIndex', null );
+            this.adminStatus = localStorage.getItem( 'isAdmin' );
+            this.userName = localStorage.getItem( 'currentUser' );
+            this.fullName = localStorage.getItem( 'userFullname' );
+            if ( this.adminStatus == 'true' ) {
+                this.isAdmin = true;
+            }
+            this.subscription = this.dashboardData.dashboardAreaChartData1Variable.subscribe( dashboardAreaChartData1 => {
+                if ( dashboardAreaChartData1.length > 1 ) {
+                    this.isDataExpenditureVolume = true;
+                }
+            } );
+            this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData => {
+                if ( dashboardPieChartData.summaryAwardDonutChart != undefined && dashboardPieChartData.summaryAwardDonutChart.length > 1) {
+                        this.isDataAwardedProposalBySponsor = true;
+                }
+            } );
+            this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
+                if ( dashboardPieChartData1.summaryAwardPieChart != undefined && dashboardPieChartData1.summaryAwardPieChart.length > 0 ) {
+                    this.isDataAwardBySponsor = true;
+                }
+            } );
+            this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
+                if ( dashboardPieChartData1.summaryProposalDonutChart != undefined && dashboardPieChartData1.summaryProposalDonutChart.length > 0 ) {
+                    this.isDataInProgressProposal = true;
+                }
+            } );
+            this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
+                if ( dashboardPieChartData1.summaryProposalPieChart != undefined && dashboardPieChartData1.summaryProposalPieChart.length > 0 ) {
+                    this.isDataProposalBySponsor = true;
+                }
+            } );
         }
-        this.subscription = this.dashboardData.dashboardAreaChartData1Variable.subscribe( dashboardAreaChartData1 => {
-            if ( dashboardAreaChartData1.length > 1 ) {
-                this.isDataExpenditureVolume = true;
-            }
-        } );
-        this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData => {
-            if ( dashboardPieChartData.summaryAwardDonutChart != undefined && dashboardPieChartData.summaryAwardDonutChart.length > 1) {
-                    this.isDataAwardedProposalBySponsor = true;
-            }
-        } );
-        this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
-            if ( dashboardPieChartData1.summaryAwardPieChart != undefined && dashboardPieChartData1.summaryAwardPieChart.length > 0 ) {
-                this.isDataAwardBySponsor = true;
-            }
-        } );
-        this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
-            if ( dashboardPieChartData1.summaryProposalDonutChart != undefined && dashboardPieChartData1.summaryProposalDonutChart.length > 0 ) {
-                this.isDataInProgressProposal = true;
-            }
-        } );
-        this.subscription = this.dashboardData.dashboardPieChartData1Variable.subscribe( dashboardPieChartData1 => {
-            if ( dashboardPieChartData1.summaryProposalPieChart != undefined && dashboardPieChartData1.summaryProposalPieChart.length > 0 ) {
-                this.isDataProposalBySponsor = true;
-            }
-        } );
     }
 
     initialLoad( currentPage ) {
@@ -306,7 +311,7 @@ export class DashboardComponent implements OnInit {
     }
 
    
-    showTab( currentTabPosition ) { 
+    showTab( currentTabPosition ) {
         this.personId = localStorage.getItem( 'personId' );
         this.result = null;
         this.showResultCard = false;

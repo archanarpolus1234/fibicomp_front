@@ -32,6 +32,81 @@
 						(click)="showTab('GRANTREPORT')"> Reports</a></li>
 				</ul>
 			</div>
+			
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+				<div class="row" *ngIf="(currentPosition == 'GRANT')">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup noPadd" *ngIf = "isAdmin == true"> <a class="noMarginTop"
+							[href]="" (click)="loadGrants($event,'create')">
+								<i class="fa fa-plus pointer" ></i> Create New Grant Call
+						</a>
+						</span>
+					</div>
+				</div>
+				<div class="row" *ngIf="(currentPosition == 'SMU_PROPOSAL')">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a title="Open"
+							routerLink='/proposal' [queryParams]="{mode:'create'}"><i
+								class="fa fa-plus"></i> Create New Application</a>
+						</span>
+					</div>
+				</div>
+				<div class="row" *ngIf="(currentPosition == 'AWARD')">
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a
+							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DAwardDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'">
+								<i class="fa fa-plus"></i> Create New Project
+						</a>
+						</span>
+						<span class="linkButtonGroup"> <a
+							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/dashboard' ">
+								<i class="fa fa-eye"></i> View Variation Request
+						</a>
+						</span>
+						<span class="linkButtonGroup"> <a
+							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/createform' ">
+								<i class="fa fa-plus"></i> Create Project Variation Request
+						</a>
+						</span> 
+					</div>
+				</div>
+				<div class="row" *ngIf="(currentPosition == 'IRB')">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a
+							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
+								class="fa fa-plus"></i> Create IRB Protocol </a>
+						</span>
+					</div>
+				</div>
+				<div class="row" *ngIf="(currentPosition == 'IACUC')">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a
+							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DIacucProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
+								class="fa fa-plus"></i> Create IACUC Protocol </a>
+						</span>
+					</div>
+				</div>
+				<div class="row" *ngIf="(currentPosition == 'DISCLOSURE')">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a
+							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DCoiDisclosureDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
+								class="fa fa-plus"></i> Create Disclosure </a>
+						</span>
+					</div>
+				</div>
+				<div class="row" *ngIf="(currentPosition == 'COMMITTEE')">
+					<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
+						<span class="linkButtonGroup"> <a title="Open"
+							routerLink='/committee' [queryParams]="{mode:'create'}"><i
+								class="fa fa-plus"></i> Create COMMITTEE</a>
+						</span>
+					</div>
+				</div>
+			</div>
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="currentPosition != 'SUMMARY'">
 				<div class="row">
@@ -117,19 +192,19 @@
 						<!-- advance search options -->
 						<div class="row">
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type="text" placeholder="{{placeholder1}}" maxlength="40"
+								<input type="text" placeholder="{{placeholder1}}" maxlength="60"
 									[(ngModel)]="advanceSearchCriteria.property1" />
 							</div>
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type="text" placeholder="{{placeholder2}}" maxlength="40"
+								<input type="text" placeholder="{{placeholder2}}" maxlength="60"
 									[(ngModel)]="advanceSearchCriteria.property2" />
 							</div>
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type="text" placeholder="{{placeholder3}}" maxlength="40"
+								<input type="text" placeholder="{{placeholder3}}" maxlength="60"
 									[(ngModel)]="advanceSearchCriteria.property3" />
 							</div>
 							<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
-								<input type="text" placeholder="{{placeholder4}}" maxlength="40"
+								<input type="text" placeholder="{{placeholder4}}" maxlength="60"
 									[(ngModel)]="advanceSearchCriteria.property4" />
 							</div>
 							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-12">
@@ -427,25 +502,7 @@
 
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'AWARD')">
-				<div class="row">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a
-							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DAwardDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'">
-								<i class="fa fa-plus"></i> Create New Project
-						</a>
-						</span>
-						<span class="linkButtonGroup"> <a
-							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/dashboard' ">
-								<i class="fa fa-eye"></i> View Variation Request
-						</a>
-						</span>
-						<span class="linkButtonGroup"> <a
-							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/createform' ">
-								<i class="fa fa-plus"></i> Create Project Variation Request
-						</a>
-						</span>
-					</div>
-				</div>
+				
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
 					<table class="table table-responsive tableSkin"
@@ -453,12 +510,12 @@
 						<thead>
 							<tr>
 								<th (click)="sortResult('awardNumber',currentPosition)"
-									title="Click to sort by Award">Award <span
+									title="Click to sort by Award">Project # <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
 								</th>
 								<th (click)="sortResult('accountNumber',currentPosition)"
-									title="Click to sort by Account">Account <span
+									title="Click to sort by Account">Account #<span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
 								</th>
@@ -505,7 +562,7 @@
 						</tbody>
 					</table>
 					<div *ngIf="this.result?.awardViews?.length == 0"
-						class="noDataOnChart">No awards Found</div>
+						class="noDataOnChart noDataExists">No projects Found</div>
 				</div>
 			</div>
 
@@ -568,7 +625,7 @@
 								<td>{{proposalDetails.title}}</td>
 								<td>{{proposalDetails.leadUnit}}</td>
 								<td>{{proposalDetails.sponsor}}</td>
-								<td>{{proposalDetails.deadLinedate}}</td>
+								<td>{{proposalDetails.deadLinedate | date: 'MM/dd/yyyy'}}</td>
 								<td>{{proposalDetails.status}}</td>
 								<td>
 									<ul class="actionButtonGroup">
@@ -588,15 +645,6 @@
 			<!-- IRB -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'IRB')">
-				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a
-							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create IRB Protocol </a>
-						</span>
-					</div>
-				</div>
 
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
@@ -635,11 +683,11 @@
 						<tbody>
 							<tr
 								*ngFor="let IRBDetails of serviceRequestList | slice:begin:end">
-								<td>{{IRBDetails.protocolNumber}}</td>
-								<td>{{IRBDetails.title}}</td>
-								<td>{{IRBDetails.leadUnit}}</td>
-								<td>{{IRBDetails.protocolType}}</td>
-								<td>{{IRBDetails.status}}</td>
+								<td>{{IRBDetails?.protocolNumber}}</td>
+								<td>{{IRBDetails?.title}}</td>
+								<td>{{IRBDetails?.leadUnit}}</td>
+								<td>{{IRBDetails?.protocolType}}</td>
+								<td>{{IRBDetails?.status}}</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open {{IRBDetails.protocolNumber}}"
@@ -650,7 +698,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<div *ngIf="this.result?.protocolViews?.length == 0"
+					<div *ngIf="result?.protocolViews?.length == 0"
 						class="noDataOnChart noDataExists">No IRB data Found</div>
 				</div>
 			</div>
@@ -658,19 +706,11 @@
 			<!-- IACUC -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'IACUC')">
-				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a
-							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DIacucProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create IACUC Protocol </a>
-						</span>
-					</div>
-				</div>
+				
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
 					<table class="table table-responsive tableSkin"
-						*ngIf="this.result?.iacucViews?.length !== 0">
+						*ngIf="result?.iacucViews?.length !== 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('protocolNumber',currentPosition)"
@@ -730,15 +770,7 @@
 			<!-- DISCLOSURE -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'DISCLOSURE')">
-				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a
-							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DCoiDisclosureDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create Disclosure </a>
-						</span>
-					</div>
-				</div>
+				
 				<div class="borderBox" *ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
 					<table class="table table-responsive tableSkin"
 						*ngIf="this.result?.disclosureViews?.length !== 0">
@@ -785,7 +817,7 @@
 								<td>{{DisclosureDetails.disclosureDisposition}}</td>
 								<td>{{DisclosureDetails.disclosureStatus}}</td>
 								<td>{{DisclosureDetails.moduleItemKey}}</td>
-								<td>{{DisclosureDetails.expirationDate}}</td>
+								<td>{{DisclosureDetails.expirationDate | date: 'MM/dd/yyyy'}}</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a
@@ -805,15 +837,7 @@
 			<!-- COMMITTEE -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 				*ngIf="(currentPosition == 'COMMITTEE')">
-				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a title="Open"
-							routerLink='/committee' [queryParams]="{mode:'create'}"><i
-								class="fa fa-plus"></i> Create COMMITTEE</a>
-						</span>
-					</div>
-				</div>
+				
 				<div class="borderBox"
 					*ngIf="((isAdmin==true) || (adminAdvanceSearch == true)) && (adminClear == false)">
 					<table class="table table-responsive tableSkin"
@@ -943,9 +967,9 @@
 						<tbody>
 							<tr *ngFor="let schedule of serviceRequestList">
 								<td>{{schedule.scheduleId}}</td>
-								<td>{{schedule.scheduledDate}}</td>
+								<td>{{schedule.scheduledDate | date: 'MM/dd/yyyy'}}</td>
 								<td>{{schedule.place}}</td>
-								<td>{{schedule.protocolSubDeadline}}</td>
+								<td>{{schedule.protocolSubDeadline | date: 'MM/dd/yyyy'}}</td>
 								<td>{{schedule.scheduleStatus.description}}</td>
 								<td>{{schedule.committeeId}}</td>
 								<td>{{schedule.committeeName}}</td>
@@ -963,21 +987,12 @@
 				</div>
 			</div>
 
-			<!-- Grant -->
+			<!-- Grant Call-->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="(currentPosition == 'GRANT')">
-			<div class="row">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup" *ngIf = "isAdmin == true"> <a
-							[href]="" (click)="loadGrants($event,'create')">
-								<i class="fa fa-plus pointer" ></i> Create New Grant Call
-						</a>
-						</span>
-					</div>
-				</div>
-				
+			
 				<div class="borderBox" >
-					<table class="table table-responsive tableSkin" *ngIf="serviceRequestList?.length > 0" >
+					<table class="table table-responsive tableSkin" *ngIf="result?.grantCalls?.length > 0" >
 						<thead>
 							<tr>
 								<th (click)="sortResult('grantCallId',currentPosition)" class="hand-cursor"
@@ -1007,8 +1022,8 @@
 								<td [title]="(grant?.grantCallName).length>60 ? grant?.grantCallName: ''">{{ (grant?.grantCallName).length>60 ? (grant?.grantCallName | slice:0:60)+'...' : grant?.grantCallName}}</td>
 								<td>{{grant?.sponsorName}}</td>
 								<td>{{grant?.grantCallTypeDesc}}</td>
-								<td>{{grant?.openingDate}}</td>
-								<td>{{grant?.closingDate}}</td>
+								<td>{{grant?.openingDate | date: 'MM/dd/yyyy'}}</td>
+								<td>{{grant?.closingDate | date: 'MM/dd/yyyy'}}</td>
 								<td>{{grant?.grantCallStatusDesc}}</td>
 								<td>
 									<ul class="actionButtonGroup">
@@ -1021,31 +1036,22 @@
 							</tr>
 						</tbody>
 					</table>
-					<div *ngIf="serviceRequestList?.length == 0"
+					<div *ngIf="result?.grantCalls?.length == 0"
 						class="noDataOnChart noDataExists">There are no grant call for your request</div>
 				</div>
 			</div>
 
-			<!-- SMU_PROPOSAL -->
+			<!-- SMU_PROPOSAL/ APPLICATIONS -->
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="(currentPosition == 'SMU_PROPOSAL')">
-				<div class="row">
-					<div
-						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a title="Open"
-							routerLink='/proposal' [queryParams]="{mode:'create'}"><i
-								class="fa fa-plus"></i> Create New Application</a>
-						</span>
-					</div>
-						
-				</div>
+				
 						<!-- Success message fade out -->
 						<div class="row" id="fadeOutMessage">
 							<div class="col-12 text-left"><span class="successWarning" *ngIf="showSuccessMessage">{{successMessage}}</span></div>
 						</div>
 						
-				<div class="borderBox" *ngIf="serviceRequestList?.length > 0">
-					<table class="table table-responsive tableSkin">
+				<div class="borderBox">
+					<table class="table table-responsive tableSkin" *ngIf="result?.proposal?.length > 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('proposalId',currentPosition)" class="hand-cursor"
@@ -1072,7 +1078,7 @@
 								<td>{{proposal.applicationCategory}}</td>
 								<td>{{proposal.applicationType}}</td>
 								<td>{{proposal.applicationStatus}}</td>
-								<td>{{proposal.submissionDate}}</td>
+								<td>{{proposal.submissionDate | date: 'MM/dd/yyyy'}}</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open application {{proposal?.proposalId}}"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
@@ -1086,7 +1092,8 @@
 							</tr>
 						</tbody>
 					</table>
-					
+					<div *ngIf="result?.proposal?.length == 0"
+						class="noDataOnChart noDataExists">There are no applications for your request</div>
 				</div>
 			</div>
 
@@ -1161,8 +1168,8 @@
 													<tr *ngFor="let proposal of proposals">
 														<td>{{proposal?.proposalId}}</td>
 														<td>{{proposal?.title}}</td>
-														<td>{{proposal?.startDate}}</td>
-														<td>{{proposal?.endDate}}</td>
+														<td>{{proposal?.startDate | date: 'MM/dd/yyyy'}}</td>
+														<td>{{proposal?.endDate | date: 'MM/dd/yyyy'}}</td>
 														<td>{{proposal?.grantCall?.homeUnitName}}</td>
 														<td>{{proposal?.proposalStatus?.description}}</td>
 														<td>
@@ -1263,7 +1270,7 @@
 								<td>{{proposal.applicationCategory}}</td>
 								<td>{{proposal.applicationType}}</td>
 								<td>{{proposal.applicationStatus}}</td>
-								<td>{{proposal.submissionDate}}</td>
+								<td>{{proposal.submissionDate | date: 'MM/dd/yyyy'}}</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open application {{proposal?.proposalId}}"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
