@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SessionManagementService } from "../session/session-management.service";
 import { Subject, Observable } from "rxjs";
 import { CompleterService, CompleterData } from "ng2-completer";
+import { SlicePipe } from '@angular/common';
 import { UploadFile, UploadEvent } from "ngx-file-drop";
 import { CommitteeMemberEmployeeElasticService } from '../elastic-search/committee-members-employees-elastic-search.service';
 import { CommitteeMemberNonEmployeeElasticService } from '../elastic-search/committee-members-nonEmployee-elastic-search.service';
@@ -179,6 +180,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     isAbsDescReadMore: boolean = false;
     isFundDescReadMore: boolean = false;
     isDeliverReadMore: boolean = false;
+    budgetDescExpand: any = {};
 
     public onDestroy$ = new Subject<void>();
 
@@ -1061,6 +1063,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     submitProposal() {
+        this.showSubmittedModal = false;
         if ( this.result.proposal.title == "" || this.result.proposal.title == null ) {
             this.isMandatory = true;
             this.mandatoryText = '* Please enter a title';
@@ -1382,7 +1385,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     removeSelectedReviewer( $event, reviewer, i ) {
         $event.preventDefault();
         if ( this.result.loggedInWorkflowDetail.workflowReviewerDetails.length > 0 ) {
-            if ( reviewer.reviewerPersonId != null ) {
+            if ( reviewer.reviewerDetailId != null ) {
                 this.proposalCreateService.deleteAssignedReviewer( this.result.proposal.proposalId, reviewer.reviewerPersonId ).subscribe( data => {
                     var temp: any;
                     temp = data;
@@ -1408,16 +1411,38 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
         for ( let reviewer of this.availableReviewers ) {
             if ( reviewer.approverPersonName == this.selectedReviewer ) {
-                var assignedReviewer: any = {};
-                assignedReviewer.reviewerPersonId = reviewer.approverPersonId;
-                assignedReviewer.emailAddress = reviewer.emailAddress;
-                assignedReviewer.reviewerPersonName = reviewer.approverPersonName;
-                assignedReviewer.approvalStatusCode = "W";
-                assignedReviewer.workflowDetail = _.cloneDeep(this.tempLoggedWorkflowDetail);
-                assignedReviewer.workflowStatus = this.tempLoggedWorkflowDetail.workflowStatus;
-                assignedReviewer.updateTimeStamp = ( new Date() ).getTime();
-                assignedReviewer.updateUser = localStorage.getItem( 'currentUser' );
-                this.result.loggedInWorkflowDetail.workflowReviewerDetails.push( assignedReviewer );
+                console.log(this.result.loggedInWorkflowDetail.workflowReviewerDetails);
+                if(this.result.loggedInWorkflowDetail.workflowReviewerDetails.length!=0) {
+                    for(let review of this.result.loggedInWorkflowDetail.workflowReviewerDetails) {
+                        if(review.reviewerPersonId == reviewer.approverPersonId) {
+                                console.log(review.reviewerPersonId,reviewer.approverPersonId)
+                                break;
+                        } else {
+                            var assignedReviewer: any = {};
+                            assignedReviewer.reviewerPersonId = reviewer.approverPersonId;
+                            assignedReviewer.emailAddress = reviewer.emailAddress;
+                            assignedReviewer.reviewerPersonName = reviewer.approverPersonName;
+                            assignedReviewer.approvalStatusCode = "W";
+                            assignedReviewer.workflowDetail = _.cloneDeep(this.tempLoggedWorkflowDetail);
+                            assignedReviewer.workflowStatus = this.tempLoggedWorkflowDetail.workflowStatus;
+                            assignedReviewer.updateTimeStamp = ( new Date() ).getTime();
+                            assignedReviewer.updateUser = localStorage.getItem( 'currentUser' );
+                            this.result.loggedInWorkflowDetail.workflowReviewerDetails.push( assignedReviewer );
+                        }
+                    }
+                } else {
+                    var assignedReviewer: any = {};
+                    assignedReviewer.reviewerPersonId = reviewer.approverPersonId;
+                    assignedReviewer.emailAddress = reviewer.emailAddress;
+                    assignedReviewer.reviewerPersonName = reviewer.approverPersonName;
+                    assignedReviewer.approvalStatusCode = "W";
+                    assignedReviewer.workflowDetail = _.cloneDeep(this.tempLoggedWorkflowDetail);
+                    assignedReviewer.workflowStatus = this.tempLoggedWorkflowDetail.workflowStatus;
+                    assignedReviewer.updateTimeStamp = ( new Date() ).getTime();
+                    assignedReviewer.updateUser = localStorage.getItem( 'currentUser' );
+                    this.result.loggedInWorkflowDetail.workflowReviewerDetails.push( assignedReviewer );
+                }
+            
             }
         }
         this.changeRef.detectChanges();
@@ -1539,6 +1564,11 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     
     triggerAdd() {
         $('#addAttach').trigger('click');
+    }
+
+    backToList(e){
+        e.preventDefault();
+        this.router.navigate(['/dashboard'], { queryParams: { 'currentTab': 'SMU_PROPOSAL' } } )
     }
     
 }
