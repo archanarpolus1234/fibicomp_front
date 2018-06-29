@@ -6,7 +6,9 @@
 				<br>
 						<div class="row" *ngIf="result?.proposal?.proposalId || result?.proposal?.ipNumber">
 							<div class="col-6 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">#{{result?.proposal?.proposalId}}: {{result?.proposal?.title}}</span></div>
-							<div class="col-6 text-right"><span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
+							<div class="col-6 text-right">
+								<button class="btnSkin btnSkinPrimary" (click)="backToList($event)">Back to Application</button>
+								<span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
 						</div>
 						<div class="row" id="fadeOutMessage" *ngIf="showSuccessMessage">
 							<div class="col-12 text-left"><span class="successWarning" >{{successMessage}}</span></div>
@@ -58,8 +60,8 @@
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br>
 													 <span *ngIf="mode != 'view'" >
-													    <input placeholder="MM/dd/YYYY"
-															[owlDateTimeTrigger]="subDt" [owlDateTime]="subDt" 
+													    <input type="date" placeholder="MM/dd/YYYY"
+															[owlDateTime]="subDt"  class="dateWidth"
 															[(ngModel)]="result.proposal.submissionDate"
 															[ngClass]="editClass" />
 															<i class="fa fa-calendar fa-large  hand-cursor" [owlDateTimeTrigger]="subDt"></i>
@@ -70,8 +72,8 @@
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed Start Date:</label><br>
 													 <span *ngIf="mode != 'view'" >
-													 	<input placeholder="MM/dd/YYYY"
-															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" 
+													 	<input type="date" placeholder="MM/dd/YYYY"
+															[owlDateTime]="startDt"  class="dateWidth"
 															[(ngModel)]="result.proposal.startDate" 
 															[ngClass]="editClass" />
 														<i class="fa fa-calendar fa-large hand-cursor" [owlDateTimeTrigger]="startDt"></i>
@@ -82,10 +84,10 @@
 												<div  [ngClass] = "mode == 'view'?'col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2':'col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4'">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed End Date:</label><br>
 													 <span *ngIf="mode != 'view'" >
-													 	<input placeholder="MM/dd/YYYY"
-															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" 
+													 	<input type="date" class="dateWidth" placeholder="MM/dd/YYYY"
+															[owlDateTime]="endDt" style="width: 65% !important"
 															[(ngModel)]="result.proposal.endDate"
-															[ngClass]="editClass" style="width: 65%" />
+															[ngClass]="editClass" />
 															<i class="fa fa-calendar fa-large hand-cursor" [owlDateTimeTrigger]="endDt"></i>
 															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
 													</span>
@@ -523,17 +525,14 @@
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin grid2">
 													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
-														<td></td>
-														<td class="text-right"><label>Protocol:</label></td>
-														<td>
-															<div style="width: 40%">
-																<ng2-completer title="Add area of research"
+														<td class="text-right"><label>Protocol: </label></td>
+														<td><ng2-completer title="Add area of research"
 																	[inputClass]="completerID" placeholder=""
 																	[(ngModel)]="selectedProtocol" (selected)="addIRB()"
 																	[datasource]="protocolsList" [minSearchLength]="0"></ng2-completer>
-															</div>
 														</td>
-														<td colspan="4">&nbsp;</td>
+														<td colspan="5">&nbsp;</td>
+														
 													</tr>
 													<tr  *ngIf="isIRBWarning">
 			                                        	<td colspan="4"><span class="mandatory">{{irbWarningText}}</span></td>
@@ -547,7 +546,7 @@
 													<tbody *ngIf="result?.proposal?.proposalIrbProtocols?.length > 0">
 				                                        <tr>
 				                                            <th >Sl No.</th>
-				                                            <th >Protocol Number</th>
+				                                            <th>Protocol Number</th>
 				                                            <th >Title</th>
 				                                            <th >Approval Status</th>
 				                                            <th >Approval Date</th>
@@ -586,22 +585,22 @@
 									</button>
 										<table class="table table-responsive tableSkin grid2">
 											<tr id="addFundingSupportRow" *ngIf="mode != 'view' && isBudgetWdgtOpen">
-	                                        	<td class="text-right"><label>Category:</label></td>
-	                                        	<td><select [ngClass]="editClass" [(ngModel)]="budgetCategorySelected" (change)="budgetCategoryChanged()" >
+	                                        
+	                                        	<td colspan="2"><label>Category:</label><br><select [ngClass]="editClass" [(ngModel)]="budgetCategorySelected" (change)="budgetCategoryChanged()" >
 														<option (value)="select">{{select}}</option>
 														<option *ngFor="let category of result?.proposalBudgetCategories">{{category.description}}</option>
 														  </select></td>
-												<td class="text-right"><label>Cost Element:</label> </td>
-												<td><select [ngClass]="editClass" [(ngModel)]="costElementSelected" >
+											
+												<td colspan="2"><label>Cost Element:</label><br><select [ngClass]="editClass" [(ngModel)]="costElementSelected" >
 														<option (value)="select">{{select}}</option>
 														<option *ngFor="let costElement of result?.proposalCostElements" >{{costElement.description}}</option>
 													</select>
 												</td>
-												<td class="text-right"><label>Description:</label> </td>
-												<td><textarea [ngClass]="editClass" rows="1" [(ngModel)]="budgetDescription" class="forTextAreaEntry"></textarea></td>
-												<td class="text-right"><label>Cost:</label> </td>
-												<td><input type="number" [ngClass]="editClass" [(ngModel)]="budgetCost"/></td>
-												<td>
+												
+												<td colspan="2"><label>Description:</label><br><textarea type="text" [ngClass]="editClass" [(ngModel)]="budgetDescription" class="forTextAreaEntry" maxlength="254"></textarea></td>
+												
+												<td colspan="2"><label>Cost:</label> <br><input type="number" [ngClass]="editClass" [(ngModel)]="budgetCost"/></td>
+												<td >
 													<button class="btnSkin btnSkinPrimary" (click)="addBudget()">Add</button>
 												</td>
 											</tr>
@@ -611,7 +610,7 @@
 											<tbody *ngIf="result?.proposal?.proposalBudgets?.length > 0 && isBudgetWdgtOpen">
 		                                        <tr >
 		                                            <th >Sl no</th>
-		                                            <th colspan="2">Budget category</th>
+		                                            <th colspan="2" width="25%">Budget category</th>
 		                                            <th colspan="2">Cost Element</th>
 		                                            <th colspan="2">Line Item Description</th>
 		                                            <th >Line Item Cost</th>
@@ -619,9 +618,10 @@
 		                                        </tr>
 		                                        <tr *ngFor="let budget of result?.proposal?.proposalBudgets; let i = index">
 		                                            <td>{{ i + 1 }}</td>
-		                                            <td colspan="2">{{budget?.budgetCategory?.description}}</td>
+		                                            <td colspan="2" >{{budget?.budgetCategory?.description}}</td>
 		                                            <td colspan="2">{{budget?.proposalCostElement?.description}}</td>
-		                                            <td colspan="2">{{budget?.description}}</td>
+													<td colspan="2">{{budget?.description | slice:0:30}}<i  *ngIf="!budgetDescExpand[i];else showFullBudgetDesc" (click)="budgetDescExpand[i] = !budgetDescExpand[i]" class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="budgetDescExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i>
+													<ng-template #showFullBudgetDesc>{{budget?.description }}<i (click)="budgetDescExpand[i] = !budgetDescExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="budgetDescExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template></td>
 		                                            <td>{{budget.cost| currency:'USD':true}}</td>
 		                                         	<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 															<li><a href="#" data-toggle="modal"
@@ -675,7 +675,7 @@
                                </div>
                                <div class="col-12 text-right">
                                  	<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view'" (click)="saveProposal()">Save</button>
-									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposal" *ngIf="mode !='view' && result?.proposal?.proposalId" (click)="submitProposal()">Submit</button>
+									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposal" *ngIf="mode !='view' && result?.proposal?.proposalId" (click)="showSubmittedModal = true">Submit</button>
                                		<button type="button" class="btnSkin btn-secondary" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="disapproveProposal()" >Disapprove</button>
                                		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="approveProposal()">Approve</button>
 									<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#reviewerModal" *ngIf="mode =='view' && result?.isGrantAdmin == true && result?.isReviewed != true && result?.isApproved != true" (click)="getAllReviewer()">Assign to Reviewer</button>
@@ -939,7 +939,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 				<div class="modal-body">
 							<table class="table table-responsive tableSkin" id="reviewAssignModalTable">
 								<tr >
-									<td colspan="2" class="text-right" id="reviewAssignModalTd">Name of Reviewer:</td>
+									<td colspan="2" class="text-right" id="reviewAssignModalTd"><b>Name of Reviewer:</b></td>
 									<td colspan="2" class="pull-left" id="reviewAssignModalTd"><span><ng2-completer style="border:none; padding:0px"
 															[inputClass]="completerID" placeholder=""
 															[(ngModel)]="selectedReviewer"
@@ -951,15 +951,15 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 								<tbody *ngIf="result?.loggedInWorkflowDetail?.workflowReviewerDetails?.length >0">
 									<tr>
 										<th >Sl No</th>
-			                            <th >Reviewer Person Id</th>
-										<th colspan="2">Reviewer Name</th>
-			                            <th >Action</th>
+			                            <th >Person Id</th>
+										<th colspan="2">Name</th>
+			                            <th>Action</th>
 									</tr>
 									<tr *ngFor="let reviewer of result?.loggedInWorkflowDetail?.workflowReviewerDetails; let i=index">
 										<td style="padding-left: 10px"><span>{{i+1}}</span></td>
 										<td ><span >{{reviewer?.reviewerPersonId}}</span></td>
 										<td colspan="2"><span >{{reviewer?.reviewerPersonName}}</span></td>
-										<td ><ul class="actionButtonGroup">
+										<td ><ul class="actionButtonGroup" *ngIf="reviewer?.reviewerDetailId==null">
 												<li><a href="#" (click)="removeSelectedReviewer($event, reviewer, i)"><i class="fa fa-trash-o" aria-hidden="true" title="remove this reviewer"></i></a></li>
 											</ul>
 									</tr>
@@ -1207,33 +1207,30 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 
 
 	<!-- SUBMITTED MODAL -->
-	<!-- <div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmittedModal" tabindex="-1"
+	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmittedModal" tabindex="-1"
 id="submitProposal" tabindex="-1" role="dialog"
 aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title" *ngIf="isProposalSubmitted">Submitted</h5>
-			<h5 class="modal-title" *ngIf="!isProposalSubmitted">Warning</h5>
-
+			<h5 class="modal-title">Submit Application</h5>
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			</button>
 		</div>
 		<div class="modal-body">
-			<p *ngIf="isProposalSaved">Proposal has been submitted successfully.</p>
-			<p *ngIf="!isProposalSaved">Error to submit your proposal, please review details</p>
+			<p>Are you sure you want to submit this application?</p>
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="isProposalSubmitted"
-				(click)="showSubmittedModal = false" data-dismiss="modal">Ok</button>
-			<button type="button" class="btnSkin btnSkinPrimary" *ngIf="!isProposalSubmitted"
-				(click)="showSubmittedModal = false" data-dismiss="modal">Ok</button>
-		</div>
+				
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="submitProposal()" data-dismiss="modal">Ok</button>
+	</div>
+			
 	</div>
 </div>
-</div> -->
+</div>
 
 	<!-- CONFIRM SUBMISSION MODAL -->
 <div class="modal fade mySkinDialog modalFallBack" *ngIf="showConfirmModal" tabindex="-1"
