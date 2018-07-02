@@ -60,38 +60,38 @@
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br>
 													 <span *ngIf="mode != 'view'" >
-													    <input type="date" placeholder="MM/dd/YYYY"
-															[owlDateTime]="subDt"  class="dateWidth"
-															[(ngModel)]="result.proposal.submissionDate"
-															[ngClass]="editClass" />
+													    <input type="text" placeholder="MM/dd/YYYY"
+															[owlDateTime]="subDt"  class="dateField"
+															[(ngModel)]="result.proposal.submissionDate" 
+															[ngClass]="editClass" (keypress)="_keyPress($event)" />
 															<i class="fa fa-calendar fa-large  hand-cursor" [owlDateTimeTrigger]="subDt"></i>
 															<owl-date-time #subDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
 													</span>
-													<span *ngIf="mode == 'view'" >{{result?.proposal?.submissionDate}}</span>
+													<span *ngIf="mode == 'view'" >{{result?.proposal?.submissionDate | date: 'MM/dd/yyyy'}}</span>
 												</div>
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed Start Date:</label><br>
 													 <span *ngIf="mode != 'view'" >
-													 	<input type="date" placeholder="MM/dd/YYYY"
-															[owlDateTime]="startDt"  class="dateWidth"
+													 	<input type="text" placeholder="MM/dd/YYYY"
+															[owlDateTime]="startDt"  class="dateField"
 															[(ngModel)]="result.proposal.startDate" 
-															[ngClass]="editClass" />
+															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
 														<i class="fa fa-calendar fa-large hand-cursor" [owlDateTimeTrigger]="startDt"></i>
 														<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
 													</span>
-													<span *ngIf="mode == 'view'" >{{result?.proposal?.startDate}}</span>
+													<span *ngIf="mode == 'view'" >{{result?.proposal?.startDate | date: 'MM/dd/yyyy'}}</span>
 												</div>
 												<div  [ngClass] = "mode == 'view'?'col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2':'col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4'">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed End Date:</label><br>
-													 <span *ngIf="mode != 'view'" >
-													 	<input type="date" class="dateWidth" placeholder="MM/dd/YYYY"
+													 <span *ngIf="mode != 'view'" class="dateField">
+													 	<input type="text" class="dateField" placeholder="MM/dd/YYYY"
 															[owlDateTime]="endDt" style="width: 65% !important"
 															[(ngModel)]="result.proposal.endDate"
-															[ngClass]="editClass" />
+															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
 															<i class="fa fa-calendar fa-large hand-cursor" [owlDateTimeTrigger]="endDt"></i>
 															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
 													</span>
-													<span *ngIf="mode == 'view'" >{{result?.proposal?.endDate}}</span>
+													<span *ngIf="mode == 'view'" >{{result?.proposal?.endDate | date: 'MM/dd/yyyy'}}</span>
 												</div>
 												<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
 													 <label>Duration:</label><br>
@@ -465,17 +465,17 @@
 															</select>
 														</td>
 														<td><label>Start Date:</label><input
-															[owlDateTimeTrigger]="startDt" [owlDateTime]="startDt" placeholder="MM/dd/YYYY"
+														[owlDateTime]="startDt" placeholder="MM/dd/YYYY"
 															[(ngModel)]="fundingStartDate" 
 															[disabled]="mode == 'view' ? true : false"
-															[ngClass]="editClass" />
+															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
 															<i class="fa fa-calendar fa-large hand-cursor" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="startDt"></i>
 															<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></td>
 													<td><label>End Date:</label><input
-															[owlDateTimeTrigger]="endDt" [owlDateTime]="endDt" placeholder="MM/dd/YYYY"
+															 [owlDateTime]="endDt" placeholder="MM/dd/YYYY"
 															[(ngModel)]="fundingEndDate"
 															[disabled]="mode == 'view' ? true : false"
-															[ngClass]="editClass" />
+															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
 															<i class="fa fa-calendar fa-large hand-cursor" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="endDt"></i>
 															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></td>
 														
@@ -597,10 +597,10 @@
 													</select>
 												</td>
 												
-												<td colspan="2"><label>Description:</label><br><textarea type="text" [ngClass]="editClass" [(ngModel)]="budgetDescription" class="forTextAreaEntry" maxlength="254"></textarea></td>
+												<td colspan="2"><label>Description:</label><br><textarea type="text" [ngClass]="editClass" [(ngModel)]="budgetDescription" class="forTextAreaEntry scheduleBoxes" rows = "1" maxlength="254"></textarea></td>
 												
 												<td colspan="2"><label>Cost:</label> <br><input type="number" [ngClass]="editClass" [(ngModel)]="budgetCost"/></td>
-												<td >
+												<td ><br/>
 													<button class="btnSkin btnSkinPrimary" (click)="addBudget()">Add</button>
 												</td>
 											</tr>
@@ -620,8 +620,8 @@
 		                                            <td>{{ i + 1 }}</td>
 		                                            <td colspan="2" >{{budget?.budgetCategory?.description}}</td>
 		                                            <td colspan="2">{{budget?.proposalCostElement?.description}}</td>
-													<td colspan="2">{{budget?.description | slice:0:30}}<i  *ngIf="!budgetDescExpand[i];else showFullBudgetDesc" (click)="budgetDescExpand[i] = !budgetDescExpand[i]" class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="budgetDescExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i>
-													<ng-template #showFullBudgetDesc>{{budget?.description }}<i (click)="budgetDescExpand[i] = !budgetDescExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="budgetDescExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template></td>
+													<td colspan="2">{{budget?.description | slice:0:30}}<i  *ngIf="!budgetDescExpand[i] && budget?.description?.length>30;else showFullBudgetDesc" (click)="budgetDescExpand[i] = !budgetDescExpand[i]" class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="budgetDescExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i>
+													<ng-template #showFullBudgetDesc>{{budget?.description }}<i *ngIf="budget?.description?.length>30" (click)="budgetDescExpand[i] = !budgetDescExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="budgetDescExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template></td>
 		                                            <td>{{budget.cost| currency:'USD':true}}</td>
 		                                         	<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 															<li><a href="#" data-toggle="modal"
@@ -640,7 +640,7 @@
 								</div>
 	                            <div class="borderBox col-12">
                                <h4 class="borderBoxHeading">Supporting Documents</h4>
-                                <button title="add new attachment" class="addBtn font hoverColor" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
+                                <button title="add new attachment" class="addBtn font attachBtn" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
 									<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
 								</button>
                                <table class="table table-responsive tableSkin grid2">
@@ -710,7 +710,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 			<div
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
 				<div class="row">
-					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6" >
 						<label>Application #</label> <span>{{result?.proposal?.proposalId}}</span>
 					</div>
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
@@ -749,7 +749,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	                            <tr *ngFor = "let workflow of workflowStopOne;let i = index">
 	                            	<td >{{workflow?.approverPersonName}}</td>
 	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
-	                            	<td >{{workflow?.approvalDate}}</td>
+	                            	<td >{{workflow?.approvalDate | date:'MM/dd/yyyy'}}</td>
 	                                <td >{{workflow?.approvalComment}}</td>
 	                                <td >
 	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
@@ -874,10 +874,8 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					<div class="pullSide">
 						<div class="gridSkin">
 							<div class="row"  *ngIf="showAddAttachment">
-								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 attach-desc text-right">
-									<label><span class="mandatory">*</span> Attachment Type:</label>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+								<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4 attach-desc">
+									<label><span class="mandatory">*</span> Attachment Type:</label><br>
 									<select class="committeeBox dateBox" [(ngModel)] = "selectedAttachmentType">
 										<option (value)="select">{{select}}</option>
 										<option *ngFor="let attachType of this.result.proposalAttachmentTypes" (value)="attachType">
@@ -885,11 +883,9 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 										</option>
 									</select>
 								</div>
-								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 attach-desc text-right">
-									<label> Description:</label>
-								</div>
-								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
-									<textarea id="desc" cols=2 [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
+								<div class="col-xl-8 col-lg-8 col-md-6 col-sm-12 col-8 attach-desc">
+									<label> Description:</label><br/>
+									<textarea id="desc" cols=2 rows="3" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
 								</div>
 							</div>
 						</div>
@@ -912,11 +908,12 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 							</div>
 						</div>
 					</div>
-					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">{{attachmentWarningMsg}}</span></div>
+					<div *ngIf="noAttachmentSelectedMsg"><span class="mandatory font">* No attachments selected</span></div>
+					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">* Please select an attachment type</span></div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
-					<button type="button" class="btnSkin btnSkinPrimary" (click)="addAttachments()" data-dismiss="modal" >Add</button>
+					<button type="button" class="btnSkin btnSkinPrimary" (click)="addAttachments()"  >Add</button>
 				</div>
 			</div>
 		</div>
@@ -948,6 +945,8 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 										
 									</td>
 								</tr>
+								<tr *ngIf = "reviewerAlreadyAddedMsg && result?.loggedInWorkflowDetail?.workflowReviewerDetails?.length >0">
+									<td colspan="8" style="border:none"><span class="mandatory font">*Reviewer already added</span></td></tr>
 								<tbody *ngIf="result?.loggedInWorkflowDetail?.workflowReviewerDetails?.length >0">
 									<tr>
 										<th >Sl No</th>
@@ -970,7 +969,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					<button type="button" class="btnSkin btn-secondary"
 						data-dismiss="modal" data-toggle="modal" (click)="showReviewerModal = false">Cancel</button>
 					<button type="button" class="btnSkin btnSkinPrimary"
-						(click)="addReviewer()" data-dismiss="modal">Add Reviewer(s)</button>
+						(click)="addReviewer()" >Add Reviewer(s)</button>
 				</div>
 			</div>
 		</div>
@@ -1151,12 +1150,12 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered"
 			role="document">
 			<div class="modal-content">
-				<div class="modal-header routeLogModalHeader">
+				<div class="modal-header">
 					<h5 class="modal-title" id="skippedSchedulesLongTitle">{{modalAproveHeading}} <span>Application #{{result?.proposal?.proposalId}}</span></h5>
-					<!-- <button type="button" class="close" data-dismiss="modal"
+					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close" (click)="showAddAttachment = false">
 						<span aria-hidden="true">&times;</span>
-					</button> -->
+					</button>
 				</div>
 				<div class="modal-body">
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
@@ -1184,16 +1183,22 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 						<textarea placeholder="" class="col-12 col-lg-12 commentBox" rows="2" cols="20" [(ngModel)]="approveComments"></textarea>
 						</table>
 						Add files:
-					<file-drop headertext="Drop files here"
+						<file-drop
 						(onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
-						(onFileLeave)="fileLeave($event)"> <input type="file"
-						#file (change)="onChange(file.files)" multiple /> OR &nbsp;&nbsp;
+						(onFileLeave)="fileLeave($event)">
+						<button class="btnSkin btnSkinPrimary" (click)="triggerAdd()">Choose Files</button>
+						<input type="file" #file (change)="onChange(file.files)" multiple id="addAttach" style="display: none"/>
+						<div style="color: #00BCD4; margin-left: 10px;"> OR Drop files here</div>
 					</file-drop>
-					<ul>
-						<li *ngFor="let item of uploadedFile; let i=index">
-						<span>{{ item.name }}----------------</span><i class="fa fa-trash-o pointer" (click)="deleteFromUploadedFileList(item)"></i>
-						</li>
-					</ul>
+					<div class="row">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="fileChips regularFont">
+								<span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+									<i class="fa fa-close hand-cursor" title="Remove File" (click)="deleteFromUploadedFileList(item)"></i>
+								</span>
+							</div>
+						</div>
+					</div>
 					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">{{attachmentWarningMsg}}</span></div>
 				</div>
 				<div class="modal-footer">

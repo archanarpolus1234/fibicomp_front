@@ -97,7 +97,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     tempSaveAttachment: any = {};
     attachmentObject: any = {};
     file: FileList;
-    ismandatoryFilled: boolean;
+    ismandatoryFilled: boolean=true;
     selectedAttachmentType: string;
     areaList: any = [];
     selectedAreaType: string;
@@ -181,6 +181,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     isFundDescReadMore: boolean = false;
     isDeliverReadMore: boolean = false;
     budgetDescExpand: any = {};
+    reviewerAlreadyAddedMsg = false;
+    noAttachmentSelectedMsg:boolean = false;
 
     public onDestroy$ = new Subject<void>();
 
@@ -672,13 +674,22 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
             if ( this.result.proposal.proposalPersons.length != 0 ) {
                 for ( let person of this.result.proposal.proposalPersons ) {
+                    if(person.proposalPersonRole.description == "Principal Investigator" && tempObj.proposalPersonRole.description == "Principal Investigator") {
+                        personFlag = true;
+                        this.personWarningFlag = true;
+                        this.personWarningMsg = 'You have already added a Principal Investigator';
+                        this.selectedMember = null;
+                        this.searchTextModel = "";
+                        break;
+                    }
                     if ( person.fullName == tempObj.fullName ) {
                         personFlag = true;
                         this.personWarningFlag = true;
                         this.personWarningMsg = 'You have already added ' + tempObj.fullName;
                         this.selectedMember = null;
+                        this.searchTextModel = "";
                         break;
-                    }
+                    } 
                 }
             }
 
@@ -699,9 +710,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 this.personWarningFlag = false;
                 this.personWarningMsg = null;
             } else {
-                this.personWarningFlag = true;
-                this.personWarningMsg = 'You have already added ' + tempObj.fullName;
-                this.selectedMember = null;
+                // this.personWarningFlag = true;
+                // this.personWarningMsg = 'You have already added ' + tempObj.fullName;
+                // this.selectedMember = null;
             }
 
         } else if ( this.personRoleSelected == this.select ) {
@@ -809,13 +820,20 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
     }
 
-    ////// Methods by Ashik Varma
+
     addAttachments() {
+        this.ismandatoryFilled = true;
+        this.noAttachmentSelectedMsg = false;
         var d = new Date();
         var timestamp = d.getTime();
         if(this.selectedAttachmentType == this.select) {
-            
-        } else {
+           this.ismandatoryFilled = false;
+        } else if(this.uploadedFile.length == 0){
+            this.noAttachmentSelectedMsg = true;
+        }
+        
+        if(this.ismandatoryFilled == true && this.noAttachmentSelectedMsg == false){
+           console.log("hello")
             for ( let attachmentType of this.result.proposalAttachmentTypes ) {
                 if ( attachmentType.description == this.selectedAttachmentType ) {
                     this.attachmentObject = attachmentType;
@@ -882,6 +900,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
     closeAttachments() {
         this.showAddAttachment = false;
+        this.approveComments = "";
         this.uploadedFile = [];
     }
     ////// Methods by Ashik Varma ends for Attachments
@@ -1354,6 +1373,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     approveDisapproveProposal() {
+        
         this.sendObject.personId = localStorage.getItem( 'personId' );
         this.sendObject.proposal = this.result.proposal;
         this.sendObject.approverStopNumber = this.result.approverStopNumber;
@@ -1362,6 +1382,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             var temp: any = {};
             temp = data;
             this.result = temp;
+            this.approveComments = "";
             this.initialiseProposalFormElements();
             this.changeRef.detectChanges();
         } );
@@ -1411,11 +1432,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
         for ( let reviewer of this.availableReviewers ) {
             if ( reviewer.approverPersonName == this.selectedReviewer ) {
-                console.log(this.result.loggedInWorkflowDetail.workflowReviewerDetails);
                 if(this.result.loggedInWorkflowDetail.workflowReviewerDetails.length!=0) {
                     for(let review of this.result.loggedInWorkflowDetail.workflowReviewerDetails) {
                         if(review.reviewerPersonId == reviewer.approverPersonId) {
-                                console.log(review.reviewerPersonId,reviewer.approverPersonId)
+                                this.reviewerAlreadyAddedMsg = true;
                                 break;
                         } else {
                             var assignedReviewer: any = {};
@@ -1428,6 +1448,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                             assignedReviewer.updateTimeStamp = ( new Date() ).getTime();
                             assignedReviewer.updateUser = localStorage.getItem( 'currentUser' );
                             this.result.loggedInWorkflowDetail.workflowReviewerDetails.push( assignedReviewer );
+                            this.reviewerAlreadyAddedMsg = false;
                         }
                     }
                 } else {
@@ -1441,6 +1462,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                     assignedReviewer.updateTimeStamp = ( new Date() ).getTime();
                     assignedReviewer.updateUser = localStorage.getItem( 'currentUser' );
                     this.result.loggedInWorkflowDetail.workflowReviewerDetails.push( assignedReviewer );
+                    this.reviewerAlreadyAddedMsg = false;
                 }
             
             }
@@ -1450,20 +1472,26 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
     
     addReviewer() {
-        this.result.proposal.updateTimeStamp = new Date().getTime();
-        this.result.proposal.updateUser = this.currentUser;
-        this.proposalCreateService.assignReviewer( this.result.proposal, this.result.loggedInWorkflowDetail, this.result.proposal.proposalId ).subscribe( data => {
-            var temp: any = {};
-            temp = data;
-            this.result.proposal = temp.proposal;
-            this.result.workflow = temp.workflow;
-            this.result.loggedInWorkflowDetail = temp.loggedInWorkflowDetail;
-            this.updateFlags(temp);
-            this.updateWorkflowStops();
-            this.updateRouteLogHeader();
-            this.changeRef.detectChanges();
-        } );
-        this.showReviewerModal = false;
+        if( this.result.loggedInWorkflowDetail.workflowReviewerDetails.length!=0) {
+            console.log("yes")
+            this.result.proposal.updateTimeStamp = new Date().getTime();
+            this.result.proposal.updateUser = this.currentUser;
+            this.proposalCreateService.assignReviewer( this.result.proposal, this.result.loggedInWorkflowDetail, this.result.proposal.proposalId ).subscribe( data => {
+                var temp: any = {};
+                temp = data;
+                this.result.proposal = temp.proposal;
+                this.result.workflow = temp.workflow;
+                this.result.loggedInWorkflowDetail = temp.loggedInWorkflowDetail;
+                this.updateFlags(temp);
+                this.updateWorkflowStops();
+                this.updateRouteLogHeader();
+                this.changeRef.detectChanges();
+            } );
+            this.showReviewerModal = false;
+        } else {
+            this.showReviewerModal = true;
+        }
+       
     }
 
     completeReview() {
@@ -1570,5 +1598,15 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         e.preventDefault();
         this.router.navigate(['/dashboard'], { queryParams: { 'currentTab': 'SMU_PROPOSAL' } } )
     }
+
+    _keyPress(event: any) {
+        const pattern = /[0-9\+\-\/\ ]/;
+        let inputChar = String.fromCharCode(event.charCode);
+
+        if (!pattern.test(inputChar)) {
+          event.preventDefault();
+        }
+    }
+
     
 }
