@@ -1169,9 +1169,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         if ( this.tempAreaObject.researchAreaId != null ) {
             //serviceCall
             this.proposalCreateService.deleteProposalResearchArea( this.result.proposal.proposalId, this.tempAreaObject.researchAreaId ).subscribe();
-            this.result.proposal.proposalResearchAreas.splice( this.index, 1 );
-        } else {
-            this.result.proposal.proposalResearchAreas.splice( this.index, 1 );
+        }
+        this.result.proposal.proposalResearchAreas.splice( this.index, 1 );
+        if(this.result.proposal.proposalResearchAreas.length == 0) {
+            this.result.proposal.researchDescription = "";
         }
     }
 

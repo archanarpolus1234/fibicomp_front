@@ -23,9 +23,8 @@
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 						<div class="borderBox"><h4 class="borderBoxHeading">
 							<div class="row">
-								<div class="col-8">Overview 
-								</div>
-								<div class="col-4 text-right"><span style="margin-right: 10px"><label style="margin-right: 10px">Status: </label>{{result?.grantCall?.grantCallStatus?.description}}</span></div>
+								<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8">Overview</div>
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 text-right colorBlack"><span style="margin-right: 10px"><label style="margin-right: 10px">Status: </label>{{result?.grantCall?.grantCallStatus?.description}}</span></div>
 							</div></h4>
 							<p *ngIf = "showWarning"><span class="mandatory warningMessage">* Please fill all the mandatory fields marked</span></p>
 							<div class="pullSide">
@@ -41,11 +40,11 @@
 												</select>
 												<span *ngIf="mode == 'view'">{{grantCallTypeSelected}}</span>
 											</div>
-											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Opening Date:</label><br><span *ngIf="mode != 'view'" ><input type="date" placeholder="MM/dd/YYYY" [(ngModel)] = "result.grantCall.openingDate" [ngClass]="editClass" [owlDateTime]="openingDt"  class="committeeBox dateWidth"/>&nbsp;
-												<span class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="openingDt"></span><owl-date-time #openingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()" ></owl-date-time></span>
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Opening Date:</label><br><span *ngIf="mode != 'view'" class="dateField"><input type="text" placeholder="MM/dd/yyyy" [(ngModel)] = "result.grantCall.openingDate" [ngClass]="editClass" (keypress)="_keyPress($event)" [owlDateTime]="openingDt"  class="committeeBox dateWidth"/>&nbsp;
+												<span class="fa fa-calendar fa-large pointer insidePicker" title="open calendar" [owlDateTimeTrigger]="openingDt"></span><owl-date-time #openingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()" ></owl-date-time></span>
 												<span *ngIf="mode == 'view'" >{{result?.grantCall?.openingDate | date: 'MM/dd/yyyy'}}</span></div>
-											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Closing Date:</label><br><span *ngIf="mode != 'view'"><input type="date" placeholder="MM/dd/YYYY" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass" [owlDateTime]="closingDt"  class="committeeBox dateWidth"/>&nbsp;
-												<span class="fa fa-calendar fa-large pointer" [owlDateTimeTrigger]="closingDt"></span> <owl-date-time #closingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Closing Date:</label><br><span *ngIf="mode != 'view'" class="dateField"><input type="text" placeholder="MM/dd/yyyy" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass" (keypress)="_keyPress($event)" [owlDateTime]="closingDt"  class="committeeBox dateWidth"/>&nbsp;
+												<span class="fa fa-calendar fa-large pointer insidePicker" title="open calendar" [owlDateTimeTrigger]="closingDt"></span> <owl-date-time #closingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
 												<span *ngIf="mode == 'view'" >{{result?.grantCall?.closingDate | date: 'MM/dd/yyyy'}}</span>
 											</div>
 										</div>
@@ -83,7 +82,7 @@
 											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3"><label>Lead Unit:</label><br>
 												<ng2-completer *ngIf="mode!='view'" 
 													[inputClass]="completerID"
-													[(ngModel)]="selectedHomeUnit" placeholder=""
+													[(ngModel)]="selectedHomeUnit" placeholder="Search here for Lead Unit"
 													[datasource]="homeUnits" [minSearchLength]="0"
 													(selected)="homeUnitChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0 dateBox" ></ng2-completer>
 												<span *ngIf="mode == 'view'">{{result?.grantCall?.homeUnitName}}</span>
@@ -123,7 +122,7 @@
 											<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><label>Keywords:</label><br>
 												<div class="row">
 													<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2" *ngIf="mode!='view'" style="padding-left: 0px">
-														<ng2-completer  title="Add Keyword" 
+														<ng2-completer 
 															[inputClass]="completerID"
 															[(ngModel)]="selectedKeyword" placeholder="Search here for Keyword"
 															[datasource]="keywordsList" [minSearchLength]="0"
@@ -199,8 +198,8 @@
 										<table class="table table-responsive tableSkin grid2">
 											<tr id="addPointOfContactRow" *ngIf="showAddPointOfContact && mode != 'view'">
 												<td>
-													<label>Is SMU Person:</label><br/>
-													<input class="text-center" #isSMUPersonCheck type="checkbox" [checked]="isSMUChecked" (change)="personTypeChanged(isSMUPersonCheck.checked)">
+													<label>Is SMU Person:</label><br>
+													<input class="text-center" #isSMUPersonCheck class="checkClass" type="checkbox" [checked]="isSMUChecked" (change)="personTypeChanged(isSMUPersonCheck.checked)">
 												</td>
 												<td>
 													<label>
@@ -264,7 +263,7 @@
 															<li><a href="#" data-toggle="modal"
 																data-target="#deletePointOfContact"
 																(click)="tempSavePointOfContact($event,pointOfContact,i)"><i
-																	class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
+																	class="fa fa-trash-o pointer" aria-hidden="true" title="remove this person"></i></a></li>
 														</ul>
 													</td>
 												</tr>
@@ -273,7 +272,7 @@
 											</tbody>
 											<tr *ngIf="result?.grantCall?.grantCallContacts?.length == 0 && mode == 'view'">
 												<td colspan="6"><div class="noDataExists">
-														No point of contact specified
+														There are no point of contact specified
 													</div></td>
 											</tr>
 										</table>
@@ -306,8 +305,8 @@
                                                                			<tbody *ngIf="addResearch && result?.grantCall?.grantCallResearchAreas?.length > 0">
 	                                                                        <tr >
 	                                                                                <th >Sl no</th>
-	                                                                                <th >Research Area Code</th>
-	                                                                                <th >Code/Description</th>
+	                                                                                <th >Code</th>
+	                                                                                <th >Research Area</th>
 	                                                                                <th *ngIf="mode != 'view'">Action</th>
 	                                                                        </tr>
 	                                                                        <tr *ngFor="let researchArea of result?.grantCall?.grantCallResearchAreas;let i = index">
@@ -318,15 +317,15 @@
 																							<li><a href="#" data-toggle="modal"
 																								data-target="#deleteResearchArea"
 																								(click)="tempSaveResearchAreaObject($event,researchArea)"><i
-																									class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
+																									class="fa fa-trash-o pointer" title="remove this research area" aria-hidden="true"></i></a></li>
 																						</ul>
 																					</td>
 																			</tr>
-																			<tr *ngIf = "areaWarning"><td colspan="4"><span class="mandatory">Research area already added</span></td></tr>
+																			<tr *ngIf = "areaWarning"><td colspan="4"><span class="mandatory">* Research area already added</span></td></tr>
 	                                                                	</tbody>
 	                                                                	<tr *ngIf="result?.grantCall?.grantCallResearchAreas?.length == 0 && mode == 'view'">
 																			<td colspan="4"><div class="noDataExists">
-																					No area of research specified
+																					No areas of research included in this grant call
 																				</div></td>
 																		</tr>
                                                                 </table>
@@ -372,15 +371,15 @@
 																								<li><a href="#" data-toggle="modal"
 																									data-target="#deleteEligibility"
 																									(click)="tempSaveEligibilityObject($event,eligibility,i)"><i
-																										class="fa fa-trash-o pointer" aria-hidden="true"></i></a></li>
+																										class="fa fa-trash-o pointer" title="remove this eligibility criteria" aria-hidden="true"></i></a></li>
 																							</ul>
 																						</td>
 																				</tr>
-																				<tr *ngIf = "eligibilityWarning"><td colspan="5"><span class="mandatory">Eligibility already added</span></td></tr>
+																				<tr *ngIf = "eligibilityWarning"><td colspan="5"><span class="mandatory">* Eligibility already added</span></td></tr>
                                                                              </tbody>  
                                                                              <tr *ngIf="result?.grantCall?.grantCallEligibilities?.length == 0 && mode == 'view'">
 																				<td colspan="5"><div class="noDataExists">
-																						No eleigibility criteria specified
+																						There are no eligibility criteria specified
 																					</div></td>
 																			</tr> 
                                                                         </table>
@@ -409,8 +408,8 @@
 	                                                                                    <td ><ul class="actionButtonGroup">
 																								<li *ngIf="mode != 'view'"><a (click)="tempSaveAttachments($event,attachment,i)" *ngIf="editScheduleattachment == true" 
 																									data-toggle="modal" data-target="#deleteAttachment"><i
-																										class="fa fa-trash-o"></i></a></li>
-																								<li><a  (click)="downloadAttachments($event, attachment)" title="Open"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
+																										class="fa fa-trash-o" title="remove this attached item"></i></a></li>
+																								<li><a  (click)="downloadAttachments($event, attachment)" title="download this attachment"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
 																							</ul>
                                                                                 		</td>
 																				</tr>

@@ -145,6 +145,7 @@ export class GrantComponent {
                             this.selectedSponsor = this.select;
                             this.selectedActivityType = this.select;
                             this.selectedFundingType =  this.select;
+                            console.log( this.result.grantCall.openingDate);
                             if(this.result.grantCall.sponsorCode != null) {
                                 this.grantService.fetchSponsorsBySponsorType(this.result.grantCall.sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
                                     var temp :any= {};
@@ -256,7 +257,7 @@ export class GrantComponent {
 
     //elastic search value change
     onSearchValueChange() {
-        this.iconClass = this.searchTextModel ? 'fa fa-times fa-med' : '';
+        this.iconClass = this.searchTextModel ? 'fa fa-times fa-med' : 'fa fa-search fa-med';
         this.elasticSearchresults = [];
     }
 
@@ -564,7 +565,7 @@ export class GrantComponent {
         this.uploadedFile = [];
     }
 
-    addAttachments() {debugger;
+    addAttachments() {
         var d = new Date();
         this.attachmentWarning = false;
         if ( this.result.grantCall.grantCallAttachments.length != 0 ) {
@@ -768,7 +769,6 @@ export class GrantComponent {
     }
 
     saveGrant() {
-        
         if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.result.grantCall.grantTheme==null) {
             var scrollTop;
             this.showWarning = true;
@@ -935,5 +935,19 @@ export class GrantComponent {
     backToList(e){
         e.preventDefault();
         this.router.navigate(['/dashboard'], { queryParams: { 'currentTab': 'GRANT' } } )
+    }
+    
+    _keyPress(event: any) {
+        const pattern = /[0-9\+\-\/\ ]/;
+        let inputChar = String.fromCharCode(event.charCode);
+
+        if (!pattern.test(inputChar)) {
+          event.preventDefault();
+        }
+    }
+    
+    pickerOpen() {
+        this.result.grantCall.openingDate = (this.result.grantCall.openingDate == null)? new Date(): this.result.grantCall.openingDate; 
+        this.result.grantCall.closingDate = (this.result.grantCall.closingDate == null)? new Date(): this.result.grantCall.closingDate; 
     }
 }
