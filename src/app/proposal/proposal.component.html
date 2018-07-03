@@ -59,24 +59,24 @@
 											<div class="row">
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br>
-													 <span *ngIf="mode != 'view'" >
-													    <input type="text" placeholder="MM/dd/YYYY"
-															[owlDateTime]="subDt"  class="dateField"
+													 <span *ngIf="mode != 'view'"  class="dateField" >
+													    <input type="text" placeholder="MM/dd/YYYY" style="width:100% !important"
+															[owlDateTime]="subDt" class="dateWidth"
 															[(ngModel)]="result.proposal.submissionDate" 
 															[ngClass]="editClass" (keypress)="_keyPress($event)" />
-															<i class="fa fa-calendar fa-large  hand-cursor" [owlDateTimeTrigger]="subDt"></i>
+															<i class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="subDt"></i>
 															<owl-date-time #subDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
 													</span>
 													<span *ngIf="mode == 'view'" >{{result?.proposal?.submissionDate | date: 'MM/dd/yyyy'}}</span>
 												</div>
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed Start Date:</label><br>
-													 <span *ngIf="mode != 'view'" >
-													 	<input type="text" placeholder="MM/dd/YYYY"
-															[owlDateTime]="startDt"  class="dateField"
+													 <span *ngIf="mode != 'view'" class="dateField">
+													 	<input type="text" placeholder="MM/dd/YYYY" style="width:100% !important"
+															[owlDateTime]="startDt" class="dateWidth"
 															[(ngModel)]="result.proposal.startDate" 
 															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
-														<i class="fa fa-calendar fa-large hand-cursor" [owlDateTimeTrigger]="startDt"></i>
+														<i class="fa fa-calendar fa-large hand-cursor insidePicker" [owlDateTimeTrigger]="startDt"></i>
 														<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
 													</span>
 													<span *ngIf="mode == 'view'" >{{result?.proposal?.startDate | date: 'MM/dd/yyyy'}}</span>
@@ -84,11 +84,11 @@
 												<div  [ngClass] = "mode == 'view'?'col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2':'col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4'">
 													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed End Date:</label><br>
 													 <span *ngIf="mode != 'view'" class="dateField">
-													 	<input type="text" class="dateField" placeholder="MM/dd/YYYY"
+													 	<input type="text" class="dateWidth" placeholder="MM/dd/YYYY"
 															[owlDateTime]="endDt" style="width: 65% !important"
 															[(ngModel)]="result.proposal.endDate"
 															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
-															<i class="fa fa-calendar fa-large hand-cursor" [owlDateTimeTrigger]="endDt"></i>
+															<i class="fa fa-calendar fa-large hand-cursor insidePicker" [owlDateTimeTrigger]="endDt"></i>
 															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
 													</span>
 													<span *ngIf="mode == 'view'" >{{result?.proposal?.endDate | date: 'MM/dd/yyyy'}}</span>
@@ -126,7 +126,7 @@
 													 	 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"  *ngIf="mode!='view'" style="padding-left: 0px">
 													 	 	<ng2-completer style="border:none; padding:0px"
 															[inputClass]="completerID"
-															[(ngModel)]="selectedKeyword" placeholder=""
+															[(ngModel)]="selectedKeyword" placeholder="Search here for Keyword"
 															[datasource]="keywordsList" [minSearchLength]="0"
 															(selected)="keywordChangeFunction()" [disabled]="mode == 'view'">
 													 		</ng2-completer>
@@ -161,7 +161,7 @@
 								<tr *ngIf="result?.proposal?.grantCall == null && mode !='view' && isGrantCallWdgtOpen">
 									<td class="text-right"><label>Title of Grant Call:</label></td>
 									<td class="pull-left"><span><ng2-completer style="border:none; padding:0px;"
-															[inputClass]="completerID" placeholder=""
+															[inputClass]="completerID" placeholder="Search here for Grant Call Title"
 															[(ngModel)]="selectedGrantCall"
 															[datasource]="grantCallList" [minSearchLength]="0"
 															(selected)="grantCallChangeFunction()" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
@@ -236,7 +236,7 @@
 											<td>
 												<div>
 													 <ng2-completer title="Add area of research"
-														[inputClass]="completerID" placeholder=""
+														[inputClass]="completerID" [placeholder]="(researchTypeSelected == 'Area of Research')?'Search here for Area of Research':'Search here for Area of Excellence'"
 														[(ngModel)]="selectedArea"
 														[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
 												</div>
@@ -252,8 +252,8 @@
 										<tbody *ngIf="result?.proposal?.proposalResearchAreas?.length > 0 && isareaWdgtOpen">
 	                                        <tr>
 	                                            <th >Sl No.</th>
-	                                            <th >Research Area Code</th>
-	                                            <th  colspan="2">Code/Description</th>
+	                                            <th >Code</th>
+	                                            <th  colspan="2">Research Area</th>
 	                                            <th title="" *ngIf="mode != 'view'">Action</th>
 	                                        </tr>
 	                                        <tr *ngFor = "let researchArea of result?.proposal?.proposalResearchAreas; let i = index">
@@ -305,7 +305,7 @@
 											<td class="text-right"><label>Name:</label></td>
 											<td> 
 												<div class="searchBox memberSearchBox">
-													<input type="text" placeholder="" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+													<input type="text" placeholder="Search here for an Employee / Search here for a Non-Employee" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
 														[formControl]="searchText"  (ngModelChange)="onSearchValueChange()"/> <a href="#"
 														class="searchButton" (click)="clearSearchBox($event)"><i
 														[ngClass]="iconClass"></i></a>
@@ -341,7 +341,7 @@
 										</tr>
 										<tr *ngIf="result?.proposal?.proposalPersons?.length == 0 && mode == 'view'">
 											<td colspan="9"><div class="noDataExists">
-													No members are associated with this proposal
+													There are no investigators added in this application
 												</div></td>
 										</tr>
 										<tbody *ngIf="result?.proposal?.proposalPersons?.length > 0 && isTeamWdgtOpen">
@@ -379,7 +379,7 @@
 									<div class="topGrid gridSkin" *ngIf="isProjectDescWdgtOpen">
 											<div class="row">
 												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label>Abstract:</label><br>
-													<textarea name="abstract" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
+													<textarea name="abstract" class="forTextAreaEntry" placeholder="Please provide Lay Abstract or Scientic Abstract details here" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view' && result?.proposal?.abstractDescription != null"><p class="textView" *ngIf="mode == 'view' && !isAbsDescReadMore">{{(result?.proposal?.abstractDescription).length>240 ? (result?.proposal?.abstractDescription | slice:0:240)+'...' : result?.proposal?.abstractDescription}}
 															<span *ngIf="(result?.proposal?.abstractDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isAbsDescReadMore = !isAbsDescReadMore">Read more<i [ngClass]="isAbsDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -393,7 +393,7 @@
 													</div>
 												</div>
 												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label>Funding Strategy:</label><br>
-													<textarea name="fundingStrategy" class="forTextAreaEntry" maxlength="48" placeholder="" [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<textarea name="fundingStrategy" class="forTextAreaEntry" maxlength="48" placeholder="Please provide details on strategy for obtaining funding " [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view' && result?.proposal?.fundingStrategy != null"><p class="textView" *ngIf="mode == 'view' && !isFundDescReadMore">{{(result?.proposal?.fundingStrategy).length>240 ? (result?.proposal?.fundingStrategy | slice:0:240)+'...' : result?.proposal?.fundingStrategy}}
 															<span *ngIf="(result?.proposal?.fundingStrategy?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isFundDescReadMore = !isFundDescReadMore">Read more<i [ngClass]="isFundDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -410,7 +410,7 @@
 	                                        <div class="row">
 												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
 													<label>Details of Proposal:</label><br>
-													<textarea name="details" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
+													<textarea name="details" class="forTextAreaEntry" placeholder="Please provide details of Research Proposal ( e.g. Aims, Significance, Approach, Investigator, Preliminary Studies, References, Project Implementation Schedule/Milestones)" [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
 													<span *ngIf="mode == 'view' && result?.proposal?.details != null"><p class="textView" *ngIf="mode == 'view' && !isDetailsReadMore">{{(result?.proposal?.details).length>240 ? (result?.proposal?.details | slice:0:240)+'...' : result?.proposal?.details}}
 															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -425,7 +425,7 @@
 												</div>
 												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
 													<label>Deliverables:</label><br>
-													<textarea name="deliverables" class="forTextAreaEntry" placeholder="" [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<textarea name="deliverables" class="forTextAreaEntry" placeholder="Please provide details on Project Deliverables (e.g. Man power Training, Research Outcomes, etc.)" [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 													<span *ngIf="mode == 'view' && result?.proposal?.deliverables != null"><p class="textView" *ngIf="mode == 'view' && !isDeliverReadMore">{{(result?.proposal?.deliverables).length>240 ? (result?.proposal?.deliverables | slice:0:240)+'...' : result?.proposal?.deliverables}}
 															<span *ngIf="(result?.proposal?.deliverables?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDeliverReadMore = !isDeliverReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -464,20 +464,20 @@
 																<option *ngFor="let sponsor of result.sponsors" >{{sponsor.sponsorName}}</option>
 															</select>
 														</td>
-														<td><label>Start Date:</label><input
-														[owlDateTime]="startDt" placeholder="MM/dd/YYYY"
-															[(ngModel)]="fundingStartDate" 
+														<td><label>Start Date:</label><span class="dateField"><input
+														[owlDateTime]="startDt" placeholder="MM/dd/YYYY" style="width:100% !important"
+															[(ngModel)]="fundingStartDate" class="dateWidth"
 															[disabled]="mode == 'view' ? true : false"
 															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
-															<i class="fa fa-calendar fa-large hand-cursor" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="startDt"></i>
-															<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></td>
-													<td><label>End Date:</label><input
+															<i class="fa fa-calendar fa-large hand-cursor insidePicker" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="startDt"></i>
+															<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></span></td>
+													<td><label>End Date:</label><span class="dateField"><input style="width:100% !important"
 															 [owlDateTime]="endDt" placeholder="MM/dd/YYYY"
-															[(ngModel)]="fundingEndDate"
+															[(ngModel)]="fundingEndDate" class="dateWidth"
 															[disabled]="mode == 'view' ? true : false"
 															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
-															<i class="fa fa-calendar fa-large hand-cursor" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="endDt"></i>
-															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></td>
+															<i class="fa fa-calendar fa-large hand-cursor insidePicker" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="endDt"></i>
+															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></span></td>
 														
 												
 													<td><label>Amount</label><br><input type="number"  [ngClass]="editClass" [(ngModel)] = "sponsorAmount"/></td>
@@ -491,7 +491,7 @@
 													</tr>
 													<tr *ngIf="result?.proposal?.proposalSponsors?.length == 0 && mode == 'view'">
 														<td colspan="6"><div class="noDataExists">
-																No fundings declared
+																There are no other funding support/s declared by the investigator
 															</div></td>
 													</tr>
 													<tbody *ngIf="result?.proposal?.proposalSponsors?.length > 0">
@@ -525,7 +525,7 @@
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin grid2">
 													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
-														<td class="text-right"><label>Protocol: </label></td>
+														<td class="text-right"><label>Protocol Title: </label></td>
 														<td><ng2-completer title="Add area of research"
 																	[inputClass]="completerID" placeholder=""
 																	[(ngModel)]="selectedProtocol" (selected)="addIRB()"
@@ -540,7 +540,7 @@
 													</tr>
 													<tr *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && mode == 'view'">
 														<td colspan="7"><div class="noDataExists">
-																No protocols declared
+																There are no IRB protocols linked to this application
 															</div></td>
 													</tr>
 													<tbody *ngIf="result?.proposal?.proposalIrbProtocols?.length > 0">
@@ -573,7 +573,7 @@
 										</div>
 										<div class="col-12" *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && result?.proposal?.proposalSponsors?.length == 0 && mode == 'view'">
 											<div class="noDataExists regularFont" >
-												No declarations for this proposal
+														There are no IRB protocols linked to this application
 											</div>
 										</div>
 							</div>
@@ -633,7 +633,7 @@
 	                                         </tbody>
 	                                         <tr *ngIf="result?.proposal?.proposalBudgets?.length == 0 && mode == 'view'">
 												<td colspan="9"><div class="noDataExists">
-														No budget estimated with this proposal
+														There are no budget category items added to this application
 													</div></td>
 											</tr>
 	                                    </table>
@@ -646,7 +646,7 @@
                                <table class="table table-responsive tableSkin grid2">
                                		<tr *ngIf="result?.proposal?.proposalAttachments?.length == 0 && mode == 'view'">
 										<td colspan="5"><div class="noDataExists">
-												No supporting documents are attached with this proposal
+												There are no attachments uploaded
 											</div></td>
 									</tr>
 									<tbody *ngIf="result?.proposal?.proposalAttachments?.length > 0">
@@ -1179,10 +1179,10 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					</div>
 					
 					<table class="table table-responsive tableSkin">
-						Comments:
+						<label class="mySkinDialog "><p class="m-0"><b>Comments:</b></p> </label>
 						<textarea placeholder="" class="col-12 col-lg-12 commentBox" rows="2" cols="20" [(ngModel)]="approveComments"></textarea>
 						</table>
-						Add files:
+						<label class="mySkinDialog"><p class="m-0"><b>Add files:</b></p> </label>
 						<file-drop
 						(onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
 						(onFileLeave)="fileLeave($event)">

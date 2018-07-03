@@ -404,13 +404,26 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .dateWidth {
-	width: 85% !important;	
+	width: 90% !important;
+	position: relative;
 }
 
 .dateWidth::-webkit-inner-spin-button,
 .dateWidth::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
+}
+
+.dateField {
+	position: relative;
+}
+
+.insidePicker {
+	position: absolute;
+	top: 1px;
+	right: 10px;
+	bottom: 0;
+	
 }
 
 .gridSkin .row div p {
@@ -532,4 +545,10 @@ input[type=number]::-webkit-outer-spin-button {
 
 .attachBtn:hover {
 	color: #9e9e9e;
+}
+
+.checkClass {
+	width: 50%;
+	height: 1.2em;
+	margin: .75em;
 }

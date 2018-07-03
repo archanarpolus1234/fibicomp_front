@@ -173,18 +173,19 @@ export class DashboardComponent implements OnInit {
         }
         this.grantManager = localStorage.getItem('grantManager');
         this.provost = localStorage.getItem('provost');
-        this.getResearchSummaryData();
     }
     
     ngOnDestroy() {
         this.onDestroy$.next();
         this.onDestroy$.complete();
     }
+
     ngOnInit() {
         var currentTab = this.route.snapshot.queryParamMap.get('currentTab');
         if(currentTab != 'SUMMARY' && currentTab != null) {
             this.showTab(currentTab);
         } else {
+            this.getResearchSummaryData();
             this.dashboardConfigurationService.currentdashboardExpenditureVolumeWidget.takeUntil(this.onDestroy$).subscribe( status => {
                 this.dashboardExpenditureVolumeWidget = status;
             } );
@@ -813,7 +814,7 @@ export class DashboardComponent implements OnInit {
         this.proposalsPiechartList = [];
         this.pieChartReportType = "";
         this.projectPiechartList =[];
-        this.pieChartReportProtocolType = "";
+        this.pieChartReportProjectType = "";
     }
 
     changeReportPiechartProjectList(temporaryObj) {

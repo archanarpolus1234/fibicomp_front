@@ -509,32 +509,32 @@
 						*ngIf="this.result?.awardViews?.length !== 0">
 						<thead>
 							<tr>
-								<th (click)="sortResult('awardNumber',currentPosition)"
-									title="Click to sort by Award">Project # <span
+								<th style="width: 10%" (click)="sortResult('awardNumber',currentPosition)" class="hand-cursor"
+									title="Click to sort by Project #">Project # <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
 								</th>
-								<th (click)="sortResult('accountNumber',currentPosition)"
-									title="Click to sort by Account">Account #<span
+								<th (click)="sortResult('accountNumber',currentPosition)" class="hand-cursor"
+									title="Click to sort by Account #">Account #<span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
 								</th>
-								<th (click)="sortResult('title',currentPosition)"
+								<th (click)="sortResult('title',currentPosition)" class="hand-cursor"
 									title="Click to sort by Title">Title <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
 								</th>
-								<th (click)="sortResult('unitName',currentPosition)"
+								<th (click)="sortResult('unitName',currentPosition)" class="hand-cursor"
 									title="Click to sort by Lead Unit">Lead Unit <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'unitName')}"></span>
 								</th>
-								<th (click)="sortResult('sponsor',currentPosition)"
+								<th (click)="sortResult('sponsor',currentPosition)" class="hand-cursor"
 									title="Click to sort by Sponsor">Sponsor <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'sponsor')}"></span>
 								</th>
-								<th (click)="sortResult('fullName',currentPosition)"
+								<th (click)="sortResult('fullName',currentPosition)" class="hand-cursor"
 									title="Click to sort by PI">PI <span class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'fullName')}"></span>
 								</th>
@@ -544,7 +544,7 @@
 						<tbody>
 							<tr
 								*ngFor="let awardDetails of serviceRequestList | slice:begin:end">
-								<td width="8%">{{awardDetails.awardNumber}}</td>
+								<td style="width: 10%">{{awardDetails.awardNumber}}</td>
 								<td>{{awardDetails.accountNumber}}</td>
 								<td>{{awardDetails.title}}</td>
 								<td>{{awardDetails.unitName}}</td>
@@ -1296,7 +1296,7 @@
 													</th>
 													<th width="40%">Title 
 													</th>
-													<th >Lead Unit >
+													<th >Lead Unit
 													</th>
 													<th >Protocol Type
 													</th>
