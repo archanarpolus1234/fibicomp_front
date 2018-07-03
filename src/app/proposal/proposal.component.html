@@ -305,7 +305,7 @@
 											<td class="text-right"><label>Name:</label></td>
 											<td> 
 												<div class="searchBox memberSearchBox">
-													<input type="text" placeholder="Search here for an Employee / Search here for a Non-Employee" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+													<input type="text" placeholder="{{placeHolderText}}" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
 														[formControl]="searchText"  (ngModelChange)="onSearchValueChange()"/> <a href="#"
 														class="searchButton" (click)="clearSearchBox($event)"><i
 														[ngClass]="iconClass"></i></a>
@@ -558,8 +558,8 @@
 				                                            <td>{{protocol?.protocol?.protocolNumber}}</td>
 															<td>{{protocol?.protocol?.title}}</td>
 															<td>{{protocol?.protocol?.protocolStatus?.description}}</td>
-				                                            <td>{{protocol?.protocol?.approvalDate}}</td>
-				                                            <td>{{protocol?.protocol?.expirationDate}}</td>
+				                                            <td>{{protocol?.protocol?.approvalDate | date:'MM/dd/yyyy'}}</td>
+				                                            <td>{{protocol?.protocol?.expirationDate | date:'MM/dd/yyyy'}}</td>
 				                                         	<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 																	<li><a href="#" data-toggle="modal"
 																		data-target="#deleteIRB"
