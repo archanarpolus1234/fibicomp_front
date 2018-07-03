@@ -510,7 +510,11 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
     toggleICL( flag ) {
         this.result.proposal.isSmu = flag;
-        this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
+        if ( flag == false ) {
+            this.selectedICLLab = this.select;
+        } else {
+            this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
+        }
     }
 
     changeArea( areaType ) {
@@ -1025,6 +1029,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         } else if ( this.proposalTypeSelected == this.select ) {
             this.isMandatory = true;
             this.mandatoryText = '* Please choose proposal type';
+        } else if ( this.result.proposal.isSmu == true && this.selectedICLLab == this.select ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please specify the ICL Lab';
         } else {
             this.isMandatory = false;
             this.dateValidation();
