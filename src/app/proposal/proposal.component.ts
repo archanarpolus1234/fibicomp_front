@@ -177,12 +177,17 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     isBudgetWdgtOpen: boolean = true;
     isDeclareWdgtOpen: boolean = true;
     isResDescReadMore: boolean = false;
+    isGrantThemeReadMore: boolean = false;
     isAbsDescReadMore: boolean = false;
     isFundDescReadMore: boolean = false;
     isDeliverReadMore: boolean = false;
     budgetDescExpand: any = {};
     reviewerAlreadyAddedMsg = false;
-    noAttachmentSelectedMsg:boolean = false;
+    noAttachmentSelectedMsg: boolean = false;
+    duplicateAttachmentMsg: boolean = false;
+    noReviewerAdded: boolean = false;
+    showSaveProposalModal: boolean = false;
+    showSubmitSuccessfullyModal: boolean = false;
 
     public onDestroy$ = new Subject<void>();
 
@@ -237,12 +242,14 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.updateRouteLogHeader();
 
         // set default grantCallType to Others if no grant call is associated with the proposal
-        if ( this.result.proposal.grantCall == null ) {
+        if ( this.result.proposal.grantCallType == null ) {
             this.result.proposal.grantCallType = this.result.defaultGrantCallType;
             this.result.proposal.grantTypeCode = this.result.defaultGrantCallType.grantTypeCode;
-        } else {
+        } else if (this.result.proposal.grantCall != null) {
             this.result.proposal.grantCallType = this.result.proposal.grantCall.grantCallType;
             this.result.proposal.grantTypeCode = this.result.proposal.grantCall.grantCallType.grantTypeCode;
+        } else if ( this.result.proposal.grantCall == null ) {
+            //do nothing
         }
 
         this.personRolesList = this.result.proposalPersonRoles;
@@ -827,6 +834,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
     addAttachments() {
         this.ismandatoryFilled = true;
+        this.duplicateAttachmentMsg = false;
         this.noAttachmentSelectedMsg = false;
         var d = new Date();
         var timestamp = d.getTime();
@@ -837,7 +845,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
         
         if(this.ismandatoryFilled == true && this.noAttachmentSelectedMsg == false){
-           console.log("hello")
             for ( let attachmentType of this.result.proposalAttachmentTypes ) {
                 if ( attachmentType.description == this.selectedAttachmentType ) {
                     this.attachmentObject = attachmentType;
@@ -850,13 +857,26 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             tempObjectForAdd.updateTimeStamp = timestamp;
             tempObjectForAdd.updateUser = this.currentUser;
             this.result.newAttachment = tempObjectForAdd;
-            this.proposalCreateService.addProposalAttachment( this.result.proposal, this.result.newAttachment, this.uploadedFile ).subscribe( success => {
-                var temporaryObject: any = {};
-                temporaryObject = success;
-                this.result.proposal = temporaryObject.proposal;
-            }, error => { console.log( error ) }, () => {
-                this.closeAttachments();
-            } );
+            label: for(let attachment of this.result.proposal.proposalAttachments) {
+                for(let file of this.uploadedFile) {
+                    if(attachment.fileName == file.name) {
+                    this.duplicateAttachmentMsg = true; break label;
+                    }
+                }
+              
+            }
+            if(this.duplicateAttachmentMsg == false) {
+                this.proposalCreateService.addProposalAttachment( this.result.proposal, this.result.newAttachment, this.uploadedFile ).subscribe( success => {
+                    var temporaryObject: any = {};
+                    temporaryObject = success;
+                    this.result.proposal = temporaryObject.proposal;
+                }, error => { console.log( error ) }, () => {
+                    this.closeAttachments();
+                } );
+            } else {
+                this.duplicateAttachmentMsg = true;
+            }
+         
         }
     }
 
@@ -1068,17 +1088,19 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.result.proposal.createTimeStamp = new Date().getTime();
             this.result.proposal.updateUser = this.currentUser;
             this.result.proposal.updateTimeStamp = new Date().getTime();
+            this.showSaveProposalModal = true;
             this.proposalCreateService.saveProposal( this.result.proposal, type ).subscribe( data => {
                 var temp: any = data;
                 this.result.proposal = temp.proposal;
-                this.showSuccessMessage = true;
-                this.successMessage = 'Proposal has been saved successfully.';
-                setTimeout(()=> {
-                  this.showSuccessMessage = false;
-                  },8000);
-                window.scrollTo( 0, 0 );
+                
+                // this.successMessage = 'Proposal has been saved successfully.';
+                // setTimeout(()=> {
+                //   this.showSuccessMessage = false;
+                //   },8000);
+                // window.scrollTo( 0, 0 );
             } );
         } else {
+            this.showSaveProposalModal = false;
               this.showSuccessMessage = true;
               this.successMessage = 'Error in saving proposal, please review whether mandatory fields are filled';
               setTimeout(() => {
@@ -1089,6 +1111,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     submitProposal() {
+        this.showSubmitSuccessfullyModal = false;
         this.showSubmittedModal = false;
         if ( this.result.proposal.title == "" || this.result.proposal.title == null ) {
             this.isMandatory = true;
@@ -1141,6 +1164,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.result.proposal.updateTimeStamp = new Date().getTime();
             this.result.proposal.updateUser = this.currentUser;
             //this.showAddedModal = false;
+            this.showSubmitSuccessfullyModal = true;
             this.proposalCreateService.submitProposal( this.result.proposal, localStorage.getItem( 'currentUser' ), this.result.proposalStatusCode ).subscribe( data => {
                 var temp: any = data;
                 this.result.proposal = temp.proposal;
@@ -1408,7 +1432,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.result.loggedInWorkflowDetail = _.cloneDeep(temp.loggedInWorkflowDetail);
             this.reviewerList = this.completerService.local( this.availableReviewers, 'approverPersonName', 'approverPersonName' );
             this.changeRef.detectChanges();
-        } );
+        } ,error=>{},()=>{});
     }
 
     removeSelectedReviewer( $event, reviewer, i ) {
@@ -1480,8 +1504,8 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
     
     addReviewer() {
+        this.noReviewerAdded = false;
         if( this.result.loggedInWorkflowDetail.workflowReviewerDetails.length!=0) {
-            console.log("yes")
             this.result.proposal.updateTimeStamp = new Date().getTime();
             this.result.proposal.updateUser = this.currentUser;
             this.proposalCreateService.assignReviewer( this.result.proposal, this.result.loggedInWorkflowDetail, this.result.proposal.proposalId ).subscribe( data => {
@@ -1495,8 +1519,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                 this.updateRouteLogHeader();
                 this.changeRef.detectChanges();
             } );
+            this.noReviewerAdded = false;
             this.showReviewerModal = false;
         } else {
+            this.noReviewerAdded = true;
             this.showReviewerModal = true;
         }
        

@@ -59,7 +59,7 @@
 															<span *ngIf="(result?.grantCall?.description.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDescReadMore = !isDescReadMore">Show less<i [ngClass]="isDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
 															</div>
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Grant Theme</label><textarea rows="3" placeholder="" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.grantTheme" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Grant Theme</label><textarea rows="3" placeholder="" *ngIf="mode != 'view'" maxlength="3999" [(ngModel)] = "result.grantCall.grantTheme" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
 															<p *ngIf="mode == 'view' && !isThemeReadMore">{{(result?.grantCall?.grantTheme).length>240 ? (result?.grantCall?.grantTheme | slice:0:240)+'...' : result?.grantCall?.grantTheme}}
 															<span *ngIf="(result?.grantCall?.grantTheme.length>300)" class="hand-cursor fibiDefaultColor italian" (click)="isThemeReadMore = !isThemeReadMore">Read more<i [ngClass]="isThemeReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -96,7 +96,7 @@
                                        		</div>
                                         </div>
                                         <div class="row">
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-4" ><label>Application Procedure:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-4" ><label>Application Procedure:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="" maxlength="3999" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
 														<span *ngIf="mode == 'view' && result?.grantCall?.applicationProcedure != null"><p *ngIf="mode == 'view' && !isApplProcReadMore">{{(result?.grantCall?.applicationProcedure).length>240 ? (result?.grantCall?.applicationProcedure | slice:0:240)+'...' : result?.grantCall?.applicationProcedure}}
 															<span *ngIf="(result?.grantCall?.applicationProcedure.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isApplProcReadMore = !isApplProcReadMore">Read more<i [ngClass]="isApplProcReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -107,7 +107,7 @@
 														<span *ngIf="mode == 'view' && result?.grantCall?.applicationProcedure == null" class="noDataExists">No procedure details provided</span>
 											</div>
 											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
-                                       			<label>Other Information:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
+                                       			<label>Other Information:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="" maxlength="3999" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
                                            		<span *ngIf="mode == 'view' && result?.grantCall?.otherInformation != null"><p *ngIf="mode == 'view' && !isOtherInfoReadMore">{{(result?.grantCall?.otherInformation).length>240 ? (result?.grantCall?.otherInformation | slice:0:240)+'...' : result?.grantCall?.otherInformation}}
 													<span *ngIf="(result?.grantCall?.otherInformation.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isOtherInfoReadMore = !isOtherInfoReadMore">Read more<i [ngClass]="isOtherInfoReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 													</p>
@@ -152,14 +152,14 @@
                                                                           	<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4"><label>Type:</label><br>
 																				<select *ngIf="mode!='view'" class="dateBox" [(ngModel)]="selectedSponsorType" [ngClass]="editClass" (change) = "sponsorTypeChange($event.target.value)">
 																					<option>{{select}}</option>
-																					<option *ngFor="let type of this.result?.sponsorTypes" (value)="type">{{type.description}}</option>
+																					<option *ngFor="let type of result?.sponsorTypes" (value)="type">{{type.description}}</option>
 																				</select>
 																				<span *ngIf="mode == 'view'">{{result?.grantCall?.sponsorType?.description}}</span>
 																			</div>	
 																		 	<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4"><label>Name:</label><br> 
 																		 		<select *ngIf="mode != 'view'" class="dateBox" [ngClass]="editClass" [(ngModel)]="selectedSponsor"  (change) = "sponsorNameChange($event.target.value)" >
 																					<option>{{select}}</option>
-																					<option *ngFor="let sponsor of this.sponsorList"(value)="sponsor" >{{sponsor.sponsorName}}
+																					<option *ngFor="let sponsor of result?.sponsors" (value)="sponsor" >{{sponsor.sponsorName}}
 																					</option>
 																				</select>
 																				<span *ngIf="mode == 'view'">{{result?.grantCall?.sponsor?.sponsorName}}</span>
@@ -167,7 +167,7 @@
                                                                           	<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label>Research Type:</label><br>
 									                                           <select *ngIf="mode != 'view'" [ngClass]="editClass" class="dateBox" (change)="researchTypeChange($event.target.value)" [(ngModel)] = "selectedActivityType">
 																					<option>{{select}}</option>
-																					<option *ngFor="let type of this.result?.activityTypes" (value)="type" >
+																					<option *ngFor="let type of result?.activityTypes" (value)="type" >
 																						{{type.description}}
 																					</option>
 																				</select>
@@ -425,7 +425,7 @@
                                                                 <div class="col-12 text-right" *ngIf="mode != 'view'">
 																		<p class="mandatory warningMessage" *ngIf="saveSuccessfulMessage!=null"> {{saveSuccessfulMessage}}</p>
                                                                 	<button type="button" class="btnSkin btnPublish" (click) = "showPublishWarning = true" data-toggle="modal" data-target="#publishWarning" href="#scrollToTop"  [disabled] = "result.grantCall.grantCallId ==null" *ngIf="result?.grantCall?.grantCallId !=null">Publish</button>
-																	<button type="button" class="btnSkin btnSkinPrimary" (click)="saveGrant()" href="#scrollToTop">Save</button>
+																	<button type="button" class="btnSkin btnSkinPrimary" (click)="saveGrant()" data-target="#saveGrant" data-toggle="modal" href="#scrollToTop">Save</button>
 																	
 																</div>
 																
@@ -635,4 +635,28 @@
 			</div>
 		</div>
 	</div>
+
+<!-- SAVE GRANT CALL MODAL -->
+	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSaveGrantModal" tabindex="-1"
+id="saveGrant" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Success</h5>
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Grant Call has been saved successfully</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">Ok</button>
+	</div>
+			
+	</div>
+</div>
+</div>
 	

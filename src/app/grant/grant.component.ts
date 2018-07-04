@@ -112,6 +112,7 @@ export class GrantComponent {
     isThemeReadMore: boolean = false;
     isOtherInfoReadMore: boolean = false;
     isApplProcReadMore: boolean = false;
+    showSaveGrantModal: boolean = false;
 
     constructor( public changeRef :ChangeDetectorRef, public _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public completerService : CompleterService, public router : Router,public route : ActivatedRoute, private grantService: GrantService, private sessionService: SessionManagementService) {
         if ( !sessionService.canActivate() ) {
@@ -121,7 +122,7 @@ export class GrantComponent {
         this.result.grantCall = {};
     }
 
-    ngOnInit() { 
+    ngOnInit() {
      this.currentDate.setDate(this.currentDate.getDate()-1);
        this.grantId = this.route.snapshot.queryParamMap.get('grantId');
         if(this.grantId == null) {
@@ -141,16 +142,16 @@ export class GrantComponent {
                             this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
                             this.editAreaClass = 'scheduleBoxes';
                             this.dateValidation();
-                            this.selectedSponsorType = this.select;
-                            this.selectedSponsor = this.select;
-                            this.selectedActivityType = this.select;
-                            this.selectedFundingType =  this.select;
-                            console.log( this.result.grantCall.openingDate);
+                            this.selectedSponsorType = (this.result.grantCall.sponsorType != null)? this.result.grantCall.sponsorType.description: this.select;
+                            this.selectedSponsor = (this.result.grantCall.sponsor != null)? this.result.grantCall.sponsor.sponsorName: this.select;
+                            this.selectedActivityType = (this.result.grantCall.activityType != null)? this.result.grantCall.activityType.description: this.select;
+                            this.selectedFundingType =  (this.result.grantCall.fundingSourceType != null)? this.result.grantCall.fundingSourceType.description: this.select;
                             if(this.result.grantCall.sponsorCode != null) {
                                 this.grantService.fetchSponsorsBySponsorType(this.result.grantCall.sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
                                     var temp :any= {};
                                     temp = success;
                                     this.sponsorList = temp.sponsors;
+                                    this.result.sponsors = temp.sponsors;
                                     /*this.selectedSponsorType = this.result.grantCall.sponsorType.description;
                                     this.selectedSponsor = this.result.grantCall.sponsor.sponsorName;
                                     this.selectedActivityType = this.result.grantCall.activityType.description;
@@ -669,6 +670,7 @@ export class GrantComponent {
                         var temp :any= {};
                         temp = success;
                         this.sponsorList = temp.sponsors;
+                        this.result.sponsors = temp.sponsors;
                         this.result.grantCall.sponsorType = sponsorType;
                         this.result.grantCall.sponsorTypeCode = sponsorType.code;
                        /* this.result.grantCall.sponsor = this.sponsorList[0];
@@ -769,10 +771,11 @@ export class GrantComponent {
     }
 
     saveGrant() {
+        this.showSaveGrantModal = false;
         if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.result.grantCall.grantTheme==null) {
             var scrollTop;
-            this.showWarning = true;
-            this.showSavedSuccessfully = false;
+            /*this.showWarning = true;
+            this.showSavedSuccessfully = false;*/
             this.saveSuccessfulMessage = "";
             //Scroll to Top Javascript Function
              scrollTop = setInterval(function(){ 
@@ -783,7 +786,7 @@ export class GrantComponent {
         } else {
             this.scrollToTop = "";
             this.showWarning = false;
-            this.showSavedSuccessfully = true;
+            /*this.showSavedSuccessfully = true;*/
             this.keyWordWarningMessage = null;
             var d = new Date();
             var timeStamp = d.getTime();
@@ -796,8 +799,8 @@ export class GrantComponent {
             } else {
                 this.saveType = "UPDATE";
             }
-            
-                this.grantService.saveGrantCall(this.result.grantCall,this.result.newAttachments,this.saveType,this.uploadedFile).takeUntil(this.onDestroy$).subscribe(response=>{
+            this.showSaveGrantModal = true;
+            this.grantService.saveGrantCall(this.result.grantCall,this.result.newAttachments,this.saveType,this.uploadedFile).takeUntil(this.onDestroy$).subscribe(response=>{
                     var temp:any = {};
                     temp = response;
                     this.result.grantCall = temp.grantCall;
@@ -887,7 +890,7 @@ export class GrantComponent {
 
         } else {
             this.scrollToTop = "";
-            this.showWarning = false;
+            /*this.showWarning = false;*/
             this.keyWordWarningMessage = null;
             this.grantService.publishCall( this.result.grantCall ).subscribe( success => {
                 var temp: any = {};
