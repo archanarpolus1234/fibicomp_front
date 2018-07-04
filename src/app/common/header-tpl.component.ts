@@ -42,6 +42,10 @@ export class HeaderComponent implements OnInit {
     proposalBySponsorTypesWidget: boolean = true;
     inProgressproposalBySponsorWidget: boolean = true;
     message: string;
+    role: string;
+    provost: string;
+    grantManager: string;
+    reviewer: string;
 
     @ViewChild( 'notificationBar' ) notificationBar: ElementRef;
     @ViewChild( 'configurationBar' ) configurationBar: ElementRef;
@@ -72,6 +76,21 @@ export class HeaderComponent implements OnInit {
         this.adminStatus = localStorage.getItem( 'isAdmin' );
         this.userName = localStorage.getItem( 'currentUser' );
         this.fullName = localStorage.getItem( 'userFullname' );
+        this.grantManager = localStorage.getItem( 'grantManager' );
+        this.provost = localStorage.getItem( 'provost' );
+        this.reviewer = localStorage.getItem( 'reviewer' );
+        
+        if ( this.grantManager == 'true' ) {
+            this.role = "Grant Manager";
+        } else if ( this.provost == 'true' ) {
+            this.role = "Provost";
+        } else if ( this.reviewer == 'true' ) {
+            this.role = "Reviewer";
+        } else if ( this.adminStatus == 'true' ) {
+            this.role = "Grant Admin";
+        } else {
+            this.role = "PI";
+        }
         if ( this.adminStatus == 'true' ) {
             this.isAdmin = true;
         }

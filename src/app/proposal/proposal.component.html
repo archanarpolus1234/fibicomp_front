@@ -10,9 +10,6 @@
 								<button class="btnSkin btnSkinPrimary" (click)="backToList($event)">Back to Application</button>
 								<span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
 						</div>
-						<div class="row" id="fadeOutMessage" *ngIf="showSuccessMessage">
-							<div class="col-12 text-left"><span class="successWarning" >{{successMessage}}</span></div>
-						</div>
 						<br>
 						<div class="row">
 							<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
@@ -115,7 +112,6 @@
 													 <label>ICL:</label><br>
 												     <select *ngIf="mode != 'view'" [ngClass]="editClass" [disabled]="mode == 'view'" 
 			                                         									[(ngModel)]="selectedICLLab" (change)="labICLChange()">
-																<option (value)="select">{{select}}</option>
 																<option *ngFor="let icl of result.proposalInstituteCentreLabs">{{icl.description}}</option>
 													</select>
 													<span *ngIf="mode == 'view' && result?.proposal?.isSmu == true">{{selectedICLLab}}</span>
@@ -180,7 +176,7 @@
 										<th >Title</th>
 			                            <th >Funding Agency</th>
 			                            <th >Funding Scheme</th>
-			                            <th >Grant Theme</th>
+			                            <th style="width:35%">Grant Theme</th>
 			                            <th *ngIf="mode != 'view'">Action</th>
 									</tr>
 									<tr>
@@ -188,7 +184,15 @@
 										<td title="{{(result?.proposal?.grantCall?.grantCallName?.length > 60)?(result?.proposal?.grantCall?.grantCallName):''}}"><span >{{(result?.proposal?.grantCall?.grantCallName?.length > 60 )?(result?.proposal?.grantCall?.grantCallName | slice:0:60):(result?.proposal?.grantCall?.grantCallName)}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.sponsor?.sponsorName}}</span></td>
 										<td ><span >{{result?.proposal?.grantCall?.activityType?.description}}</span></td>
-										<td ><span >{{result?.proposal?.grantCall?.grantTheme}}</span></td>
+										<td style="width:35%">
+												<span *ngIf=" result?.proposal?.grantCall?.grantTheme != null"><p class="textView" *ngIf="!isGrantThemeReadMore">{{(result?.proposal?.grantCall?.grantTheme.length>100)? (result?.proposal?.grantCall?.grantTheme | slice:0:100)+'...' : result?.proposal?.grantCall?.grantTheme}}
+														<span *ngIf="(result?.proposal?.grantCall?.grantTheme?.length>100)" class="hand-cursor fibiDefaultColor italian" (click)="isGrantThemeReadMore = !isGrantThemeReadMore">Read more<i [ngClass]="isGrantThemeReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+														</p>
+														<p *ngIf=" isGrantThemeReadMore" class="textView">{{result?.proposal?.grantCall?.grantTheme}}
+														<span *ngIf="(result?.proposal?.grantCall?.grantTheme?.length>100)" class="hand-cursor fibiDefaultColor italian" (click)="isGrantThemeReadMore = !isGrantThemeReadMore">Show less<i [ngClass]="isGrantThemeReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+														</p>
+												</span>
+										</td>
 										<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 												<li><a href="#" data-target="#deleteGrantCall" data-toggle="modal" (click)="showDeleteGrantCall = true"><i class="fa fa-trash-o" aria-hidden="true" title="remove this grant call"></i></a></li>
 											</ul>
@@ -228,7 +232,7 @@
 									<table class="table table-responsive tableSkin grid2">
 										<tr id="addAreaOfResearchRow" *ngIf=" mode != 'view' && isareaWdgtOpen">
 											<td class="text-right"><label>Type:</label></td>
-											<td><select [ngClass]="editClass" [(ngModel)]="researchTypeSelected" (change)="changeArea($event.target.value)">
+											<td style="width:15%"><select [ngClass]="editClass" [(ngModel)]="researchTypeSelected" (change)="changeArea($event.target.value)">
 											
 														<option *ngFor="let type of result?.proposalResearchTypes" (value)="type">{{type.description}}</option>
 														  </select></td>
@@ -251,15 +255,17 @@
 										</tr>
 										<tbody *ngIf="result?.proposal?.proposalResearchAreas?.length > 0 && isareaWdgtOpen">
 	                                        <tr>
-	                                            <th >Sl No.</th>
-	                                            <th >Code</th>
+	                                            <th style="width:10%">Sl No.</th>
+												<th style="width:10%">Code</th>
+												<th>Type</th>
 	                                            <th  colspan="2">Research Area</th>
 	                                            <th title="" *ngIf="mode != 'view'">Action</th>
 	                                        </tr>
 	                                        <tr *ngFor = "let researchArea of result?.proposal?.proposalResearchAreas; let i = index">
 	                                            <td>{{i+1}}</td>
-												<td *ngIf="researchArea.excellenceAreaCode? researchArea.excellenceAreaCode: researchArea.researchAreaCode;let areaCode; ">{{areaCode}}</td>
-	                                            <td  colspan="2"*ngIf="researchArea.proposalExcellenceArea? researchArea.proposalExcellenceArea.description: researchArea.researchArea.description;let description; ">{{description}}</td>
+												<td style="width:10%" *ngIf="researchArea.excellenceAreaCode? researchArea.excellenceAreaCode: researchArea.researchAreaCode;let areaCode; ">{{areaCode}}</td>
+												<td>{{researchArea.proposalResearchType.description}}</td>
+												<td  colspan="2" *ngIf="researchArea.proposalExcellenceArea? researchArea.proposalExcellenceArea.description: researchArea.researchArea.description;let description; ">{{description}}</td>
 	                                            <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
 														<li><a href="#" data-toggle="modal"
 															data-target="#deleteResearchArea"
@@ -666,7 +672,7 @@
 													<li *ngIf="mode != 'view'"><a (click)="tempSaveAttachments($event,attachment,i)" 
 														data-toggle="modal" data-target="#deleteAttachment"><i
 															class="fa fa-trash-o"></i></a></li>
-													<li><a  (click)="downloadAttachments($event, attachment)" title="Open"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
+													<li><a  (click)="downloadAttachments($event, attachment)" title="download"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
 												</ul>
 											</td>
 									</tr>
@@ -674,7 +680,7 @@
                                  </table>
                                </div>
                                <div class="col-12 text-right">
-                                 	<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#addProposal" *ngIf="mode !='view'" (click)="saveProposal()">Save</button>
+                                 	<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#saveProposal" *ngIf="mode !='view'" (click)="saveProposal()">Save</button>
 									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposal" *ngIf="mode !='view' && result?.proposal?.proposalId" (click)="showSubmittedModal = true">Submit</button>
                                		<button type="button" class="btnSkin btn-secondary" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="disapproveProposal()" >Disapprove</button>
                                		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="approveProposal()">Approve</button>
@@ -682,7 +688,8 @@
 									<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isReviewer == true && result?.isReviewed == false" (click)="approveProposal()">Complete Review</button>
                                		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#confirmSubmit" *ngIf="(mode == 'view') && grantManager == 'true' && result?.proposal?.statusCode == 4" (click)="openConfirm('submit')" >Submit to Provost</button>
                                		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#confirmSubmit" *ngIf="(mode == 'view') && provost == 'true' && result?.proposal?.statusCode == 10" (click)="openConfirm('endorse')" >Endorse</button>
-                               		<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="(mode == 'view') || (mode != 'view' && result?.proposal?.proposalStatus?.statusCode == 9)" (click)="openRouteLog()" >Route Log</button>
+									   <button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="(mode == 'view') || (mode != 'view' && result?.proposal?.proposalStatus?.statusCode == 9)" (click)="openRouteLog()" >Route Log</button>
+									  
                                </div>
                     </div>
 			</section>
@@ -713,10 +720,10 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6" >
 						<label>Application #</label> <span>{{result?.proposal?.proposalId}}</span>
 					</div>
-					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+					<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
 						<label>Title</label> <span>{{result?.proposal?.title}}</span>
 					</div>
-					<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
 						<label>Status</label> <span>{{result?.proposal?.proposalStatus?.description}}</span>
 					</div>
 					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
@@ -910,6 +917,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					</div>
 					<div *ngIf="noAttachmentSelectedMsg"><span class="mandatory font">* No attachments selected</span></div>
 					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">* Please select an attachment type</span></div>
+					<div *ngIf="duplicateAttachmentMsg"><span class="mandatory font"> * Already added the file</span></div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
@@ -946,7 +954,9 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 									</td>
 								</tr>
 								<tr *ngIf = "reviewerAlreadyAddedMsg && result?.loggedInWorkflowDetail?.workflowReviewerDetails?.length >0">
-									<td colspan="8" style="border:none"><span class="mandatory font">*Reviewer already added</span></td></tr>
+									<td colspan="8" style="border:none"><span class="mandatory ">* Reviewer already added</span></td></tr>
+									<tr *ngIf = "noReviewerAdded">
+											<td colspan="8" style="border:none"><span class="mandatory ">* Select atleast one reviewer</span></td></tr>
 								<tbody *ngIf="result?.loggedInWorkflowDetail?.workflowReviewerDetails?.length >0">
 									<tr>
 										<th >Sl No</th>
@@ -1180,7 +1190,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					
 					<table class="table table-responsive tableSkin">
 						<label class="mySkinDialog "><p class="m-0"><b>Comments:</b></p> </label>
-						<textarea placeholder="" class="col-12 col-lg-12 commentBox" rows="2" cols="20" [(ngModel)]="approveComments"></textarea>
+						<textarea placeholder="" class="col-12 col-lg-12 commentBox" rows="2" cols="20" maxlength="254" [(ngModel)]="approveComments"></textarea>
 						</table>
 						<label class="mySkinDialog"><p class="m-0"><b>Add files:</b></p> </label>
 						<file-drop
@@ -1211,7 +1221,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	</div>
 
 
-	<!-- SUBMITTED MODAL -->
+	<!-- Pre SUbmit MODAL -->
 	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmittedModal" tabindex="-1"
 id="submitProposal" tabindex="-1" role="dialog"
 aria-labelledby="deleteModalTitle" aria-hidden="true">
@@ -1228,9 +1238,58 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 			<p>Are you sure you want to submit this application?</p>
 		</div>
 		<div class="modal-footer">
-				
-			<button type="button" class="btnSkin btnSkinPrimary"
-				(click)="submitProposal()" data-dismiss="modal">Ok</button>
+				<button type="button" class="btnSkin btnSkinPrimary"data-dismiss="modal">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposalSuccessful"
+				(click)="submitProposal()" data-dismiss="modal">Yes</button>
+	</div>
+			
+	</div>
+</div>
+</div>
+
+<!-- SAVED SUCCESSFULLY MODAL -->
+
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSaveProposalModal" tabindex="-1"
+id="saveProposal" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Success</h5>
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Application has been saved successfully</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">Ok</button>
+	</div>
+			
+	</div>
+</div>
+</div>
+
+<!-- SUBMIT MODAL SUCCESSFULLY-->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmitSuccessfullyModal" tabindex="-1"
+id="submitProposalSuccessful" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Submit</h5>
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Application has been submitted successfully</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">Ok</button>
 	</div>
 			
 	</div>
