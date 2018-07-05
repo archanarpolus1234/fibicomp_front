@@ -182,16 +182,21 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     isFundDescReadMore: boolean = false;
     isDeliverReadMore: boolean = false;
     budgetDescExpand: any = {};
+    commentsExpand:any = {};
+    commentsGrantAdminExpand:any = {};
+    commentsGrantManagerExpand:any = {};
     reviewerAlreadyAddedMsg = false;
     noAttachmentSelectedMsg: boolean = false;
     duplicateAttachmentMsg: boolean = false;
     noReviewerAdded: boolean = false;
     showSaveProposalModal: boolean = false;
     showSubmitSuccessfullyModal: boolean = false;
+    isAttachmentListOpen: boolean = true;
+    showConfirmGoBack: boolean = false;
 
     public onDestroy$ = new Subject<void>();
 
-    constructor( public grantService: GrantService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public _ngZone: NgZone, public changeRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private sessionService: SessionManagementService, private proposalCreateService: ProposalCreateEditService, public completerService: CompleterService ) {
+    constructor( public grantService: GrantService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public _ngZone: NgZone, public changeRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private sessionService: SessionManagementService, private proposalCreateService: ProposalCreateEditService, public completerService: CompleterService) {
         if ( !sessionService.canActivate() ) {
             localStorage.setItem('currentUrl', window.location.href);
             this.router.navigate( ['/loginpage'] );
@@ -519,6 +524,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.result.proposal.isSmu = flag;
         if ( flag == false ) {
             this.selectedICLLab = this.select;
+            this.result.proposal.proposalInstituteCentreLab = null;
         } else {
             this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
         }
@@ -554,10 +560,12 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         } else if ( this.result.proposal.startDate == null ) {
             this.isDateWarningText = true;
             this.dateWarningText = '* Please select a start date';
-        } else if ( this.result.proposal.startDate < this.currentDate ) {
-            this.isDateWarningText = true;
-            this.dateWarningText = '* Please select a start date from today';
-        } else if ( this.result.proposal.startDate != null && this.result.proposal.endDate != null && this.result.proposal.startDate <= this.result.proposal.endDate ) {
+        } 
+        // else if ( this.result.proposal.startDate < this.currentDate ) {
+        //     this.isDateWarningText = true;
+        //     this.dateWarningText = '* Please select a start date from today';
+        // } 
+        else if ( this.result.proposal.startDate != null && this.result.proposal.endDate != null && this.result.proposal.startDate <= this.result.proposal.endDate ) {
             this.isDateWarningText = false;
             this.differenceBetweenDates( this.result.proposal.startDate, this.result.proposal.endDate );
             /*if ( this.result.proposal.submissionDate != null && ( this.result.proposal.startDate > this.result.proposal.submissionDate || this.result.proposal.submissionDate > this.result.proposal.endDate ) ) {
@@ -885,6 +893,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         this.showAddAttachment = true;
         this.uploadedFile = [];
         this.attachmentDescription = '';
+        this.selectedAttachmentType = this.select;
+        this.noAttachmentSelectedMsg = false;
+        this.ismandatoryFilled = true;
+        this.duplicateAttachmentMsg = false;
     }
 
     tempSaveAttachments( e, attachments, i ) {
@@ -1122,7 +1134,10 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         } else if ( this.proposalTypeSelected == this.select ) {
             this.isMandatory = true;
             this.mandatoryText = '* Please choose proposal type';
-        } else {
+        } else if ( this.result.proposal.isSmu == true && this.selectedICLLab == this.select ) {
+            this.isMandatory = true;
+            this.mandatoryText = '* Please specify the ICL Lab';
+        }  else {
             this.isMandatory = false;
             this.dateValidation();
         }
@@ -1639,6 +1654,14 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
         if (!pattern.test(inputChar)) {
           event.preventDefault();
+        }
+    }
+
+    openGoBackModal() {
+        if( this.result.proposal.statusCode == 1) {
+            this.showConfirmGoBack = true;
+        } else {
+            this.router.navigate(['/dashboard'],{queryParams:{'currentTab':'SMU_PROPOSAL'}});
         }
     }
 
