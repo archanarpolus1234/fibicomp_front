@@ -559,12 +559,25 @@ input[type=number]::-webkit-outer-spin-button {
 
 :host >>> .completer-dropdown {
     width: 100% !important;
-    color: red !important;
-    position: relative !important;
+    color: #26A69A !important;
+    position: absolute !important;
+    top: 35px !important;
+    z-index: 5 !important;
     overflow-y: scroll;
     max-height: 200px !important;
     background: white !important;
     border-left: 1px #26A69A solid !important;
     border-right: 1px #26A69A solid !important;
     border-radius: 10px !important;
+    box-shadow: 3px 3px 3px 0 rgba(0, 0, 0, 0.18) !important; 
+}
+
+:host>>> .completer-holder {
+	position: relative !important;
+}
+
+.popupDatePicker {
+	position: absolute;
+    right: 45px;
+    bottom: 18px;
 }

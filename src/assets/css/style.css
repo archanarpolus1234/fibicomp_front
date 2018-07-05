@@ -1619,11 +1619,6 @@ a:hover {
 	color: #5F5F5F;
 }
 
-.completer-dropdown {
-	overflow-y: auto;
-	max-height: 100px;
-}
-
 .completerID {
 	border-radius: 20px;
 	border: 1px #DEDEDE solid;
@@ -1637,12 +1632,6 @@ a:hover {
 .mandatory {
 	color: red;
 	padding-right: 2px;
-}
-
-:host>>> .completer-dropdown {
-	max-height: 150px !important;
-	overflow-y: scroll;
-	overflow-x: hidden;
 }
 
 :host>>> .completer-input {

@@ -101,6 +101,10 @@ export class Constants {
     submitEndorsementUrl: string;
     approveByProvost: string;
     IRBOutputPath: string;
+    projectVariationRequestUrl: string;
+    viewTemplateUrl: string;
+    getContractAdminUrl: string;
+    submitOSTDetailsUrl: string;
 
 
     constructor() {
@@ -268,6 +272,14 @@ export class Constants {
         this.submitEndorsementUrl = this.baseUrl + this.portAndPath + '/submitForEndorsement';
 
         this.approveByProvost = this.baseUrl + this.portAndPath + '/approveProvost';
+
+        this.projectVariationRequestUrl = this.baseUrl + this.portAndPath + '/createProjectVariationRequest';
+
+        this.viewTemplateUrl = this.baseUrl + this.portAndPath + '/viewTemplate';
+        
+        this.getContractAdminUrl = this.baseUrl + this.portAndPath + '/getContractAdmin';
+        
+        this.submitOSTDetailsUrl = this.baseUrl + this.portAndPath + '/submitOSTDetails';
 
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
         this.outputPath = 'http://demo.fibiweb.com/kc-dev';

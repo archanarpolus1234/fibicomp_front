@@ -179,9 +179,15 @@ export class DashboardComponent implements OnInit {
         this.onDestroy$.next();
         this.onDestroy$.complete();
     }
-
     ngOnInit() {
         var currentTab = this.route.snapshot.queryParamMap.get('currentTab');
+        this.adminStatus = localStorage.getItem( 'isAdmin' );
+        if ( this.adminStatus == 'true' ) {
+            this.isAdmin = true;
+        }
+        this.userName = localStorage.getItem( 'currentUser' );
+        this.fullName = localStorage.getItem( 'userFullname' );
+
         if(currentTab != 'SUMMARY' && currentTab != null) {
             this.showTab(currentTab);
         } else {
@@ -206,12 +212,6 @@ export class DashboardComponent implements OnInit {
             } );
 
            // localStorage.setItem( 'researchSummaryIndex', null );
-            this.adminStatus = localStorage.getItem( 'isAdmin' );
-            this.userName = localStorage.getItem( 'currentUser' );
-            this.fullName = localStorage.getItem( 'userFullname' );
-            if ( this.adminStatus == 'true' ) {
-                this.isAdmin = true;
-            }
             this.subscription = this.dashboardData.dashboardAreaChartData1Variable.subscribe( dashboardAreaChartData1 => {
                 if ( dashboardAreaChartData1.length > 1 ) {
                     this.isDataExpenditureVolume = true;
@@ -814,7 +814,7 @@ export class DashboardComponent implements OnInit {
         this.proposalsPiechartList = [];
         this.pieChartReportType = "";
         this.projectPiechartList =[];
-        this.pieChartReportProjectType = "";
+        this.pieChartReportProtocolType = "";
     }
 
     changeReportPiechartProjectList(temporaryObj) {
@@ -829,4 +829,5 @@ export class DashboardComponent implements OnInit {
         this.protocolPiechartList = [];
         this.pieChartReportProtocolType = "";
     }
+
 }
