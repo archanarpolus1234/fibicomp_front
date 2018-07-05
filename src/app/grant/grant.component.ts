@@ -1,6 +1,6 @@
 import { Component, OnDestroy,ChangeDetectionStrategy,ChangeDetectorRef, NgZone  } from '@angular/core';
-import { ActivatedRoute,Router } from '@angular/router'
-import {Subscription} from 'rxjs/Subscription';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { UploadEvent, UploadFile } from 'ngx-file-drop';
 import { Subject } from 'rxjs';
@@ -113,6 +113,8 @@ export class GrantComponent {
     isOtherInfoReadMore: boolean = false;
     isApplProcReadMore: boolean = false;
     showSaveGrantModal: boolean = false;
+    isAttachmentListOpen: boolean = true;
+    showConfirmGoBack: boolean = false;
 
     constructor( public changeRef :ChangeDetectorRef, public _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public completerService : CompleterService, public router : Router,public route : ActivatedRoute, private grantService: GrantService, private sessionService: SessionManagementService) {
         if ( !sessionService.canActivate() ) {
@@ -123,7 +125,7 @@ export class GrantComponent {
     }
 
     ngOnInit() {
-     this.currentDate.setDate(this.currentDate.getDate()-1);
+     this.currentDate.setDate(this.currentDate.getDate());
        this.grantId = this.route.snapshot.queryParamMap.get('grantId');
         if(this.grantId == null) {
             this.mode='create';
@@ -141,6 +143,9 @@ export class GrantComponent {
                             this.editClass="committeeBox";
                             this.pocClass = this.isSMUChecked ? 'committeeBoxNotEditable': 'committeeBox';
                             this.editAreaClass = 'scheduleBoxes';
+                            /*if(this.result.grantCall.openingDate == null) {
+                                this.result.grantCall.openingDate == this.currentDate;
+                            }*/
                             this.dateValidation();
                             this.selectedSponsorType = (this.result.grantCall.sponsorType != null)? this.result.grantCall.sponsorType.description: this.select;
                             this.selectedSponsor = (this.result.grantCall.sponsor != null)? this.result.grantCall.sponsor.sponsorName: this.select;
@@ -292,10 +297,11 @@ export class GrantComponent {
         if ( this.result.grantCall.openingDate == null ) {
             this.isDateWarningText = true;
             this.dateWarningText = 'Please select a opening date';
-        } else if ( new Date(this.result.grantCall.openingDate) < this.currentDate ) {
+        } /*else if ( new Date(this.result.grantCall.openingDate) < this.currentDate ) {
             this.isDateWarningText = true;
             this.dateWarningText = 'Please select a opening date from today';
-        } else if ( this.result.grantCall.openingDate != null && this.result.grantCall.closingDate != null && new Date(this.result.grantCall.openingDate) <= new Date(this.result.grantCall.closingDate) ) {
+        } */
+        else if ( this.result.grantCall.openingDate != null && this.result.grantCall.closingDate != null && new Date(this.result.grantCall.openingDate) <= new Date(this.result.grantCall.closingDate) ) {
             this.isDateWarningText = false;
             this.differenceBetweenDates( this.result.grantCall.openingDate, this.result.grantCall.closingDate );
             
@@ -327,6 +333,14 @@ export class GrantComponent {
             this.selectedSponsor = this.select;
             this.selectedActivityType = this.select;
             this.selectedFundingType =  this.select;
+            if (this.result.grantCall.openingDate == null) {
+                this.result.grantCall.openingDate = this.currentDate;
+            }
+            if(this.result.grantCall.closingDate == null) {
+                var date = new Date();
+                date.setDate(this.currentDate.getDate() + 1);
+                this.result.grantCall.closingDate = date;
+            }
            /* this.grantService.fetchSponsorsBySponsorType(this.result.sponsorTypes[0].code).takeUntil(this.onDestroy$).subscribe(success=>{
                 var temp :any= {};
                 temp = success;
@@ -350,30 +364,42 @@ export class GrantComponent {
         this.showAddPointOfContact = !this.showAddPointOfContact;
     }
 
-    addPointOfContact(pointOfContactObject) {
+    addPointOfContact( pointOfContactObject ) {
         this.pocDuplicationMessage = false;
-        if(this.validateEmailAndMobile(this.pointOfContactObject.email.trim(),this.pointOfContactObject.mobile) && this.pointOfContactObject.fullName.trim().length>0 ) {
-            if(this.result.grantCall.grantCallContacts.length!=0) {
-            for(let poc of this.result.grantCall.grantCallContacts) {
-                if(poc.email.trim() == this.pointOfContactObject.email.trim()) {
-                    this.pocDuplicationMessage = true;
-                } 
-            }
-            }
-            
-            if(this.pocDuplicationMessage == false) {
-                this.pointOfContactObject.personId = "";
-            this.result.grantCall.grantCallContacts.push(pointOfContactObject);
-            this.pointOfContactObject = {};
-            this.searchTextModel = '';
-            this.valid = true;
-            this.changeRef.detectChanges();
-            } 
-        }else {
-            this.validationError = "Fields are incorrect or not filled";
+        if ( pointOfContactObject.fullName == null || pointOfContactObject.fullName.trim() == "" ) {
+            this.validationError = "Please choose a person";
             this.valid = false;
+        } else {
+            if ( this.validateEmailAndMobile( this.pointOfContactObject.email.trim(), this.pointOfContactObject.mobile ) && this.pointOfContactObject.fullName.trim().length > 0 ) {
+                if ( this.result.grantCall.grantCallContacts.length != 0 ) {
+                    for ( let poc of this.result.grantCall.grantCallContacts ) {
+                        if ( poc.email.trim() == this.pointOfContactObject.email.trim() ) {
+                            this.pocDuplicationMessage = true;
+                            this.validationError = "You have already added the same person";
+                            this.valid = false;
+                        }
+                    }
+                }
+
+                if ( this.pocDuplicationMessage == false ) {
+                    this.pointOfContactObject.personId = "";
+                    if ( this.isSMUChecked == true ) {
+                        pointOfContactObject.isSMUPerson = true;
+                    } else {
+                        pointOfContactObject.isSMUPerson = false;
+                    }
+                    this.result.grantCall.grantCallContacts.push( pointOfContactObject );
+                    this.pointOfContactObject = {};
+                    this.searchTextModel = '';
+                    this.valid = true;
+                    this.changeRef.detectChanges();
+                }
+            } else {
+                this.validationError = "Fields are incorrect or not filled";
+                this.valid = false;
+            }
         }
-       
+
     }
     validateEmailAndMobile(mail,mobile) {
 		if (/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(mail) )
@@ -497,6 +523,7 @@ export class GrantComponent {
     showAddAttachmentPopUp(e) {
         e.preventDefault();
         this.showAddAttachment = true;
+        this.attachmentWarning = false;
         this.uploadedFile = [];
         this.attachmentDescription = '';
         this.selectedAttachmentType = this.select;
@@ -575,7 +602,7 @@ export class GrantComponent {
                     for ( let file of this.uploadedFile ) {
                         if ( attachment.fileName == file.name ) {
                             this.attachmentWarning = true;
-                            this.attachmentWarningMsg = '* Already added the file';
+                            this.attachmentWarningMsg = '* File already added in the list';
                             break label;
                         }
                     }
@@ -586,7 +613,7 @@ export class GrantComponent {
             this.attachmentWarningMsg = '* Please select an attachment type';
         } else if ( this.uploadedFile.length == 0 ) {
             this.attachmentWarning = true;
-            this.attachmentWarningMsg = '* No attachments selected';
+            this.attachmentWarningMsg = '* Please choose atleast one attachment';
         }
         if ( this.attachmentWarning == false) {
             var timestamp = d.getTime();
@@ -772,11 +799,11 @@ export class GrantComponent {
 
     saveGrant() {
         this.showSaveGrantModal = false;
-        if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim() == null || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.result.grantCall.grantTheme==null) {
+        if(this.result.grantCall.grantCallType==null || this.result.grantCall.grantCallStatus == null || this.result.grantCall.grantCallName.trim().length == 0 || this.result.grantCall.openingDate == null || this.result.grantCall.closingDate == null || this.result.grantCall.description.trim() == null || this.result.grantCall.maximumBudget == null || this.isDateWarningText == true || this.result.grantCall.grantTheme==null || ( this.grantCallTypeSelected == 'External' && this.result.grantCall.externalUrl == null)) {
             var scrollTop;
-            /*this.showWarning = true;
-            this.showSavedSuccessfully = false;*/
-            this.saveSuccessfulMessage = "";
+            this.showWarning = true;
+            /*this.showSavedSuccessfully = false;
+            this.saveSuccessfulMessage = "";*/
             //Scroll to Top Javascript Function
              scrollTop = setInterval(function(){ 
                         if(document.body.scrollTop == document.documentElement.scrollTop) {
@@ -934,10 +961,18 @@ export class GrantComponent {
     triggerAdd() {
         $('#addAttach').trigger('click');
     }
-    
-    backToList(e){
+
+    openGoBackModal() {
+        if ( this.result.grantCall.grantStatusCode == 1 ) {//status == Draft
+            this.showConfirmGoBack = true;
+        } else {
+            this.router.navigate( ['/dashboard'], { queryParams: { 'currentTab': 'GRANT' } } );
+        }
+    }
+
+    backToList( e ) {
         e.preventDefault();
-        this.router.navigate(['/dashboard'], { queryParams: { 'currentTab': 'GRANT' } } )
+        this.router.navigate( ['/dashboard'], { queryParams: { 'currentTab': 'GRANT' } } );
     }
     
     _keyPress(event: any) {
