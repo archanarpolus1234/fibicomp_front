@@ -4,10 +4,10 @@
 		<section class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br>
-						<div class="row" *ngIf="result?.proposal?.proposalId || result?.proposal?.ipNumber">
+						<div class="row" >
 							<div class="col-6 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">#{{result?.proposal?.proposalId}}: {{result?.proposal?.title}}</span></div>
 							<div class="col-6 text-right">
-								<button class="btnSkin btnSkinPrimary" (click)="backToList($event)">Back to Application</button>
+								<button class="btnSkin btnSkinPrimary"  data-target="#confirmGoBack" data-toggle="modal" (click)="openGoBackModal()">Back to Application</button>
 								<span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
 						</div>
 						<br>
@@ -110,8 +110,11 @@
 												</div>
 												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3" *ngIf="result?.proposal?.isSmu == true">
 													 <label>ICL:</label><br>
+													 
 												     <select *ngIf="mode != 'view'" [ngClass]="editClass" [disabled]="mode == 'view'" 
-			                                         									[(ngModel)]="selectedICLLab" (change)="labICLChange()">
+																		 
+													 [(ngModel)]="selectedICLLab" (change)="labICLChange()">
+													 <option>{{select}}</option>
 																<option *ngFor="let icl of result.proposalInstituteCentreLabs">{{icl.description}}</option>
 													</select>
 													<span *ngIf="mode == 'view' && result?.proposal?.isSmu == true">{{selectedICLLab}}</span>
@@ -194,7 +197,7 @@
 												</span>
 										</td>
 										<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
-												<li><a href="#" data-target="#deleteGrantCall" data-toggle="modal" (click)="showDeleteGrantCall = true"><i class="fa fa-trash-o" aria-hidden="true" title="remove this grant call"></i></a></li>
+												<li><a href="#" data-target="#deleteGrantCall" data-toggle="modal" (click)="showDeleteGrantCall = true"><i class="fa fa-trash-o" aria-hidden="true" title="Click here to remove this Grant Call"></i></a></li>
 											</ul>
 										</td>
 									</tr>
@@ -270,12 +273,12 @@
 														<li><a href="#" data-toggle="modal"
 															data-target="#deleteResearchArea"
 															(click)="tempSaveArea($event,researchArea,i)"><i
-																class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																class="fa fa-trash-o" aria-hidden="true" title="Click here to delete this Research Area"></i></a></li>
 													</ul></td>
 	                                        </tr>
 	                                        <tr>
 	                                        	<td><label>Description:</label></td>
-	                                        	<td colspan="4"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+	                                        	<td colspan="8"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
 	                                        		<span *ngIf="mode == 'view' && result?.proposal?.researchDescription != null"><p class="textView" *ngIf="mode == 'view' && !isResDescReadMore">{{(result?.proposal?.researchDescription).length>240 ? (result?.proposal?.researchDescription | slice:0:240)+'...' : result?.proposal?.researchDescription}}
 															<span *ngIf="(result?.proposal?.researchDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isResDescReadMore = !isResDescReadMore">Read more<i [ngClass]="isResDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -334,7 +337,7 @@
 											<td class="pull-left"><span><ng2-completer style="border:none; padding:0px"
 															[inputClass]="completerID" placeholder=""
 															[(ngModel)]="selectedHomeUnit"
-															[datasource]="homeUnits" [minSearchLength]="0"
+															[datasource]="homeUnits" [minSearchLength]="0"  clearUnselected="true"
 															[ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
 										
 											</td>
@@ -353,7 +356,8 @@
 										<tbody *ngIf="result?.proposal?.proposalPersons?.length > 0 && isTeamWdgtOpen">
 	                                        <tr>
 	                                            <th >Sl No.</th>
-	                                            <th colspan="2">Name</th>
+												<th colspan="2">Name</th>
+												<!-- <th>Type</th> -->
 	                                            <th >Role</th>
 	                                            <th colspan="2">Home Unit</th>
 	                                            <th colspan="2">Department</th>
@@ -361,7 +365,8 @@
 	                                        </tr>
 	                                        <tr *ngFor="let person of result?.proposal?.proposalPersons; let i = index">
 	                                            <td>{{i+1}}</td>
-	                                            <td colspan="2">{{person.fullName}}</td>
+												<td colspan="2">{{person.fullName}}</td>
+												<!-- <td *ngIf="(person?.personId==null)?'Employee':'Non-Employee';let type">{{type}}</td> -->
 	                                            <td>{{person?.proposalPersonRole?.description}}</td>
 	                                            <td colspan="2">{{person.leadUnitName}}</td>
 	                                            <td colspan="2">{{person.department}}</td>
@@ -369,7 +374,7 @@
 																				<li><a href="#" data-toggle="modal"
 																					data-target="#deleteMemberModal"
 																					(click)="tempSavePerson($event,person, i)"><i
-																						class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																						class="fa fa-trash-o" aria-hidden="true" title="Click here to delete {{person.fullName}}"></i></a></li>
 																			</ul>
 												</td>
 	                                         </tr>
@@ -454,7 +459,7 @@
 									*ngIf="((result?.proposal?.proposalIrbProtocols?.length > 0 || result?.proposal?.proposalSponsors?.length > 0) && mode == 'view') || (mode != 'view')">
 										<i [ngClass]="isDeclareWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
 								</button>
-										<div class="borderBox col-12 innerBorderBox" *ngIf="isDeclareWdgtOpen && !(result?.proposal?.proposalIrbProtocols?.length == 0 && result?.proposal?.proposalSponsors?.length == 0 && mode == 'view')">
+										<div class="borderBox col-12 innerBorderBox" *ngIf="isDeclareWdgtOpen">
 											<h4 class="borderBoxHeading">Funding Support</h4>
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin grid2">
@@ -519,14 +524,14 @@
 																	<li><a href="#" data-toggle="modal"
 																		data-target="#deleteSponsor"
 																		(click)="tempSaveSponsor(proposalSponsor,i)"><i
-																			class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																			class="fa fa-trash-o" aria-hidden="true" title="Click here to delete this Sponsor"></i></a></li>
 																</ul></td>
 				                                         </tr>
 			                                         </tbody>
 	                                      			</table>
 											</div>
 										</div>
-										<div class="borderBox col-12 innerBorderBox" *ngIf="isDeclareWdgtOpen && !(result?.proposal?.proposalIrbProtocols?.length == 0 && result?.proposal?.proposalSponsors?.length == 0 && mode == 'view')">
+										<div class="borderBox col-12 innerBorderBox" *ngIf="isDeclareWdgtOpen">
 											<h4 class="borderBoxHeading">IRB</h4>
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin grid2">
@@ -570,18 +575,18 @@
 																	<li><a href="#" data-toggle="modal"
 																		data-target="#deleteIRB"
 																		(click)="tempSaveIRB($event,protocol,i)"><i
-																			class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																			class="fa fa-trash-o" aria-hidden="true" title="Click here to delete {{protocol?.protocol?.title}}"></i></a></li>
 																</ul></td>
 				                                         </tr>
 			                                         </tbody>
 	                                      			</table>
 											</div>
 										</div>
-										<div class="col-12" *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && result?.proposal?.proposalSponsors?.length == 0 && mode == 'view'">
+										<!-- <div class="col-12" *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && mode == 'view'">
 											<div class="noDataExists regularFont" >
 														There are no IRB protocols linked to this application
 											</div>
-										</div>
+										</div> -->
 							</div>
 							<div class="borderBox col-12">
 									<h4 class="borderBoxHeading">Budget</h4>
@@ -633,7 +638,7 @@
 															<li><a href="#" data-toggle="modal"
 																data-target="#deleteMemberModal"
 																(click)="deleteBudgetConfirmation($event, budget, i)"><i
-																	class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+																	class="fa fa-trash-o" aria-hidden="true" title="Click here to delete this Budget"></i></a></li>
 														</ul></td>
 		                                         </tr>
 	                                         </tbody>
@@ -646,16 +651,21 @@
 								</div>
 	                            <div class="borderBox col-12">
                                <h4 class="borderBoxHeading">Supporting Documents</h4>
-                                <button title="add new attachment" class="addBtn font attachBtn" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
+                                <button title="add new attachment" class="addBtn font attachBtn" style="right:55px" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
 									<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
 								</button>
+								<button id="attachmentExpandBtn" class="addBtn font hoverColor btnPositionFullWidget" (click)="isAttachmentListOpen = !isAttachmentListOpen" *ngIf="(result?.proposal?.proposalAttachments?.length > 0)">
+									<i [ngClass]="isAttachmentListOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+								</button>
+
+
                                <table class="table table-responsive tableSkin grid2">
                                		<tr *ngIf="result?.proposal?.proposalAttachments?.length == 0 && mode == 'view'">
 										<td colspan="5"><div class="noDataExists">
 												There are no attachments uploaded
 											</div></td>
 									</tr>
-									<tbody *ngIf="result?.proposal?.proposalAttachments?.length > 0">
+									<tbody *ngIf="result?.proposal?.proposalAttachments?.length > 0 && isAttachmentListOpen">
 	                                   <tr>
 	                                       <th>Sl No</th>
 	                                       <th>Attachment Type</th>
@@ -666,13 +676,13 @@
 	                                   <tr *ngFor="let attachment of result?.proposal?.proposalAttachments;let i = index">
 											<td>{{i+1}}</td>
 											<td>{{attachment.attachmentType.description}}</td>
-											<td>{{attachment.description}}</td>
-											<td>{{attachment.fileName}}</td>
+											<td title="{{(attachment?.description?.length>60)?(attachment?.description):''}}">{{(attachment?.description?.length > 60)?(attachment?.description | slice:0:60)+'...':(attachment?.description)}}</td>
+											<td title="{{(attachment?.fileName?.length>60)?(attachment?.fileName):''}}">{{(attachment?.fileName?.length > 60)?(attachment?.fileName | slice:0:60)+'...':(attachment?.fileName)}}</td>
 											<td ><ul class="actionButtonGroup">
 													<li *ngIf="mode != 'view'"><a (click)="tempSaveAttachments($event,attachment,i)" 
 														data-toggle="modal" data-target="#deleteAttachment"><i
-															class="fa fa-trash-o"></i></a></li>
-													<li><a  (click)="downloadAttachments($event, attachment)" title="download"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
+															class="fa fa-trash-o" title="Click here to delete {{attachment.fileName}}"></i></a></li>
+													<li><a  (click)="downloadAttachments($event, attachment)" title="Click here to download {{(attachment?.fileName?.length > 20)?(attachment?.fileName | slice:0:20)+'...':(attachment?.fileName)}}"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
 												</ul>
 											</td>
 									</tr>
@@ -713,24 +723,25 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 		</div>
 		<div class="modal-body">
 			
-			<!--  -->
+			
 			<div
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
 				<div class="row">
-					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6" >
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6" >
 						<label>Application #</label> <span>{{result?.proposal?.proposalId}}</span>
 					</div>
-					<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
-						<label>Title</label> <span>{{result?.proposal?.title}}</span>
-					</div>
-					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+					
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 						<label>Status</label> <span>{{result?.proposal?.proposalStatus?.description}}</span>
 					</div>
-					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 						<label>PI</label> <span>{{proposalPIName}}</span>
 					</div>
-					<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 						<label>Home Unit</label> <span>{{proposalLeadUnit}}</span>
+					</div>
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<label>Title</label> <span>{{result?.proposal?.title}}</span>
 					</div>
 				</div>
 			</div>
@@ -757,7 +768,10 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	                            	<td >{{workflow?.approverPersonName}}</td>
 	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
 	                            	<td >{{workflow?.approvalDate | date:'MM/dd/yyyy'}}</td>
-	                                <td >{{workflow?.approvalComment}}</td>
+									<td>{{workflow?.approvalComment | slice:0:20}}<i *ngIf="!commentsGrantManagerExpand[i] && workflow?.approvalComment?.length>30;else showFullGrantManagerComments" (click) = "commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]" class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i>
+													
+										<ng-template #showFullGrantManagerComments>{{workflow?.approvalComment }}<i *ngIf="workflow?.approvalComment?.length>30" (click)="commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
+									</td>
 	                                <td >
 	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
 	                                			<select  class="committeeBoxNotEditable" *ngIf="workflow?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentStopOne[i]">
@@ -777,7 +791,10 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 		                            	<td >{{workflow?.approverPersonName}}</td>
 		                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
 		                            	<td >{{workflow?.approvalDate}}</td>
-		                                <td >{{workflow?.approvalComment}}</td>
+										<td>{{workflow?.approvalComment | slice:0:20}}<i *ngIf="!commentsGrantAdminExpand[i] && workflow?.approvalComment?.length>30;else showFullGrantAdminComments" (click) = "commentsGrantAdminExpand[i] = !commentsGrantAdminExpand[i]" class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantAdminExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i>
+													
+											<ng-template #showFullGrantAdminComments>{{workflow?.approvalComment }}<i *ngIf="workflow?.approvalComment?.length>30" (click)="commentsGrantAdminExpand[i] = !commentsGrantAdminExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantAdminExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
+										</td>
 		                                <td >
 		                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
 		                                			<select  class="committeeBoxNotEditable" *ngIf="workflow?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentStopTwo[i]">
@@ -810,7 +827,9 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 						                            	<td>{{reviewerItem?.reviewerPersonName}}</td>
 						                            	<td>{{reviewerItem?.workflowStatus?.approveStatus}}</td>
 						                            	<td>{{reviewerItem?.reviewDate}}</td>
-						                            	<td>{{reviewerItem?.comments}}</td>
+														<td>{{reviewerItem?.comments | slice:0:20}}<i *ngIf="!commentsExpand[i] && reviewerItem?.comments?.length>30;else showFullComments" (click) = "commentsExpand[i] = !commentsExpand[i]" class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i>
+													
+															<ng-template #showFullComments>{{reviewerItem?.comments }}<i *ngIf="reviewerItem?.comments?.length>30" (click)="commentsExpand[i] = !commentsExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template></td>
 						                            	<td>
 						                            		<span *ngIf="reviewerItem?.workflowAttachments?.length == 0 && reviewerItem?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
 				                                			<select  class="committeeBoxNotEditable" *ngIf="reviewerItem?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentReviewer[j]">
@@ -892,7 +911,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 								</div>
 								<div class="col-xl-8 col-lg-8 col-md-6 col-sm-12 col-8 attach-desc">
 									<label> Description:</label><br/>
-									<textarea id="desc" cols=2 rows="3" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
+									<textarea id="desc" cols=2 rows="1" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
 								</div>
 							</div>
 						</div>
@@ -908,16 +927,16 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					</file-drop>
 					<div class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-							<div class="fileChips">
-								<span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+							<div class="fileChips regularFont">
+								<span *ngFor="let item of uploadedFile; let i=index" title="{{(item?.name?.length > 30)?item?.name:''}}">{{(item?.name?.length > 30)?(item?.name | slice:0:30)+'...':(item?.name)}}
 									<i class="fa fa-close hand-cursor" title="Remove File" (click)="deleteFromUploadedFileList(item)"></i>
 								</span>
 							</div>
 						</div>
 					</div>
-					<div *ngIf="noAttachmentSelectedMsg"><span class="mandatory font">* No attachments selected</span></div>
+					<div *ngIf="noAttachmentSelectedMsg"><span class="mandatory font">* Please choose atleast one attachment</span></div>
 					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">* Please select an attachment type</span></div>
-					<div *ngIf="duplicateAttachmentMsg"><span class="mandatory font"> * Already added the file</span></div>
+					<div *ngIf="duplicateAttachmentMsg"><span class="mandatory font"> * File already added in the list</span></div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
@@ -968,8 +987,9 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 										<td style="padding-left: 10px"><span>{{i+1}}</span></td>
 										<td ><span >{{reviewer?.reviewerPersonId}}</span></td>
 										<td colspan="2"><span >{{reviewer?.reviewerPersonName}}</span></td>
-										<td ><ul class="actionButtonGroup" *ngIf="reviewer?.reviewerDetailId==null">
-												<li><a href="#" (click)="removeSelectedReviewer($event, reviewer, i)"><i class="fa fa-trash-o" aria-hidden="true" title="remove this reviewer"></i></a></li>
+										<td ><ul class="actionButtonGroup" >
+												<li *ngIf="reviewer?.reviewerDetailId==null"><a href="#" (click)="removeSelectedReviewer($event, reviewer, i)"><i class="fa fa-trash-o" aria-hidden="true" title="Click here to remove this reviewer"></i></a></li>
+												<li *ngIf="reviewer?.reviewerDetailId!=null"><a href="#" ><i class="fa fa-check" aria-hidden="true" title="Click here to remove this reviewer"></i></a></li>
 											</ul>
 									</tr>
 								</tbody>
@@ -991,7 +1011,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title">Want to delete?</h5>
+			<h5 class="modal-title">Delete</h5>
 
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
@@ -1024,7 +1044,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Want to delete?</h5>
+					<h5 class="modal-title">Delete</h5>
 
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -1051,7 +1071,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title">Want to delete?</h5>
+			<h5 class="modal-title">Delete</h5>
 
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
@@ -1079,7 +1099,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title">Want to delete?</h5>
+			<h5 class="modal-title">Delete</h5>
 
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
@@ -1106,7 +1126,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title">Want to delete?</h5>
+			<h5 class="modal-title">Delete</h5>
 
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
@@ -1133,7 +1153,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">
 	<div class="modal-content">
 		<div class="modal-header">
-			<h5 class="modal-title">Want to delete?</h5>
+			<h5 class="modal-title">Delete</h5>
 
 			<button type="button" class="close" data-dismiss="modal"
 				aria-label="Close">
@@ -1168,22 +1188,24 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 					</button>
 				</div>
 				<div class="modal-body">
-					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+						<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
 						<div class="row">
-							<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+							<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6" >
 								<label>Application #</label> <span>{{result?.proposal?.proposalId}}</span>
 							</div>
-							<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
-								<label>Title</label> <span>{{result?.proposal?.title}}</span>
-							</div>
-							<div class="col-xl-4 col-lg-4 col-md-6 col-sm-6 col-6">
+							
+							<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 								<label>Status</label> <span>{{result?.proposal?.proposalStatus?.description}}</span>
 							</div>
-							<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+							<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 								<label>PI</label> <span>{{proposalPIName}}</span>
 							</div>
-							<div class="col-xl-2 col-lg-2 col-md-6 col-sm-6 col-6">
+							<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
 								<label>Home Unit</label> <span>{{proposalLeadUnit}}</span>
+							</div>
+							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+								<label>Title</label> <span>{{result?.proposal?.title}}</span>
 							</div>
 						</div>
 					</div>
@@ -1328,3 +1350,31 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	</div>
 </div>
 </div>
+
+<!-- CONFIRM GOBACK MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showConfirmGoBack" tabindex="-1"
+id="confirmGoBack" tabindex="-1" role="dialog"
+aria-labelledby="confirmGoBackModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Warning..!</h5>
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>You are currently creating/editing an application. Unsaved changes may lost if you go back. Do you want to stay on this page.?</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="backToList($event)">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="showConfirmGoBack = false" data-dismiss="modal">Yes</button>
+		</div>
+			
+	</div>
+</div>
+</div>
+
