@@ -6,7 +6,12 @@
 			<div id="myawa"
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br/>
-				<div class="topHeading"> MY AWARD</div>
+				<div class="row">
+					<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-left"><span class="topHeading">MY AWARD</span></div>
+					<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 text-right ">
+						<button class="btnSkin btnSkinPrimary" (click)="backToList($event)">Back to Project</button>
+					</div>
+				</div>
 			</div>
 			<div
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
@@ -55,13 +60,13 @@
 								[href]="outputPathAB+'/award.search?username='+currentUser+'&isSMU=true#/budget?awardNumber='+awardNumber+'&from=EDIT_DETAILS&versionNumber='+latest_version_number">
 								<i class="fa fa-external-link"></i> View Award Budget
 							</a>
-							<a class="view_external_link" title="create project variation request"
+							<a class="view_external_link" title="Create project variation request"
 								[href]="outputPathOST+'/dashboard?username='+currentUser+'&isSMU=true#/createform' ">
 								<i class="fa fa-external-link"></i> Create Variation Request
 							</a>	
 							<a class="view_external_link" title="Open {{awardNumber}}"
 								[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FawardHome.do%3FmethodToCall%3DdocHandler%26placeHolderAwardId%3D'+awardId+'%26docId%3D'+this.documentNumber+'%26command%3DdisplayDocSearchView%26businessObjectClassName%3Dorg.kuali.kra.award.home.Award%26docFormKey%3D88888888&__login_user='+currentUser+'&kcComp=true'">
-								<i class="fa fa-external-link"></i> Open Award
+								 Open Award
 							</a>
 						</ul>
 					</div>

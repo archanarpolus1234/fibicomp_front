@@ -142,7 +142,7 @@ input[type=number]::-webkit-outer-spin-button {
 }
 
 .forTextAreaEntry {
-	color: #5F5F5F !important;
+	/* color: #5F5F5F !important; */
 	height: auto !important;
 }
 
@@ -551,4 +551,20 @@ input[type=number]::-webkit-outer-spin-button {
 	width: 50%;
 	height: 1.2em;
 	margin: .75em;
+}
+
+.btnPositionFullWidget {
+	right: 18px;
+}
+
+:host >>> .completer-dropdown {
+    width: 100% !important;
+    color: red !important;
+    position: relative !important;
+    overflow-y: scroll;
+    max-height: 200px !important;
+    background: white !important;
+    border-left: 1px #26A69A solid !important;
+    border-right: 1px #26A69A solid !important;
+    border-radius: 10px !important;
 }

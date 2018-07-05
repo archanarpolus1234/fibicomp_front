@@ -4,16 +4,17 @@
 		<section class="row">
 			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="result.grantCall!={}">
 				<br>
-				<div class="row" *ngIf="grantId != null">
+				<div class="row">
 					<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-left"><span *ngIf="grantId != null" class="topHeading">#{{grantId}} : {{result?.grantCall?.grantCallName}}</span></div>
 					<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 text-right ">
-						<button class="btnSkin btnSkinPrimary" (click)="backToList($event)">Back to Grant Call</button>
 						<span *ngIf="result?.grantCall?.grantCallStatus?.description == 'Open'" class = "grantCall_create_proposal_link">
 						<button class="btnSkin btnSkinPrimary" (click)="navigate($event, 'create')">Create Application</button></span>
 						<!-- <span class="linkButtonGroup"> <a (click)="navigate($event, 'create')">
 								<i class="fa fa-plus"></i> Create New Project
 						</a>
-						</span> --></div>
+						</span> -->
+						<button class="btnSkin btnSkinPrimary" data-target="#confirmGoBack" data-toggle="modal" (click)="openGoBackModal()">Back to Grant Call</button>
+					</div>
 				</div>
 				<br>
 					<div class="row" id="fadeOutMessage" *ngIf="showSavedSuccessfully">
@@ -48,10 +49,10 @@
 												<span *ngIf="mode == 'view'" >{{result?.grantCall?.closingDate | date: 'MM/dd/yyyy'}}</span>
 											</div>
 										</div>
-										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"  *ngIf="isDateWarningText"><span class="mandatory font">*{{dateWarningText}}</span>
+										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"  *ngIf="isDateWarningText"><span class="mandatory font">* {{dateWarningText}}</span>
 										</div>
 										<div class="row">
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" ><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Description:</label><br><textarea rows="3" placeholder = "" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.description" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6" ><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Description:</label><br><textarea rows="2" placeholder = "" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.description" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
 															<p *ngIf="mode == 'view' && !isDescReadMore">{{(result?.grantCall?.description).length>240 ? (result?.grantCall?.description | slice:0:240)+'...' : result?.grantCall?.description}}
 															<span *ngIf="(result?.grantCall?.description.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDescReadMore = !isDescReadMore">Read more<i [ngClass]="isDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -59,7 +60,7 @@
 															<span *ngIf="(result?.grantCall?.description.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDescReadMore = !isDescReadMore">Show less<i [ngClass]="isDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
 															</div>
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Grant Theme</label><textarea rows="3" placeholder="" *ngIf="mode != 'view'" maxlength="3999" [(ngModel)] = "result.grantCall.grantTheme" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Grant Theme</label><textarea rows="2" placeholder="" *ngIf="mode != 'view'" maxlength="3999" [(ngModel)] = "result.grantCall.grantTheme" class="forTextAreaEntry" [ngClass]="editAreaClass"></textarea>
 															<p *ngIf="mode == 'view' && !isThemeReadMore">{{(result?.grantCall?.grantTheme).length>240 ? (result?.grantCall?.grantTheme | slice:0:240)+'...' : result?.grantCall?.grantTheme}}
 															<span *ngIf="(result?.grantCall?.grantTheme.length>300)" class="hand-cursor fibiDefaultColor italian" (click)="isThemeReadMore = !isThemeReadMore">Read more<i [ngClass]="isThemeReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -67,8 +68,6 @@
 															<span *ngIf="(result?.grantCall?.grantTheme.length>300)" class="hand-cursor fibiDefaultColor italian" (click)="isThemeReadMore = !isThemeReadMore">Show less<i [ngClass]="isThemeReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
 															</div>
-										</div>
-										<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"  *ngIf="showWarning"><span class="mandatory font">* Please fill the mandatory fields</span>
 										</div>
 										<div class="row">
 											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" class="dateBox" />
@@ -90,13 +89,13 @@
 														No lead unit specified</span>
 											</div>
                                         	<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" *ngIf="grantCallTypeSelected == 'External'">
-                                        		<label>External Weblink:</label><br><input *ngIf="mode != 'view'" class="dateBox" type="text" placeholder="" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass"/>
+                                        		<label><span class="mandatory" *ngIf="mode != 'view'">*</span> External Weblink:</label><br><input *ngIf="mode != 'view'" class="dateBox" type="text" placeholder="" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass"/>
                                        			<span *ngIf="mode == 'view'">{{result?.grantCall?.externalUrl}}</span>
                                        			<span *ngIf="mode == 'view' && result.grantCall.externalUrl == null" class="noDataExists">No external link provided</span>
                                        		</div>
                                         </div>
                                         <div class="row">
-											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-4" ><label>Application Procedure:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="" maxlength="3999" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-4" ><label>Application Procedure:</label><br><textarea rows="2" *ngIf="mode != 'view'" placeholder="" maxlength="3999" [(ngModel)] = "result.grantCall.applicationProcedure" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
 														<span *ngIf="mode == 'view' && result?.grantCall?.applicationProcedure != null"><p *ngIf="mode == 'view' && !isApplProcReadMore">{{(result?.grantCall?.applicationProcedure).length>240 ? (result?.grantCall?.applicationProcedure | slice:0:240)+'...' : result?.grantCall?.applicationProcedure}}
 															<span *ngIf="(result?.grantCall?.applicationProcedure.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isApplProcReadMore = !isApplProcReadMore">Read more<i [ngClass]="isApplProcReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 															</p>
@@ -107,7 +106,7 @@
 														<span *ngIf="mode == 'view' && result?.grantCall?.applicationProcedure == null" class="noDataExists">No procedure details provided</span>
 											</div>
 											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
-                                       			<label>Other Information:</label><br><textarea rows="3" *ngIf="mode != 'view'" placeholder="" maxlength="3999" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
+                                       			<label>Other Information:</label><br><textarea rows="2" *ngIf="mode != 'view'" placeholder="" maxlength="3999" [(ngModel)] = "result.grantCall.otherInformation" [ngClass]="editAreaClass" class="forTextAreaEntry" ></textarea>
                                            		<span *ngIf="mode == 'view' && result?.grantCall?.otherInformation != null"><p *ngIf="mode == 'view' && !isOtherInfoReadMore">{{(result?.grantCall?.otherInformation).length>240 ? (result?.grantCall?.otherInformation | slice:0:240)+'...' : result?.grantCall?.otherInformation}}
 													<span *ngIf="(result?.grantCall?.otherInformation.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isOtherInfoReadMore = !isOtherInfoReadMore">Read more<i [ngClass]="isOtherInfoReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
 													</p>
@@ -192,7 +191,7 @@
                                  </div>   
                                  <div class="borderBox col-12">
 										<h4 class="borderBoxHeading">Point of Contact</h4>
-										<button id="pointOfContactAddBtn" class="addBtn font hoverColor" (click)="showaddPointOfContact()" 
+										<button id="pointOfContactAddBtn" class="addBtn font hoverColor btnPositionFullWidget" (click)="showaddPointOfContact()" 
 											*ngIf="(result?.grantCall?.grantCallContacts?.length > 0 && mode == 'view') || (mode != 'view')"><i class="fa-large" [ngClass]="showAddPointOfContact?'fa fa-angle-double-up':'fa fa-angle-double-down'"></i>
 										</button>
 										<table class="table table-responsive tableSkin grid2">
@@ -207,7 +206,7 @@
 													</label> <br>
 													<input type="text" *ngIf="!isSMUChecked" [ngClass]="editClass" placeholder="" [(ngModel)] = "pointOfContactObject.fullName" [disabled]="mode == 'view'">
 													<div class="searchBox memberSearchBox" *ngIf="isSMUChecked">
-																		<input type="text" placeholder="" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+																		<input type="text" placeholder="Search here for contact person" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
 																			[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
 																			class="searchButton" (click)="clearSearchBox($event)"><i
 																			[ngClass]="iconClass"></i></a>
@@ -249,6 +248,7 @@
 													<th >Designation</th>
 													<th >Email</th>
 													<th >Phone</th>
+													<!-- <th >Is SMU Person</th> -->
 													<th *ngIf="mode != 'view'">Action</th>
 						
 												</tr>
@@ -258,6 +258,7 @@
 													<td>{{pointOfContact.designation}}</td>
 													<td>{{pointOfContact.email}}</td>
 													<td>{{pointOfContact.mobile}}</td>
+													<!-- <td><i [ngClass]="(pointOfContact.isSMUPerson == true)?'fa fa-check-square-o fa-large':'fa fa-times fa-large'"></i></td> -->
 													<td *ngIf="mode != 'view'">
 														<ul class="actionButtonGroup">
 															<li><a href="#" data-toggle="modal"
@@ -267,8 +268,9 @@
 														</ul>
 													</td>
 												</tr>
-												<div *ngIf="!valid"><span class="mandatory warningMessage">*{{validationError}}</span></div>
-												<tr *ngIf="pocDuplicationMessage"><span class="mandatory warningMessage">*Same person already added</span></tr>
+												<tr *ngIf="!valid">
+													<td colspan="6"><span class="mandatory">* {{validationError}}</span></td>
+												</tr>
 											</tbody>
 											<tr *ngIf="result?.grantCall?.grantCallContacts?.length == 0 && mode == 'view'">
 												<td colspan="6"><div class="noDataExists">
@@ -291,9 +293,9 @@
                                                                 		<tr id="addAreaOfResearchRow" *ngIf="addResearch && mode != 'view'">
 																			<td colspan="3"><label>Research Area:</label><br/>
 																				<div>
-																					 <ng2-completer title="Add area of research"
+																					 <ng2-completer title=""
 																						[inputClass]="completerID"
-																						[(ngModel)]="selectedResearchArea" placeholder=""
+																						[(ngModel)]="selectedResearchArea" placeholder="Search here for Area of Research"
 																						[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
 																						
 																				</div>
@@ -388,11 +390,15 @@
                                                         </div>
                                                         <div class="borderBox col-12">
                                                                         <h4 class="borderBoxHeading">Supporting Documents</h4>
-                                                                        <button title="add new attachment" class="addBtn font attachBtn" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
+                                                                        <button title="add new attachment" class="addBtn font attachBtn" style="right:55px" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
 																				<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
 																		</button>
+																		<button id="attachmentExpandBtn" class="addBtn font hoverColor btnPositionFullWidget" (click)="isAttachmentListOpen = !isAttachmentListOpen" 
+                                                                        	*ngIf="(result?.grantCall?.grantCallAttachments?.length > 0)">
+																			<i [ngClass]="isAttachmentListOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+																		</button>
                                                                         <table class="table table-responsive tableSkin grid2">
-                                                                        	<tbody *ngIf = "result?.grantCall?.grantCallAttachments?.length > 0">
+                                                                        	<tbody *ngIf = "result?.grantCall?.grantCallAttachments?.length > 0 && isAttachmentListOpen">
                                                                                 <tr >
                                                                                         <th >Sl No</th>
                                                                                         <th >Attachment Type</th>
@@ -407,9 +413,10 @@
                                                                                         <td title="{{(attachment?.fileName?.length>60)?(attachment?.fileName):''}}">{{(attachment?.fileName?.length > 60)?(attachment?.fileName | slice:0:60)+'...':(attachment?.fileName)}}</td>
 	                                                                                    <td ><ul class="actionButtonGroup">
 																								<li *ngIf="mode != 'view'"><a (click)="tempSaveAttachments($event,attachment,i)" *ngIf="editScheduleattachment == true" 
-																									data-toggle="modal" data-target="#deleteAttachment"><i
-																										class="fa fa-trash-o" title="remove this attached item"></i></a></li>
-																								<li><a  (click)="downloadAttachments($event, attachment)" title="download this attachment"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
+																									data-toggle="modal" data-target="#deleteAttachment" title="Click here to delete {{(attachment?.fileName?.length > 20)?(attachment?.fileName | slice:0:20)+'...':(attachment?.fileName)}}"><i
+																										class="fa fa-trash-o" ></i></a></li>
+																								<li><a  (click)="downloadAttachments($event, attachment)" title="Click here to download {{(attachment?.fileName?.length > 20)?(attachment?.fileName | slice:0:20)+'...':(attachment?.fileName)}}"> 
+																									<i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
 																							</ul>
                                                                                 		</td>
 																				</tr>
@@ -466,7 +473,7 @@
 								</div>
 								<div class="col-xl-8 col-lg-8 col-md-6 col-sm-12 col-8 attach-desc">
 									<label>Description:</label><br/>
-									<textarea id="desc" rows="3" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
+									<textarea id="desc" rows="1" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
 								</div>
 							</div>
 						</div>
@@ -482,7 +489,9 @@
 					<div class="row">
 						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 							<div class="fileChips regularFont">
-								<span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+								<span *ngFor="let item of uploadedFile; let i=index"
+									title="{{(item?.name?.length > 30)?item?.name:''}}">
+										{{(item?.name?.length > 30)?(item?.name | slice:0:30)+'...':(item?.name)}}
 									<i class="fa fa-close hand-cursor" title="Remove File" (click)="deleteFromUploadedFileList(item)"></i>
 								</span>
 							</div>
@@ -507,7 +516,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Want to delete?</h5>
+					<h5 class="modal-title">Delete</h5>
 
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -535,7 +544,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Want to delete?</h5>
+					<h5 class="modal-title">Delete</h5>
 
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -562,7 +571,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Want to delete?</h5>
+					<h5 class="modal-title">Delete</h5>
 
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -589,7 +598,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Want to delete?</h5>
+					<h5 class="modal-title">Delete</h5>
 
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -616,7 +625,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Want to Publish?</h5>
+					<h5 class="modal-title">Publish</h5>
 
 					<button type="button" class="close" data-dismiss="modal"
 						aria-label="Close">
@@ -624,7 +633,7 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<p>Are you sure you want to publish this grant?</p>
+					<p>Are you sure you want to publish this grant call?</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btnSkin btn-secondary"
@@ -659,4 +668,31 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	</div>
 </div>
 </div>
+
+<!-- CONFIRM GOBACK MODAL -->
+	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showConfirmGoBack" tabindex="-1"
+		id="confirmGoBack" tabindex="-1" role="dialog"
+		aria-labelledby="confirmGoBackModalTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Warning..!</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>You are currently creating/editing a grant call. Unsaved changes may lost if you go back. Do you want to stay on this page.?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary"
+						data-dismiss="modal" data-toggle="modal" (click)="backToList($event)">No</button>
+					<button type="button" class="btnSkin btnSkinPrimary"
+						(click)="showConfirmGoBack = false" data-dismiss="modal">Yes</button>
+				</div>
+					
+			</div>
+		</div>
+	</div>
 	

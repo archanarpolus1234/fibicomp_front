@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AwardSummaryService } from './award-home/award-summary.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AwardHierarchyService } from '../award/award-hierarchy/award-hierarchy.service';
 import { Constants } from '../constants/constants.service';
 import {AwardconfigurationService} from '../award/awardconfiguration.service';
@@ -32,7 +32,7 @@ export class AwardComponent {
     outputPathOST: string;
     currentUser: string;
     
-    constructor( public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, public awardconfigurationService: AwardconfigurationService ) {
+    constructor( public router: Router, public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, public awardconfigurationService: AwardconfigurationService ) {
         this.outputPath = this.constant.outputPath;
         this.outputPathAB = this.constant.outputPathAB;
         this.outputPathOST = this.constant.outputPathOST;
@@ -69,5 +69,10 @@ export class AwardComponent {
     ngOnDestroy() {
         this.currentValueSub.unsubscribe();
         this.loadAwardSub.unsubscribe();
+    }
+
+    backToList( e ) {
+        e.preventDefault();
+        this.router.navigate( ['/dashboard'], { queryParams: { 'currentTab': 'AWARD' } } );
     }
 }
