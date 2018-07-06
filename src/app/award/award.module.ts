@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TreeModule } from 'angular-tree-component';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
 import { AwardComponent } from "./award.component";
 import { RouterModule } from "@angular/router";
@@ -19,8 +21,11 @@ const routes = [{ path: '', component: AwardComponent }];
 @NgModule( {
     imports: [
         CommonModule,
+        FormsModule,
         RouterModule.forChild( routes ),
-        TreeModule
+        TreeModule,
+        OwlDateTimeModule,
+        OwlNativeDateTimeModule
     ],
     declarations: [
         AwardComponent,

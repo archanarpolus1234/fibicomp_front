@@ -24,10 +24,10 @@
 						(click)="showTab('IACUC')"> IACUC </a></li>
 					<li [ngClass]="{'active': currentPosition == 'DISCLOSURE'}"><a
 						(click)="showTab('DISCLOSURE')"> Disclosures </a></li>
-					<li [ngClass]="{'active': currentPosition == 'COMMITTEE'}"><a
+					<!-- <li [ngClass]="{'active': currentPosition == 'COMMITTEE'}"><a
 						(click)="showTab('COMMITTEE')"> Committee</a></li>
 					<li [ngClass]="{'active': currentPosition == 'SCHEDULE'}"><a
-						(click)="showTab('SCHEDULE')"> Schedules</a></li>
+						(click)="showTab('SCHEDULE')"> Schedules</a></li> -->
 					<li *ngIf="isAdmin" [ngClass]="{'active': currentPosition == 'GRANTREPORT'}"><a
 						(click)="showTab('GRANTREPORT')"> Reports</a></li>
 				</ul>
@@ -63,11 +63,11 @@
 								<i class="fa fa-eye"></i> View Variation Request
 						</a>
 						</span>
-						<span class="linkButtonGroup"> <a
-							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/createform' ">
+						<!-- <span class="linkButtonGroup">  <a
+							[href]=" outputPathOST+'/dashboard?username='+userName+'&isSMU=true#/createform' "> 
 								<i class="fa fa-plus"></i> Create Project Variation Request
-						</a>
-						</span> 
+						 </a>
+						</span>  -->
 					</div>
 				</div>
 				<div class="row" *ngIf="(currentPosition == 'IRB')">
@@ -514,7 +514,7 @@
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'awardNumber')}"></span>
 								</th>
-								<th (click)="sortResult('accountNumber',currentPosition)" class="hand-cursor"
+								<th style="width: 10%" (click)="sortResult('accountNumber',currentPosition)" class="hand-cursor"
 									title="Click to sort by Account #">Account #<span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'accountNumber')}"></span>
@@ -1074,7 +1074,7 @@
 						<tbody>
 							<tr *ngFor="let proposal of serviceRequestList">
 								<td>{{proposal.proposalId}}</td>
-								<td>{{proposal.title}}</td>
+								<td title="{{proposal.title}}">{{proposal.title | slice:0:40}}<span *ngIf="proposal.title.length>40">...</span></td>
 								<td>{{proposal.applicationCategory}}</td>
 								<td>{{proposal.applicationType}}</td>
 								<td>{{proposal.applicationStatus}}</td>
@@ -1140,7 +1140,7 @@
 												  	<td class="text-right" *ngIf="selectedReportName != select"><span *ngIf="selectedReportName != 'Expenditure by Project'">Grant Call:</span>
 												  						   <span *ngIf="selectedReportName == 'Expenditure by Project'">Project:</span>
 												  	</td>
-													<td >
+													<td style="width:35%">
 														<div *ngIf="selectedReportName != select">
 																<ng2-completer 
 																		[inputClass]="completerID"
@@ -1167,7 +1167,7 @@
 													</tr>
 													<tr *ngFor="let proposal of proposals">
 														<td>{{proposal?.proposalId}}</td>
-														<td>{{proposal?.title}}</td>
+														<td title="{{proposal.title}}">{{(proposal.title.length>60? (proposal.title | slice : 0 : 59)+'...': (proposal.title)) }}</td>
 														<td>{{proposal?.startDate | date: 'MM/dd/yyyy'}}</td>
 														<td>{{proposal?.endDate | date: 'MM/dd/yyyy'}}</td>
 														<td>{{proposal?.grantCall?.homeUnitName}}</td>

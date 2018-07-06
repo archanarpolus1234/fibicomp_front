@@ -60,8 +60,8 @@
 								[href]="outputPathAB+'/award.search?username='+currentUser+'&isSMU=true#/budget?awardNumber='+awardNumber+'&from=EDIT_DETAILS&versionNumber='+latest_version_number">
 								<i class="fa fa-external-link"></i> View Award Budget
 							</a>
-							<a class="view_external_link" title="Create project variation request"
-								[href]="outputPathOST+'/dashboard?username='+currentUser+'&isSMU=true#/createform' ">
+							<a class="view_external_link hand-cursor" title="Create project variation request" (click)="createProjectVariationRequest()" data-toggle="modal" data-target="#OSTRequest">
+								<!-- [href]="outputPathOST+'/dashboard?username='+currentUser+'&isSMU=true#/createform' "> -->
 								<i class="fa fa-external-link"></i> Create Variation Request
 							</a>	
 							<a class="view_external_link" title="Open {{awardNumber}}"
@@ -88,3 +88,119 @@
 		<div class="footerPush"></div>
 	</div>
 </div>
+
+<!-- CREATE PROJECT VARIATION REQUEST MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" id="OSTRequest"
+		tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle"
+		aria-hidden="true" *ngIf="createOSTRequest">
+		<div class="modal-dialog modal-lg modal-dialog-centered"
+			role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="skippedSchedulesLongTitle">Create Project Variation Request</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" title="Close" (click)="createOSTRequest = false">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div class="pullSide">
+						<div class="gridSkin">
+							<div class="row">
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+									<label>Status: {{serviceRequest.status}}</label>
+								</div>	
+							</div>
+							<div class="row" *ngIf="pvr_errorString != ''">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+									<span class="mandatory">* Please fill all mandatory fields{{pvr_errorString}}</span>
+								</div>
+							</div>
+							<div class="row" *ngIf="isPVRsave == true">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+									<span class="routeLogStatus">{{successMsg}}</span>
+								</div>
+							</div>
+							<div class="row">
+									<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8">
+										<label><span  *ngIf="isPVRsave != true" class="mandatory">*</span>Subject:</label>
+										<input type="text" *ngIf="isPVRsave != true" class="dateBox committeeBox" placeholder="Type here the Subject of the Request" [(ngModel)]="serviceRequest.summary"/>
+										<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0].SUMMARY}}</span>
+									</div>
+							</div>
+							<div class="row">
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
+									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Category:</label>
+									<select *ngIf="isPVRsave != true" class="committeeBox dateBox" [(ngModel)]="serviceRequest.ostCategoryCode" (ngModelChange)="checkCategory(serviceRequest.ostCategoryCode, serviceRequest.serviceTypeCode)">
+										<option [value]=null>{{select}}</option>
+										 <option *ngFor="let category of this.projectVariationRequest_categoryMap" [value]="category.CATEGORY_CODE">
+											{{category.DESCRIPTION}}
+										</option> 
+									</select>
+									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0].CATEGORY}}</span>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
+									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Type:</label>
+									<select  *ngIf="isPVRsave != true" class="committeeBox dateBox" [(ngModel)]="serviceRequest.serviceTypeCode" (ngModelChange)="checkCategory(serviceRequest.ostCategoryCode, serviceRequest.serviceTypeCode)">
+										<option [value]=null>{{select}}</option>
+										 <option *ngFor="let type of this.projectVariationRequest_typeMap" [value]="type.TYPE_CODE">
+											{{type.DESCRIPTION}}
+										</option>
+									</select>
+									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0].SERVICE_TYPE}}</span>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
+									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Project Extension Date:</label>
+									<input type="text" *ngIf="isPVRsave != true" placeholder="MM/dd/YYYY" [(ngModel)]="serviceRequest.arrivalDate" 
+															[owlDateTime]="arrivalDt"  class="dateWidth committeeBox"  
+															[ngClass]="editClass" />
+									<i  *ngIf="isPVRsave != true" class="fa fa-calendar fa-large hand-cursor popupDatePicker" [owlDateTimeTrigger]="arrivalDt"></i>
+									<owl-date-time #arrivalDt [pickerType]="'calendar'"></owl-date-time>
+									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0].ARRIVAL_DATE | date: 'MM/dd/yyyy'}}</span>
+								</div>
+							</div>
+							<div class="row" *ngIf="noCategoryMsg == true">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><span class="mandatory">Please select Category</span></div>
+							</div>
+							<div class="row">
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
+									<label><span  *ngIf="isPVRsave != true" class="mandatory">*</span>Department:</label>
+									<select  *ngIf="isPVRsave != true" class="committeeBox dateBox" [(ngModel)]="serviceRequest.unitNumber" (ngModelChange)="getContractAdmin(serviceRequest.unitNumber)">
+										<option [value]=null>{{select}}</option>
+										 <option *ngFor="let department of this.projectVariationRequest_departmentList" [value]="department.UNIT_NUMBER">
+											{{department.UNIT_NAME}}
+										</option>
+									</select>
+									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0].UNIT_NAME}}</span>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
+									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Grant Manager/Administrator:</label>
+									<input type="text" *ngIf="isPVRsave != true" class="dateBox committeeBox" [(ngModel)]="serviceRequest.contractAdminName"/>
+									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0].CURRENT_CA_NAME}}</span>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
+									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Reporter:</label>
+									<input type="text"  *ngIf="isPVRsave != true" class="dateBox committeeBox" [(ngModel)]="fullName"/> 
+									<span *ngIf="isPVRsave == true">{{fullName}}</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Description:</label>
+									<!-- <textarea class="scheduleBoxes forTextAreaEntry" cols=4 [disabled]="createOSTRequest == true" [value]="projectVariationRequest_templateList[0]?.TEMPLATE"></textarea> -->
+									<div class="scheduleBoxes forTextAreaEntry" [innerHTML]="projectVariationRequest_templateList[0]?.TEMPLATE">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" *ngIf="isPVRsave != true" class="btnSkin btn-secondary" title="Cancel" data-dismiss="modal" (click)="closePVRPopup()">Cancel</button>
+					<button type="button" *ngIf="isPVRsave != true" class="btnSkin btnSkinPrimary" title="Save Project Variation Request" (click)="saveProjectVariationRequest(serviceRequest)">Save</button>
+					<button type="button" *ngIf="isPVRsave == true" class="btnSkin btn-secondary" title="Close" data-dismiss="modal" (click)="closePVRPopup()">Close</button>
+					<button type="button" *ngIf="isPVRsave == true" class="btnSkin btnSkinPrimary" title="Open Project Variation Request" (click)="openOSTRequest()">Open</button>
+				</div>
+			</div>
+		</div>
+	</div>
+

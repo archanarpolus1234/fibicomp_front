@@ -318,5 +318,22 @@
 	"/approveProvost": {
 		"target": "http://192.168.1.76:8080/fibi-comp",
 		"secure": false
+	},
+	"/createProjectVariationRequest": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/viewTemplate": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/getContractAdmin": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/submitOSTDetails": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
 	}
+	
 }
