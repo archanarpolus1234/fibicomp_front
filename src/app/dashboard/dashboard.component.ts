@@ -612,21 +612,21 @@ export class DashboardComponent implements OnInit {
     }
 
     expandedView( summaryView ) {
-        if ( summaryView == 'Submitted Proposal' ) {
+        if ( summaryView == 'Submitted Application' ) {
             //localStorage.setItem( 'researchSummaryIndex', "PROPOSALSSUBMITTED" );
             this.expandedViewDataservice.setResearchSummaryIndex("PROPOSALSSUBMITTED");
             //localStorage.setItem( 'expandedViewHeading', summaryView );
             this.expandedViewDataservice.setExpandedViewHeading(summaryView);
             this.router.navigate( ['/expandedview'],{queryParams:{"summaryIndex" : "PROPOSALSSUBMITTED","summaryheading" : summaryView}} );
         }
-        if ( summaryView == 'In Progress Proposal' ) {
+        if ( summaryView == 'In Progress Application' ) {
            // localStorage.setItem( 'researchSummaryIndex', "PROPOSALSINPROGRESS" );
             this.expandedViewDataservice.setResearchSummaryIndex("PROPOSALSINPROGRESS");
             //localStorage.setItem( 'expandedViewHeading', summaryView );
             this.expandedViewDataservice.setExpandedViewHeading(summaryView);
             this.router.navigate( ['/expandedview'],{queryParams:{"summaryIndex" : "PROPOSALSINPROGRESS","summaryheading" : summaryView}} );
         }
-        if ( summaryView == 'Active Award' ) {
+        if ( summaryView == 'Active Projects' ) {
             this.expandedViewDataservice.setResearchSummaryIndex("AWARDSACTIVE");
             this.expandedViewDataservice.setExpandedViewHeading(summaryView);
             this.router.navigate( ['/expandedview'],{queryParams:{"summaryIndex" : "AWARDSACTIVE","summaryheading" : summaryView}} );

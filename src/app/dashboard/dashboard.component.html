@@ -1203,7 +1203,7 @@
 													<tr *ngFor="let award of awards">
 														<td>{{award?.awardNumber}}</td>
 														<td>{{award?.accountNumber}}</td>
-														<td>{{award?.title}}</td>
+														<td title="award.title">{{((award.title.length>60)?(award.title | slice:0:60)+'...' : (award.title))}}</td>
 														<td>{{award?.unitName}}</td>
 														<td>{{award?.sponsor}}</td>
 														<td>{{award?.fullName}}</td>
@@ -1266,7 +1266,7 @@
 												</tr>
 												<tr *ngFor="let proposal of proposalsPiechartList">
 													<td>{{proposal.proposalId}}</td>
-								<td>{{proposal.title}}</td>
+													<td title="{{proposal.title}}">{{((proposal.title.length>60)?(proposal.title | slice:0:60)+'...' : (proposal.title))}}</td>
 								<td>{{proposal.applicationCategory}}</td>
 								<td>{{proposal.applicationType}}</td>
 								<td>{{proposal.applicationStatus}}</td>
@@ -1307,7 +1307,7 @@
 												<tr
 													*ngFor="let IRBDetails of protocolPiechartList | slice:begin:end">
 													<td>{{IRBDetails.protocolNumber}}</td>
-													<td>{{IRBDetails.title}}</td>
+													<td title="IRBDetails.title">{{((IRBDetails.title.length>60)?(IRBDetails.title | slice:0:60)+'...' : (IRBDetails.title))}}</td>
 													<td>{{IRBDetails.leadUnit}}</td>
 													<td>{{IRBDetails.protocolType}}</td>
 													<td>{{IRBDetails.status}}</td>
@@ -1344,9 +1344,9 @@
 <tbody>
 	<tr
 		*ngFor="let awardDetails of projectPiechartList | slice:begin:end">
-		<td width="8%">{{awardDetails.awardNumber}}</td>
+		<td width="10%">{{awardDetails.awardNumber}}</td>
 		<td>{{awardDetails.accountNumber}}</td>
-		<td>{{awardDetails.title}}</td>
+		<td title="awardDetails.title">{{((awardDetails.title.length>60)?(awardDetails.title | slice:0:60)+'...' : (awardDetails.title))}}</td>
 		<td>{{awardDetails.unitName}}</td>
 		<td>{{awardDetails.sponsor}}</td>
 		<td>{{awardDetails.fullName}}</td>
