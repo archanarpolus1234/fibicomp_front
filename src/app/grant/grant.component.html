@@ -73,7 +73,7 @@
 											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" class="dateBox" />
 												<span *ngIf="mode == 'view'">{{result?.grantCall?.maximumBudget | currency:'USD':true}}</span>
 											</div>
-											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" ><label>Quantum:</label><br><input *ngIf="mode != 'view'" type="number" [(ngModel)] = "result.grantCall.quantum" placeholder="" [ngClass]="editClass" class="dateBox"/>
+											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" ><label>Quantum:</label><span class="mandatory" *ngIf="mode != 'view' && isString"> ( {{stringWarning}} )</span><br><input *ngIf="mode != 'view'" type="number" [(ngModel)] = "result.grantCall.quantum" placeholder="" [ngClass]="editClass" class="dateBox" (keypress)="stringRestriction($event)"/>
 													<span *ngIf="mode == 'view'">{{result?.grantCall?.quantum}}</span>
 													<span *ngIf="result.grantCall.quantum == null && mode == 'view'" class="noDataExists">
 														No quantum specified</span>
@@ -89,7 +89,7 @@
 														No lead unit specified</span>
 											</div>
                                         	<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" *ngIf="grantCallTypeSelected == 'External'">
-                                        		<label><span class="mandatory" *ngIf="mode != 'view'">*</span> External Weblink:</label><br><input *ngIf="mode != 'view'" class="dateBox" type="text" placeholder="" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass"/>
+                                        		<label><span class="mandatory" *ngIf="mode != 'view'">*</span>External Weblink:</label><br><input *ngIf="mode != 'view'" class="dateBox" type="text" placeholder="" [(ngModel)] = "result.grantCall.externalUrl" [ngClass]="editClass"/>
                                        			<span *ngIf="mode == 'view'">{{result?.grantCall?.externalUrl}}</span>
                                        			<span *ngIf="mode == 'view' && result.grantCall.externalUrl == null" class="noDataExists">No external link provided</span>
                                        		</div>

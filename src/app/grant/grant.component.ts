@@ -115,6 +115,8 @@ export class GrantComponent {
     showSaveGrantModal: boolean = false;
     isAttachmentListOpen: boolean = true;
     showConfirmGoBack: boolean = false;
+    isString: boolean = false;
+    stringWarning: string;
 
     constructor( public changeRef :ChangeDetectorRef, public _ngZone: NgZone, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public completerService : CompleterService, public router : Router,public route : ActivatedRoute, private grantService: GrantService, private sessionService: SessionManagementService) {
         if ( !sessionService.canActivate() ) {
@@ -147,10 +149,6 @@ export class GrantComponent {
                                 this.result.grantCall.openingDate == this.currentDate;
                             }*/
                             this.dateValidation();
-                            this.selectedSponsorType = (this.result.grantCall.sponsorType != null)? this.result.grantCall.sponsorType.description: this.select;
-                            this.selectedSponsor = (this.result.grantCall.sponsor != null)? this.result.grantCall.sponsor.sponsorName: this.select;
-                            this.selectedActivityType = (this.result.grantCall.activityType != null)? this.result.grantCall.activityType.description: this.select;
-                            this.selectedFundingType =  (this.result.grantCall.fundingSourceType != null)? this.result.grantCall.fundingSourceType.description: this.select;
                             if(this.result.grantCall.sponsorCode != null) {
                                 this.grantService.fetchSponsorsBySponsorType(this.result.grantCall.sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
                                     var temp :any= {};
@@ -161,6 +159,11 @@ export class GrantComponent {
                                     this.selectedSponsor = this.result.grantCall.sponsor.sponsorName;
                                     this.selectedActivityType = this.result.grantCall.activityType.description;
                                     this.selectedFundingType = this.result.grantCall.fundingSourceType.description;*/ 
+                                    this.selectedSponsorType = (this.result.grantCall.sponsorType != null)? this.result.grantCall.sponsorType.description: this.select;
+                                    this.selectedSponsor = (this.result.grantCall.sponsor != null)? this.result.grantCall.sponsor.sponsorName: this.select;
+                                    this.selectedActivityType = (this.result.grantCall.activityType != null)? this.result.grantCall.activityType.description: this.select;
+                                    this.selectedFundingType =  (this.result.grantCall.fundingSourceType != null)? this.result.grantCall.fundingSourceType.description: this.select;
+                                    
                                 });
                             
                             } /*else {
@@ -688,27 +691,24 @@ export class GrantComponent {
     }
 
     sponsorTypeChange(type) {
-        if(type == this.select) {
-            this.selectedSponsor = this.select;
-        } else {
-            for(let sponsorType of this.result.sponsorTypes) {
-                if(sponsorType.description == type) {
-                    this.grantService.fetchSponsorsBySponsorType(sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
-                        var temp :any= {};
-                        temp = success;
-                        this.sponsorList = temp.sponsors;
-                        this.result.sponsors = temp.sponsors;
-                        this.result.grantCall.sponsorType = sponsorType;
-                        this.result.grantCall.sponsorTypeCode = sponsorType.code;
-                       /* this.result.grantCall.sponsor = this.sponsorList[0];
-                        this.result.grantCall.sponsorCode = this.sponsorList[0].code;*/
-                    });
-                    //this.sponsorNameChange(this.selectedSponsor);
-                }
+        for(let sponsorType of this.result.sponsorTypes) {
+            if(sponsorType.description == type) {
+                this.grantService.fetchSponsorsBySponsorType(sponsorType.code).takeUntil(this.onDestroy$).subscribe(success=>{
+                    var temp :any= {};
+                    temp = success;
+                    this.sponsorList = temp.sponsors;
+                    this.result.sponsors = temp.sponsors;
+                    this.result.grantCall.sponsorType = sponsorType;
+                    this.result.grantCall.sponsorTypeCode = sponsorType.code;
+                    this.selectedSponsor = this.select;
+                    /* this.result.grantCall.sponsor = this.sponsorList[0];
+                    this.result.grantCall.sponsorCode = this.sponsorList[0].code;*/
+                });
+                //this.sponsorNameChange(this.selectedSponsor);
             }
         }
-        
     }
+
     researchTypeChange(type) {
         for(let activityType of this.result.activityTypes) {
             if(activityType.description == type) {
@@ -987,5 +987,19 @@ export class GrantComponent {
     pickerOpen() {
         this.result.grantCall.openingDate = (this.result.grantCall.openingDate == null)? new Date(): this.result.grantCall.openingDate; 
         this.result.grantCall.closingDate = (this.result.grantCall.closingDate == null)? new Date(): this.result.grantCall.closingDate; 
+    }
+
+    stringRestriction(event: any) {
+        const pattern = /[0-9]/;
+        let inputChar = String.fromCharCode(event.charCode);
+
+        if (!pattern.test(inputChar)) {
+          event.preventDefault();
+          this.isString = true;
+          this.stringWarning = "accept numbers only";
+        } else {
+            this.isString = false;
+            this.stringWarning = "";
+        }
     }
 }
