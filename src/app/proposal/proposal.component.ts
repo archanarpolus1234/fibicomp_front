@@ -434,7 +434,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
                                 } )
                                 .catch(( error ) => {
-                                    alert( "catch error" );
                                 } );
                         } );
                     }
@@ -471,7 +470,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
 
                                 } )
                                 .catch(( error ) => {
-                                    console.log( "catch error", error );
                                 } );
                         } );
                     }

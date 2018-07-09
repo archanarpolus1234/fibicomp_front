@@ -535,14 +535,16 @@
 											<h4 class="borderBoxHeading">IRB</h4>
 											<div class="pullSide">
 												<table class="table table-responsive tableSkin grid2">
-													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
-														<td class="text-right"><label>Protocol Title: </label></td>
-														<td><ng2-completer title="Add area of research" 
+													<tr style="width:30%" id="addFundingSupportRow" *ngIf="mode != 'view'">
+															<td style="width:10%"></td>
+														<td  style="width:15%" class="text-right"><label>Protocol Title: </label></td>
+													
+														<td style="width:25%"><ng2-completer title="Add area of research" 
 																	[inputClass]="completerID" placeholder=""
 																	[(ngModel)]="selectedProtocol" (selected)="addIRB()"
 																	[datasource]="protocolsList" [minSearchLength]="0"></ng2-completer>
 														</td>
-														<td colspan="5">&nbsp;</td>
+														<td  colspan="4">&nbsp;</td>
 														
 													</tr>
 													<tr  *ngIf="isIRBWarning">
@@ -556,8 +558,8 @@
 													</tr>
 													<tbody *ngIf="result?.proposal?.proposalIrbProtocols?.length > 0">
 				                                        <tr>
-				                                            <th >Sl No.</th>
-				                                            <th>Protocol Number</th>
+				                                            <th  >Sl No.</th>
+				                                            <th style="width:15%">Protocol Number</th>
 				                                            <th >Title</th>
 				                                            <th >Approval Status</th>
 				                                            <th >Approval Date</th>
@@ -565,7 +567,7 @@
 				                                            <th *ngIf="mode != 'view'">Action</th>
 				                                        </tr>
 														<tr *ngFor = "let protocol of result?.proposal?.proposalIrbProtocols; let i = index">
-				                                            <td>{{i+1}}</td>
+				                                            <td >{{i+1}}</td>
 				                                            <td>{{protocol?.protocol?.protocolNumber}}</td>
 															<td>{{protocol?.protocol?.title}}</td>
 															<td>{{protocol?.protocol?.protocolStatus?.description}}</td>
@@ -989,7 +991,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 										<td colspan="2"><span >{{reviewer?.reviewerPersonName}}</span></td>
 										<td ><ul class="actionButtonGroup" >
 												<li *ngIf="reviewer?.reviewerDetailId==null"><a href="#" (click)="removeSelectedReviewer($event, reviewer, i)"><i class="fa fa-trash-o" aria-hidden="true" title="Click here to remove this reviewer"></i></a></li>
-												<li *ngIf="reviewer?.reviewerDetailId!=null"><a href="#" ><i class="fa fa-check" aria-hidden="true" title="Click here to remove this reviewer"></i></a></li>
+												<li *ngIf="reviewer?.reviewerDetailId!=null"><i class="fa fa-check fibiDefaultColor" aria-hidden="true" title="Reviewer already assigned"></i></li>
 											</ul>
 									</tr>
 								</tbody>
