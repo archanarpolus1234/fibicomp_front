@@ -814,7 +814,7 @@ export class DashboardComponent implements OnInit {
         this.proposalsPiechartList = [];
         this.pieChartReportType = "";
         this.projectPiechartList =[];
-        this.pieChartReportProtocolType = "";
+        this.pieChartReportProjectType = "";
     }
 
     changeReportPiechartProjectList(temporaryObj) {
