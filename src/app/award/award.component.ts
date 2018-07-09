@@ -20,6 +20,7 @@ export class AwardComponent {
     public accountNumber: string;
     public awardStatus: string;
     public lastUpdate: string;
+    public obligationEndDate: any;
     result: any = {};
     outputPath: string;
     outputPathAB: string;
@@ -32,6 +33,7 @@ export class AwardComponent {
     outputPathOST: string;
     currentUser: string;
     fullName: string;
+    isGrantManager: string;
     createOSTRequest: boolean = false;
     select: string = '--Select--';
     serviceRequest: any = {};
@@ -43,6 +45,8 @@ export class AwardComponent {
     moduleCode: number;
     moduleItemKey: string;
     noCategoryMsg: boolean = false;
+    isDateValidationMsg: boolean = false;
+    dateValidationMsg: string = "* Select Project Extension Date after the obligation End Date";
     pvr_errorString: string = '';
     isPVRsave: boolean = false;
     successMsg: string = '';
@@ -72,6 +76,7 @@ export class AwardComponent {
                 this.awardStatus = this.result.awardDetails[0].award_status;
                 this.sponsorName = this.result.awardDetails[0].sponsor_name;
                 this.lastUpdate = this.result.awardDetails[0].last_update;
+                this.obligationEndDate = this.result.awardDetails[0].obligation_end;
                 this.documentNumber = this.result.awardDetails[0].document_number;
                 this.is_awd_budget = this.result.awardDetails[0].is_awd_budget;
                 this.latest_version_number = this.result.awardDetails[0].latest_version_number;
@@ -79,6 +84,7 @@ export class AwardComponent {
         } );
 
         this.fullName = localStorage.getItem( 'userFullname' );
+        this.isGrantManager = localStorage.getItem( 'grantManager' );
     }
 
     show_current_tab( e: any, current_tab ) {
@@ -105,6 +111,7 @@ export class AwardComponent {
             this.projectVariationRequest_typeMap = temp.typeMap;
             this.projectVariationRequest_departmentList = temp.departmentList;
             this.serviceRequest = temp.serviceRequest;
+            this.serviceRequest.arrivalDate = this.obligationEndDate;
         } );
         this.createOSTRequest = true;
     }
@@ -135,7 +142,48 @@ export class AwardComponent {
             }
         }
     }
+    
+    _keyPress(event: any) {
+        const pattern = /[0-9\+\-\/\ ]/;
+        let inputChar = String.fromCharCode(event.charCode);
 
+        if (!pattern.test(inputChar)) {
+          event.preventDefault();
+        }
+    }
+    
+    /*validating whether extension date is lesser than Obligation-end date*/
+    validateExtensionDate(arrivalDate) {
+        
+        var selectedDate = arrivalDate;
+        var date = new Date(arrivalDate);
+        var newArrivalDate = this.convertDate(date);
+        
+        var oDate = new Date(this.obligationEndDate);
+        var newObligationEndDate = this.convertDate(oDate);
+        
+        if(newArrivalDate < newObligationEndDate) {
+            this.isDateValidationMsg = true;
+            //this.serviceRequest.arrivalDate = this.obligationEndDate;
+        }
+        else {
+            this.isDateValidationMsg = false;
+            if(newArrivalDate == newObligationEndDate) {
+                this.serviceRequest.arrivalDate = this.obligationEndDate;
+            }
+            else{
+                this.serviceRequest.arrivalDate = selectedDate;
+            }
+        }
+    }
+    
+    /*converting Date Object to string for Comparison*/
+    convertDate(str) {
+        var mnth = ("0" + (str.getMonth()+1)).slice(-2);
+        var day  = ("0" + str.getDate()).slice(-2);
+        return [ str.getFullYear(), mnth, day ].join("/");        
+    }
+    
     /*fetch respective Grant Manager on selecting Department*/
     getContractAdmin( unitNumber ) {
         this.awardconfigurationService.getContractAdmin( unitNumber ).subscribe(( data ) => {
@@ -146,9 +194,15 @@ export class AwardComponent {
             this.serviceRequest.contractAdminPersonId = this.projectVariationRequest_userList[0].PERSON_ID;
         } );
     }
+    
+    /*updating of Reporter name (by GrantManagers only)*/
+    updateReporter(fullName) {
+        this.serviceRequest.reporterName = fullName;
+    }
 
     /*save new project variation request*/
     saveProjectVariationRequest( serviceRequest ) {
+        this.pvr_errorString = '';
         if ( this.serviceRequest.summary == '' || this.serviceRequest.summary == null || this.serviceRequest.summary == undefined ) {
             this.pvr_errorString += "Subject";
         }
@@ -163,9 +217,6 @@ export class AwardComponent {
         }
         else if ( this.serviceRequest.unitNumber == '' || this.serviceRequest.unitNumber == null || this.serviceRequest.unitNumber == undefined ) {
             this.pvr_errorString += " Department";
-        }
-        else if ( this.serviceRequest.contractAdminName == '' || this.serviceRequest.contractAdminName == null || this.serviceRequest.contractAdminName == undefined ) {
-            this.pvr_errorString += " Grant Manager";
         }
         else if ( this.serviceRequest.description == '' || this.serviceRequest.description == null || this.serviceRequest.description == undefined ) {
             this.pvr_errorString += " Description";
@@ -188,8 +239,12 @@ export class AwardComponent {
     }
 
     closePVRPopup() {
+        this.createOSTRequest = false;
         this.serviceRequest = {};
+        this.pvr_result = {};
         this.pvr_errorString = '';
+        this.isPVRsave = false;
+        this.isDateValidationMsg = false;
     }
 
     openOSTRequest() {
