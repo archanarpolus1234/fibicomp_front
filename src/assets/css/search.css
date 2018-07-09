@@ -581,3 +581,12 @@ input[type=number]::-webkit-outer-spin-button {
     right: 45px;
     bottom: 18px;
 }
+
+.pvrPadding {
+	padding: 0 10px !important;
+}
+
+.disableInput {
+	border: 1px #DEDEDE solid !important;
+	border-radius: 50px !important;
+}
