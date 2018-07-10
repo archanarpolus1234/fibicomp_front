@@ -1437,6 +1437,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     
     getAllReviewer() {
         this.showReviewerModal = true;
+        this.selectedReviewer = null;
+        this.reviewerAlreadyAddedMsg = false;
+        this.noReviewerAdded = false;
         this.proposalCreateService.fetchAvailableReviewers( this.result.proposal, this.result.personId ).subscribe( data => {
             var temp: any = {};
             temp = data;
@@ -1459,14 +1462,14 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                     this.result.workflow = temp.workflow;
                     this.updateWorkflowStops();
                 } );
-                this.result.loggedInWorkflowDetail.workflowReviewerDetails.splice( i, 1 );
-            } else {
-                this.result.loggedInWorkflowDetail.workflowReviewerDetails.splice( i, 1 );
             }
+            this.result.loggedInWorkflowDetail.workflowReviewerDetails.splice( i, 1 );
+            this.reviewerAlreadyAddedMsg = false;
         }
     }
     
     reviewerChangeFunction() {
+        this.reviewerAlreadyAddedMsg = false;
         var d = new Date();
         var timeStamp = d.getTime();
         if ( this.result.loggedInWorkflowDetail == null ) {
@@ -1477,26 +1480,15 @@ export class ProposalComponent implements OnInit, AfterViewInit {
         }
         for ( let reviewer of this.availableReviewers ) {
             if ( reviewer.approverPersonName == this.selectedReviewer ) {
-                if(this.result.loggedInWorkflowDetail.workflowReviewerDetails.length!=0) {
+                if(this.result.loggedInWorkflowDetail.workflowReviewerDetails.length != 0) {
                     for(let review of this.result.loggedInWorkflowDetail.workflowReviewerDetails) {
                         if(review.reviewerPersonId == reviewer.approverPersonId) {
                                 this.reviewerAlreadyAddedMsg = true;
                                 break;
-                        } else {
-                            var assignedReviewer: any = {};
-                            assignedReviewer.reviewerPersonId = reviewer.approverPersonId;
-                            assignedReviewer.emailAddress = reviewer.emailAddress;
-                            assignedReviewer.reviewerPersonName = reviewer.approverPersonName;
-                            assignedReviewer.approvalStatusCode = "W";
-                            assignedReviewer.workflowDetail = _.cloneDeep(this.tempLoggedWorkflowDetail);
-                            assignedReviewer.workflowStatus = this.tempLoggedWorkflowDetail.workflowStatus;
-                            assignedReviewer.updateTimeStamp = ( new Date() ).getTime();
-                            assignedReviewer.updateUser = localStorage.getItem( 'currentUser' );
-                            this.result.loggedInWorkflowDetail.workflowReviewerDetails.push( assignedReviewer );
-                            this.reviewerAlreadyAddedMsg = false;
                         }
                     }
-                } else {
+                }
+                if( this.reviewerAlreadyAddedMsg == false) {
                     var assignedReviewer: any = {};
                     assignedReviewer.reviewerPersonId = reviewer.approverPersonId;
                     assignedReviewer.emailAddress = reviewer.emailAddress;
@@ -1507,9 +1499,7 @@ export class ProposalComponent implements OnInit, AfterViewInit {
                     assignedReviewer.updateTimeStamp = ( new Date() ).getTime();
                     assignedReviewer.updateUser = localStorage.getItem( 'currentUser' );
                     this.result.loggedInWorkflowDetail.workflowReviewerDetails.push( assignedReviewer );
-                    this.reviewerAlreadyAddedMsg = false;
                 }
-            
             }
         }
         this.changeRef.detectChanges();

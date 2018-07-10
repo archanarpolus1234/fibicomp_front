@@ -92,7 +92,7 @@ export class ExpandedviewComponent implements OnInit {
             this.isAdmin = true;
         }
         
-         if ( this.piechartIndex != "null" ) {
+         if ( this.piechartIndex != null ) {
             this.expandedViewService.loadExpandedView( this.sponsorCode, localStorage.getItem( 'personId' ),this.piechartIndex ).takeUntil(this.onDestroy$).subscribe(
                 data => {
                     this.piechartResult = data || [];
@@ -110,7 +110,7 @@ export class ExpandedviewComponent implements OnInit {
                     }
                 } );
         }
-        if ( this.summaryIndex != "null" ) {
+        if ( this.summaryIndex != null ) {
             this.expandedViewService.loadExpandedSummaryView( localStorage.getItem( 'personId' ), this.summaryIndex ).takeUntil(this.onDestroy$).subscribe(
                 data => {
                     this.summaryResult = data || [];
@@ -134,7 +134,7 @@ export class ExpandedviewComponent implements OnInit {
                     }
                 } );
         }
-        if ( this.donutchartIndex != "null" ) {
+        if ( this.donutchartIndex != null ) {
             this.expandedViewService.loadDonutExpandedView( this.sponsorCode, localStorage.getItem( 'personId' ), this.donutchartIndex ).takeUntil(this.onDestroy$).subscribe(
                 data => {
                     this.piechartResult = data || [];
