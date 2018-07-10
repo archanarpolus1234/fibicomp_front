@@ -812,7 +812,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 										<td colspan="6">
 											<table class="table table-responsive tableSkin reviewTable">
 												<tr>
-					                            	<td colspan="6" class="borderBoxHeading" id="reviewHeading">Reviewers<a class="collapseExpand" href="#" (click)="toggleReviewers($event, i)">
+					                            	<td colspan="6" class="borderBoxHeading" id="reviewHeading">Reviewers<a class="collapseExpand" href="#" (click)="toggleReviewers($event, i)" id="reviewCollapse">
 														<i [ngClass]="(isRevExpanded[i] == true) ? 'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
 													</td>
 					                           	</tr>
@@ -974,10 +974,10 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 										
 									</td>
 								</tr>
-								<tr *ngIf = "reviewerAlreadyAddedMsg && result?.loggedInWorkflowDetail?.workflowReviewerDetails?.length >0">
+								<tr *ngIf = "reviewerAlreadyAddedMsg">
 									<td colspan="8" style="border:none"><span class="mandatory ">* Reviewer already added</span></td></tr>
-									<tr *ngIf = "noReviewerAdded">
-											<td colspan="8" style="border:none"><span class="mandatory ">* Select atleast one reviewer</span></td></tr>
+								<tr *ngIf = "noReviewerAdded">
+									<td colspan="8" style="border:none"><span class="mandatory ">* Select atleast one reviewer</span></td></tr>
 								<tbody *ngIf="result?.loggedInWorkflowDetail?.workflowReviewerDetails?.length >0">
 									<tr>
 										<th >Sl No</th>

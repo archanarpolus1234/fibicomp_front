@@ -300,6 +300,7 @@ input[type=number]::-webkit-outer-spin-button {
 /* style  for reviewer */
 .reviewTable {
 	margin-bottom: 0px;
+	border: 1px solid #E6F8F6;
 }
 .reviewTable thead th {
 	font-size: .95em !important;
@@ -316,6 +317,9 @@ input[type=number]::-webkit-outer-spin-button {
 #reviewHeading, #reviewAssignModalTable, #reviewAssignModalTd {
 	border-top : 0px;
 	padding-top: 0px;
+}
+#reviewHeading {
+	background-color: #E6F8F6;
 }
 .collapseExpand {
 	color: #bdbdbd;
@@ -589,4 +593,9 @@ input[type=number]::-webkit-outer-spin-button {
 .disableInput {
 	border: 1px #DEDEDE solid !important;
 	border-radius: 50px !important;
+}
+
+#reviewCollapse {
+	background: transparent;
+	border: none;
 }
