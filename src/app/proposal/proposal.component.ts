@@ -348,6 +348,9 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     createProposalCall() {
+        var today = new Date();
+        var tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
         if ( this.grantId != null ) {
             this.sendObject.grantCallId = this.grantId;
 
@@ -360,6 +363,15 @@ export class ProposalComponent implements OnInit, AfterViewInit {
             this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
             this.proposalCategorySelected = ( this.result.proposal.proposalCategory != null ) ? this.result.proposal.proposalCategory.description : this.select;
             this.selectedICLLab = ( this.result.proposal.proposalInstituteCentreLab != null ) ? this.result.proposal.proposalInstituteCentreLab.description : this.select;
+            if ( this.result.proposal.startDate == null ) {
+                this.result.proposal.startDate = today;
+            }
+            if ( this.result.proposal.submissionDate == null ) {
+                this.result.proposal.submissionDate = today;
+            }
+            if ( this.result.proposal.endDate == null ) {
+                this.result.proposal.endDate = tomorrow;
+            }
             this.personRoleSelected = this.select;
             this.budgetCategorySelected = this.select;
             this.selectedAreaType = this.result.proposalResearchTypes[0].description;
@@ -1418,7 +1430,6 @@ export class ProposalComponent implements OnInit, AfterViewInit {
     }
 
     approveDisapproveProposal() {
-        
         this.sendObject.personId = localStorage.getItem( 'personId' );
         this.sendObject.proposal = this.result.proposal;
         this.sendObject.approverStopNumber = this.result.approverStopNumber;

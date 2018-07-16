@@ -756,12 +756,12 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 				<div class="pullSide">
                     <table class="table table-responsive tableSkin" id="routeLogTable">
 	                           	<tr id="routelogHeader">
-	                                <th >Name</th>
-	                                <th >Review Status</th>
-	                                <th >Action Date</th>
+	                                <th style="width: 15%">Name</th>
+	                                <th style="width: 20%">Review Status</th>
+	                                <th style="width: 15%">Action Date</th>
 	                                <th >Comments</th>
-	                                <th >Attachments</th>
-	                                <th >Actions</th>
+	                                <th style="width: 15%">Attachments</th>
+	                                <th style="width: 10%">Action</th>
 	                            </tr>
 	                             <tr>
 	                            	<td colspan="6" class="borderBoxHeading"><label>Stop 1:&nbsp;&nbsp;</label>Grant Manager</td>
@@ -770,12 +770,12 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	                            	<td >{{workflow?.approverPersonName}}</td>
 	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
 	                            	<td >{{workflow?.approvalDate | date:'MM/dd/yyyy'}}</td>
-									<td style="width:30%"><span *ngIf="!commentsGrantManagerExpand[i] && workflow?.approvalComment?.length>30;else showFullGrantManagerComments" (click) = "commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]">{{workflow?.approvalComment | slice:0:20}}<span  class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
+									<td ><span *ngIf="!commentsGrantManagerExpand[i] && workflow?.approvalComment?.length>30;else showFullGrantManagerComments" (click) = "commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]">{{workflow?.approvalComment | slice:0:20}}<span  class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
 													
 										<ng-template #showFullGrantManagerComments>{{workflow?.approvalComment }}<i *ngIf="workflow?.approvalComment?.length>30" (click)="commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
 									</td>
 	                                <td >
-	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
+	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments</span>
 	                                			<select  class="committeeBoxNotEditable" *ngIf="workflow?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentStopOne[i]">
 													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 												</select>
@@ -792,13 +792,13 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 	                            	<tr>
 		                            	<td >{{workflow?.approverPersonName}}</td>
 		                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
-		                            	<td >{{workflow?.approvalDate}}</td>
+		                            	<td >{{workflow?.approvalDate | date:'MM/dd/yyyy'}}</td>
 										<td style="width:30%"><span *ngIf="!commentsGrantAdminExpand[i] && workflow?.approvalComment?.length>30;else showFullGrantAdminComments" (click) = "commentsGrantAdminExpand[i] = !commentsGrantAdminExpand[i]">{{workflow?.approvalComment | slice:0:20}}<span  class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantAdminExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
 													
 											<ng-template #showFullGrantAdminComments>{{workflow?.approvalComment }}<i *ngIf="workflow?.approvalComment?.length>30" (click)="commentsGrantAdminExpand[i] = !commentsGrantAdminExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantAdminExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
 										</td>
 		                                <td >
-		                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
+		                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments</span>
 		                                			<select  class="committeeBoxNotEditable" *ngIf="workflow?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentStopTwo[i]">
 														<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
 													</select>
@@ -828,12 +828,12 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 						                            <tr *ngFor="let reviewerItem of workflow?.workflowReviewerDetails; let j=index">
 						                            	<td>{{reviewerItem?.reviewerPersonName}}</td>
 						                            	<td>{{reviewerItem?.workflowStatus?.approveStatus}}</td>
-						                            	<td>{{reviewerItem?.reviewDate}}</td>
+						                            	<td>{{reviewerItem?.reviewDate | date:'MM/dd/yyyy'}}</td>
 														<td style="width:30%"><span *ngIf="!commentsExpand[i] && reviewerItem?.comments?.length>30;else showFullComments" (click) = "commentsExpand[i] = !commentsExpand[i]" >{{reviewerItem?.comments | slice:0:20}}<span class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
 													
 															<ng-template #showFullComments>{{reviewerItem?.comments }}<i *ngIf="reviewerItem?.comments?.length>30" (click)="commentsExpand[i] = !commentsExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template></td>
 						                            	<td>
-						                            		<span *ngIf="reviewerItem?.workflowAttachments?.length == 0 && reviewerItem?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments added</span>
+						                            		<span *ngIf="reviewerItem?.workflowAttachments?.length == 0 && reviewerItem?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments</span>
 				                                			<select  class="committeeBoxNotEditable" *ngIf="reviewerItem?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentReviewer[j]">
 																<option *ngFor="let attachment of reviewerItem?.workflowAttachments">{{attachment.fileName}}</option>
 															</select>
@@ -1262,7 +1262,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 			<p>Are you sure you want to submit this application?</p>
 		</div>
 		<div class="modal-footer">
-				<button type="button" class="btnSkin btnSkinPrimary"data-dismiss="modal">No</button>
+				<button type="button" class="btnSkin btn-secondary"data-dismiss="modal">No</button>
 			<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposalSuccessful"
 				(click)="submitProposal()" data-dismiss="modal">Yes</button>
 	</div>

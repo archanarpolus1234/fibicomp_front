@@ -4,10 +4,11 @@
 		<!-- Session handling component -->
 		<app-sessiontimeout> </app-sessiontimeout>
 		<!-- Expanded view for awards from pichart -->
+		<br/>
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="this.piechartIndex=='AWARD'">
-			<h5 class="pageHeader">{{this.awardsheading}}</h5>
 			<div class="borderBox">
+				<h5 class="borderBoxHeading">{{this.awardsheading}}</h5>
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
@@ -63,8 +64,8 @@
 		<!-- Expanded view for propsals from pichart -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="this.piechartIndex=='PROPOSAL'">
-			<h5 class="pageHeader">{{ this.proposalheading}}</h5>
 			<div class="borderBox">
+				<h5 class="borderBoxHeading">{{ this.proposalheading}}</h5>
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
@@ -119,8 +120,8 @@
 		<!-- Expanded view for Awarded proposals from donut chart -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="this.donutchartIndex=='AWARDED'">
-			<h5 class="pageHeader">{{ this.donutAwardHeading}}</h5>
 			<div class="borderBox">
+				<h5 class="borderBoxHeading">{{ this.donutAwardHeading}}</h5>
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
@@ -175,8 +176,8 @@
 		<!-- Expanded view for In progress propsals from donut chart -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf="this.donutchartIndex=='INPROGRESS'">
-			<h5 class="pageHeader">{{ this.donutProposalHeading}}</h5>
 			<div class="borderBox">
+				<h5 class="borderBoxHeading">{{ this.donutProposalHeading}}</h5>
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
@@ -232,8 +233,8 @@
 
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf=" this.summaryIndex=='PROPOSALSSUBMITTED'">
-			<h5 class="pageHeader">{{this.summaryheading }}</h5>
 			<div class="borderBox">
+				<h5 class="borderBoxHeading">{{this.summaryheading }}</h5>
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
@@ -288,8 +289,8 @@
 		<!-- Expanded view for inprogress proposals -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf=" this.summaryIndex=='PROPOSALSINPROGRESS'">
-			<h5 class="pageHeader">{{this.summaryheading}}</h5>
 			<div class="borderBox">
+				<h5 class="borderBoxHeading">{{this.summaryheading}}</h5>
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>
@@ -344,8 +345,8 @@
 		<!-- Expanded view for active awards -->
 		<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"
 			*ngIf=" this.summaryIndex=='AWARDSACTIVE'">
-			<h5 class="pageHeader">{{this.summaryheading}}</h5>
 			<div class="borderBox">
+				<h5 class="borderBoxHeading">{{this.summaryheading}}</h5>
 				<table class="table table-responsive tableSkin">
 					<thead>
 						<tr>

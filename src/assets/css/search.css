@@ -599,3 +599,6 @@ input[type=number]::-webkit-outer-spin-button {
 	background: transparent;
 	border: none;
 }
+.block-display {
+	display: block !important;
+}
