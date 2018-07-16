@@ -125,7 +125,7 @@
 									<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8">
 										<label><span  *ngIf="isPVRsave != true" class="mandatory">*</span>Subject:</label>
 										<input type="text" *ngIf="isPVRsave != true" class="dateBox committeeBox" placeholder="Type here the Subject of the Request" [(ngModel)]="serviceRequest.summary"/>
-										<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.SUMMARY}}</span>
+										<span class="block-display" *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.SUMMARY}}</span>
 									</div>
 							</div>
 							<div class="row">
@@ -137,7 +137,7 @@
 											{{category.DESCRIPTION}}
 										</option> 
 									</select>
-									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.CATEGORY}}</span>
+									<span class="block-display" *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.CATEGORY}}</span>
 								</div>
 								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
 									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Type:</label>
@@ -147,7 +147,7 @@
 											{{type.DESCRIPTION}}
 										</option>
 									</select>
-									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.SERVICE_TYPE}}</span>
+									<span class="block-display" *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.SERVICE_TYPE}}</span>
 								</div>
 								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
 									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Project Extension Date:</label>
@@ -156,7 +156,7 @@
 															[ngClass]="editClass"  (keypress)="_keyPress($event)"/>
 									<i  *ngIf="isPVRsave != true" class="fa fa-calendar fa-large hand-cursor popupDatePicker" [owlDateTimeTrigger]="arrivalDt"></i>
 									<owl-date-time #arrivalDt [pickerType]="'calendar'" (afterPickerClosed)="validateExtensionDate(serviceRequest.arrivalDate)"></owl-date-time>
-									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.ARRIVAL_DATE | date: 'MM/dd/yyyy'}}</span>
+									<span class="block-display" *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.ARRIVAL_DATE | date: 'MM/dd/yyyy'}}</span>
 								</div>
 							</div>
 							<div class="row">
@@ -176,17 +176,17 @@
 											{{department.UNIT_NAME}}
 										</option>
 									</select>
-									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.UNIT_NAME}}</span>
+									<span  class="block-display" *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.UNIT_NAME}}</span>
 								</div>
 								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
 									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Grant Manager/Administrator:</label>
 									<input type="text" *ngIf="isPVRsave != true" class="dateBox committeeBoxNotEditable disableInput" [disabled]="createOSTRequest==true" [(ngModel)]="serviceRequest.contractAdminName"/>
-									<span *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.CURRENT_CA_NAME}}</span>
+									<span class="block-display" *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.CURRENT_CA_NAME}}</span>
 								</div>
 								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
 									<label>Reporter:</label>
 									<input type="text"  *ngIf="isPVRsave != true" [ngClass]="isGrantManager == 'false'?'dateBox committeeBoxNotEditable disableInput':'dateBox committeeBox'" [disabled]="isGrantManager == 'false'" [(ngModel)]="fullName" (ngModelChange)="updateReporter(fullName)"/> 
-									<span *ngIf="isPVRsave == true">{{fullName}}</span>
+									<span class="block-display" *ngIf="isPVRsave == true">{{fullName}}</span>
 								</div>
 							</div>
 							<div class="row" *ngIf="serviceRequest.ostCategoryCode != null && serviceRequest.serviceTypeCode != null">

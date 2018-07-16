@@ -1059,6 +1059,8 @@
 								</th>
 								<th >Title
 								</th>
+								<th >PI
+								</th>
 								<th (click)="sortResult('proposalCategory.description',currentPosition)" class="hand-cursor"
 								title="Click to sort by category">Category<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalCategory.description')}"></span></th>
 								<th (click)="sortResult('proposalType.description',currentPosition)" class="hand-cursor"
@@ -1073,11 +1075,12 @@
 						</thead>
 						<tbody>
 							<tr *ngFor="let proposal of serviceRequestList">
-								<td>{{proposal.proposalId}}</td>
-								<td title="{{proposal.title}}">{{proposal.title | slice:0:40}}<span *ngIf="proposal.title.length>40">...</span></td>
-								<td>{{proposal.applicationCategory}}</td>
-								<td>{{proposal.applicationType}}</td>
-								<td>{{proposal.applicationStatus}}</td>
+								<td>{{proposal?.proposalId}}</td>
+								<td [title]="(proposal?.title).length>40 ? proposal?.title: ''">{{ (proposal?.title).length>40 ? (proposal?.title | slice:0:60)+'...' : proposal?.title}}</td>
+								<td>{{proposal?.principalInvestigator}}</td>
+								<td>{{proposal?.proposalCategory?.description}}</td>
+								<td>{{proposal?.proposalType?.description}}</td>
+								<td>{{proposal?.proposalStatus?.description}}</td>
 								<td>{{proposal.submissionDate | date: 'MM/dd/yyyy'}}</td>
 								<td>
 									<ul class="actionButtonGroup">
