@@ -129,14 +129,16 @@
 															[datasource]="keywordsList" [minSearchLength]="0"
 															(selected)="keywordChangeFunction()" [disabled]="mode == 'view'">
 													 		</ng2-completer>
-													 		<span class="noDataExists" *ngIf="result?.proposal?.proposalKeywords?.length == 0 && mode == 'view'">No keywords added with this proposal</span>
 													 	 </div>
 													 	 <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8" style="padding-left: 0;">
 													 	 	  <div *ngIf="result?.proposal?.proposalKeywords?.length > 0" class="fileChips" style="word-break: break-all;">
 																	<span *ngFor="let keyword of result?.proposal?.proposalKeywords;let i = index">{{keyword.scienceKeyword.description}}
 																		<i class="fa fa-close hand-cursor" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)" title="Remove this Keyword"></i>
 																	</span>
-															</div>
+															 </div>
+															 <div *ngIf="mode == 'view'">
+													 			<span class="noDataExists" *ngIf="result?.proposal?.proposalKeywords?.length == 0 && mode == 'view'">No keywords added with this proposal</span>
+													 	 	</div>
 													 	 </div>
 													 </div>
 												</div>
