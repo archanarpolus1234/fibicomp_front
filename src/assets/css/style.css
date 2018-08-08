@@ -480,6 +480,14 @@ input[type="text"] {
 	transition: background-color .25s, border-color .25s, color .25s;
 }
 
+.btnSkin.btnSkinPrimary:disabled {
+	color: #9e9e9e;
+	background-color: #fff;
+	cursor: no-drop;
+	border-color: #9e9e9e;
+	transition: background-color .25s, border-color .25s, color .25s;
+}
+
 .btnSkin.btnPublish {
 	color: #26A69A;
 	border-color: #26A69A;

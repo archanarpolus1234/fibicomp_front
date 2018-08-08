@@ -36,15 +36,15 @@
 											</div>					
 											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Type:</label><br>
 												<select *ngIf="mode!='view'" class="dateBox" [(ngModel)]="grantCallTypeSelected" [ngClass]="editClass" (change) = "grantCallTypeChange($event.target.value)">
-													<option value="select">{{select}}</option>
+													<option [value]=null>{{select}}</option>
 													<option *ngFor="let type of result?.grantCallTypes" (value)="type">{{type.description}}</option>
 												</select>
 												<span *ngIf="mode == 'view'">{{grantCallTypeSelected}}</span>
 											</div>
-											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Opening Date:</label><br><span *ngIf="mode != 'view'" class="dateField"><input type="text" placeholder="MM/dd/yyyy" [(ngModel)] = "result.grantCall.openingDate" [ngClass]="editClass" (keypress)="_keyPress($event)" [owlDateTime]="openingDt"  class="committeeBox dateWidth"/>&nbsp;
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Opening Date:</label><br><span *ngIf="mode != 'view'" class="dateField"><input type="text" placeholder="mm/dd/yyyy" [(ngModel)] = "result.grantCall.openingDate" [ngClass]="editClass" (keypress)="_keyPress($event)" [owlDateTime]="openingDt"  class="committeeBox dateWidth"/>&nbsp;
 												<span class="fa fa-calendar fa-large pointer insidePicker" title="open calendar" [owlDateTimeTrigger]="openingDt"></span><owl-date-time #openingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()" ></owl-date-time></span>
 												<span *ngIf="mode == 'view'" >{{result?.grantCall?.openingDate | date: 'MM/dd/yyyy'}}</span></div>
-											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Closing Date:</label><br><span *ngIf="mode != 'view'" class="dateField"><input type="text" placeholder="MM/dd/yyyy" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass" (keypress)="_keyPress($event)" [owlDateTime]="closingDt"  class="committeeBox dateWidth"/>&nbsp;
+											<div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-2"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Closing Date:</label><br><span *ngIf="mode != 'view'" class="dateField"><input type="text" placeholder="mm/dd/yyyy" [(ngModel)] = "result.grantCall.closingDate" [ngClass]="editClass" (keypress)="_keyPress($event)" [owlDateTime]="closingDt"  class="committeeBox dateWidth"/>&nbsp;
 												<span class="fa fa-calendar fa-large pointer insidePicker" title="open calendar" [owlDateTimeTrigger]="closingDt"></span> <owl-date-time #closingDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time></span>
 												<span *ngIf="mode == 'view'" >{{result?.grantCall?.closingDate | date: 'MM/dd/yyyy'}}</span>
 											</div>
@@ -70,8 +70,8 @@
 															</div>
 										</div>
 										<div class="row">
-											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Max Budget (SGD):</label><br><input type="number" placeholder="" *ngIf="mode != 'view'" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" class="dateBox" />
-												<span *ngIf="mode == 'view'">{{result?.grantCall?.maximumBudget | currency:'USD':true}}</span>
+											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Max Budget (SGD):</label><br><input id="budgetID" type="number" placeholder="" *ngIf="mode != 'view' && currencyFocus== false" [(ngModel)] = "result.grantCall.maximumBudget" [ngClass]="editClass" class="dateBox" />
+												<span id="budgetAmount" *ngIf="mode == 'view' || currencyFocus == true" (click)="setCurrencyFocus()">{{result?.grantCall?.maximumBudget | currency:'USD':true}}</span>
 											</div>
 											<div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-3" ><label>Quantum:</label><span class="mandatory" *ngIf="mode != 'view' && isString"> ( {{stringWarning}} )</span><br><input *ngIf="mode != 'view'" type="number" [(ngModel)] = "result.grantCall.quantum" placeholder="" [ngClass]="editClass" class="dateBox" (keypress)="stringRestriction($event)"/>
 													<span *ngIf="mode == 'view'">{{result?.grantCall?.quantum}}</span>

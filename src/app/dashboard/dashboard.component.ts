@@ -690,7 +690,7 @@ export class DashboardComponent implements OnInit {
     viewProposalById( event: any, proposalId, grantCallId ) {
         event.preventDefault();
         this.currentPosition = 'SMU_PROPOSAL';
-        this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'proposalId': proposalId } } );
+        this.router.navigate( ['/proposal/proposalHome'], { queryParams: { 'proposalId': proposalId } } );
         //this.router.navigate( ['/proposal/createProposal'], { queryParams: { 'proposalId': proposalId, 'grantId': grantCallId } } );
     }
 
@@ -828,6 +828,10 @@ export class DashboardComponent implements OnInit {
         this.pieChartReportType = "";
         this.protocolPiechartList = [];
         this.pieChartReportProtocolType = "";
+    }
+    
+    gotoProposal() {
+        this.router.navigate(['/proposal/proposalHome']);
     }
 
 }

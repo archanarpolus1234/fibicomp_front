@@ -6,30 +6,29 @@
 			<div id="myawa"
 				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 				<br/>
-				<div class="row">
+				<div class="row pb-2">
 					<div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 text-left"><span class="topHeading">MY AWARD</span></div>
 					<div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 text-right ">
 						<button class="btnSkin btnSkinPrimary" (click)="backToList($event)">Back to Project</button>
 					</div>
 				</div>
 			</div>
-			<div
-				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+			<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
 				<div class="row">
-					<div class="col-xl-3 col-lg-6 col-md-10 col-sm-10 col-10">
+					<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
 						<label>Award#:Account</label> <span>{{awardNumber}}:{{accountNumber}}</span>
 					</div>
-					<div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
+					<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
 						<label>Lead Unit</label> <span>{{leadUnitName}}</span>
 					</div>
-					<div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
+					<div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-6">
 						<label>Sponsor</label> <span>{{sponsorName}}</span>
 					</div>
-					<div class="col-xl-2 col-lg-4 col-md-4 col-sm-4 col-4">
-						<label>Status</label> <span>{{awardStatus}}</span>
-					</div>
-					<div class="col-xl-2 col-lg-4 col-md-8 col-sm-8 col-8">
+					<div class="col-xl-2 col-lg-2 col-md-2 col-sm-6 col-6">
 						<label>Last Update</label> <span>{{lastUpdate}}</span>
+					</div>
+					<div class="col-xl-1 col-lg-1 col-md-1 col-sm-4 col-6">
+						<label>Status</label> <span>{{awardStatus}}</span>
 					</div>
 				</div>
 			</div>
@@ -140,7 +139,7 @@
 								</div>
 								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
 									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Type:</label>
-									<select  *ngIf="isPVRsave != true" class="committeeBox dateBox" [disabled]="serviceRequest.ostCategoryCode==null" [(ngModel)]="serviceRequest.serviceTypeCode" (ngModelChange)="checkCategory(serviceRequest.ostCategoryCode, serviceRequest.serviceTypeCode)">
+									<select  *ngIf="isPVRsave != true" class="committeeBox dateBox" [disabled]="serviceRequest.ostCategoryCode==null||serviceRequest.ostCategoryCode=='null'" [(ngModel)]="serviceRequest.serviceTypeCode" (ngModelChange)="checkCategory(serviceRequest.ostCategoryCode, serviceRequest.serviceTypeCode)">
 										<option [value]=null>{{select}}</option>
 										 <option *ngFor="let type of this.projectVariationRequest_typeMap" [value]="type.TYPE_CODE">
 											{{type.DESCRIPTION}}
@@ -148,23 +147,25 @@
 									</select>
 									<span class="block-display" *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.SERVICE_TYPE}}</span>
 								</div>
-								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" *ngIf="serviceRequest.serviceTypeCode!=null && serviceRequest.serviceTypeCode!='null' && serviceRequest.serviceTypeCode=='7'">
 									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Project Extension Date:</label>
 									<input type="text" *ngIf="isPVRsave != true" placeholder="{{obligationEndDate}}" [(ngModel)]="serviceRequest.arrivalDate" 
-															[owlDateTime]="arrivalDt"  class="dateWidth committeeBox"  
+															id="extensionDate" [owlDateTime]="arrivalDt"  class="committeeBox"  
 															[ngClass]="editClass"  (keypress)="_keyPress($event)"/>
 									<i  *ngIf="isPVRsave != true" class="fa fa-calendar fa-large hand-cursor popupDatePicker" [owlDateTimeTrigger]="arrivalDt"></i>
 									<owl-date-time #arrivalDt [pickerType]="'calendar'" (afterPickerClosed)="validateExtensionDate(serviceRequest.arrivalDate)"></owl-date-time>
 									<span class="block-display" *ngIf="isPVRsave == true">{{pvr_result.serviceRequest.serviceList[0]?.ARRIVAL_DATE | date: 'MM/dd/yyyy'}}</span>
+								</div>
+								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4" *ngIf="serviceRequest.serviceTypeCode!=null && serviceRequest.serviceTypeCode!='null' && serviceRequest.serviceTypeCode=='31'">
+									<label><span *ngIf="isPVRsave != true"></span>Project Status:</label>
+									<span class="block-display paddingStatus">{{awardStatus}}</span>
+									<!-- <span class="block-display paddingStatus" *ngIf="isPVRsave == true">Closed</span> -->
 								</div>
 							</div>
 							<div class="row" *ngIf="isDateValidationMsg">
 								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 									<span *ngIf="isDateValidationMsg" class="mandatory">{{dateValidationMsg}}</span>
 								</div>
-							</div>
-							<div class="row" *ngIf="noCategoryMsg == true">
-								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><span class="mandatory">Please select Category</span></div>
 							</div>
 							<div class="row">
 								<div class="col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4">
@@ -188,11 +189,11 @@
 									<span class="block-display" *ngIf="isPVRsave == true">{{fullName}}</span>
 								</div>
 							</div>
-							<div class="row" *ngIf="serviceRequest.ostCategoryCode != null && serviceRequest.serviceTypeCode != null">
+							<div class="row" *ngIf="serviceRequest.ostCategoryCode != null && serviceRequest.ostCategoryCode != 'null' && serviceRequest.serviceTypeCode!=null && serviceRequest.serviceTypeCode!='null'">
 								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 									<label><span *ngIf="isPVRsave != true" class="mandatory">*</span>Description:</label>
-									<!-- <textarea class="scheduleBoxes forTextAreaEntry" cols=4 [disabled]="createOSTRequest == true" [value]="projectVariationRequest_templateList[0]?.TEMPLATE"></textarea> -->
-									<div id="variationDescriptionBox" class="scheduleBoxes" [innerHTML]="projectVariationRequest_templateList[0]?.TEMPLATE">
+									<app-ngx-editor *ngIf="isPVRsave != true" [config]="ngxEditorConfig" [(ngModel)]="serviceRequest.description"></app-ngx-editor>
+									<div *ngIf="isPVRsave == true" id="variationDescriptionBox" class="scheduleBoxes" [innerHTML]="serviceRequest.description">
 								</div>
 							</div>
 						</div>
