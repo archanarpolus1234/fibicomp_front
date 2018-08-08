@@ -1,0 +1,1344 @@
+				<div class="row">
+							<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+								<div class="borderBox">
+									<h4 class="borderBoxHeading">
+										<div class="row">
+											<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8">Application Details</div>
+											<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 text-right colorBlack">
+												<span style="margin-right: 10px"><label style="margin-right: 10px">Created By: </label>{{result?.proposal?.createUser}}</span>
+											</div>
+											<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 text-right colorBlack">
+												<span style="margin-right: 10px"><label style="margin-right: 10px">Status: </label>{{result?.proposal?.proposalStatus?.description}}</span>
+											</div>
+										</div>
+									</h4>	
+									<div class="pullSide">
+										<div class="topGrid gridSkin">
+											<div class="row">
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+													<label><span class="mandatory" *ngIf="mode != 'view'">*</span>Title:</label><br>
+													<input type="text" placeholder="" class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="result.proposal.title" (ngModelChange)="checkProposalDataValidity(result.proposal.title,'title')"/>
+													<span *ngIf="mode == 'view'" >{{result?.proposal?.title}}</span>
+												</div>
+												<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+													<label><span class="mandatory" *ngIf="mode != 'view'">*</span>Category:</label><br>
+													<select class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="proposalCategorySelected" (change) = "proposalCategoryChange()"  (ngModelChange)="checkProposalDataValidity(proposalCategorySelected,'category')">
+														    <option (value)="select">{{select}}</option>
+															<option *ngFor="let category of result.activityTypes" (value) = "category">{{category.description}}</option>
+											        </select>
+											        <span *ngIf="mode == 'view'" >{{proposalCategorySelected}}</span>
+												</div>
+												<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+													 <label class="greenLabel"><span class="mandatory" *ngIf="mode != 'view'">*</span>Type:</label><br>
+													 <select class="dateBox" [ngClass]="editClass" *ngIf="mode != 'view'" [(ngModel)]="proposalTypeSelected" (change)="proposalTypeChange()"  (ngModelChange)="checkProposalDataValidity(proposalTypeSelected,'type')">
+															<option (value)="select">{{select}}</option>
+															<option *ngFor="let type of result?.proposalTypes" >{{type.description}}</option>
+													</select>
+													<span *ngIf="mode == 'view'">{{result?.proposal?.proposalType?.description}}</span>
+												</div>
+												<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+													<label>Grant Call Type:</label><br><span>{{result?.proposal?.grantCallType?.description}}</span>
+												</div>
+											</div>
+											<!-- <div class="row" *ngIf="isMandatory">
+												<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><span class="mandatory">{{mandatoryText}}</span></div>
+											</div> -->
+											<div class="row">
+												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Submission Date:</label><br>
+													 <span *ngIf="mode != 'view'"  class="dateField" >
+													    <input type="text" placeholder="mm/dd/yyyy" style="width:100% !important"
+															[owlDateTime]="subDt" class="dateWidth"
+															[(ngModel)]="result.proposal.submissionDate" 
+															[ngClass]="editClass" (keypress)="_keyPress($event)" (ngModelChange)="checkProposalDataValidity(result.proposal.submissionDate,'submissionDate')"/>
+															<i class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="subDt"></i>
+															<owl-date-time #subDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
+													</span>
+													<span *ngIf="mode == 'view'" >{{result?.proposal?.submissionDate | date: 'MM/dd/yyyy'}}</span>
+												</div>
+												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed Start Date:</label><br>
+													 <span *ngIf="mode != 'view'" class="dateField">
+													 	<input type="text" placeholder="mm/dd/yyyy" style="width:100% !important"
+															[owlDateTime]="startDt" class="dateWidth"
+															[(ngModel)]="result.proposal.startDate" 
+															[ngClass]="editClass" (keypress)="_keyPress($event)" (ngModelChange)="checkProposalDataValidity(result.proposal.startDate,'proposedStartDate')"/>
+														<i class="fa fa-calendar fa-large hand-cursor insidePicker" [owlDateTimeTrigger]="startDt"></i>
+														<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
+													</span>
+													<span *ngIf="mode == 'view'" >{{result?.proposal?.startDate | date: 'MM/dd/yyyy'}}</span>
+												</div>
+												<div  [ngClass] = "mode == 'view'?'col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2':'col-xl-4 col-lg-4 col-md-4 col-sm-12 col-4'">
+													 <label><span class="mandatory" *ngIf="mode != 'view'">*</span>Proposed End Date:</label><br>
+													 <span *ngIf="mode != 'view'" class="dateField">
+													 	<input type="text" class="dateWidth" placeholder="mm/dd/yyyy"
+															[owlDateTime]="endDt" style="width: 65% !important"
+															[(ngModel)]="result.proposal.endDate"
+															[ngClass]="editClass" (keypress)="_keyPress($event)" (ngModelChange)="checkProposalDataValidity(result.proposal.endDatee,'proposedEndDate')"/>
+															<i class="fa fa-calendar fa-large hand-cursor insidePicker" [owlDateTimeTrigger]="endDt"></i>
+															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
+													</span>
+													<span *ngIf="mode == 'view'" >{{result?.proposal?.endDate | date: 'MM/dd/yyyy'}}</span>
+												</div>
+												<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+													 <label>Duration:</label><br>
+													 <span><b>{{durInYears}}</b> year(s), <b>{{durInMonths}}</b> month(s) & <b>{{durInDays}}</b> day(s)</span>
+												</div>
+												
+											</div>
+											<div class="row" *ngIf="isDateWarningText">
+													<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><span class="mandatory">{{dateWarningText}}</span></div>
+											</div>
+											<div class="row">
+												 <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+													 <label>Is this Project under SMU ICLs?</label><br>
+													 <div *ngIf="mode != 'view'">
+													 	<input type="radio" name="underICL" (click)="toggleICL(true)" [checked]="result?.proposal?.isSmu == true"/>Yes
+													 	<input type="radio" name="underICL" style="margin-left: 20px" (click)="toggleICL(false)" [checked]="result?.proposal?.isSmu == false || result?.proposal?.isSmu == null"/>No
+													 </div>
+													 <input type="text" class="committeeBoxNotEditable" style="padding-left:  0px;" *ngIf="mode == 'view'" [value]="(result?.proposal?.isSmu == true) ? 'Yes':'No'"/>  
+												</div>
+												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3" *ngIf="result?.proposal?.isSmu == true">
+													 <label>ICL:</label><br>
+													 
+												     <select *ngIf="mode != 'view'" [ngClass]="editClass" [disabled]="mode == 'view'" 
+																		 
+													 [(ngModel)]="selectedICLLab" (change)="labICLChange()" (ngModelChange)="checkProposalDataValidity(selectedICLLab,'ICL')">
+													 <option>{{select}}</option>
+																<option *ngFor="let icl of result.proposalInstituteCentreLabs">{{icl.description}}</option>
+													</select>
+													<span *ngIf="mode == 'view' && result?.proposal?.isSmu == true">{{selectedICLLab}}</span>
+												</div>
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+												     <label>Keywords:</label>
+													 <div class="row">
+													 	 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"  *ngIf="mode!='view'" style="padding-left: 0px">
+													 	 	<ng2-completer style="border:none; padding:0px"
+															[inputClass]="completerID"
+															[(ngModel)]="selectedKeyword" placeholder="Search here for Keyword"
+															[datasource]="keywordsList" [minSearchLength]="0"
+															(selected)="keywordChangeFunction()" [disabled]="mode == 'view'">
+													 		</ng2-completer>
+													 		<span class="noDataExists" *ngIf="result?.proposal?.proposalKeywords?.length == 0 && mode == 'view'">No keywords added with this proposal</span>
+													 	 </div>
+													 	 <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8" style="padding-left: 0;">
+													 	 	  <div *ngIf="result?.proposal?.proposalKeywords?.length > 0" class="fileChips" style="word-break: break-all;">
+																	<span *ngFor="let keyword of result?.proposal?.proposalKeywords;let i = index">{{keyword.scienceKeyword.description}}
+																		<i class="fa fa-close hand-cursor" *ngIf="mode != 'view'" (click)="deleteKeyword(keyword,i)" title="Remove this Keyword"></i>
+																	</span>
+															</div>
+													 	 </div>
+													 </div>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3"><label><span class="mandatory" *ngIf="mode != 'view'">*</span>Lead Unit:</label><br>
+													<ng2-completer *ngIf="mode!='view'" 
+														[inputClass]="completerID"
+														[(ngModel)]="result.proposal.homeUnitName" placeholder="Search here for Lead Unit"
+														[datasource]="homeUnits" [minSearchLength]="0"
+														(selected)="leadUnitChangeFunction()"  class="widthLimiterNg2Completer" class="p-0 border-0 dateBox" ></ng2-completer>
+													<span *ngIf="mode == 'view'">{{result?.proposal?.homeUnitName}}</span>
+												</div>
+											</div>
+											</div>
+											<div class="row"  *ngIf="isKeywordWarning">
+												<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12"><span class="mandatory">{{keywordWarningText}}</span></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						<div class="borderBox col-12">
+							<h4 class="borderBoxHeading">Grant Call Details</h4>
+							<button id="grantDetailsExpandBtn" class="addBtn font hoverColor" (click)="isGrantCallWdgtOpen = !isGrantCallWdgtOpen" 
+                                 *ngIf="(result?.proposal?.grantCall != null && mode == 'view') || (mode != 'view')">
+								<i [ngClass]="isGrantCallWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+							</button>
+							<table class="table table-responsive tableSkin grid2">
+								<tr *ngIf="result?.proposal?.grantCall == null && mode !='view' && isGrantCallWdgtOpen">
+									<td class="text-right"><label>Title of Grant Call:</label></td>
+									<td class="pull-left"><span><ng2-completer style="border:none; padding:0px;"
+															[inputClass]="completerID" placeholder="Search here for Grant Call Title"
+															[(ngModel)]="selectedGrantCall"
+															[datasource]="grantCallList" [minSearchLength]="0"
+															(selected)="grantCallChangeFunction()" [ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
+										
+									</td>
+									<td colspan="4">&nbsp;</td>
+								</tr>
+								<tr *ngIf="result?.proposal?.grantCall == null && mode == 'view'">
+									<td colspan="6"><div class="noDataExists">
+											No grant call associated with this proposal
+										</div></td>
+								</tr>
+								<tbody *ngIf="result?.proposal?.grantCall != null && isGrantCallWdgtOpen">
+									<tr>
+										<th >Id</th>
+										<th >Title</th>
+			                            <th >Funding Agency</th>
+			                            <th >Funding Scheme</th>
+			                            <th style="width:35%">Grant Theme</th>
+			                            <th *ngIf="mode != 'view'">Action</th>
+									</tr>
+									<tr>
+										<td style="padding-left: 10px"><span >{{result?.proposal?.grantCallId}}</span></td>
+										<td title="{{(result?.proposal?.grantCall?.grantCallName?.length > 60)?(result?.proposal?.grantCall?.grantCallName):''}}"><span >{{(result?.proposal?.grantCall?.grantCallName?.length > 60 )?(result?.proposal?.grantCall?.grantCallName | slice:0:60):(result?.proposal?.grantCall?.grantCallName)}}</span></td>
+										<td ><span >{{result?.proposal?.grantCall?.sponsor?.sponsorName}}</span></td>
+										<td ><span >{{result?.proposal?.grantCall?.activityType?.description}}</span></td>
+										<td style="width:35%">
+												<span *ngIf=" result?.proposal?.grantCall?.grantTheme != null"><p class="textView" *ngIf="!isGrantThemeReadMore">{{(result?.proposal?.grantCall?.grantTheme.length>100)? (result?.proposal?.grantCall?.grantTheme | slice:0:100)+'...' : result?.proposal?.grantCall?.grantTheme}}
+														<span *ngIf="(result?.proposal?.grantCall?.grantTheme?.length>100)" class="hand-cursor fibiDefaultColor italian" (click)="isGrantThemeReadMore = !isGrantThemeReadMore">Read more<i [ngClass]="isGrantThemeReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+														</p>
+														<p *ngIf=" isGrantThemeReadMore" class="textView">{{result?.proposal?.grantCall?.grantTheme}}
+														<span *ngIf="(result?.proposal?.grantCall?.grantTheme?.length>100)" class="hand-cursor fibiDefaultColor italian" (click)="isGrantThemeReadMore = !isGrantThemeReadMore">Show less<i [ngClass]="isGrantThemeReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+														</p>
+												</span>
+										</td>
+										<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+												<li><a href="#" data-target="#deleteGrantCall" data-toggle="modal" (click)="showDeleteGrantCall = true"><i class="fa fa-trash-o" aria-hidden="true" title="Click here to remove this Grant Call"></i></a></li>
+											</ul>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+                         <div class="borderBox col-12">
+									<h4 class="borderBoxHeading"><span class="mandatory" *ngIf="mode != 'view'">*</span>Area of Research</h4>
+									<button id="areaofResearchExpandBtn" class="addBtn font hoverColor" (click)="isareaWdgtOpen = !isareaWdgtOpen" 
+	                                 	*ngIf="(result?.proposal?.proposalResearchAreas?.length > 0 && mode == 'view') || (mode != 'view')">
+										<i [ngClass]="isareaWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+									</button>
+										<!-- <div class="pullSide">
+											<div class="topGrid gridSkin">
+                                    	<div class="row" id="addAreaOfResearchRow" *ngIf=" mode != 'view' && isareaWdgtOpen">
+											<div class="col-4"><label>Type:</label><br/>
+												<select [ngClass]="editClass" [(ngModel)]="researchTypeSelected" (change)="changeArea($event.target.value)">
+													<option *ngFor="let type of result?.proposalResearchTypes" (value)="type">{{type.description}}</option>
+												</select></div>
+											<div class="col-4"><label>{{selectedAreaType}}:</label><br/>
+												<div>
+													 <ng2-completer title="Add area of research"
+														[inputClass]="completerID" placeholder=""
+														[(ngModel)]="selectedArea"
+														[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
+												</div>
+											</div>
+											<div class="text-right col-4">
+												<button class="btnSkin btnSkinPrimary" (click)="addArea()">Add</button>
+											</div>
+										</div>
+										</div>
+										</div> -->
+                                    
+									<table class="table table-responsive tableSkin grid2">
+										<tr id="addAreaOfResearchRow" *ngIf=" mode != 'view' && isareaWdgtOpen">
+											<td class="text-right"><label>Type:</label></td>
+											<td style="width:15%"><select [ngClass]="editClass" [(ngModel)]="researchTypeSelected" (change)="changeArea($event.target.value)">
+											
+														<option *ngFor="let type of result?.proposalResearchTypes" (value)="type">{{type.description}}</option>
+														  </select></td>
+											<td class="text-right"><label>{{selectedAreaType}}:</label></td>
+											<td>
+												<div>
+													 <ng2-completer title="Add area of research"
+														[inputClass]="completerID" [placeholder]="(researchTypeSelected == 'Area of Research')?'Search here for Area of Research':'Search here for Area of Excellence'"
+														[(ngModel)]="selectedArea" 
+														[datasource]="areaList" [minSearchLength]="0"></ng2-completer> 
+												</div>
+											</td>
+											<td class="text-right">
+												<button class="btnSkin btnSkinPrimary" (click)="addArea()">Add</button>
+											</td>
+										</tr>
+										<tr *ngIf="isAreaWarning">
+                                        	<td colspan="3"><span class="mandatory">{{areaWarningText}}</span></td>
+											<td colspan="2"></td>
+										</tr>
+										<tbody *ngIf="result?.proposal?.proposalResearchAreas?.length > 0 && isareaWdgtOpen">
+	                                        <tr>
+	                                            <th style="width:10%">Sl No.</th>
+												<th style="width:10%">Code</th>
+												<th>Type</th>
+	                                            <th  colspan="2">Research Area</th>
+	                                            <th title="" *ngIf="mode != 'view'">Action</th>
+	                                        </tr>
+	                                        <tr *ngFor = "let researchArea of result?.proposal?.proposalResearchAreas; let i = index">
+	                                            <td>{{i+1}}</td>
+												<td style="width:10%" *ngIf="researchArea.excellenceAreaCode? researchArea.excellenceAreaCode: researchArea.researchAreaCode;let areaCode; ">{{areaCode}}</td>
+												<td>{{researchArea.proposalResearchType.description}}</td>
+												<td  colspan="2" *ngIf="researchArea.proposalExcellenceArea? researchArea.proposalExcellenceArea.description: researchArea.researchArea.description;let description; ">{{description}}</td>
+	                                            <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+														<li><a href="#" data-toggle="modal"
+															data-target="#deleteResearchArea"
+															(click)="tempSaveArea($event,researchArea,i)"><i
+																class="fa fa-trash-o" aria-hidden="true" title="Click here to delete this Research Area"></i></a></li>
+													</ul></td>
+	                                        </tr>
+	                                        <tr>
+	                                        	<td><label>Description:</label></td>
+	                                        	<td colspan="8"><textarea name="description" [(ngModel)] = "result.proposal.researchDescription" class="forTextAreaEntry" placeholder="" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+	                                        		<span *ngIf="mode == 'view' && result?.proposal?.researchDescription != null"><p class="textView" *ngIf="mode == 'view' && !isResDescReadMore">{{(result?.proposal?.researchDescription).length>240 ? (result?.proposal?.researchDescription | slice:0:240)+'...' : result?.proposal?.researchDescription}}
+															<span *ngIf="(result?.proposal?.researchDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isResDescReadMore = !isResDescReadMore">Read more<i [ngClass]="isResDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isResDescReadMore" class="textView">{{result?.proposal?.researchDescription}}
+															<span *ngIf="(result?.proposal?.researchDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isResDescReadMore = !isResDescReadMore">Show less<i [ngClass]="isResDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+														</span>
+	                                        	<div class="noDataExists" *ngIf="result?.proposal?.researchDescription == null && mode == 'view'">
+													No contributions or descriptions provided for this proposal
+												</div>
+												</td>
+	                                        </tr>
+                                        </tbody>
+                                        <tr *ngIf="result?.proposal?.proposalResearchAreas?.length == 0  && mode == 'view'">
+                                        	<td colspan="5"><div class="noDataExists">
+														No area of research/excellence added with this proposal
+													</div></td>
+                                        </tr>
+                                  </table>
+                             </div>
+                            <div class="borderBox col-12">
+                    				<h4 class="borderBoxHeading"><span class="mandatory" *ngIf="mode != 'view'">*</span>Project Team</h4>
+                    				<button id="projectExpandBtn" class="addBtn font hoverColor" (click)="isTeamWdgtOpen = !isTeamWdgtOpen" 
+	                                 	*ngIf="(result?.proposal?.proposalPersons?.length > 0 && mode == 'view') || (mode != 'view')">
+										<i [ngClass]="isTeamWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+									</button>
+                                    <table class="table table-responsive tableSkin grid2">
+                                    	<tr id="addTeamMemberRow" *ngIf="mode != 'view' && isTeamWdgtOpen">
+                                    		<td><label>Member Type:</label></td>
+                                    		<td><select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)]="memberTypeSelected" (change)="memberTypeChanged()">
+													<option *ngFor="let type of memberTypes" (value)="type">{{type.value}}</option>
+												</select></td>
+											<td class="text-right"><label>Name:</label></td>
+											<td> 
+												<div class="searchBox memberSearchBox">
+													<input type="text" placeholder="{{placeHolderText}}" [(ngModel)]="searchTextModel" (blur)="searchActive = false" (focus)="searchActive = true" id="member_search"
+														[formControl]="searchText" (ngModelChange)="onSearchValueChange()"/> <a href="#"
+														class="searchButton" (click)="clearSearchBox($event)"><i
+														[ngClass]="iconClass"></i></a>
+													<div class="sb-seachresults"  *ngIf="searchActive">
+														<ul class="sb-results-dropdown-menu text-left">
+															<li *ngFor="let result of this.elasticSearchresults "
+																(mousedown)="selected(result)"><span
+																[innerHTML]="result.label"></span></li>
+														</ul>
+													</div>
+												</div>
+											</td>
+											<td class="text-right"><label>Role:</label></td>
+											<td><select [ngClass]="editClass" [disabled]="mode == 'view' ? true : false" [(ngModel)]="personRoleSelected">
+												<option (value)="select">{{select}}</option>	
+												<option *ngFor="let role of personRolesList">{{role.description}}</option>
+													  </select>
+											</td>
+											<td class="text-right"><label>Department:</label></td>
+											<td class="pull-left"><span><ng2-completer style="border:none; padding:0px"
+															[inputClass]="completerID" placeholder=""
+															[(ngModel)]="selectedHomeUnit" 
+															[datasource]="homeUnits" [minSearchLength]="0"  clearUnselected="true"
+															[ngClass]="editClass" [disabled]="mode == 'view' ? true : false"></ng2-completer></span>
+										
+											</td>
+											<td class="text-right">
+												<button class="btnSkin btnSkinPrimary" (click)="addProposalTeamMember()">Add</button>
+											</td>
+										</tr>
+										<tr *ngIf="personWarningFlag">
+											<td colspan="9"><span class="mandatory">{{personWarningMsg}}</span></td>
+										</tr>
+										<tr *ngIf="result?.proposal?.proposalPersons?.length == 0 && mode == 'view'">
+											<td colspan="9"><div class="noDataExists">
+													There are no investigators added in this application
+												</div></td>
+										</tr>
+										<tbody *ngIf="result?.proposal?.proposalPersons?.length > 0 && isTeamWdgtOpen">
+	                                        <tr>
+	                                            <th >Sl No.</th>
+												<th colspan="2">Name</th>
+												<!-- <th>Type</th> -->
+	                                            <th >Role</th>
+	                                            <th colspan="2">Home Unit</th>
+	                                            <th colspan="2">Department</th>
+	                                            <th *ngIf="mode != 'view'">Action</th>
+	                                        </tr>
+	                                        <tr *ngFor="let person of result?.proposal?.proposalPersons; let i = index">
+	                                            <td>{{i+1}}</td>
+												<td colspan="2">{{person.fullName}}</td>
+												<!-- <td *ngIf="(person?.personId==null)?'Employee':'Non-Employee';let type">{{type}}</td> -->
+	                                            <td>{{person?.proposalPersonRole?.description}}</td>
+	                                            <td colspan="2">{{person.leadUnitName}}</td>
+	                                            <td colspan="2">{{person.department}}</td>
+	                                            <td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																				<li><a href="#" data-toggle="modal"
+																					data-target="#deleteMemberModal"
+																					(click)="tempSavePerson($event,person, i)"><i
+																						class="fa fa-trash-o" aria-hidden="true" title="Click here to delete {{person.fullName}}"></i></a></li>
+																			</ul>
+												</td>
+	                                         </tr>
+                                         </tbody>
+                                       </table>
+                                    </div>
+	                        <div class="borderBox col-12" [ngClass]="isProjectDescWdgtOpen?'normalPadd':'lowPadd'">
+								<h4 class="borderBoxHeading">Project Description</h4>
+								<button id="projectDescExpandBtn" class="addBtn font hoverColor" (click)="isProjectDescWdgtOpen = !isProjectDescWdgtOpen" >
+										<i [ngClass]="isProjectDescWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+								</button>
+								<div class="pullSide">
+									<div class="topGrid gridSkin" *ngIf="isProjectDescWdgtOpen">
+											<div class="row">
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label>Abstract:</label><br>
+													<textarea name="abstract" class="forTextAreaEntry" placeholder="Please provide Lay Abstract or Scientic Abstract details here" [(ngModel)]="result.proposal.abstractDescription" [ngClass]="editAreaClass" *ngIf="mode != 'view'" [disabled]="mode == 'view'"></textarea>
+													<span *ngIf="mode == 'view' && result?.proposal?.abstractDescription != null"><p class="textView" *ngIf="mode == 'view' && !isAbsDescReadMore">{{(result?.proposal?.abstractDescription).length>240 ? (result?.proposal?.abstractDescription | slice:0:240)+'...' : result?.proposal?.abstractDescription}}
+															<span *ngIf="(result?.proposal?.abstractDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isAbsDescReadMore = !isAbsDescReadMore">Read more<i [ngClass]="isAbsDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isAbsDescReadMore" class="textView">{{result?.proposal?.abstractDescription}}
+															<span *ngIf="(result?.proposal?.abstractDescription?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isAbsDescReadMore = !isAbsDescReadMore">Show less<i [ngClass]="isAbsDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+													</span>
+													
+													<div class="noDataExists" *ngIf="result?.proposal?.abstractDescription == null && mode == 'view'">
+														No abstract for this application
+													</div>
+												</div>
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"><label>Funding Strategy:</label><br>
+													<textarea name="fundingStrategy" class="forTextAreaEntry" maxlength="48" placeholder="Please provide details on strategy for obtaining funding " [(ngModel)]="result.proposal.fundingStrategy" *ngIf="mode != 'view'" [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<span *ngIf="mode == 'view' && result?.proposal?.fundingStrategy != null"><p class="textView" *ngIf="mode == 'view' && !isFundDescReadMore">{{(result?.proposal?.fundingStrategy).length>240 ? (result?.proposal?.fundingStrategy | slice:0:240)+'...' : result?.proposal?.fundingStrategy}}
+															<span *ngIf="(result?.proposal?.fundingStrategy?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isFundDescReadMore = !isFundDescReadMore">Read more<i [ngClass]="isFundDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isFundDescReadMore" class="textView">{{result?.proposal?.fundingStrategy}}
+															<span *ngIf="(result?.proposal?.fundingStrategy?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isFundDescReadMore = !isFundDescReadMore">Show less<i [ngClass]="isFundDescReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+													</span>
+													
+													<div class="noDataExists" *ngIf="result?.proposal?.fundingStrategy == null && mode == 'view'">
+														No description for funding strategy for this application
+													</div>
+	                                        	</div>
+	                                        </div>
+	                                        <div class="row">
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+													<label>Details of Application:</label><br>
+													<textarea name="details" class="forTextAreaEntry" placeholder="Please provide details of Research Proposal ( e.g. Aims, Significance, Approach, Investigator, Preliminary Studies, References, Project Implementation Schedule/Milestones)" [(ngModel)]="result.proposal.details" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'? true: false"></textarea>
+													<span *ngIf="mode == 'view' && result?.proposal?.details != null"><p class="textView" *ngIf="mode == 'view' && !isDetailsReadMore">{{(result?.proposal?.details).length>240 ? (result?.proposal?.details | slice:0:240)+'...' : result?.proposal?.details}}
+															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isDetailsReadMore" class="textView">{{result?.proposal?.details}}
+															<span *ngIf="(result?.proposal?.details?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDetailsReadMore = !isDetailsReadMore">Show less<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+													</span>
+													
+													<div class="noDataExists" *ngIf="result?.proposal?.details == null && mode == 'view'">
+														No additional details for this application
+													</div>
+												</div>
+												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+													<label>Deliverables:</label><br>
+													<textarea name="deliverables" class="forTextAreaEntry" placeholder="Please provide details on Project Deliverables (e.g. Man power Training, Research Outcomes, etc.)" [(ngModel)]="result.proposal.deliverables" *ngIf="mode != 'view'"  [ngClass]="editAreaClass" [disabled]="mode == 'view'"></textarea>
+													<span *ngIf="mode == 'view' && result?.proposal?.deliverables != null"><p class="textView" *ngIf="mode == 'view' && !isDeliverReadMore">{{(result?.proposal?.deliverables).length>240 ? (result?.proposal?.deliverables | slice:0:240)+'...' : result?.proposal?.deliverables}}
+															<span *ngIf="(result?.proposal?.deliverables?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDeliverReadMore = !isDeliverReadMore">Read more<i [ngClass]="isDetailsReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+															<p *ngIf="mode == 'view' && isDeliverReadMore" class="textView">{{result?.proposal?.deliverables}}
+															<span *ngIf="(result?.proposal?.deliverables?.length>240)" class="hand-cursor fibiDefaultColor italian" (click)="isDeliverReadMore = !isDeliverReadMore">Show less<i [ngClass]="isDeliverReadMore?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span>
+															</p>
+													</span>
+													
+													<div class="noDataExists" *ngIf="result?.proposal?.deliverables == null && mode == 'view'">
+														No deliverables for this application
+													</div>
+												</div>
+	                                        </div>
+									</div>
+								</div>
+							</div>
+							<div class="borderBox col-12">
+								<h4 class="borderBoxHeading">Declaration</h4>
+								<button id="declarationExpandBtn" class="addBtn font hoverColor" (click)="isDeclareWdgtOpen = !isDeclareWdgtOpen" 
+									*ngIf="((result?.proposal?.proposalIrbProtocols?.length > 0 || result?.proposal?.proposalSponsors?.length > 0) && mode == 'view') || (mode != 'view')">
+										<i [ngClass]="isDeclareWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+								</button>
+										<div class="borderBox col-12 innerBorderBox" *ngIf="isDeclareWdgtOpen">
+											<h4 class="borderBoxHeading">Funding Support</h4>
+											<div class="pullSide">
+												<table class="table table-responsive tableSkin grid2">
+													<tr id="addFundingSupportRow" *ngIf="mode != 'view'">
+														
+														<td><label>Type of Funding Agency :</label><br><select [(ngModel)] = "selectedSponsorType" [ngClass]="editClass" (change)="sponsorTypeChange()">
+															<option (value)="select">{{select}}</option>
+															<option *ngFor="let sponsorType of result.sponsorTypes">{{sponsorType.description}}</option>
+														</select></td>
+														<td><label>Name of Funding Agency:</label><br>
+															<select [(ngModel)] = "selectedSponsorName" [ngClass]="editClass" >
+																<option (value)="select">{{select}}</option>
+																<option *ngFor="let sponsor of result.sponsors" >{{sponsor.sponsorName}}</option>
+															</select>
+														</td>
+														<td><label>Start Date:</label><span class="dateField"><input
+														[owlDateTime]="startDt" placeholder="mm/dd/yyyy" style="width:100% !important"
+															[(ngModel)]="fundingStartDate" class="dateWidth"
+															[disabled]="mode == 'view' ? true : false"
+															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
+															<i class="fa fa-calendar fa-large hand-cursor insidePicker" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="startDt"></i>
+															<owl-date-time #startDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></span></td>
+													<td><label>End Date:</label><span class="dateField"><input style="width:100% !important"
+															 [owlDateTime]="endDt" placeholder="mm/dd/yyyy"
+															[(ngModel)]="fundingEndDate" class="dateWidth"
+															[disabled]="mode == 'view' ? true : false"
+															[ngClass]="editClass" (keypress)="_keyPress($event)"/>
+															<i class="fa fa-calendar fa-large hand-cursor insidePicker" *ngIf="mode != 'view'"  [owlDateTimeTrigger]="endDt"></i>
+															<owl-date-time #endDt [pickerType]="'calendar'" (afterPickerClosed)="sponsorDateValidation()"></owl-date-time></span></td>
+														
+												
+													<td><label>Amount</label><br><input type="number"  [ngClass]="editClass" [(ngModel)] = "sponsorAmount"/></td>
+														<td><br>
+															<button class="btnSkin btnSkinPrimary" (click)="addSponsor()">Add</button>
+														</td>
+													</tr>
+													<tr  *ngIf="isFundingWarning">
+			                                        	<td colspan="3"><span class="mandatory">{{fundingWarningText}}</span></td>
+														<td colspan="3"></td>
+													</tr>
+													<tr *ngIf="result?.proposal?.proposalSponsors?.length == 0 && mode == 'view'">
+														<td colspan="6"><div class="noDataExists">
+																There are no other funding support/s declared by the investigator
+															</div></td>
+													</tr>
+													<tbody *ngIf="result?.proposal?.proposalSponsors?.length > 0">
+				                                        <tr>
+				                                            <th >Sl no</th>
+				                                            <th >Funding Agency</th>
+				                                            <th >Start Date</th>
+				                                            <th >End Date</th>
+				                                            <th >Amount</th>
+				                                            <th  *ngIf="mode != 'view'">Action</th>
+				                                        </tr>
+				                                        <tr *ngFor="let proposalSponsor of result?.proposal?.proposalSponsors;let i = index">
+				                                            <td>{{i+1}}</td>
+				                                            <td >{{proposalSponsor?.sponsor?.sponsorName}}</td>
+				                                            <td >{{proposalSponsor?.startDate | date:'MM/dd/yyyy'}}</td>
+				                                            <td >{{proposalSponsor?.endDate | date:'MM/dd/yyyy'}}</td>
+				                                            <td >{{proposalSponsor?.amount | currency:'USD':true}}</td>
+				                                         	<td  *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																	<li><a href="#" data-toggle="modal"
+																		data-target="#deleteSponsor"
+																		(click)="tempSaveSponsor(proposalSponsor,i)"><i
+																			class="fa fa-trash-o" aria-hidden="true" title="Click here to delete this Sponsor"></i></a></li>
+																</ul></td>
+				                                         </tr>
+			                                         </tbody>
+	                                      			</table>
+											</div>
+										</div>
+										<div class="borderBox col-12 innerBorderBox" *ngIf="isDeclareWdgtOpen">
+											<h4 class="borderBoxHeading">IRB</h4>
+											<div class="pullSide">
+												<table class="table table-responsive tableSkin grid2">
+													<tr style="width:30%" id="addFundingSupportRow" *ngIf="mode != 'view'">
+															<td style="width:10%"></td>
+														<td  style="width:15%" class="text-right"><label>Protocol Title: </label></td>
+													
+														<td style="width:25%"><ng2-completer title="Add area of research" 
+																	[inputClass]="completerID" placeholder=""
+																	[(ngModel)]="selectedProtocol" (selected)="addIRB()"
+																	[datasource]="protocolsList" [minSearchLength]="0"></ng2-completer>
+														</td>
+														<td  colspan="4">&nbsp;</td>
+														
+													</tr>
+													<tr  *ngIf="isIRBWarning">
+			                                        	<td colspan="4"><span class="mandatory">{{irbWarningText}}</span></td>
+														<td colspan="3"></td>
+													</tr>
+													<tr *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && mode == 'view'">
+														<td colspan="7"><div class="noDataExists">
+																There are no IRB protocols linked to this application
+															</div></td>
+													</tr>
+													<tbody *ngIf="result?.proposal?.proposalIrbProtocols?.length > 0">
+				                                        <tr>
+				                                            <th  >Sl No.</th>
+				                                            <th style="width:15%">Protocol Number</th>
+				                                            <th >Title</th>
+				                                            <th >Approval Status</th>
+				                                            <th >Approval Date</th>
+				                                            <th >Expiration Date</th>
+				                                            <th *ngIf="mode != 'view'">Action</th>
+				                                        </tr>
+														<tr *ngFor = "let protocol of result?.proposal?.proposalIrbProtocols; let i = index">
+				                                            <td >{{i+1}}</td>
+				                                            <td>{{protocol?.protocol?.protocolNumber}}</td>
+															<td>{{protocol?.protocol?.title}}</td>
+															<td>{{protocol?.protocol?.protocolStatus?.description}}</td>
+				                                            <td>{{protocol?.protocol?.approvalDate | date:'MM/dd/yyyy'}}</td>
+				                                            <td>{{protocol?.protocol?.expirationDate | date:'MM/dd/yyyy'}}</td>
+				                                         	<td *ngIf="mode != 'view'"><ul class="actionButtonGroup">
+																	<li><a href="#" data-toggle="modal"
+																		data-target="#deleteIRB"
+																		(click)="tempSaveIRB($event,protocol,i)"><i
+																			class="fa fa-trash-o" aria-hidden="true" title="Click here to delete {{protocol?.protocol?.title}}"></i></a></li>
+																</ul></td>
+				                                         </tr>
+			                                         </tbody>
+	                                      			</table>
+											</div>
+										</div>
+										<!-- already commented
+										<div class="col-12" *ngIf="result?.proposal?.proposalIrbProtocols?.length == 0 && mode == 'view'">
+											<div class="noDataExists regularFont" >
+														There are no IRB protocols linked to this application
+											</div>
+										</div> already-->
+							</div>
+							<div class="borderBox col-12">
+									<h4 class="borderBoxHeading">Budget Periods</h4>
+									<span *ngIf="result?.proposal?.budgetHeader?.budgetPeriods?.length <= 0" class="addBtn font hoverColor" style="margin-right: 25px;" title="Create Budget Period" (click)="gotoBudget()">Create Budget Period<i class="fa fa-angle-double-right" style="margin-left: 3px;"></i></span>
+									<span *ngIf="result?.proposal?.budgetHeader?.budgetPeriods?.length > 0" class="addBtn font hoverColor" style="margin-right: 25px;" title="View Detailed Budget Period" (click)="gotoBudget()">Detailed Budget<i class="fa fa-angle-double-right" style="margin-left: 3px;"></i></span>
+									<button id="budgetExpandBtn" class="addBtn font hoverColor" (click)="isBudgetWdgtOpen = !isBudgetWdgtOpen" 
+	                                 	*ngIf="result?.proposal?.budgetHeader?.budgetPeriods?.length > 0">
+										<i [ngClass]="isBudgetWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+									</button>
+										<table id="periodTable" class="table table-responsive tableSkin grid2">
+											<tr *ngIf="budgetWarningFlag">
+												<td colspan="9"><span class="mandatory">{{budgetWarningMsg}}</span></td>
+											</tr>
+											<tbody *ngIf="result?.proposal?.budgetHeader?.budgetPeriods?.length > 0">
+		                                        <tr>
+		                                            <th width="10%">Period#</th>
+		                                            <th width="15%">Period Start Date</th>
+		                                            <th width="15%">Period End Date</th>
+		                                            <th width="20%">Total Sponsor Cost</th>
+		                                            <th width="20%">Direct Cost</th>
+		                                            <th width="20%">Indirect Cost</th>
+		                                        </tr>
+		                                        <tr *ngFor="let budget of result?.proposal?.budgetHeader?.budgetPeriods; let i = index">
+		                                            <td>{{ i + 1 }}</td>
+		                                            <td>{{budget?.startDate | date:'MM/dd/yyyy'}}</td>
+		                                            <td>{{budget?.endDate | date:'MM/dd/yyyy'}}</td>
+		                                            <td>{{budget?.totalCost| currency:'USD':true}}</td>
+		                                            <td>{{budget?.totalDirectCost| currency:'USD':true}}</td>
+		                                            <td>{{budget?.totalIndirectCost| currency:'USD':true}}</td>
+		                                         </tr>
+		                                        <tr>
+		                                        	<td colspan="2"></td>
+					                               	<td class="totalText"> <span>Total:</span></td>
+					                               	<td class="totalText"><span>{{result?.proposal?.budgetHeader?.totalCost| currency:'USD':true}}</span></td>
+					                               	<td class="totalText"><span>{{result?.proposal?.budgetHeader?.totalDirectCost| currency:'USD':true}}</span></td>
+					                               	<td class="totalText" colspan="2"><span>{{result?.proposal?.budgetHeader?.totalIndirectCost| currency:'USD':true}}</span></td>
+							                     </tr>
+	                                         </tbody>
+	                                         <tbody *ngIf="result?.proposal?.budgetHeader?.budgetPeriods?.length <= 0">
+		                                         <tr>
+													<td colspan="7"><div class="noDataExists">
+															There are no Budget Periods added yet.
+														</div></td>
+												</tr>
+											</tbody>
+	                                    </table>
+								</div>
+	                            <div class="borderBox col-12">
+                               <h4 class="borderBoxHeading">Supporting Documents</h4>
+                                <button title="add new attachment" class="addBtn font attachBtn" style="right:55px" (click)="showAddAttachmentPopUp($event)" *ngIf="mode != 'view'" data-toggle="modal" data-target="#addAttachment">
+									<i class="fa fa-plus"></i>&nbsp;<span>Add Attachment</span>
+								</button>
+								<button id="attachmentExpandBtn" class="addBtn font hoverColor btnPositionFullWidget" (click)="isAttachmentListOpen = !isAttachmentListOpen" *ngIf="(result?.proposal?.proposalAttachments?.length > 0)">
+									<i [ngClass]="isAttachmentListOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'" class="fa-large"></i>
+								</button>
+
+
+                               <table class="table table-responsive tableSkin grid2">
+                               		<tr *ngIf="result?.proposal?.proposalAttachments?.length == 0 && mode == 'view'">
+										<td colspan="5"><div class="noDataExists">
+												There are no attachments uploaded
+											</div></td>
+									</tr>
+									<tbody *ngIf="result?.proposal?.proposalAttachments?.length > 0 && isAttachmentListOpen">
+	                                   <tr>
+	                                       <th>Sl No</th>
+	                                       <th>Attachment Type</th>
+	                                       <th>Description</th>
+	                                       <th>File Name</th>
+	                                       <th>Action</th>
+	                                   </tr>
+	                                   <tr *ngFor="let attachment of result?.proposal?.proposalAttachments;let i = index">
+											<td>{{i+1}}</td>
+											<td>{{attachment.attachmentType.description}}</td>
+											<td title="{{(attachment?.description?.length>60)?(attachment?.description):''}}">{{(attachment?.description?.length > 60)?(attachment?.description | slice:0:60)+'...':(attachment?.description)}}</td>
+											<td title="{{(attachment?.fileName?.length>60)?(attachment?.fileName):''}}">{{(attachment?.fileName?.length > 60)?(attachment?.fileName | slice:0:60)+'...':(attachment?.fileName)}}</td>
+											<td ><ul class="actionButtonGroup">
+													<li *ngIf="mode != 'view'"><a (click)="tempSaveAttachments($event,attachment,i)" 
+														data-toggle="modal" data-target="#deleteAttachment"><i
+															class="fa fa-trash-o" title="Click here to delete {{attachment.fileName}}"></i></a></li>
+													<li><a  (click)="downloadAttachments($event, attachment)" title="Click here to download {{(attachment?.fileName?.length > 20)?(attachment?.fileName | slice:0:20)+'...':(attachment?.fileName)}}"> <i class="fa fa-download pointer" aria-hidden="true"></i></a></li>
+												</ul>
+											</td>
+									</tr>
+                                   </tbody>
+                                 </table>
+                               </div>
+                               <div class="col-12 text-right">
+                                 	<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#saveProposal" *ngIf="mode !='view'" (click)="saveProposal('fullSave')">Save</button>
+									<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposal" *ngIf="mode !='view' && result?.proposal?.proposalId" (click)="showSubmittedModal = true">Submit</button>
+									<button type="button" class="btnSkin btnPublish" *ngIf="result?.proposal?.proposalId" (click)="printProposal()">Print</button>
+                               		<button type="button" class="btnSkin btn-secondary" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="disapproveProposal()" >Disapprove</button>
+                               		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isApprover == true && result?.isApproved == false" (click)="approveProposal()">Approve</button>
+									<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#reviewerModal" *ngIf="mode =='view' && result?.isGrantAdmin == true && result?.isReviewed != true && result?.isApproved != true" (click)="getAllReviewer()">Assign to Reviewer</button>
+									<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#approveDisapproveModal" *ngIf="mode =='view' && result?.isReviewer == true && result?.isReviewed == false" (click)="approveProposal()">Complete Review</button>
+                               		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#confirmSubmit" *ngIf="(mode == 'view') && grantManager == 'true' && result?.proposal?.statusCode == 4" (click)="openConfirm('submit')" >Submit to Provost</button>
+                               		<button type="button" class="btnSkin btnPublish" data-toggle="modal" data-target="#confirmSubmit" *ngIf="(mode == 'view') && provost == 'true' && result?.proposal?.statusCode == 10" (click)="openConfirm('endorse')" >Endorse</button>
+									   <button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#routeLogModal" *ngIf="(mode == 'view') || (mode != 'view' && result?.proposal?.proposalStatus?.statusCode == 9)" (click)="openRouteLog()" >Route Log</button>
+									  
+                               </div>
+                               				
+<!-- Modal Section -->
+							
+<!-- ROUTE LOG MODAL  -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="isRoutelogOpened" tabindex="-1"
+id="routeLogModal" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Route Log</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			
+			
+			<div
+				class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+				<div class="row">
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6" >
+						<label>Application #</label> <span>{{result?.proposal?.proposalId}}</span>
+					</div>
+					
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>Status</label> <span>{{result?.proposal?.proposalStatus?.description}}</span>
+					</div>
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>PI</label> <span>{{proposalPIName}}</span>
+					</div>
+					<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+						<label>Home Unit</label> <span>{{proposalLeadUnit}}</span>
+					</div>
+					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+						<label>Title</label> <span>{{result?.proposal?.title}}</span>
+					</div>
+				</div>
+			</div>
+			<div class="row" *ngIf="finalStatus != null">
+				<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+					<label class="routeLogStatus">{{finalStatus}}</label>
+				</div>
+			</div>
+			<div class="borderBox col-12" id="routeLogBody">
+				<div class="pullSide">
+                    <table class="table table-responsive tableSkin" id="routeLogTable">
+	                           	<tr id="routelogHeader">
+	                                <th style="width: 15%">Name</th>
+	                                <th style="width: 20%">Review Status</th>
+	                                <th style="width: 15%">Action Date</th>
+	                                <th >Comments</th>
+	                                <th style="width: 15%">Attachments</th>
+	                                <th style="width: 10%">Action</th>
+	                            </tr>
+	                             <tr>
+	                            	<td colspan="6" class="borderBoxHeading"><label>Stop 1:&nbsp;&nbsp;</label>Grant Manager</td>
+	                           	 </tr>
+	                            <tr *ngFor = "let workflow of workflowStopOne;let i = index">
+	                            	<td >{{workflow?.approverPersonName}}</td>
+	                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
+	                            	<td >{{workflow?.approvalDate | date:'MM/dd/yyyy'}}</td>
+									<td ><span *ngIf="!commentsGrantManagerExpand[i] && workflow?.approvalComment?.length>30;else showFullGrantManagerComments" (click) = "commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]">{{workflow?.approvalComment | slice:0:20}}<span  class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
+													
+										<ng-template #showFullGrantManagerComments>{{workflow?.approvalComment }}<i *ngIf="workflow?.approvalComment?.length>30" (click)="commentsGrantManagerExpand[i] = !commentsGrantManagerExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantManagerExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
+									</td>
+	                                <td >
+	                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments</span>
+	                                			<select  class="committeeBoxNotEditable" *ngIf="workflow?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentStopOne[i]">
+													<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
+												</select>
+	                                </td>
+	                                <td *ngIf = "workflow.approvalStopNumber == 1"><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
+										<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopOne[i], workflow.workflowAttachments)"><i title="download this document"
+												class="fa fa-download" aria-hidden="true"></i></a></li>
+									</ul></td>
+	                            </tr>
+	                            <tr>
+	                            	<td colspan="6"  class="borderBoxHeading"><label>Stop 2:&nbsp;&nbsp;</label>Grant Administrator</td>
+	                           	 </tr>
+	                            <tbody  *ngFor = "let workflow of workflowStopTwo;let i = index">
+	                            	<tr>
+		                            	<td >{{workflow?.approverPersonName}}</td>
+		                            	<td >{{workflow?.workflowStatus?.approveStatus}}</td>
+		                            	<td >{{workflow?.approvalDate | date:'MM/dd/yyyy'}}</td>
+										<td style="width:30%"><span *ngIf="!commentsGrantAdminExpand[i] && workflow?.approvalComment?.length>30;else showFullGrantAdminComments" (click) = "commentsGrantAdminExpand[i] = !commentsGrantAdminExpand[i]">{{workflow?.approvalComment | slice:0:20}}<span  class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsGrantAdminExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
+													
+											<ng-template #showFullGrantAdminComments>{{workflow?.approvalComment }}<i *ngIf="workflow?.approvalComment?.length>30" (click)="commentsGrantAdminExpand[i] = !commentsGrantAdminExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsGrantAdminExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template>
+										</td>
+		                                <td >
+		                                			<span *ngIf="workflow?.workflowAttachments?.length == 0 && workflow?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments</span>
+		                                			<select  class="committeeBoxNotEditable" *ngIf="workflow?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentStopTwo[i]">
+														<option *ngFor="let attachment of workflow.workflowAttachments">{{attachment.fileName}}</option>
+													</select>
+		                                </td>
+		                                <td ><ul class="actionButtonGroup" *ngIf="workflow?.workflowAttachments?.length > 0">
+											<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentStopTwo[i], workflow.workflowAttachments)"><i title="download this document"
+													class="fa fa-download" aria-hidden="true"></i></a></li>
+										</ul></td>
+									</tr>
+									<tr *ngIf="workflow?.workflowReviewerDetails != null && workflow?.workflowReviewerDetails?.length > 0">
+										<td colspan="6">
+											<table class="table table-responsive tableSkin reviewTable">
+												<tr>
+					                            	<td colspan="6" class="borderBoxHeading" id="reviewHeading">Reviewers<a class="collapseExpand" href="#" (click)="toggleReviewers($event, i)" id="reviewCollapse">
+														<i [ngClass]="(isRevExpanded[i] == true) ? 'fa fa-chevron-circle-up':'fa fa-chevron-circle-down'"></i></a>
+													</td>
+					                           	</tr>
+					                           	<tbody *ngIf="isRevExpanded[i]">
+													<tr >
+						                                <th >Name</th>
+						                                <th >Routing Status</th>
+						                                <th >Action Date</th>
+						                                <th >Comments</th>
+						                                <th >Attachments</th>
+						                                <th >Action</th>
+						                            </tr>
+						                            <tr *ngFor="let reviewerItem of workflow?.workflowReviewerDetails; let j=index">
+						                            	<td>{{reviewerItem?.reviewerPersonName}}</td>
+						                            	<td>{{reviewerItem?.workflowStatus?.approveStatus}}</td>
+						                            	<td>{{reviewerItem?.reviewDate | date:'MM/dd/yyyy'}}</td>
+														<td style="width:30%"><span *ngIf="!commentsExpand[i] && reviewerItem?.comments?.length>30;else showFullComments" (click) = "commentsExpand[i] = !commentsExpand[i]" >{{reviewerItem?.comments | slice:0:20}}<span class="hand-cursor fibiDefaultColor italian">...Read more<i [ngClass]="commentsExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></span></span>
+													
+															<ng-template #showFullComments>{{reviewerItem?.comments }}<i *ngIf="reviewerItem?.comments?.length>30" (click)="commentsExpand[i] = !commentsExpand[i]" class="hand-cursor fibiDefaultColor italian"> Show Less<i [ngClass]="commentsExpand[i]?'fa fa-angle-double-left':'fa fa-angle-double-right'"></i></i></ng-template></td>
+						                            	<td>
+						                            		<span *ngIf="reviewerItem?.workflowAttachments?.length == 0 && reviewerItem?.workflowStatus?.approveStatusCode != 'T' && workflow?.workflowStatus?.approveStatusCode != 'W'" class="noDataExists">No attachments</span>
+				                                			<select  class="committeeBoxNotEditable" *ngIf="reviewerItem?.workflowAttachments?.length > 0" [(ngModel)]="selectedAttachmentReviewer[j]">
+																<option *ngFor="let attachment of reviewerItem?.workflowAttachments">{{attachment.fileName}}</option>
+															</select>
+						                            	</td>
+						                            	<td><ul class="actionButtonGroup"*ngIf="reviewerItem?.workflowAttachments?.length > 0" >
+																<li><a href="#" (click)="downloadRouteAttachment($event, selectedAttachmentReviewer[j], reviewerItem.workflowAttachments)"><i title="download this document"
+																class="fa fa-download" aria-hidden="true"></i></a></li>
+																<!-- <li><a href="#" (click)="deleteRouteAttachment($event, selectedAttachmentReviewer[j], reviewerItem.workflowAttachments)"><i title="remove this reviewer"
+																class="fa fa-trash-o" aria-hidden="true"></i></a></li> -->
+															</ul></td>
+						                            </tr>
+					                            </tbody>
+											</table>
+										
+										</td>
+		                            </tr>
+		                            <!-- <tr *ngIf="finalStatus != null">
+		                            	<td></td>
+		                            	<td colspan="5"><span>{{finalStatus}}</span></td>
+		                            </tr> -->
+	                            </tbody>
+                           </table> 
+				</div>
+			</div>
+			
+			<!--  -->
+		</div>
+		<div class="modal-footer" >
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="isRoutelogOpened = false">Close</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- ADD ATTACHMENT MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" id="addAttachment"
+		tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle"
+		aria-hidden="true" *ngIf="showAddAttachment">
+		<div class="modal-dialog modal-lg modal-dialog-centered"
+			role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="skippedSchedulesLongTitle">Add
+						Attachment</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" (click)="showAddAttachment = false">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- <table class="table table-responsive tableSkin">
+						<tr class="row" *ngIf="showAddAttachment">
+							<td class="noData filterElement col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2"><span class="mandatory">*</span> Attachment Type:</td>
+							<td class="filterElement col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4">
+							<select class="committeeBox dateBox" [(ngModel)] = "selectedAttachmentType">
+								<option *ngFor="let attachType of this.result.proposalAttachmentTypes" (value)="attachType">
+									{{attachType.description}}
+								</option>
+							</select>
+							</td>
+							<td class="noData filterElement col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2"><span class="mandatory">*</span> Description:</td>
+							<td class="filterElement col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"><textarea id="desc" cols=2 [(ngModel)] = "attachmentDescription" placeholder="Description" class="scheduleBoxes forTextAreaEntry"></textarea></td>
+						</tr>
+					</table> -->
+					<div class="pullSide">
+						<div class="gridSkin">
+							<div class="row"  *ngIf="showAddAttachment">
+								<div class="col-xl-4 col-lg-4 col-md-6 col-sm-12 col-4 attach-desc">
+									<label><span class="mandatory">*</span> Attachment Type:</label><br>
+									<select class="committeeBox dateBox" [(ngModel)] = "selectedAttachmentType">
+										<option (value)="select">{{select}}</option>
+										<option *ngFor="let attachType of this.result.proposalAttachmentTypes" (value)="attachType">
+											{{attachType.description}}
+										</option>
+									</select>
+								</div>
+								<div class="col-xl-8 col-lg-8 col-md-6 col-sm-12 col-8 attach-desc">
+									<label> Description:</label><br/>
+									<textarea id="desc" cols=2 rows="1" [(ngModel)] = "attachmentDescription" placeholder="" class="scheduleBoxes forTextAreaEntry"></textarea>
+								</div>
+							</div>
+						</div>
+					</div>
+										
+
+					<file-drop
+						(onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
+						(onFileLeave)="fileLeave($event)">
+						<button class="btnSkin btnSkinPrimary" (click)="triggerAdd()">Choose Files</button>
+						<input type="file" #file (change)="onChange(file.files)" multiple id="addAttach" style="display: none"/>
+						<div style="color: #00BCD4; margin-left: 10px;"> OR Drop files here</div>
+					</file-drop>
+					<div class="row">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="fileChips regularFont">
+								<span *ngFor="let item of uploadedFile; let i=index" title="{{(item?.name?.length > 30)?item?.name:''}}">{{(item?.name?.length > 30)?(item?.name | slice:0:30)+'...':(item?.name)}}
+									<i class="fa fa-close hand-cursor" title="Remove File" (click)="deleteFromUploadedFileList(item)"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div *ngIf="noAttachmentSelectedMsg"><span class="mandatory font">* Please choose atleast one attachment</span></div>
+					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">* Please select an attachment type</span></div>
+					<div *ngIf="duplicateAttachmentMsg"><span class="mandatory font"> * File already added in the list</span></div>
+					<div *ngIf="isFileSizeExceeded"><span class="mandatory font"> * Attachment size must be below 20MB</span></div>																								
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
+					<button type="button" class="btnSkin btnSkinPrimary" (click)="addAttachments()"  >Add</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- ASSIGN REVIEWER MODAL -->
+	
+	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showReviewerModal" tabindex="-1"
+		id="reviewerModal" tabindex="-1" role="dialog"
+		aria-labelledby="deleteModalTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Assign to Reviewer</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+							<table class="table table-responsive tableSkin" id="reviewAssignModalTable">
+								<tr >
+									<td colspan="2" class="text-right" id="reviewAssignModalTd"><b>Name of Reviewer:</b></td>
+									<td colspan="2" class="pull-left" id="reviewAssignModalTd"><span><ng2-completer style="border:none; padding:0px"
+															[inputClass]="completerID" placeholder=""
+															[(ngModel)]="selectedReviewer"
+															[datasource]="reviewerList" [minSearchLength]="0"
+															(selected)="reviewerChangeFunction()" [ngClass]="editClass" ></ng2-completer></span>
+										
+									</td>
+								</tr>
+								<tr *ngIf = "reviewerAlreadyAddedMsg">
+									<td colspan="8" style="border:none"><span class="mandatory ">* Reviewer already added</span></td></tr>
+								<tr *ngIf = "noReviewerAdded">
+									<td colspan="8" style="border:none"><span class="mandatory ">* Select atleast one reviewer</span></td></tr>
+								<tbody *ngIf="result?.loggedInWorkflowDetail?.workflowReviewerDetails?.length >0">
+									<tr>
+										<th >Sl No</th>
+			                            <th >Person Id</th>
+										<th colspan="2">Name</th>
+			                            <th>Action</th>
+									</tr>
+									<tr *ngFor="let reviewer of result?.loggedInWorkflowDetail?.workflowReviewerDetails; let i=index">
+										<td style="padding-left: 10px"><span>{{i+1}}</span></td>
+										<td ><span >{{reviewer?.reviewerPersonId}}</span></td>
+										<td colspan="2"><span >{{reviewer?.reviewerPersonName}}</span></td>
+										<td ><ul class="actionButtonGroup" >
+												<li *ngIf="reviewer?.reviewerDetailId==null"><a href="#" (click)="removeSelectedReviewer($event, reviewer, i)"><i class="fa fa-trash-o" aria-hidden="true" title="Click here to remove this reviewer"></i></a></li>
+												<li *ngIf="reviewer?.reviewerDetailId!=null"><i class="fa fa-check fibiDefaultColor" aria-hidden="true" title="Reviewer already assigned"></i></li>
+											</ul>
+									</tr>
+								</tbody>
+							</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary"
+						data-dismiss="modal" data-toggle="modal" (click)="showReviewerModal = false">Cancel</button>
+					<button type="button" class="btnSkin btnSkinPrimary"
+						(click)="addReviewer()" >Add Reviewer(s)</button>
+				</div>
+			</div>
+		</div>
+		</div>
+	<!-- DELETE MEMBER WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteMember || showDeleteBudget" tabindex="-1"
+id="deleteMemberModal" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Delete</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to delete this item?</p>
+		</div>
+		<div class="modal-footer" *ngIf="showDeleteMember">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteMember = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deletePerson()" data-dismiss="modal">Yes</button>
+		</div>
+		<div class="modal-footer" *ngIf="showDeleteBudget">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteBudget = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deleteBudget()" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- DELETE RESEARCH AREA WARNING MODAL -->
+	<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteResearchArea" tabindex="-1"
+		id="deleteResearchArea" tabindex="-1" role="dialog"
+		aria-labelledby="deleteModalTitle" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Delete</h5>
+
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Are you sure you want to delete this item?</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary"
+						data-dismiss="modal" data-toggle="modal" (click)="showDeleteResearchArea = false">No</button>
+					<button type="button" class="btnSkin btnSkinPrimary"
+						(click)="deleteArea($event)" data-dismiss="modal">Yes</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- DELETE IRB WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteIRB" tabindex="-1"
+id="deleteIRB" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Delete</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to delete this item?</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteIRB = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deleteIRB()" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+
+
+<!-- DELETE SPONSOR WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteSponsor" tabindex="-1"
+id="deleteSponsor" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Delete</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to delete this item?</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteSponsor = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deleteSponsor()" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- DELETE GRANT CALL WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteGrantCall" tabindex="-1"
+id="deleteGrantCall" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Delete</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to remove this grant call?</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteGrantCall = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="removeSelectedGrant($event)" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- DELETE ATTACHMENT WARNING MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showDeleteAttachment" tabindex="-1"
+id="deleteAttachment" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Delete</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to delete this item?</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showDeleteAttachment = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="deleteAttachments($event)" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>
+
+<!-- APPROVE-DISAPPROVE MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" id="approveDisapproveModal"
+		tabindex="-1" role="dialog" aria-labelledby="skippedSchedulesTitle"
+		aria-hidden="true" *ngIf="showApproveDisapproveModal">
+		<div class="modal-dialog modal-lg modal-dialog-centered"
+			role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="skippedSchedulesLongTitle">{{modalAproveHeading}} <span>Application #{{result?.proposal?.proposalId}}</span></h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close" (click)="showAddAttachment = false">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+						<div
+						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 viewMode resultCard">
+						<div class="row">
+							<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6" >
+								<label>Application #</label> <span>{{result?.proposal?.proposalId}}</span>
+							</div>
+							
+							<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+								<label>Status</label> <span>{{result?.proposal?.proposalStatus?.description}}</span>
+							</div>
+							<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+								<label>PI</label> <span>{{proposalPIName}}</span>
+							</div>
+							<div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-6">
+								<label>Home Unit</label> <span>{{proposalLeadUnit}}</span>
+							</div>
+							<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+								<label>Title</label> <span>{{result?.proposal?.title}}</span>
+							</div>
+						</div>
+					</div>
+					
+					<table class="table table-responsive tableSkin">
+						<label class="mySkinDialog "><p class="m-0"><b>Comments:</b></p> </label>
+						<textarea placeholder="" class="col-12 col-lg-12 commentBox" rows="2" cols="20" maxlength="254" [(ngModel)]="approveComments"></textarea>
+						</table>
+						<label class="mySkinDialog"><p class="m-0"><b>Add files:</b></p> </label>
+						<file-drop
+						(onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)"
+						(onFileLeave)="fileLeave($event)">
+						<button class="btnSkin btnSkinPrimary" (click)="triggerAdd()">Choose Files</button>
+						<input type="file" #file (change)="onChange(file.files)" multiple id="addAttach" style="display: none"/>
+						<div style="color: #00BCD4; margin-left: 10px;"> OR Drop files here</div>
+					</file-drop>
+					<div class="row">
+						<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+							<div class="fileChips regularFont">
+								<span *ngFor="let item of uploadedFile; let i=index">{{ item.name }}
+									<i class="fa fa-close hand-cursor" title="Remove File" (click)="deleteFromUploadedFileList(item)"></i>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div *ngIf="!ismandatoryFilled"><span class="mandatory font">{{attachmentWarningMsg}}</span></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btnSkin btn-secondary" data-dismiss="modal" (click)="closeAttachments()">Close</button>
+					<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" *ngIf="result?.isReviewer != true " (click)="approveDisapproveProposal()" >{{modalAproveHeading}}</button>
+					<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" *ngIf="result?.isReviewer == true && result?.isReviewed == false" (click)="completeReview()" >Complete Review</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+<!-- Pre SUbmit MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmittedModal" tabindex="-1"
+id="submitProposal" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Submit Application</h5>
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Are you sure you want to submit this application?</p>
+		</div>
+		<div class="modal-footer">
+				<button type="button" class="btnSkin btn-secondary"data-dismiss="modal">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary" data-toggle="modal" data-target="#submitProposalSuccessful"
+				(click)="submitProposal()" data-dismiss="modal">Yes</button>
+	</div>
+			
+	</div>
+</div>
+</div>
+
+<!-- SAVED SUCCESSFULLY MODAL -->
+
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSaveProposalModal" tabindex="-1"
+id="saveProposal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" *ngIf="!isMandatory">Success</h5>
+			<h5 class="modal-title" *ngIf="isMandatory">Warning</h5>
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close" (click)="closeSaveModal()">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body" *ngIf="!isMandatory">
+			<p>Application has been saved successfully</p>
+		</div>
+		<div class="modal-body" *ngIf="isMandatory">
+			<p>Error in saving proposal, please review whether all mandatory fields are filled</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" *ngIf="!isMandatory" (click)="closeSaveModal()">OK</button>
+			<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal" *ngIf="isMandatory" (click)="closeSaveModal()">Close</button>
+	</div>
+			
+	</div>
+</div>
+</div>
+
+<!-- SUBMIT MODAL SUCCESSFULLY-->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSubmitSuccessfullyModal" tabindex="-1"
+id="submitProposalSuccessful" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Submit</h5>
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Application has been submitted successfully</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">Ok</button>
+	</div>
+			
+	</div>
+</div>
+</div>
+
+<!-- CONFIRM SUBMISSION MODAL -->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showConfirmModal" tabindex="-1"
+id="confirmSubmit" tabindex="-1" role="dialog"
+aria-labelledby="deleteModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">{{confirmHeading}}</h5>
+
+			<button type="button" class="close" data-dismiss="modal"
+				aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>{{confirmMessage}}</p>
+		</div>
+		<div class="modal-footer" *ngIf="isForward">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showConfirmModal = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="submitToProvost()" data-dismiss="modal">Yes</button>
+		</div>
+		<div class="modal-footer" *ngIf="isEndorse">
+			<button type="button" class="btnSkin btn-secondary"
+				data-dismiss="modal" data-toggle="modal" (click)="showConfirmModal = false">No</button>
+			<button type="button" class="btnSkin btnSkinPrimary"
+				(click)="approveEndorse()" data-dismiss="modal">Yes</button>
+		</div>
+	</div>
+</div>
+</div>

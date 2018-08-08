@@ -1,0 +1,380 @@
+<div class="row">
+	<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+		 <div class="borderBox" [ngClass]="isOverviewWdgtOpen?'':'pb-0'">
+			 <h4 class="borderBoxHeading" [ngClass]="isOverviewWdgtOpen?'':'mb-0'">Application Overview</h4>
+			 <button id="overviewExpndBtn" class="addBtn font hoverColor" (click)="isOverviewWdgtOpen = !isOverviewWdgtOpen" >
+			 	<i class="fa-large" [ngClass]="isOverviewWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'"></i>
+			 </button>
+			<div class="pullSide" *ngIf="isOverviewWdgtOpen">
+				 <div class="topGrid gridSkin">
+					 <div class="row">
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+								<label>Application #:</label><br>
+								<span>{{createBudgetData?.proposalId}}</span>
+						  </div>
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+								<label>Submission Date:</label><br>
+								<span>{{createBudgetData?.submissionDate | date: 'MM/dd/yyyy'}}</span>
+						  </div>
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+						       <label class="greenLabel">Category:</label><br>
+							   <span>{{createBudgetData?.activityType?.description}}</span>
+						  </div>
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+						 		<label class="greenLabel">Type:</label><br>
+								<span>{{createBudgetData?.proposalType?.description}}</span> 
+						  </div>
+					 </div>
+											
+					 <div class="row">
+						  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+							   <label>Title:</label><br>
+							   <span title="{{(createBudgetData?.title?.length > 240)?(createBudgetData?.title):''}}">
+							   		{{(createBudgetData?.title?.length > 240)?(createBudgetData?.title | slice:0:240)+'...':createBudgetData?.title}}</span>
+						  </div>
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+							   <label>Proposed Start Date:</label><br>
+							   <span>{{createBudgetData?.startDate | date: 'MM/dd/yyyy'}}</span>
+						  </div>
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+							   <label>Proposed End Date:</label><br>
+							   <span>{{createBudgetData?.endDate | date: 'MM/dd/yyyy'}}</span>
+						  </div>												
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
+		 <div class="borderBox" [ngClass]="isBudgetOverviewWdgtOpen?'':'pb-0'">
+			 <h4 class="borderBoxHeading" [ngClass]="isBudgetOverviewWdgtOpen?'':'mb-0'">Budget Overview</h4>
+			 <button id="budgetExpndBtn" class="addBtn font hoverColor" (click)="isBudgetOverviewWdgtOpen = !isBudgetOverviewWdgtOpen" >
+			 	<i class="fa-large" [ngClass]="isBudgetOverviewWdgtOpen?'fa fa-angle-double-up':'fa fa-angle-double-down'"></i>
+			 </button>
+					<!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">Version:{{createBudgetData?.proposal?.budgetHeader?.versionNumber}} 1</div>
+					<div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3">Status: {{createBudgetData?.proposal?.budgetHeader?.budgetStatus}}</div>
+					<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2">Budget Type: {{createBudgetData?.proposal?.budgetHeader?.budgetType}}</div> -->
+			<div class="pullSide" *ngIf="isBudgetOverviewWdgtOpen">
+				 <div class="topGrid gridSkin">
+					 <div class="row">
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+								<label><span class="mandatory">*</span>Budget Start:</label><br>
+								<span  class="dateField" >
+									   <input type="text" placeholder="mm/dd/yyyy" style="width:75% !important" (keypress)="_keyPress($event)"
+															[owlDateTime]="budgetstart" class="dateWidth committeeBox"  
+															[ngClass]="editClass" [(ngModel)]="createBudgetData.budgetHeader.startDate" />
+									   <i class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="budgetstart"></i>
+									   <owl-date-time #budgetstart [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
+							 	</span>
+						  </div>
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+								<label><span class="mandatory">*</span>Budget End:</label><br>
+								<span  class="dateField" >
+									   <input type="text" placeholder="mm/dd/yyyy" style="width:75% !important" (keypress)="_keyPress($event)"
+															[owlDateTime]="budgetend" class="dateWidth committeeBox"  
+															[ngClass]="editClass" [(ngModel)]="createBudgetData.budgetHeader.endDate"/>
+									   <i class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="budgetend"></i>
+									   <owl-date-time #budgetend [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time> 
+							 	</span>
+						  </div>
+						  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+						       <label>Direct Cost:</label><br>
+							   <span *ngIf="createBudgetData?.budgetHeader?.totalDirectCost != null">{{createBudgetData?.budgetHeader?.totalDirectCost | currency:'USD'}}</span>
+							   <span *ngIf="createBudgetData?.budgetHeader?.totalDirectCost == null">$0.00</span>
+						  </div>
+						  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+						 		<label>Indirect Cost:</label><br>
+								<span *ngIf="createBudgetData?.budgetHeader?.totalIndirectCost != null">{{createBudgetData?.budgetHeader?.totalIndirectCost | currency:'USD'}}</span>
+								<span *ngIf="createBudgetData?.budgetHeader?.totalIndirectCost == null">$0.00</span>
+						  </div>
+						  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+						 		<label>Total Cost:</label><br>
+								<span *ngIf="createBudgetData?.budgetHeader?.totalCost != null">{{createBudgetData?.budgetHeader?.totalCost | currency:'USD'}}</span>
+								<span *ngIf="createBudgetData?.budgetHeader?.totalCost == null">$0.00</span>
+						  </div>
+					 </div>
+											
+					 <div class="row">
+						  <!-- <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+							   <label><span class="mandatory">*</span>On/Off Campus:</label><br>
+							   <input type="radio" name="onoffCampusFlag" [checked]="createBudgetData.proposal.budgetHeader.onOffCampusFlag == true" (click)="togglecampusFlag(true)"/><span style="margin-right: 20px;">On{{createBudgetData.proposal.budgetHeader.onOffCampusFlag}}</span>
+							   <input type="radio" name="onoffCampusFlag" [checked]="createBudgetData.proposal.budgetHeader.onOffCampusFlag == false" (click)="togglecampusFlag(false)"/><span>Off</span>
+						  </div> -->
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+							   <label>OH Base:</label><br>
+							   <span>{{createBudgetData?.budgetHeader?.rateType?.description}}</span>
+						  </div>
+						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+							   <label>Last Updated:</label><br>
+							   <span>on {{createBudgetData?.budgetHeader?.updateTimeStamp | date: 'MM/dd/yyyy'}} by {{createBudgetData?.budgetHeader?.updateUserName}}</span>
+						  </div>
+						  <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6"></div>										
+					</div>
+					<div class="row">
+						<div  class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+							<label>Description:</label>
+							<textarea name="details" class=" forTextAreaEntry scheduleBoxes dateBox" [(ngModel)] = "createBudgetData.budgetHeader.comments" ></textarea>
+						</div>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>
+
+<div>
+		<span class="filter nav nav-tabs">
+	        	<span><input type="checkbox" #isAutoCalcCheck [checked]="isAutoCalculate" (change)="changeAutoCal(isAutoCalcCheck.checked)"/></span>
+	        	<span id="auto-calculate" class="font hoverColor">Auto Calculate</span> 
+	        	<a href="" class="addPeriod font hoverColor" *ngIf="!isPeriodTotalSelected && !isCumulativeSelected">Add Period</a>
+	    </span>
+		<div class="tabs">
+		<!-- Nav tabs -->
+			<ul class="nav nav-tabs" role="tablist" >
+		                    <li role="presentation" [ngClass]="isPeriodTotalSelected?'activeTab':'inActiveTab'">
+		                    	<a href="" role="tab" data-toggle="tab" (click)="changeTab('PERIOD_AND_TOTAL',0)"> <!-- (click)="selectedPeriod = 0;isPeriodTotalSelected=true"> -->
+		                    		Periods &amp; Total
+		                    	</a>
+		                    </li>
+		       				<li *ngFor="let period of budgetPeriods; let i=index" role="presentation" [ngClass]="selectedPeriod == period.budgetPeriod?'activeTab':'inActiveTab'">
+		                		<a href="" role="tab" data-toggle="tab" (click)="changeTab('PERIODS',period.budgetPeriod)"><!-- ;isPeriodTotalSelected=false -->
+		                			Period {{period.budgetPeriod}}
+		                		</a>
+		                	</li>
+		                    <li role="presentation" [ngClass]="isCumulativeSelected?'activeTab':'inActiveTab'">
+		                    	<a href="" role="tab" data-toggle="tab">
+		                    		Cumulative
+		                    	</a>
+		                    </li>
+		                    
+			</ul>
+			
+			 <div *ngIf="isPeriodTotalSelected && !isPeriodSelected && selectedPeriod==0" class="tab-content">
+				<div class="topGrid gridSkin">
+					<div class="row">
+						<table class="tableStyle">
+							<thead><tr>
+								<th>Period #</th>
+								<th>Period Start Date</th>
+								<th>Period End Date</th>
+								<th>Direct Cost</th>
+								<th>Indirect Cost</th>
+								<th>Total Cost</th>
+							</tr></thead>
+							<tbody>
+							<tr *ngFor="let period of budgetPeriods">
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.budgetPeriod"/></td>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.startDate"/></td>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.endDate"/></td>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.totalDirectCost"/></td>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.totalIndirectCost"/></td>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.totalCost"/></td>
+							</tr>
+							<tr>
+                               	<td colspan="2"></td>
+                               	<td class="totalText"> <span>Total:</span></td>
+                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalDirectCost| currency:'USD':'symbol-narrow':'4.2-2'}}</span></td>
+                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalIndirectCost| currency:'USD':'symbol-narrow':'4.2-2'}}</span></td>
+                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalCost| currency:'USD':'symbol-narrow':'4.2-2'}}</span></td>
+		                     </tr>
+								<!-- <input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="budgetDetail?.budgetCategory?.description"/></td> -->
+							</tbody>
+						</table>
+					   </div>
+			   </div>
+		   </div> 
+			
+			<div id="divForIteration" *ngFor="let period of budgetPeriods; let k=index">
+			<div *ngIf="selectedPeriod == period.budgetPeriod && !isPeriodTotalSelected && isPeriodSelected==true"> <!-- && isPeriodTotalSelected==false -->
+				<div class="tab-content" style="position: relative">
+					<a class="delete-period font hoverColor hand-cursor"  title="Delete Period" (click)="deleteBudgetPeriod(period.budgetPeriodId)">
+						<i style="padding: 5px" class="fa fa-trash hand-cursor hoverColor"></i>Delete Period
+    				</a>
+    			</div>
+				<div class="tabContent-dup">
+					 <div class="topGrid gridSkin">
+						 <div class="row">
+								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+									<label><span class="mandatory">*</span>Start Date:</label>
+									<span  class="dateField" >
+										   <input type="text" placeholder="MM/dd/YYYY" style="width:75% !important" (keypress)="_keyPress($event)"
+																[owlDateTime]="periodstart" class="dateWidth committeeBox block-display"  
+																[ngClass]="editClass" [(ngModel)]="period.startDate"/>
+										   <!-- <i class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="periodstart"></i> -->
+										   <owl-date-time #periodstart [pickerType]="'calendar'"></owl-date-time>
+								 	</span>
+								</div>
+								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
+									<label><span class="mandatory">*</span>End Date:</label>
+									<span  class="dateField" >
+										   <input type="text" placeholder="MM/dd/YYYY" style="width:75% !important" (keypress)="_keyPress($event)"
+																[owlDateTime]="periodend" class="dateWidth committeeBox block-display"  
+																[ngClass]="editClass" [(ngModel)]="period.endDate"/>
+										   <!-- <i class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="periodend"></i> -->
+										   <owl-date-time #periodend [pickerType]="'calendar'"></owl-date-time>
+								 	</span>
+								</div>
+								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+									<label>Direct Cost:</label>
+									<input type="text" disabled placeholder="" class="dateBox committeeBox" *ngIf="period?.totalDirectCost != null" [value]="period.totalDirectCost | currency:'USD'"/>
+									<input type="text" disabled placeholder="" class="dateBox committeeBox" *ngIf="period?.totalDirectCost == null" value="$0.00"/>
+									<!-- <span *ngIf="period?.totalDirectCost != null"><b>{{period.totalDirectCost | currency:'USD'}}</b></span>
+									<span *ngIf="period?.totalDirectCost == null">$0.00</span> -->
+								</div>
+								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+									<label>Indirect Cost:</label>
+									<input type="text" disabled placeholder="" class="dateBox committeeBox" *ngIf="period?.totalIndirectCost != null" [value]="period.totalIndirectCost | currency:'USD'"/>
+									<input type="text" disabled placeholder="" class="dateBox committeeBox" *ngIf="period?.totalIndirectCost == null" value="$0.00"/>
+									<!-- <span *ngIf="period?.totalIndirectCost != null">{{period?.totalIndirectCost | currency:'USD'}}</span>
+									<span *ngIf="period?.totalIndirectCost == null">$0.00</span> -->
+								</div>
+								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
+									<label>Total Cost:</label>
+									<!-- <span *ngIf="period?.totalCost != null">{{period?.totalCost | currency:'USD'}}</span>
+									<span *ngIf="period?.totalCost == null">$0.00</span> -->
+									<input type="text" disabled placeholder="" class="dateBox committeeBox" *ngIf="period?.totalCost != null" [value]="period.totalCost | currency:'USD'"/>
+									<input type="text" disabled placeholder="" class="dateBox committeeBox" *ngIf="period?.totalCost == null" value="$0.00"/>
+								</div>
+							</div>
+					</div>
+				</div>
+				<div class="tab-content">
+				</div>
+				<div>
+					<table class="tableStyle">
+						<thead><tr>
+							<th>Budget Category</th>
+							<th>Cost Element</th>
+							<th>Line Item Description</th>
+							<th>Line Item Cost</th>
+							<th>Actions</th>
+						</tr></thead>
+						<tbody>
+							<tr>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="budgetDetail?.budgetCategory?.description"/></td>
+								<td>
+									<ng2-completer style="border:none; padding:0px"
+										[inputClass]="completerID" class="committeeBox dateBox"  
+										[(ngModel)]="selectedCostElement" placeholder="Search here for Cost Element"
+										[datasource]="listCEinAutoSuggest" [minSearchLength]="0"
+										(selected)="costElementChangeFunction()">
+							 		</ng2-completer></td>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" [(ngModel)]="budgetDetail.lineItemDescription" /></td>
+								<td><input type="number" placeholder="" class="dateBox committeeBox"  [ngClass]="isInvalidLineItem?'invalid-FieldBorder':''"  [(ngModel)]="budgetDetail.lineItemCost"/></td>
+								<td><i class="fa fa-check hand-cursor hoverColor" title="Add line Item" (click)="addBudgetDetail(period.budgetPeriod)"></i></td>
+							</tr>
+							<tr *ngFor="let lineItem of period.budgetDetails; let j=index;">
+							  <ng-container *ngIf="lineItem.budgetPeriod == selectedPeriod">
+								<td><input type="text" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="lineItem?.budgetCategory?.description"/></td>
+								<td><input type="text" class="dateBox committeeBox" id="lineItemBudget" [value]="lineItem?.costElement?.costElementDetail"/>
+									<!-- <ng2-completer style="border:none; padding:0px"
+										[inputClass]="completerID" class="committeeBox dateBox"
+										[(ngModel)]="lineItem.costElement" placeholder="Search here for Cost Element"
+										[datasource]="listCEinAutoSuggest" [minSearchLength]="0">
+										(selected)="costElementChangeFunction()">
+							 		</ng2-completer> --></td>
+								<td><input type="text" class="dateBox committeeBox" [(ngModel)]="lineItem.lineItemDescription" [disabled]="lineItem?.isSystemGeneratedCostElement==true"/></td>
+								<td><input type="number" class="dateBox committeeBox" [(ngModel)]="lineItem.lineItemCost" [disabled]="lineItem?.isSystemGeneratedCostElement==true && isAutoCalculate"/></td>
+								<td><i class="fa fa-trash hand-cursor hoverColor" title="Delete line Item" (click)="deleteLineItem(lineItem, period.budgetPeriodId, period.budgetPeriod, j)"></i>
+									<i class="fa fa-eye hand-cursor hoverColor" title="View rate calculation"></i></td>
+							 </ng-container>
+							</tr>
+						</tbody>
+					</table>
+				</div></div>
+			</div> <!-- iteration div ends -->
+		</div>
+</div>
+	
+
+ <div class="col-12 text-right">
+ 	  <span *ngIf="isInvalidLineItem" class="mandatory" style="float: left">* Please fill the mandatory fields.</span>
+      <button type="button" class="btnSkin btnSkinPrimary" (click)="saveProposalBudget()" data-target="#saveBudgetSuccessful" data-toggle="modal">Save</button>
+      <button type="button" class="btnSkin btnSkinPrimary" data-target="#showRates" data-toggle="modal" (click)="showRates($event)">Rates</button>
+      <button type="button" class="btnSkin btnSkinPrimary" [disabled]="!isAutoCalculate" (click)="applyRates()">Calculate</button>
+      <button type="button" class="btnSkin btnSkinPrimary" >Reset</button>
+     <!--  <button type="button" class="btnSkin btnSkinPrimary">RouteLog</button> -->
+      <button type="button" class="btnSkin btnSkinPrimary">Print</button>
+      <!-- <button type="button" id="saveBudgetHidden" [hidden]="true" data-target="#saveBudgetSuccessful" data-toggle="modal" (click)="showBudgetSaveModal = true">SaveBudgetHidden</button> -->
+</div>
+
+<!-- SHOW RATES MODAL -->
+<div class="modal fade mySkinDialog modalFallBack modal-opacity" *ngIf="showRatesModal" tabindex="-1"
+id="showRates" tabindex="-1" role="dialog"
+aria-labelledby="showRatesTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Rates</h5>
+			<button type="button" class="close" data-dismiss="modal">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<div class="tabs">
+			<ul class="nav nav-tabs" role="tablist" >
+		                    <li *ngFor="let rateClassType of rateClassTypes" role="presentation" [ngClass]="selectedRateClassType == rateClassType?'activeTab':'inActiveTab'">
+		                    	<a href="" role="tab" data-toggle="tab" (click)="selectedRateClassType=rateClassType">
+		                    		{{rateClassType}}
+		                    	</a>
+		                    </li>
+			</ul>
+			<div class="tab-content"></div>
+			<table id="ratesTable" class="tableStyle tableSection">
+					<thead><tr>
+						<th><span class="text">Rate Type</span></th>
+						<th><span class="text">Fiscal Year</span></th>
+						<th><span class="text">Start Date</span></th>
+						<th><span class="text">Institute Rate</span></th>
+						<th><span class="text">Applicable Rate</span></th>
+					</tr></thead>
+					<tbody id="mytest" *ngIf="createBudgetData?.budgetHeader?.proposalRates?.length > 0">
+						<tr *ngFor="let rate of createBudgetData?.budgetHeader?.proposalRates">
+							<ng-container *ngIf="rate.rateClass.description == selectedRateClassType">
+								<td>{{rate.rateType.description}}</td>
+								<td>{{rate.fiscalYear}}</td>
+								<td>{{rate.startDate | date: 'MM/dd/yyyy'}}</td>
+								<td>{{rate.instituteRate}}</td>
+								<td><input type="text" [(ngModel)]="rate.applicableRate" (ngModelChange)="changeApplicableRate(rate, rate.applicableRate)" class="dateBox committeeBox"/></td>
+							</ng-container>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+		</div>
+		<div class="modal-footer">
+			<button type="button" *ngIf="isApplyRates" class="btnSkin btnSkinPrimary" title="Apply rates" (click)="applyRates()" data-dismiss="modal">Apply Rates</button>
+			<button type="button" class="btnSkin btnSkinPrimary" title="Sync Rates" (click)="getSyncBudgetRates()" data-dismiss="modal">Sync Rates</button>
+			<button type="button" class="btnSkin btnSkinPrimary" title="Reset Rates" (click)="resetBudgetRates()" data-dismiss="modal">Reset</button>
+		</div>
+			
+	</div>
+</div>
+</div>
+
+<!-- SAVE BUDGET MODAL SUCCESSFULLY-->
+<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSaveBudgetModal" data-backdrop="static" data-keyboard="false"
+id="saveBudgetSuccessful" tabindex="-1" role="dialog"
+aria-labelledby="saveBudgetModalTitle" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title">Save Budget</h5>
+			<button type="button" class="close" data-dismiss="modal" (click)="closeBudgetSaveModal()">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body">
+			<p>Budget has been saved successfully</p>
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btnSkin btnSkinPrimary" (click)="closeBudgetSaveModal()" data-dismiss="modal">Close</button>
+	</div>
+			
+	</div>
+</div>
+</div>

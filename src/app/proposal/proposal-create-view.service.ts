@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, HttpModule } from '@angular/http';
 import { Headers, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Constants } from '../constants/constants.service';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
@@ -9,10 +10,61 @@ import 'rxjs/add/operator/map'
 
 @Injectable()
 export class ProposalCreateEditService {
+    proposalMode: string;
     formData = new FormData();
     approveFormData = new FormData();
+    proposalTab = new BehaviorSubject<string>('');
+    proposalTabVariable = this.proposalTab.asObservable();
+    proposalObject = new BehaviorSubject<any>({});
+    proposalObjectVariable = this.proposalObject.asObservable();
+    proposal = new BehaviorSubject<any>({});
+    proposalVariable = this.proposal.asObservable();
+    proposalValidityFlag = new BehaviorSubject<boolean>(false);
+    proposalValidityFlagVariable = this.proposalValidityFlag.asObservable();
+    budgetData = new BehaviorSubject<any>({});
+    budgetDataVariable = this.budgetData.asObservable();
+    
     constructor( private http: HttpClient, private constant: Constants ) {
 
+    }
+    
+    setResponseObject(proposalObject : any) { //proposal object only
+        this.proposalObject.next( proposalObject );
+    }
+    
+    getResponseObject() {
+        return this.proposalObject;
+    }
+    setProposalObject(proposal : any) { //whole application object
+        this.proposal.next( proposal );
+    }
+    
+    getProposalObject() {
+        return this.proposal;
+    }
+    
+    setProposalTab(proposalTab : string) {
+        this.proposalTab.next( proposalTab );
+    }
+    
+    getProposalTab() {
+        return this.proposalTab;
+    }
+    
+    setProposalValidityFlag(proposalValidityFlag : boolean) {
+        this.proposalValidityFlag.next( proposalValidityFlag );
+    }
+    
+    getProposalValidityFlag() {
+        return this.proposalValidityFlag;
+    }
+    
+    setBudgetData(budgetData : any) {
+        this.budgetData.next( budgetData );
+    }
+    
+    getBudgetData() {
+        return this.budgetData;
     }
 
     loadCreateProposalData( object: Object ): Observable<JSON> {
@@ -28,7 +80,6 @@ export class ProposalCreateEditService {
         this.formData.delete( 'formDataJson' );
 
         for ( var i = 0; i < uploadedFile.length; i++ ) {
-            console.log( "item->", i + 1, uploadedFile[i].name )
             this.formData.append( 'files', uploadedFile[i] );
         }
         var sendObject = {
@@ -266,4 +317,11 @@ export class ProposalCreateEditService {
                   return Observable.throw( error.message || error )
               } );
       }
+
+    printProposal(proposalId) {
+    return this.http.get( this.constant.printProposalUrl, {
+        headers: new HttpHeaders().set( 'proposalId', proposalId.toString() ),
+        responseType: 'blob'
+        } );
+    }
 }

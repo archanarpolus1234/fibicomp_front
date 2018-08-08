@@ -105,11 +105,19 @@ export class Constants {
     viewTemplateUrl: string;
     getContractAdminUrl: string;
     submitOSTDetailsUrl: string;
+    createProposalBudgetUrl: string;
+    getBudgetRatesUrl: string;
+    autoCalculateUrl: string;
+    resetBudgetRatesUrl: string;
+    getSyncBudgetRatesUrl: string;
+    deleteBudgetLineItemUrl: string;
+    deleteBudgetPeriodUrl: string;
+    printProposalUrl: string;
 
 
     constructor() {
-        //this.index_url = 'http://192.168.1.76:9200/';
-        this.index_url = 'http://52.20.110.7:9200/';
+        this.index_url = 'http://192.168.1.76:9200/';
+        //this.index_url = 'http://52.20.110.7:9200/';
 
         this.loginUrl = this.baseUrl + this.portAndPath + '/login';
 
@@ -281,23 +289,40 @@ export class Constants {
         
         this.submitOSTDetailsUrl = this.baseUrl + this.portAndPath + '/submitOSTDetails';
 
+        this.createProposalBudgetUrl = this.baseUrl + this.portAndPath + '/createProposalBudget';
+        
+        this.getBudgetRatesUrl = this.baseUrl + this.portAndPath + '/getBudgetRates';
+        
+        this.autoCalculateUrl = this.baseUrl + this.portAndPath + '/autoCalculate';
+        
+        this.resetBudgetRatesUrl = this.baseUrl + this.portAndPath + '/resetBudgetRates';
+        
+        this.getSyncBudgetRatesUrl = this.baseUrl + this.portAndPath + '/getSyncBudgetRates';
+        
+        this.deleteBudgetLineItemUrl = this.baseUrl + this.portAndPath + '/deleteBudgetLineItem';
+        
+        this.deleteBudgetPeriodUrl = this.baseUrl + this.portAndPath + '/deleteBudgetPeriod';
+        
+        this.printProposalUrl = this.baseUrl + this.portAndPath + '/printProposalPdfReport';
+
         //this.outputPath = 'http://192.168.1.242:8080/kc-dev';
-        this.outputPath = 'http://demo.fibiweb.com/kc-dev';
+        //this.outputPath = 'http://demo.fibiweb.com/kc-dev';
         //this.outputPath = 'http://52.20.110.7:8080/kc-dev';
         //this.outputPath = 'http://14.140.179.70:1550/kc-dev';
-        //this.outputPath = 'http://192.168.1.76:8080/kc-dev';
+        this.outputPath = 'http://192.168.1.76:8080/kc-dev';
         
-        this.outputPathAB = 'http://demo.fibiweb.com/AwardBudgetTool';
+        //this.outputPathAB = 'http://demo.fibiweb.com/AwardBudgetTool';
         //this.outputPathAB = 'http://14.140.179.70:1550/AwardBudgetTool';
-        //this.outputPathAB = 'http://192.168.1.76:8080/AwardBudgetTool';
+        this.outputPathAB = 'http://192.168.1.76:8080/AwardBudgetTool';
 
-        //this.outputPathOST = 'http://192.168.1.76:8080/osr'
+        this.outputPathOST = 'http://192.168.1.76:8080/osr'
         //this.outputPathOST = 'http://192.168.1.104:8070/osr';
         //this.outputPathOST = 'http://14.140.179.70:1550/osr';
-        this.outputPathOST = 'http://demo.fibiweb.com/osr';
+        //this.outputPathOST = 'http://demo.fibiweb.com/osr';
 
-        //this.IRBOutputPath = 'http://localhost:8080/mit-irb/login#/irb/dashboard';
-        //this.IRBOutputPath = 'http://192.168.1.76:8080/mit-irb/login#/irb/dashboard';
-        this.IRBOutputPath = 'http://demo.fibiweb.com/mit-irb/login#/irb/dashboard';
+        //this.IRBOutputPath = 'http://localhost:8080/mit-irb/dashboard#/irb/dashboard';
+        this.IRBOutputPath = 'http://192.168.1.76:8080/mit-irb/dashboard#/irb/dashboard';
+        //this.IRBOutputPath = 'http://demo.fibiweb.com/mit-irb/dashboard#/irb/dashboard';
+        //this.IRBOutputPath = 'http://14.140.179.70:1550/mit-irb/dashboard#/irb/dashboard';
     }
 }

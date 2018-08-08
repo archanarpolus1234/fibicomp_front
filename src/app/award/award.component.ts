@@ -4,11 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AwardHierarchyService } from '../award/award-hierarchy/award-hierarchy.service';
 import { Constants } from '../constants/constants.service';
 import { AwardconfigurationService } from '../award/awardconfiguration.service';
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from 'rxjs/Subscription';
 
 @Component( {
     templateUrl: 'award.component.html',
-    styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
+    styleUrls: ['../../assets/css/bootstrap.min.css', 
+    '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css']
 } )
 
 export class AwardComponent {
@@ -44,14 +45,30 @@ export class AwardComponent {
     projectVariationRequest_userList: any = [];
     moduleCode: number;
     moduleItemKey: string;
-    noCategoryMsg: boolean = false;
     isDateValidationMsg: boolean = false;
-    dateValidationMsg: string = "* Select Project Extension Date after the obligation End Date";
+    dateValidationMsg: string = '* Select Project Extension Date after the obligation End Date';
     pvr_errorString: string = '';
     isPVRsave: boolean = false;
     successMsg: string = '';
     pvr_result: any = {};
     serviceRequestId: string;
+
+    private ngxEditorConfig: {} = {
+            'editable' : true,
+            'spellcheck': true,
+            'height' : 'auto',
+            'minHeight': '0',
+            'width': 'auto',
+            'minWidth': '0',
+            'translate': 'yes',
+            'enableToolbar': false,
+            'showToolbar': false,
+            'placeholder': 'Enter text here...',
+            'imageEndPoint': '',
+            'toolbar': [
+                ['bold', 'italic', 'underline', 'strikeThrough', 'superscript', 'subscript']
+            ]
+        };
 
     constructor( public router: Router, public awardSummaryService: AwardSummaryService, public route: ActivatedRoute, public awardHierarchyService: AwardHierarchyService, private constant: Constants, public awardconfigurationService: AwardconfigurationService ) {
         this.outputPath = this.constant.outputPath;
@@ -129,20 +146,13 @@ export class AwardComponent {
 
     /*validating whether category is empty or not*/
     checkCategory( categoryCode, serviceTypeCode ) {
-        if ( categoryCode == '' || categoryCode == null || categoryCode == undefined ) {
-            this.noCategoryMsg = true;
-        }
-        else {
-            if ( serviceTypeCode != '' && serviceTypeCode != null && serviceTypeCode != undefined ) {
-                this.noCategoryMsg = false;
-                this.getDescription( categoryCode, serviceTypeCode );
-            }
-            else {
-                this.noCategoryMsg = false;
-            }
+        if ( categoryCode == '' || categoryCode == null || categoryCode == undefined || categoryCode == 'null') {
+            this.serviceRequest.serviceTypeCode = 'null';
+        } else if ( serviceTypeCode !== '' && serviceTypeCode !== null && serviceTypeCode !== undefined && serviceTypeCode !== 'null') {
+            this.getDescription( categoryCode, serviceTypeCode );
         }
     }
-    
+
     _keyPress(event: any) {
         const pattern = /[0-9\+\-\/\ ]/;
         let inputChar = String.fromCharCode(event.charCode);
@@ -202,20 +212,23 @@ export class AwardComponent {
 
     /*save new project variation request*/
     saveProjectVariationRequest( serviceRequest ) {
+        if(this.serviceRequest.serviceTypeCode=='31') {
+            this.serviceRequest.arrivalDate = null;
+        }
         this.pvr_errorString = '';
         if ( this.serviceRequest.summary == '' || this.serviceRequest.summary == null || this.serviceRequest.summary == undefined ) {
             this.pvr_errorString += "Subject";
         }
-        else if ( this.serviceRequest.ostCategoryCode == '' || this.serviceRequest.ostCategoryCode == null || this.serviceRequest.ostCategoryCode == undefined ) {
+        else if ( this.serviceRequest.ostCategoryCode == '' || this.serviceRequest.ostCategoryCode == null || this.serviceRequest.ostCategoryCode == undefined || this.serviceRequest.ostCategoryCode == 'null') {
             this.pvr_errorString += " Category";
         }
-        else if ( this.serviceRequest.serviceTypeCode == '' || this.serviceRequest.serviceTypeCode == null || this.serviceRequest.serviceTypeCode == undefined ) {
+        else if ( this.serviceRequest.serviceTypeCode == '' || this.serviceRequest.serviceTypeCode == null || this.serviceRequest.serviceTypeCode == undefined || this.serviceRequest.serviceTypeCode == 'null') {
             this.pvr_errorString += " Type";
         }
-        else if ( this.serviceRequest.arrivalDate == '' || this.serviceRequest.arrivalDate == null || this.serviceRequest.arrivalDate == undefined ) {
+        else if ( (this.serviceRequest.serviceTypeCode=='7') && (this.serviceRequest.arrivalDate == '' || this.serviceRequest.arrivalDate == null || this.serviceRequest.arrivalDate == undefined) ) {
             this.pvr_errorString += " Project Extension Date";
         }
-        else if ( this.serviceRequest.unitNumber == '' || this.serviceRequest.unitNumber == null || this.serviceRequest.unitNumber == undefined ) {
+        else if ( this.serviceRequest.unitNumber == '' || this.serviceRequest.unitNumber == null || this.serviceRequest.unitNumber == undefined || this.serviceRequest.unitNumber == 'null') {
             this.pvr_errorString += " Department";
         }
         else if ( this.serviceRequest.description == '' || this.serviceRequest.description == null || this.serviceRequest.description == undefined ) {
@@ -228,11 +241,13 @@ export class AwardComponent {
             this.moduleItemKey = this.awardNumber;
             this.awardconfigurationService.submitOSTDetails( this.serviceRequest, this.moduleCode, this.moduleItemKey ).subscribe(( data ) => {
                 var temp: any = {};
-                temp = data;
-                this.successMsg = temp.successMsg;
-                this.pvr_result = temp;
-                this.serviceRequestId = this.pvr_result.serviceRequest.serviceList[0].SERVICE_REQUEST_ID;
-                this.serviceRequest.status = temp.serviceRequest.serviceList[0].SERVICE_STATUS;
+                if (data != null) {
+                    temp = data;
+                    this.successMsg = temp.successMsg;
+                    this.pvr_result = temp;
+                    this.serviceRequestId = this.pvr_result.serviceRequest.serviceList[0].SERVICE_REQUEST_ID;
+                    this.serviceRequest.status = temp.serviceRequest.serviceList[0].SERVICE_STATUS;
+                }
             } );
             this.isPVRsave = true;
         }

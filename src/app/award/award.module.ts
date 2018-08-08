@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TreeModule } from 'angular-tree-component';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { NgxEditorModule } from 'ngx-editor';
 
 import { AwardComponent } from "./award.component";
 import { RouterModule } from "@angular/router";
@@ -25,7 +26,8 @@ const routes = [{ path: '', component: AwardComponent }];
         RouterModule.forChild( routes ),
         TreeModule,
         OwlDateTimeModule,
-        OwlNativeDateTimeModule
+        OwlNativeDateTimeModule,
+        NgxEditorModule
     ],
     declarations: [
         AwardComponent,

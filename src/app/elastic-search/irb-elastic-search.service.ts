@@ -23,9 +23,9 @@ export class IrbElasticsearchService {
   search( value, personId ): any { 
     if ( value ) {
       return this._client.search({
-        index: 'irbfibi',
+        index: 'irbprotocolfibi',
         size: 20 ,
-        type: 'irb',
+        type: 'irbprotocol',
         body: {
                 query: {
                   bool: {

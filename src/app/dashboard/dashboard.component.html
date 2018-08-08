@@ -45,8 +45,7 @@
 				</div>
 				<div class="row" *ngIf="(currentPosition == 'SMU_PROPOSAL')">
 					<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
-						<span class="linkButtonGroup"> <a title="Open"
-							routerLink='/proposal' [queryParams]="{mode:'create'}"><i
+						<span class="linkButtonGroup" (click)="gotoProposal()"> <a title="Create New Application"><i
 								class="fa fa-plus"></i> Create New Application</a>
 						</span>
 					</div>
@@ -75,7 +74,7 @@
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FprotocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create IRB Protocol </a>
+								class="fa fa-plus"></i> Create New IRB Protocol </a>
 						</span>
 					</div>
 				</div>
@@ -84,7 +83,7 @@
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FiacucProtocolProtocol.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DIacucProtocolDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create IACUC Protocol </a>
+								class="fa fa-plus"></i> Create New IACUC Protocol </a>
 						</span>
 					</div>
 				</div>
@@ -93,7 +92,7 @@
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a
 							[href]="outputPath+'/kc-krad/landingPage?viewId=Kc-Header-IframeView&href='+outputPath+'%2FcoiDisclosure.do%3FmethodToCall%3DdocHandler%26command%3Dinitiate%26docTypeName%3DCoiDisclosureDocument%26returnLocation%3D'+outputPath+'%252Fkc-krad%252FlandingPage%253FviewId%253DKc-LandingPage-RedirectView&methodToCall=start&__login_user='+userName+'&kcComp=true'"><i
-								class="fa fa-plus"></i> Create Disclosure </a>
+								class="fa fa-plus"></i> Create New Disclosure </a>
 						</span>
 					</div>
 				</div>
@@ -102,7 +101,7 @@
 						class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 text-left">
 						<span class="linkButtonGroup"> <a title="Open"
 							routerLink='/committee' [queryParams]="{mode:'create'}"><i
-								class="fa fa-plus"></i> Create COMMITTEE</a>
+								class="fa fa-plus"></i> Create New COMMITTEE</a>
 						</span>
 					</div>
 				</div>
@@ -175,7 +174,7 @@
 									[tabPosition]="currentPosition"
 									
 							</div> -->
-							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"
+							<div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 paddingAdvSearch"
 								*ngIf="currentPosition !== 'SCHEDULE' && currentPosition !== 'COMMITTEE' &&  currentPosition !== 'GRANT' && currentPosition !== 'SMU_PROPOSAL' && currentPosition !== 'GRANTREPORT'">
 								<a id="advcanceSearch" href="#" class="linkButton"
 									(click)="advanceSearch($event)"> <i class="fa fa-cog"></i>
@@ -505,7 +504,7 @@
 				
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin"
+					<table class="table table-responsive tableSkin mb-0"
 						*ngIf="this.result?.awardViews?.length !== 0">
 						<thead>
 							<tr>
@@ -581,7 +580,7 @@
 				</div>
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin"
+					<table class="table table-responsive tableSkin mb-0"
 						*ngIf="this.result?.proposalViews?.length !== 0">
 						<thead>
 							<tr>
@@ -648,31 +647,31 @@
 
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin"
+					<table class="table table-responsive tableSkin mb-0"
 						*ngIf="this.result?.protocolViews?.length !== 0">
 						<thead>
 							<tr>
-								<th (click)="sortResult('protocolNumber',currentPosition)"
+								<th (click)="sortResult('protocolNumber',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Protocol">Protocol <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolNumber')}"></span>
 								</th>
-								<th (click)="sortResult('title',currentPosition)"
+								<th (click)="sortResult('title',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Title" width="40%">Title <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
 								</th>
-								<th (click)="sortResult('leadUnit',currentPosition)"
+								<th (click)="sortResult('leadUnit',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Lead Unit">Lead Unit <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span>
 								</th>
-								<th (click)="sortResult('protocolType',currentPosition)"
+								<th (click)="sortResult('protocolType',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Protocol Type">Protocol Type <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolType')}"></span>
 								</th>
-								<th (click)="sortResult('status',currentPosition)"
+								<th (click)="sortResult('status',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Status">Status <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
@@ -709,31 +708,31 @@
 				
 				<div class="borderBox"
 					*ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin"
+					<table class="table table-responsive tableSkin mb-0"
 						*ngIf="result?.iacucViews?.length !== 0">
 						<thead>
 							<tr>
-								<th (click)="sortResult('protocolNumber',currentPosition)"
+								<th (click)="sortResult('protocolNumber',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Protocol">Protocol <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolNumber')}"></span>
 								</th>
-								<th (click)="sortResult('title',currentPosition)"
+								<th (click)="sortResult('title',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Title" width="40%">Title <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'title')}"></span>
 								</th>
-								<th (click)="sortResult('leadUnit',currentPosition)"
+								<th (click)="sortResult('leadUnit',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Lead Unit">Lead Unit <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'leadUnit')}"></span>
 								</th>
-								<th (click)="sortResult('protocolType',currentPosition)"
+								<th (click)="sortResult('protocolType',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Protocol Type">Protocol Type <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'protocolType')}"></span>
 								</th>
-								<th (click)="sortResult('status',currentPosition)"
+								<th (click)="sortResult('status',currentPosition)"  class="hand-cursor"
 									title="Click to sort by Status">Status <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
@@ -772,37 +771,37 @@
 				*ngIf="(currentPosition == 'DISCLOSURE')">
 				
 				<div class="borderBox" *ngIf="((isAdmin==false) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin"
+					<table class="table table-responsive tableSkin mb-0"
 						*ngIf="this.result?.disclosureViews?.length !== 0">
 						<thead>
 							<tr>
-								<th (click)="sortResult('coiDisclosureNumber',currentPosition)"
+								<th (click)="sortResult('coiDisclosureNumber',currentPosition)" class="hand-cursor"
 									title="Click to sort by Disclosure">Disclosure <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'coiDisclosureNumber')}"></span>
 								</th>
-								<th (click)="sortResult('fullName',currentPosition)"
+								<th (click)="sortResult('fullName',currentPosition)" class="hand-cursor"
 									title="Click to sort by Name" width="40%">Name <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'fullName')}"></span>
 								</th>
 								<th
-									(click)="sortResult('disclosureDisposition',currentPosition)"
+									(click)="sortResult('disclosureDisposition',currentPosition)" class="hand-cursor"
 									title="Click to sort by Disclosure Disposition">Disclosure
 									Disposition <span class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'disclosureDisposition')}"></span>
 								</th>
-								<th (click)="sortResult('moduleItemKey',currentPosition)"
+								<th (click)="sortResult('moduleItemKey',currentPosition)" class="hand-cursor"
 									title="Click to sort by Disclosure Status">Disclosure
 									Status <span class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'moduleItemKey')}"></span>
 								</th>
-								<th (click)="sortResult('status',currentPosition)"
+								<th (click)="sortResult('status',currentPosition)" class="hand-cursor"
 									title="Click to sort by Module item key">Module item key <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'status')}"></span>
 								</th>
-								<th (click)="sortResult('expirationDate',currentPosition)"
+								<th (click)="sortResult('expirationDate',currentPosition)" class="hand-cursor"
 									title="Click to sort by Expiration Date">Expiration Date <span
 									class="sortorder"
 									[ngClass]="{reverse:reverse, sortorder: (sortBy == 'expirationDate')}"></span>
@@ -840,7 +839,7 @@
 				
 				<div class="borderBox"
 					*ngIf="((isAdmin==true) || (adminAdvanceSearch == true)) && (adminClear == false)">
-					<table class="table table-responsive tableSkin"
+					<table class="table table-responsive tableSkin mb-0"
 						*ngIf="this.result?.committees?.length !== 0">
 						<thead>
 							<tr>
@@ -907,7 +906,7 @@
 				*ngIf="(currentPosition == 'SCHEDULE')">
 				<div class="borderBox"
 					*ngIf="((isAdmin==true) || (adminAdvanceSearch == true)) && (adminClear==false)">
-					<table class="table table-responsive tableSkin"
+					<table class="table table-responsive tableSkin mb-0"
 						*ngIf="this.result?.committeeSchedules?.length !== 0">
 						<thead>
 							<tr>
@@ -992,7 +991,7 @@
 			*ngIf="(currentPosition == 'GRANT')">
 			
 				<div class="borderBox" >
-					<table class="table table-responsive tableSkin" *ngIf="result?.grantCalls?.length > 0" >
+					<table class="table table-responsive tableSkin mb-0" *ngIf="result?.grantCalls?.length > 0" >
 						<thead>
 							<tr>
 								<th (click)="sortResult('grantCallId',currentPosition)" class="hand-cursor"
@@ -1051,7 +1050,7 @@
 						</div>
 						
 				<div class="borderBox">
-					<table class="table table-responsive tableSkin" *ngIf="result?.proposal?.length > 0">
+					<table class="table table-responsive tableSkin mb-0" *ngIf="result?.proposal?.length > 0">
 						<thead>
 							<tr>
 								<th (click)="sortResult('proposalId',currentPosition)" class="hand-cursor"
@@ -1078,7 +1077,7 @@
 								<td>{{proposal?.proposalId}}</td>
 								<td [title]="(proposal?.title).length>40 ? proposal?.title: ''">{{ (proposal?.title).length>40 ? (proposal?.title | slice:0:60)+'...' : proposal?.title}}</td>
 								<td>{{proposal?.principalInvestigator}}</td>
-								<td>{{proposal?.proposalCategory?.description}}</td>
+								<td>{{proposal?.activityType?.description}}</td>
 								<td>{{proposal?.proposalType?.description}}</td>
 								<td>{{proposal?.proposalStatus?.description}}</td>
 								<td>{{proposal.submissionDate | date: 'MM/dd/yyyy'}}</td>
@@ -1253,7 +1252,7 @@
 								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 									<div class="borderBox">
 										<h4 class="borderBoxHeading">Applications by Grant Call Type ({{pieChartReportType}})</h4>
-										<table class="table table-responsive tableSkin">
+										<table class="table table-responsive tableSkin mb-0">
 											<tbody *ngIf="proposalsPiechartList?.length > 0">
 												<tr>
 													<th>Id
@@ -1292,7 +1291,7 @@
 								<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 									<div class="borderBox">
 										<h4 class="borderBoxHeading">IRB Protocols By Type ({{pieChartReportProtocolType}})</h4>
-										<table class="table table-responsive tableSkin">
+										<table class="table table-responsive tableSkin mb-0">
 											<tbody *ngIf="protocolPiechartList?.length > 0">
 												<tr>
 													<th>Protocol 
@@ -1331,7 +1330,7 @@
 	<div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
 		<div class="borderBox">
 			<h4 class="borderBoxHeading">Projects by Grant Call Type ({{pieChartReportProjectType}})</h4>
-<table class="table table-responsive tableSkin"
+<table class="table table-responsive tableSkin mb-0"
 *ngIf="this.result?.awardViews?.length !== 0">
 <thead>
 	<tr>

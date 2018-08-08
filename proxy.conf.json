@@ -296,7 +296,7 @@
 		"secure": false
 	},
 	"/fetchReportData": {
-		"target": "http://192.168.1.76:8080/fibi-comp",
+		"target": "http://192.168.1.242:8070/fibi-comp",
 		"secure": false
 	},
 	"/applicationReport": {
@@ -334,6 +334,41 @@
 	"/submitOSTDetails": {
 		"target": "http://192.168.1.76:8080/fibi-comp",
 		"secure": false
+	},
+	"/generatePdfReport": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/createProposalBudget": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/getBudgetRates": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/autoCalculate": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/resetBudgetRates": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/getSyncBudgetRates": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/deleteBudgetLineItem": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/deleteBudgetPeriod": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
+	},
+	"/printProposalPdfReport": {
+		"target": "http://192.168.1.76:8080/fibi-comp",
+		"secure": false
 	}
-	
 }
