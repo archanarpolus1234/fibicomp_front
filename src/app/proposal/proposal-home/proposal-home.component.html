@@ -3,11 +3,11 @@
 								<div class="borderBox">
 									<h4 class="borderBoxHeading">
 										<div class="row">
-											<div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8">Application Details</div>
-											<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 text-right colorBlack">
+											<div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6">Application Details</div>
+											<div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 text-right colorBlack">
 												<span style="margin-right: 10px"><label style="margin-right: 10px">Created By: </label>{{result?.proposal?.createUser}}</span>
 											</div>
-											<div class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 text-right colorBlack">
+											<div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col-3 text-right colorBlack">
 												<span style="margin-right: 10px"><label style="margin-right: 10px">Status: </label>{{result?.proposal?.proposalStatus?.description}}</span>
 											</div>
 										</div>
@@ -112,14 +112,14 @@
 												<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
 												     <label>Keywords:</label>
 													 <div class="row">
-													 	 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4"  *ngIf="mode!='view'" style="padding-left: 0px">
-													 	 	<ng2-completer style="border:none; padding:0px"
+													 	 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4" style="padding-left: 0px">
+													 	 	<ng2-completer style="border:none; padding:0px" *ngIf="mode!='view'" 
 															[inputClass]="completerID"
 															[(ngModel)]="selectedKeyword" placeholder="Search here for Keyword"
 															[datasource]="keywordsList" [minSearchLength]="0"
 															(selected)="keywordChangeFunction()" [disabled]="mode == 'view'">
 													 		</ng2-completer>
-													 		<span class="noDataExists" *ngIf="result?.proposal?.proposalKeywords?.length == 0 && mode == 'view'">No keywords added with this proposal</span>
+													 		<span class="noDataExists" *ngIf="result?.proposal?.proposalKeywords?.length == 0 && mode == 'view'">No keywords added</span>
 													 	 </div>
 													 	 <div class="col-xl-8 col-lg-8 col-md-8 col-sm-8 col-8" style="padding-left: 0;">
 													 	 	  <div *ngIf="result?.proposal?.proposalKeywords?.length > 0" class="fileChips" style="word-break: break-all;">
@@ -616,16 +616,34 @@
 		                                            <td>{{ i + 1 }}</td>
 		                                            <td>{{budget?.startDate | date:'MM/dd/yyyy'}}</td>
 		                                            <td>{{budget?.endDate | date:'MM/dd/yyyy'}}</td>
-		                                            <td>{{budget?.totalCost| currency:'USD':true}}</td>
-		                                            <td>{{budget?.totalDirectCost| currency:'USD':true}}</td>
-		                                            <td>{{budget?.totalIndirectCost| currency:'USD':true}}</td>
+		                                            <td>
+		                                            	<span *ngIf="budget?.totalCost != null">{{budget?.totalCost| currency:'USD':true}}</span>
+		                                            	<span *ngIf="budget?.totalCost == null">$0.00</span>
+		                                            </td>
+		                                            <td>
+		                                            	<span *ngIf="budget?.totalDirectCost != null">{{budget?.totalDirectCost| currency:'USD':true}}</span>
+		                                            	<span *ngIf="budget?.totalDirectCost == null">$0.00</span>
+		                                            </td>
+		                                            <td>
+		                                            	<span *ngIf="budget?.totalIndirectCost != null">{{budget?.totalIndirectCost| currency:'USD':true}}</span>
+		                                            	<span *ngIf="budget?.totalIndirectCost == null">$0.00</span>
+		                                            </td>
 		                                         </tr>
 		                                        <tr>
 		                                        	<td colspan="2"></td>
 					                               	<td class="totalText"> <span>Total:</span></td>
-					                               	<td class="totalText"><span>{{result?.proposal?.budgetHeader?.totalCost| currency:'USD':true}}</span></td>
-					                               	<td class="totalText"><span>{{result?.proposal?.budgetHeader?.totalDirectCost| currency:'USD':true}}</span></td>
-					                               	<td class="totalText" colspan="2"><span>{{result?.proposal?.budgetHeader?.totalIndirectCost| currency:'USD':true}}</span></td>
+					                               	<td class="totalText">
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalCost != null">{{result?.proposal?.budgetHeader?.totalCost| currency:'USD':true}}</span>
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalCost == null">$0.00</span>
+					                               	</td>
+					                               	<td class="totalText">
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalDirectCost != null">{{result?.proposal?.budgetHeader?.totalDirectCost| currency:'USD':true}}</span>
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalDirectCost == null">$0.00</span>
+					                               	</td>
+					                               	<td class="totalText" colspan="2">
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalIndirectCost != null">{{result?.proposal?.budgetHeader?.totalIndirectCost| currency:'USD':true}}</span>
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalIndirectCost == null">$0.00</span>
+					                               	</td>
 							                     </tr>
 	                                         </tbody>
 	                                         <tbody *ngIf="result?.proposal?.budgetHeader?.budgetPeriods?.length <= 0">

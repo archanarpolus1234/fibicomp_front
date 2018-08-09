@@ -8,7 +8,7 @@
 							<div class="col-6 text-left"><span *ngIf="result?.proposal?.proposalId" class="topHeading">#{{result?.proposal?.proposalId}}: {{result?.proposal?.title}}</span></div>
 							<div class="col-6 text-right">
 								<button class="btnSkin btnSkinPrimary"  data-target="#confirmGoBack" data-toggle="modal" (click)="openGoBackModal()">Back to Application</button>
-								<span *ngIf="result?.proposal?.ipNumber" class="topHeading">IP&nbsp;#{{result?.proposal?.ipNumber}}</span></div>
+								</div>
 						</div>
 						<div class="row">
 							<div class="col-xl-12 col-lg-12 col-md-6 col-sm-12 col-12">
@@ -19,6 +19,7 @@
 										<li role="presentation" [ngClass]="{'active': proposalTabPosition == 'BUDGET'}">
 											<a title="View Detailed Budget" (click)="showTab('BUDGET')"> Budget</a>
 										</li>
+										<span *ngIf="result?.proposal?.ipNumber" class="topHeading pt-2" style="float:right">IP&nbsp;#{{result?.proposal?.ipNumber}}</span>
 									</ul>
 							</div>
 						</div>

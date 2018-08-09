@@ -35,6 +35,7 @@ export class ProposalCreateEditService {
     getResponseObject() {
         return this.proposalObject;
     }
+
     setProposalObject(proposal : any) { //whole application object
         this.proposal.next( proposal );
     }

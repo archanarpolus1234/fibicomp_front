@@ -23,7 +23,7 @@ export class AwardElasticsearchService {
     search( value, personId ): any {
         if ( value ) {
             return this._client.search( {
-                index: 'awardfibiqa',
+                index: 'awardfibi',
                 size: 20,
                 type: 'award',
                 body: {
