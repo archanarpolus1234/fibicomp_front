@@ -199,6 +199,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
     validateArray: any =[];
     proposalDataValidityFlag: boolean = false;
     proposalObject: any;
+    proposalVO: any = {};
     
     private proposal_subscription: ISubscription;
     private proposalFlag_subscription: ISubscription;
@@ -224,27 +225,33 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
         this.proposalId = this.route.snapshot.queryParamMap.get('proposalId');
         this.grantId = this.route.snapshot.queryParamMap.get('grantId');
         
-        this.proposal_subscription = this.proposalCreateService.proposalObjectVariable.subscribe( proposalObject => {
-            this.proposalObject = proposalObject;
-        } );
-        /*if(this.proposalObject.proposalId == null){*/
-            if (this.proposalId == null) {
-              this.mode = 'create';
-              this.editClass = "committeeBox";
-              this.editAreaClass = "scheduleBoxes";
-              this.createProposalCall();
+        /*this.proposal_subscription = this.proposalCreateService.proposalVariable.subscribe( proposalVO => {*/
+            this.proposalVO = this.proposalCreateService.getProposalVO();
+            if(this.proposalVO.proposal == null) {
+                if (this.proposalId == null) {
+                    this.mode = 'create';
+                    this.editClass = "committeeBox";
+                    this.editAreaClass = "scheduleBoxes";
+                    this.createProposalCall();
+                  } else {
+                      this.proposalCreateService.loadProposalById(this.proposalId, localStorage.getItem('personId'), localStorage.getItem('currentUser')).subscribe(success => {
+                      this.result = success;
+                      if ( this.result.proposal.proposalStatus.statusCode != 1 || this.result.proposal.proposalStatus.statusCode != 9 ){
+                          this.mode = 'view';
+                          this.proposalCreateService.setProposalVO(this.result);
+                      }
+                      this.proposalCreateService.setProposalData(this.result.proposal);
+                      this.proposalCreateService.setBudgetData(this.result.costElements);
+                      this.initialiseProposalFormElements();
+                    });
+                  }
             } else {
-                this.proposalCreateService.loadProposalById(this.proposalId, localStorage.getItem('personId'), localStorage.getItem('currentUser')).subscribe(success => {
-                this.result = success;
-                if ( this.result.proposal.proposalStatus.statusCode != 1 || this.result.proposal.proposalStatus.statusCode != 9 ){
-
-                    this.mode = 'view';
-                }
-                this.proposalCreateService.setResponseObject(this.result.proposal);
-                this.proposalCreateService.setBudgetData(this.result.costElements);
+                this.result = this.proposalVO;
                 this.initialiseProposalFormElements();
-              });
             }
+        /*} );*/
+        /*if(this.proposalObject.proposalId == null){*/
+            
         /*} else {
             this.proposalId = this.proposalObject.proposalId;
             this.proposalCreateService.loadProposalById(this.proposalId, localStorage.getItem('personId'), localStorage.getItem('currentUser')).subscribe(success => {
@@ -386,8 +393,8 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
             this.sendObject.grantCallId = null;
         }
         this.proposalCreateService.loadCreateProposalData( this.sendObject ).takeUntil( this.onDestroy$ ).subscribe( data => {
-            this.result = data || [];
-            this.proposalCreateService.setProposalObject(this.result);
+            this.result = data;
+            this.proposalCreateService.setProposalVO(this.result);
             this.personRolesList = this.result.proposalPersonRoles;
             this.proposalTypeSelected = ( this.result.proposal.proposalType != null ) ? this.result.proposal.proposalType.description : this.select;
             this.proposalCategorySelected = ( this.result.proposal.activityType != null ) ? this.result.proposal.activityType.description : this.select;
@@ -1172,14 +1179,9 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
             this.proposalCreateService.saveProposal( this.result.proposal, type ).subscribe( data => {
                 var temp: any = data;
                 this.result.proposal = temp.proposal;
+                this.proposalCreateService.setProposalData(this.result.proposal);
                 this.proposalCreateService.setProposalValidityFlag(false);
-                this.proposalCreateService.setResponseObject(this.result.proposal);
-                
-                // this.successMessage = 'Proposal has been saved successfully.';
-                // setTimeout(()=> {
-                //   this.showSuccessMessage = false;
-                //   },8000);
-                // window.scrollTo( 0, 0 );
+                this.proposalCreateService.setProposalVO(this.result);
             }, 
             err  => {},
             () => {
@@ -1194,13 +1196,6 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
         } else {
             this.showSaveProposalModal = true;
             this.isMandatory = true;
-            //alert("Error in saving proposal, please review whether all mandatory fields are filled");
-              /*this.showSuccessMessage = true;
-              this.successMessage = 'Error in saving proposal, please review whether mandatory fields are filled';
-              setTimeout(() => {
-                this.showSuccessMessage = false;
-              }, 8000);
-              window.scrollTo(0, 0);*/
         }
     }
 
@@ -1284,27 +1279,39 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
                 this.result.workflow = temp.workflow;
                 this.updateWorkflowStops();
                 this.updateRouteLogHeader();
+                this.proposalCreateService.setProposalData(this.result.proposal);
+                this.proposalCreateService.setProposalVO(this.result);
                 this.showSuccessMessage = true;
-                this.successMessage = 'Proposal submitted successfully';
+                /*this.successMessage = 'Proposal submitted successfully';
                 setTimeout(() => {
                     this.showSuccessMessage = false;
                 }, 8000);
-                window.scrollTo( 0, 0 );
+                window.scrollTo( 0, 0 );*/
                 //this.isProposalSubmitted = true;
                 var url = window.location.href;
                 if(url.indexOf('viewSubmittedProposal') !== -1) {
                     this.ngOnInit();
                 } else {
+                    this.proposalCreateService.loadProposalById( this.result.proposal.proposalId, localStorage.getItem( 'personId' ), localStorage.getItem( 'currentUser' ) ).subscribe( success => {
+                        var temp: any = {};
+                        temp = success;
+                        this.result.proposal = temp.proposal;
+                        this.updateFlags(temp);
+                        this.proposalCreateService.setProposalVO( this.result );
+                        this.proposalCreateService.setProposalData( this.result.proposal );
+                        this.proposalCreateService.setBudgetData( this.result.costElements );
+                        this.initialiseProposalFormElements();
+                    } );
                     this.router.navigate( ['/proposal/viewSubmittedProposal'], { queryParams: { 'mode': this.mode, 'proposalId': this.result.proposal.proposalId } } );
                 }
             } );
         } else {
                 this.showSuccessMessage = true;
-                  this.successMessage = 'Error in saving proposal, please review whether mandatory fields are filled';
+                /*  this.successMessage = 'Error in saving proposal, please review whether mandatory fields are filled';
                 setTimeout(() => {
                     this.showSuccessMessage = false;
                 }, 8000);
-                window.scrollTo( 0, 0 );
+                window.scrollTo( 0, 0 );*/
             //this.isProposalSubmitted = false;
         }
     }
@@ -1527,6 +1534,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
             var temp: any = {};
             temp = data;
             this.result = temp;
+            this.proposalCreateService.setProposalVO(this.result);
             this.approveComments = "";
             this.initialiseProposalFormElements();
             this.changeRef.detectChanges();
@@ -1546,6 +1554,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
             this.availableReviewers = temp.availableReviewers;
             this.tempLoggedWorkflowDetail = temp.loggedInWorkflowDetail;
             this.result.loggedInWorkflowDetail = _.cloneDeep(temp.loggedInWorkflowDetail);
+            this.proposalCreateService.setProposalVO(this.result);
             this.reviewerList = this.completerService.local( this.availableReviewers, 'approverPersonName', 'approverPersonName' );
             this.changeRef.detectChanges();
         } ,error=>{},()=>{});
@@ -1564,6 +1573,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
                 } );
             }
             this.result.loggedInWorkflowDetail.workflowReviewerDetails.splice( i, 1 );
+            this.proposalCreateService.setProposalVO(this.result);
             this.reviewerAlreadyAddedMsg = false;
         }
     }
@@ -1604,6 +1614,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
         }
         this.changeRef.detectChanges();
         this.selectedReviewer = null; 
+        this.proposalCreateService.setProposalVO(this.result);
     }
     
     addReviewer() {
@@ -1617,6 +1628,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
                 this.result.proposal = temp.proposal;
                 this.result.workflow = temp.workflow;
                 this.result.loggedInWorkflowDetail = temp.loggedInWorkflowDetail;
+                this.proposalCreateService.setProposalVO(this.result);
                 this.updateFlags(temp);
                 this.updateWorkflowStops();
                 this.updateRouteLogHeader();
@@ -1644,6 +1656,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
             this.updateFlags(temp);
             this.updateWorkflowStops();
             this.updateRouteLogHeader();
+            this.proposalCreateService.setProposalVO(this.result);
             this.changeRef.detectChanges();
         } );
         this.showApproveDisapproveModal = false;
@@ -1699,12 +1712,13 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
         temp = data;
         this.result.proposal = temp.proposal;
         this.updateRouteLogHeader();
-        this.showSuccessMessage = true;
+        this.proposalCreateService.setProposalVO(this.result);
+        /*this.showSuccessMessage = true;
         this.successMessage = 'Proposal forwarded successfully for endorsement';
         setTimeout(() => {
             this.showSuccessMessage = false;
         }, 8000);
-        window.scrollTo( 0, 0 );
+        window.scrollTo( 0, 0 );*/
       });
       this.showConfirmModal = false;
     }
@@ -1717,12 +1731,14 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
         temp = data;
         this.result.proposal = temp.proposal;
         this.updateRouteLogHeader();
-        this.showSuccessMessage = true;
+        this.proposalCreateService.setProposalData(this.result.proposal);
+        this.proposalCreateService.setProposalVO(this.result);
+        /*this.showSuccessMessage = true;
         this.successMessage = 'Proposal awarded successfully. Institute Proposal #' + this.result.proposal.ipNumber;
         setTimeout(() => {
             this.showSuccessMessage = false;
         }, 8000);
-        window.scrollTo( 0, 0 );
+        window.scrollTo( 0, 0 );*/
       });
       this.showConfirmModal = false;
     }

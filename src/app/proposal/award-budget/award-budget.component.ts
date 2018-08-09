@@ -74,7 +74,7 @@ export class AwardBudgetComponent implements OnInit {
                 this.proposalObject = temp.proposal;
                 this.costElements = temp.costElements;
                 this.rateClassTypes = temp.rateClassTypes;
-                this.proposalCreateService.setResponseObject(this.proposalObject);
+                this.proposalCreateService.setProposalData(this.proposalObject);
                 this.sysGeneratedCostElements = temp.sysGeneratedCostElements;
                 this.loadInitialData(this.proposalObject);
             });
@@ -329,7 +329,7 @@ export class AwardBudgetComponent implements OnInit {
                     //alert("Budget saved Successfully");
                    //document.getElementById('saveBudgetHidden').click();
                 }
-                this.proposalCreateService.setResponseObject(this.temp.proposal);
+                this.proposalCreateService.setProposalData(this.temp.proposal);
                 this.budgetPeriods = this.temp.proposal.budgetHeader.budgetPeriods;
                 //this.budgetDetails = [];
                 this.changeRef.detectChanges();
@@ -401,7 +401,7 @@ export class AwardBudgetComponent implements OnInit {
        }
     }
     
-    setPeriodAndTotalDirectCost(cost, periodNumber) {debugger;
+    setPeriodAndTotalDirectCost(cost, periodNumber) {
         this.budgetPeriods[periodNumber-1].totalCost = 0;
         if(this.budgetPeriods[periodNumber-1].totalIndirectCost != null) {
             this.budgetPeriods[periodNumber-1].totalCost = parseInt(this.budgetPeriods[periodNumber-1].totalIndirectCost) + parseInt(cost);
@@ -413,7 +413,7 @@ export class AwardBudgetComponent implements OnInit {
         
     }
     
-    setPeriodAndTotalIndirectCost(cost, periodNumber) {debugger;
+    setPeriodAndTotalIndirectCost(cost, periodNumber) {
     this.budgetPeriods[periodNumber-1].totalCost = 0;
     if(this.budgetPeriods[periodNumber-1].totalDirectCost != null) {
         this.budgetPeriods[periodNumber-1].totalCost = parseInt(this.budgetPeriods[periodNumber-1].totalDirectCost) + parseInt(cost);
