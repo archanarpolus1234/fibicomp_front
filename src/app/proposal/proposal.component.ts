@@ -22,7 +22,7 @@ declare var $: any;
 @Component( {
     selector: 'proposal',
     templateUrl: './proposal.component.html',
-    providers: [ProposalHomeComponent, SessionManagementService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService],
+    providers: [ProposalCreateEditService, SessionManagementService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService],
     styleUrls: ['../../assets/css/bootstrap.min.css', '../../assets/css/font-awesome.min.css', '../../assets/css/style.css', '../../assets/css/search.css'],
 
 } )
@@ -206,10 +206,6 @@ export class ProposalComponent implements OnInit {
     private proposalTab_subscription: ISubscription;
     private proposalFlag_subscription: ISubscription;
     private proposal_subscription: ISubscription;
-    //private proposal_subscription: ISubscription;
-    
-    @ContentChild(ProposalHomeComponent)
-    private proposal_childComponent: ProposalHomeComponent;
 
     constructor( public grantService: GrantService, public committeeMemberNonEmployeeElasticService: CommitteeMemberNonEmployeeElasticService, public committeeMemberEmployeeElasticService: CommitteeMemberEmployeeElasticService, public _ngZone: NgZone, public changeRef: ChangeDetectorRef, public route: ActivatedRoute, private router: Router, private sessionService: SessionManagementService, private proposalCreateService: ProposalCreateEditService, public completerService: CompleterService) {
     /*this.proposal_subscription = this.proposalCreateService.proposalObjectVariable.subscribe( proposalObject => {
@@ -293,14 +289,14 @@ export class ProposalComponent implements OnInit {
         if( this.result.proposal.statusCode == 1) {
             this.showConfirmGoBack = true;
         } else {
-            this.proposalCreateService.setResponseObject({});
+            this.proposalCreateService.setProposalData({});
             this.router.navigate(['/dashboard'],{queryParams:{'currentTab':'SMU_PROPOSAL'}});
         }
     }
     
     backToList(e){
         e.preventDefault();
-        this.proposalCreateService.setResponseObject({});
+        this.proposalCreateService.setProposalData({});
         this.router.navigate(['/dashboard'], { queryParams: { 'currentTab': 'SMU_PROPOSAL' } } );
     }
 
@@ -314,7 +310,13 @@ export class ProposalComponent implements OnInit {
         if(this.proposal_subscription) {
             this.proposal_subscription.unsubscribe();
         }*/
-        this.proposalCreateService.setProposalObject({});
+        /*this.proposalCreateService.setProposalVO({});
+        this.proposalCreateService.setProposalData({});
+        this.proposalCreateService.proposalVariable.subscribe( proposal => {
+           var temp: any = {};
+           temp = proposal;
+           console.log(temp);
+        });*/
     }
     
 }

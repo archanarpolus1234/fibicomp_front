@@ -36,6 +36,6 @@ let routes = [{ path: '', component: ProposalComponent,
     RouterModule.forChild( routes )
   ],
   declarations: [ProposalComponent, ProposalHomeComponent, AwardBudgetComponent],
-  providers: [ProposalCreateEditService, CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, GrantService, ProposalBudgetService]
+  providers: [ CommitteeMemberEmployeeElasticService, CommitteeMemberNonEmployeeElasticService, GrantService, ProposalBudgetService]
 })
 export class ProposalModule { }

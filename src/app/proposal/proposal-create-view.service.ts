@@ -15,32 +15,32 @@ export class ProposalCreateEditService {
     approveFormData = new FormData();
     proposalTab = new BehaviorSubject<string>('');
     proposalTabVariable = this.proposalTab.asObservable();
-    proposalObject = new BehaviorSubject<any>({});
+    proposalObject = new BehaviorSubject<any>({}); //only proposal
     proposalObjectVariable = this.proposalObject.asObservable();
-    proposal = new BehaviorSubject<any>({});
-    proposalVariable = this.proposal.asObservable();
+    proposal: any = {}; // VO
+    //proposalVariable = this.proposal.asObservable();
     proposalValidityFlag = new BehaviorSubject<boolean>(false);
     proposalValidityFlagVariable = this.proposalValidityFlag.asObservable();
-    budgetData = new BehaviorSubject<any>({});
+    budgetData = new BehaviorSubject<any>({}); // budget header
     budgetDataVariable = this.budgetData.asObservable();
     
     constructor( private http: HttpClient, private constant: Constants ) {
 
     }
     
-    setResponseObject(proposalObject : any) { //proposal object only
+    setProposalData(proposalObject : any) { //proposal object only
         this.proposalObject.next( proposalObject );
     }
     
-    getResponseObject() {
+    getProposalData() {
         return this.proposalObject;
     }
 
-    setProposalObject(proposal : any) { //whole application object
-        this.proposal.next( proposal );
+    setProposalVO(proposalVO : any) { //whole application object
+        this.proposal = proposalVO ;
     }
     
-    getProposalObject() {
+    getProposalVO() {
         return this.proposal;
     }
     

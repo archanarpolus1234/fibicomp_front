@@ -180,7 +180,7 @@ export class ElasticSearchComponent implements AfterViewInit {
                                         hits_highlight = ( ( searchResult.hits || {} ).hits || [] )
                                             .map(( hit ) => hit.highlight );
                                         hits_source.forEach(( elmnt, j ) => {
-                                            if( hits_source[j].pi_name === this.rolePerson || this.isAdmin === 'true' ) {   
+                                            if( hits_source[j].pi_name === this.rolePerson || this.isAdmin === 'true' ) {
                                                 proposalNo = hits_source[j].proposal_number;
                                                 title = hits_source[j].title;
                                                 lead_unit_name = hits_source[j].lead_unit_name;

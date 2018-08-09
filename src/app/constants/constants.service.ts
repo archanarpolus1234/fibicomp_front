@@ -5,8 +5,8 @@ export class Constants {
     //baseUrl : string = "http://192.168.1.76";
     //baseUrl : string = "http://52.20.110.7";
     //baseUrl : string = "http://14.140.179.70";
-    baseUrl : string = "http://demo.fibiweb.com/fibi-comp";
-    //baseUrl: string = "";
+    //baseUrl : string = "http://demo.fibiweb.com/fibi-comp";
+    baseUrl: string = "";
 
     //portAndPath: string = ":8080/fibi-comp";
     //portAndPath: string = ":1550/fibi-comp";
