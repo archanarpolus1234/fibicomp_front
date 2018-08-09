@@ -230,6 +230,12 @@ export class ProposalComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.proposal_subscription = this.proposalCreateService.proposalObjectVariable.subscribe( proposalObject => {
+            this.proposalObject = proposalObject;
+            if(this.proposalObject.proposalId != null) {
+                this.result.proposal = this.proposalObject;
+            }
+        } );
       this.proposalCreateService.setProposalTab('PROPOSAL_HOME');
       this.proposalTab_subscription = this.proposalCreateService.proposalTabVariable.subscribe( proposalTab => {
         this.proposalTabPosition = proposalTab;
@@ -298,8 +304,8 @@ export class ProposalComponent implements OnInit {
         this.router.navigate(['/dashboard'], { queryParams: { 'currentTab': 'SMU_PROPOSAL' } } );
     }
 
-    /*ngOnDestroy() {
-        if(this.proposalTab_subscription) {
+    ngOnDestroy() {
+        /*if(this.proposalTab_subscription) {
             this.proposalTab_subscription.unsubscribe();
         }
         if(this.proposalFlag_subscription) {
@@ -307,7 +313,8 @@ export class ProposalComponent implements OnInit {
         }
         if(this.proposal_subscription) {
             this.proposal_subscription.unsubscribe();
-        }
-    }*/
+        }*/
+        this.proposalCreateService.setProposalObject({});
+    }
     
 }
