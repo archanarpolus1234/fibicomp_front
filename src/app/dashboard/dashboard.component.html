@@ -1058,8 +1058,8 @@
 								</th>
 								<th >Title
 								</th>
-								<th >PI
-								</th>
+								<!-- <th >PI
+								</th> -->
 								<th (click)="sortResult('proposalCategory.description',currentPosition)" class="hand-cursor"
 								title="Click to sort by category">Category<span  [ngClass]="{reverse:reverse, sortorder: (sortBy == 'proposalCategory.description')}"></span></th>
 								<th (click)="sortResult('proposalType.description',currentPosition)" class="hand-cursor"
@@ -1076,18 +1076,18 @@
 							<tr *ngFor="let proposal of serviceRequestList">
 								<td>{{proposal?.proposalId}}</td>
 								<td [title]="(proposal?.title).length>40 ? proposal?.title: ''">{{ (proposal?.title).length>40 ? (proposal?.title | slice:0:60)+'...' : proposal?.title}}</td>
-								<td>{{proposal?.principalInvestigator}}</td>
-								<td>{{proposal?.activityType?.description}}</td>
-								<td>{{proposal?.proposalType?.description}}</td>
-								<td>{{proposal?.proposalStatus?.description}}</td>
+								<!-- <td>{{proposal?.principalInvestigator}}</td> -->
+								<td>{{proposal?.applicationActivityType}}</td>
+								<td>{{proposal?.applicationType}}</td>
+								<td>{{proposal?.applicationStatus}}</td>
 								<td>{{proposal.submissionDate | date: 'MM/dd/yyyy'}}</td>
 								<td>
 									<ul class="actionButtonGroup">
 										<li><a title="Open application {{proposal?.proposalId}}"  class="pointer" (click)="viewProposalById($event,proposal.proposalId,proposal.grantCallId)"><i
 												class="fa fa-eye pointer"></i></a></li>
-										<li><a title="forward application {{proposal?.proposalId}} for endorsement" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="grantManager == 'true' && proposal?.proposalStatus?.description == 'Approved'" (click)="openConfirm('submit', proposal.proposalId,proposal)"><i
+										<li><a title="forward application {{proposal?.proposalId}} for endorsement" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="grantManager == 'true' && proposal?.applicationStatus == 'Approved'" (click)="openConfirm('submit', proposal.proposalId,proposal)"><i
 												class="fa fa-mail-forward"></i></a></li>
-										<li><a title="endorse application {{proposal?.proposalId}}" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="provost == 'true' && proposal?.proposalStatus?.description == 'Waiting For Endorsement'" (click)="openConfirm('endorse', proposal.proposalId,proposal)"><i
+										<li><a title="endorse application {{proposal?.proposalId}}" class="pointer" data-toggle="modal" data-target="#confirmSubmit" *ngIf="provost == 'true' && proposal?.applicationStatus == 'Waiting For Endorsement'" (click)="openConfirm('endorse', proposal.proposalId,proposal)"><i
 												class="fa fa-check-square-o"></i></a></li>
 									</ul>
 								</td>

@@ -617,15 +617,15 @@
 		                                            <td>{{budget?.startDate | date:'MM/dd/yyyy'}}</td>
 		                                            <td>{{budget?.endDate | date:'MM/dd/yyyy'}}</td>
 		                                            <td>
-		                                            	<span *ngIf="budget?.totalCost != null">{{budget?.totalCost| currency:'USD':true}}</span>
+		                                            	<span *ngIf="budget?.totalCost != null">{{budget?.totalCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span>
 		                                            	<span *ngIf="budget?.totalCost == null">$0.00</span>
 		                                            </td>
 		                                            <td>
-		                                            	<span *ngIf="budget?.totalDirectCost != null">{{budget?.totalDirectCost| currency:'USD':true}}</span>
+		                                            	<span *ngIf="budget?.totalDirectCost != null">{{budget?.totalDirectCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span>
 		                                            	<span *ngIf="budget?.totalDirectCost == null">$0.00</span>
 		                                            </td>
 		                                            <td>
-		                                            	<span *ngIf="budget?.totalIndirectCost != null">{{budget?.totalIndirectCost| currency:'USD':true}}</span>
+		                                            	<span *ngIf="budget?.totalIndirectCost != null">{{budget?.totalIndirectCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span>
 		                                            	<span *ngIf="budget?.totalIndirectCost == null">$0.00</span>
 		                                            </td>
 		                                         </tr>
@@ -633,15 +633,15 @@
 		                                        	<td colspan="2"></td>
 					                               	<td class="totalText"> <span>Total:</span></td>
 					                               	<td class="totalText">
-					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalCost != null">{{result?.proposal?.budgetHeader?.totalCost| currency:'USD':true}}</span>
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalCost != null">{{result?.proposal?.budgetHeader?.totalCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span>
 					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalCost == null">$0.00</span>
 					                               	</td>
 					                               	<td class="totalText">
-					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalDirectCost != null">{{result?.proposal?.budgetHeader?.totalDirectCost| currency:'USD':true}}</span>
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalDirectCost != null">{{result?.proposal?.budgetHeader?.totalDirectCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span>
 					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalDirectCost == null">$0.00</span>
 					                               	</td>
 					                               	<td class="totalText" colspan="2">
-					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalIndirectCost != null">{{result?.proposal?.budgetHeader?.totalIndirectCost| currency:'USD':true}}</span>
+					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalIndirectCost != null">{{result?.proposal?.budgetHeader?.totalIndirectCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span>
 					                               		<span *ngIf="result?.proposal?.budgetHeader?.totalIndirectCost == null">$0.00</span>
 					                               	</td>
 							                     </tr>
@@ -1276,7 +1276,7 @@ aria-labelledby="deleteModalTitle" aria-hidden="true">
 
 <!-- SAVED SUCCESSFULLY MODAL -->
 
-<div class="modal fade mySkinDialog modalFallBack" *ngIf="showSaveProposalModal" tabindex="-1"
+<div class="modal fade modal-opacity mySkinDialog modalFallBack" *ngIf="showSaveProposalModal" tabindex="-1"
 id="saveProposal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
 aria-labelledby="deleteModalTitle" aria-hidden="true">
 <div class="modal-dialog modal-dialog-centered" role="document">

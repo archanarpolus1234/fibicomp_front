@@ -315,7 +315,6 @@ export class ProposalComponent implements OnInit {
         this.proposalCreateService.proposalVariable.subscribe( proposal => {
            var temp: any = {};
            temp = proposal;
-           console.log(temp);
         });*/
     }
     
