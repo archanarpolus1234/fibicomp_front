@@ -54,6 +54,8 @@ export class AwardBudgetComponent implements OnInit {
     rateClassTypes: any = [];
     selectedRateClassType: string = 'Inflation';
     showSaveBudgetModal = false;
+    isdisabled = false;
+    sysCostArray: any = [];
 
     private budget_proposal_subscription: ISubscription;
     private budget_costElements_subscription: ISubscription;
@@ -74,6 +76,7 @@ export class AwardBudgetComponent implements OnInit {
                 this.proposalObject = temp.proposal;
                 this.costElements = temp.costElements;
                 this.rateClassTypes = temp.rateClassTypes;
+                this.proposalCreateService.setProposalVO(temp);
                 this.proposalCreateService.setProposalData(this.proposalObject);
                 this.sysGeneratedCostElements = temp.sysGeneratedCostElements;
                 this.loadInitialData(this.proposalObject);
@@ -141,6 +144,11 @@ export class AwardBudgetComponent implements OnInit {
                 }
             }
         }
+        if ( this.isAutoCalculate === false) {
+            if (this.createBudgetData.budgetHeader.totalCost === null) {
+                this.isdisabled = false;
+            }
+        }
     }
 
     dateValidation() {
@@ -190,6 +198,12 @@ export class AwardBudgetComponent implements OnInit {
     }
 
     changeAutoCal(value) {
+        this.isdisabled = true;
+        if ( value === false) {
+            if (this.createBudgetData.budgetHeader.totalCost === null) {
+                this.isdisabled = false;
+            }
+        }
         this.isAutoCalculate = value;
         this.createBudgetData.budgetHeader.isAutoCalc = this.isAutoCalculate;
         if(value == true) {
@@ -208,13 +222,13 @@ export class AwardBudgetComponent implements OnInit {
             this.isInvalidLineItem = false;
             this.budgetDetail.budgetPeriod = budgetPeriodNumber;
             var temp: any = {};
-            temp = Object.assign({}, this.budgetDetail); // making a clone this.isAutoCalculate
+            temp = Object.assign({}, this.budgetDetail); // making a clone
             this.budgetDetails.push(temp);
-            for(var i=0; i<this.budgetPeriods.length;i++) {
-                if(this.budgetPeriods[i].budgetPeriod == this.budgetDetail.budgetPeriod){
-                for(var j=0; j<this.budgetDetails.length;j++) {
-                    if(this.budgetDetails[j].budgetPeriod == this.budgetPeriods[i].budgetPeriod && this.budgetPeriods[i].budgetDetails.indexOf(this.budgetDetails[j]) == -1){
-                    if(this.budgetPeriods[i].budgetDetails.length <= 0) {
+            for(var periodIndex=0; periodIndex<this.budgetPeriods.length; periodIndex++) {
+                if(this.budgetPeriods[periodIndex].budgetPeriod == this.budgetDetail.budgetPeriod){
+                for(var detailsIndex=0; detailsIndex<this.budgetDetails.length; detailsIndex++) {
+                    if(this.budgetDetails[detailsIndex].budgetPeriod == this.budgetPeriods[periodIndex].budgetPeriod && this.budgetPeriods[periodIndex].budgetDetails.indexOf(this.budgetDetails[detailsIndex]) == -1){
+                    if(this.budgetPeriods[periodIndex].budgetDetails.length <= 0) {
                        for(let sysCost of this.sysGeneratedCostElements){
                             var tempSysCost: any = {};
                             tempSysCost.budgetCategory = sysCost.budgetCategory;
@@ -227,12 +241,13 @@ export class AwardBudgetComponent implements OnInit {
                             tempSysCost.systemGeneratedCEType = sysCost.systemGeneratedCEType;
                             if(this.isAutoCalculate) {
                                 tempSysCost.lineItemCost = null;
-                                tempSysCost.description = null;
+                                tempSysCost.lineItemDescription = null;
                             }                      
-                            this.budgetPeriods[i].budgetDetails.push(tempSysCost);
+                            this.budgetPeriods[periodIndex].budgetDetails.push(tempSysCost);
+                            this.sysCostArray.push(tempSysCost);
                         }
                     }
-                    this.budgetPeriods[i].budgetDetails.unshift(this.budgetDetails[j]);
+                    this.budgetPeriods[periodIndex].budgetDetails.unshift(this.budgetDetails[detailsIndex]);
                     this.budgetDetail.costElement = null;
                     this.budgetDetail.budgetCategory = null;
                     this.budgetDetail.budgetCategoryCode = null;
@@ -242,7 +257,7 @@ export class AwardBudgetComponent implements OnInit {
                     this.selectedCostElement = null;
                     //this.budgetDetails = [];
                     //this.budgetDetail = {};
-                    this.calcBudgetPeriodTotalCost(budgetPeriodNumber-1);
+                    this.calcBudgetPeriodTotalCost(budgetPeriodNumber);
                     this.calcFinalBudgetCost();
                     //this.tempArray = [];
                     }
@@ -255,21 +270,48 @@ export class AwardBudgetComponent implements OnInit {
            
     }
 
-    calcBudgetPeriodTotalCost(budgetPeriodNumber) {
+   /* calcBudgetPeriodTotalCost(budgetPeriodNumber) {
         if(this.budgetDetails.length > 0) {
             var periodTotalCost = 0;
             var periodTotalDirect = 0;
             var periodTotalIndirect = 0;
-            for(let lineItem of this.budgetDetails) {
-                periodTotalDirect += lineItem.lineItemCost;
+            for(var i=0; i<this.budgetDetails.length; i++){
+            if(budgetPeriodNumber == this.budgetDetails[i].budgetPeriod) { 
+                 periodTotalDirect = periodTotalDirect + this.budgetDetails[i].lineItemCost;
+                }
+            }
+            
+            periodTotalCost = periodTotalCost + periodTotalDirect + periodTotalIndirect;
+            this.budgetPeriods[budgetPeriodNumber-1].totalCost = periodTotalCost;
+            this.budgetPeriods[budgetPeriodNumber-1].totalDirectCost = periodTotalDirect;
+            this.budgetPeriods[budgetPeriodNumber-1].totalIndirectCost = periodTotalIndirect;
+        }
+    }*/
+        
+      calcBudgetPeriodTotalCost(periodNumber) {
+        if(this.budgetDetails.length > 0) {
+            var periodTotalCost = 0;
+            var periodTotalDirect = 0;
+            var periodTotalIndirect = 0;
+            for(var detailsIndex=0; detailsIndex<this.budgetDetails.length; detailsIndex++){
+                if(periodNumber == this.budgetDetails[detailsIndex].budgetPeriod) {
+                   periodTotalDirect = periodTotalDirect + this.budgetDetails[detailsIndex].lineItemCost;  
+              }
+            }
+            for(var detailsIndex=0; detailsIndex<this.sysCostArray.length ;detailsIndex++) {
+            if(this.sysCostArray[detailsIndex].budgetPeriod == periodNumber) {
+                if(this.sysCostArray[detailsIndex].lineItemCost != null) {
+                    periodTotalDirect = periodTotalDirect + this.sysCostArray[detailsIndex].lineItemCost;
+                    }
+                }
             }
             periodTotalCost = periodTotalCost + periodTotalDirect + periodTotalIndirect;
-            this.budgetPeriods[budgetPeriodNumber].totalCost = periodTotalCost;
-            this.budgetPeriods[budgetPeriodNumber].totalDirectCost = periodTotalDirect;
-            this.budgetPeriods[budgetPeriodNumber].totalIndirectCost = periodTotalIndirect;
-            
-        }
-    }
+            this.budgetPeriods[periodNumber-1].totalCost = periodTotalCost;
+            this.budgetPeriods[periodNumber-1].totalDirectCost = periodTotalDirect;
+            this.budgetPeriods[periodNumber-1].totalIndirectCost = periodTotalIndirect;
+            this.calcFinalBudgetCost();
+            }
+         }
 
     calcFinalBudgetCost() {
         if(this.budgetPeriods.length > 0) {
@@ -314,6 +356,7 @@ export class AwardBudgetComponent implements OnInit {
 
     saveProposalBudget() {
         //var type = ( this.createBudgetData.proposal.proposalId != null ) ? "UPDATE" : "SAVE";
+        this.isdisabled = true;
         var type = 'SAVE';
         this.createBudgetData.budgetHeader.isAutoCalc = this.isAutoCalculate;
         //this.budgetPeriods.budgetDetails = this.budgetDetails;
@@ -322,6 +365,11 @@ export class AwardBudgetComponent implements OnInit {
             this.createBudgetData.updateUser = this.currentUser;
             this.createBudgetData.updateTimeStamp = new Date().getTime();
             this.showSaveBudgetModal = true;
+            if(!this.isAutoCalculate) {
+              //  this.calcBudgetPeriodTotalCost(periodNumber);
+                this.calcFinalBudgetCost();
+            }
+            
             this.proposalCreateService.saveProposal( this.createBudgetData, type ).subscribe( data => {
                 this.temp = {};
                 this.temp = data;
@@ -329,12 +377,28 @@ export class AwardBudgetComponent implements OnInit {
                     //alert("Budget saved Successfully");
                    //document.getElementById('saveBudgetHidden').click();
                 }
+                var tempProposalVO: any = {};
+                tempProposalVO = this.proposalCreateService.getProposalVO();
+                tempProposalVO.proposal = this.temp.proposal;
+                this.proposalCreateService.setProposalVO(tempProposalVO);
                 this.proposalCreateService.setProposalData(this.temp.proposal);
                 this.budgetPeriods = this.temp.proposal.budgetHeader.budgetPeriods;
-                //this.budgetDetails = [];
+                this.budgetDetails = [];
+                for(var periodIndex=0; periodIndex<this.budgetPeriods.length; periodIndex++) {
+                    for(var detailsIndex=0; detailsIndex<this.budgetPeriods[periodIndex].budgetDetails.length; detailsIndex++) {
+                        this.budgetDetails.push(this.budgetPeriods[periodIndex].budgetDetails[detailsIndex]);
+                    }
+                }
+               // this.budgetDetails = this.budgetPeriods.budgetDetails;
+                
                 this.changeRef.detectChanges();
-                if(!this.isAutoCalculate) {
+                /*if(!this.isAutoCalculate) {
                     this.calcFinalBudgetCost();
+                }*/
+                if ( this.isAutoCalculate === false) {
+                    if (this.createBudgetData.budgetHeader.totalCost === null) {
+                        this.isdisabled = false;
+                    }
                 }
             } ),
             err => {},
@@ -390,10 +454,15 @@ export class AwardBudgetComponent implements OnInit {
     
     changeTab(tabLabel, periodNumber) {
        if(tabLabel == 'PERIOD_AND_TOTAL') {
+           this.isdisabled = true;
+           if ( this.isAutoCalculate === false) {
+               if (this.createBudgetData.budgetHeader.totalCost === null) {
+                   this.isdisabled = false;
+               }
+           }
            this.selectedPeriod = periodNumber;
            this.isPeriodSelected = false;
-            this.isPeriodTotalSelected = true;
-            
+           this.isPeriodTotalSelected = true;
        } else if(tabLabel == 'PERIODS') {
            this.selectedPeriod = periodNumber;
            this.isPeriodSelected = true;
@@ -404,24 +473,26 @@ export class AwardBudgetComponent implements OnInit {
     setPeriodAndTotalDirectCost(cost, periodNumber) {
         this.budgetPeriods[periodNumber-1].totalCost = 0;
         if(this.budgetPeriods[periodNumber-1].totalIndirectCost != null) {
-            this.budgetPeriods[periodNumber-1].totalCost = parseInt(this.budgetPeriods[periodNumber-1].totalIndirectCost) + parseInt(cost);
+            this.budgetPeriods[periodNumber-1].totalCost = parseFloat(this.budgetPeriods[periodNumber-1].totalIndirectCost) + parseFloat(cost);
         } else {
             this.budgetPeriods[periodNumber-1].totalCost = cost;
         }
         this.createBudgetData.budgetHeader.budgetPeriods[periodNumber-1].totalDirectCost = cost;
         this.createBudgetData.budgetHeader.budgetPeriods[periodNumber-1].totalCost = this.budgetPeriods[periodNumber-1].totalCost;
+        this.calcFinalBudgetCost();
         
     }
     
     setPeriodAndTotalIndirectCost(cost, periodNumber) {
     this.budgetPeriods[periodNumber-1].totalCost = 0;
     if(this.budgetPeriods[periodNumber-1].totalDirectCost != null) {
-        this.budgetPeriods[periodNumber-1].totalCost = parseInt(this.budgetPeriods[periodNumber-1].totalDirectCost) + parseInt(cost);
+        this.budgetPeriods[periodNumber-1].totalCost = parseFloat(this.budgetPeriods[periodNumber-1].totalDirectCost) + parseFloat(cost);
     } else {
         this.budgetPeriods[periodNumber-1].totalCost = cost;
     }
         this.createBudgetData.budgetHeader.budgetPeriods[periodNumber-1].totalIndirectCost = cost;
         this.createBudgetData.budgetHeader.budgetPeriods[periodNumber-1].totalCost = this.budgetPeriods[periodNumber-1].totalCost;
+        this.calcFinalBudgetCost();
     }
 }
 

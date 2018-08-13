@@ -70,7 +70,7 @@
 									   <i  *ngIf="mode!='view'" class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="budgetstart"></i>
 									   <owl-date-time #budgetstart [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time>
 							 	</span>
-							 	<span *ngIf="mode=='view'">{{createBudgetData.budgetHeader.startDate}}</span>
+							 	<span *ngIf="mode=='view'">{{createBudgetData?.budgetHeader?.startDate | date:'MM/dd/yyyy'}}</span>
 						  </div>
 						  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
 								<label><span class="mandatory">*</span>Budget End:</label><br>
@@ -81,7 +81,7 @@
 									   <i  *ngIf="mode!='view'" class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="budgetend"></i>
 									   <owl-date-time #budgetend [pickerType]="'calendar'" (afterPickerClosed)="dateValidation()"></owl-date-time> 
 							 	</span>
-							 	<span *ngIf="mode=='view'">{{createBudgetData.budgetHeader.endDate}}</span>
+							 	<span *ngIf="mode=='view'">{{createBudgetData?.budgetHeader?.endDate | date:'MM/dd/yyyy'}}</span>
 						  </div>
 						  <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
 						       <label>Direct Cost:</label><br>
@@ -172,10 +172,16 @@
 							<tbody>
 							<tr *ngFor="let period of budgetPeriods">
 								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.budgetPeriod"/></td>
-								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.startDate"/></td>
-								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.endDate"/></td>
-								<td><input type="number" placeholder="" class="dateBox committeeBox" id="lineItemBudget" [(ngModel)]= "period.totalDirectCost" (ngModelChange)="setPeriodAndTotalDirectCost(period.totalDirectCost, period.budgetPeriod)" [disabled]="isAutoCalculate==true && createBudgetData?.budgetHeader?.totalCost != ''"/></td>
-								<td><input type="number" placeholder="" class="dateBox committeeBox" id="lineItemBudget" [(ngModel)]="period.totalIndirectCost" (ngModelChange)="setPeriodAndTotalIndirectCost(period.totalIndirectCost, period.budgetPeriod)" [disabled]="isAutoCalculate==true && createBudgetData?.budgetHeader?.totalCost != ''"/></td>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.startDate | date:'MM/dd/yyyy'"/></td>
+								<td><input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period?.endDate | date:'MM/dd/yyyy'"/></td>
+								<td>
+									<input *ngIf="mode != 'view'" type="number" placeholder="" class="dateBox committeeBox" id="lineItemBudget" [(ngModel)]= "period.totalDirectCost" (ngModelChange)="setPeriodAndTotalDirectCost(period.totalDirectCost, period.budgetPeriod)" [attr.disabled]="isdisabled ? '' : null"/>
+									<input *ngIf="mode =='view'" type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period.totalDirectCost"/>
+								</td>
+								<td>
+									<input *ngIf="mode != 'view'" type="number" placeholder="" class="dateBox committeeBox" id="lineItemBudget" [(ngModel)]="period.totalIndirectCost" (ngModelChange)="setPeriodAndTotalIndirectCost(period.totalIndirectCost, period.budgetPeriod)" [attr.disabled]="isdisabled ? '' : null"/>
+									<input *ngIf="mode =='view'" type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="period.totalIndirectCost"/>
+								</td>
 								<td><input type="number" placeholder="" class="dateBox committeeBox" id="lineItemBudget" [(ngModel)]="period.totalCost" disabled/></td>
 								<!--<td *ngIf="!isAutoCalculate && createBudgetData?.budgetHeader?.totalCost == null"><i class="fa fa-trash hand-cursor hoverColor" title="Delete Period" (click)="deleteBudgetPeriod(period.budgetPeriodId)"></i>
 									 <i class="fa fa-pencil hand-cursor hoverColor" title="Edit Cost"></i>
@@ -184,12 +190,11 @@
 							<tr>
                                	<td colspan="2"></td>
                                	<td class="totalText"> <span>Total:</span></td>
-                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalDirectCost| currency:'USD':'symbol-narrow':'4.2-2'}}</span></td>
-                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalIndirectCost| currency:'USD':'symbol-narrow':'4.2-2'}}</span></td>
-                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalCost| currency:'USD':'symbol-narrow':'4.2-2'}}</span></td>
+                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalDirectCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span></td>
+                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalIndirectCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span></td>
+                               	<td class="totalText"><span>{{createBudgetData?.budgetHeader?.totalCost| currency:'USD':'symbol-narrow':'1.2-2'}}</span></td>
                                	<!-- <td  *ngIf="!isAutoCalculate && createBudgetData?.budgetHeader?.totalCost == null" ></td> -->
 		                     </tr>
-								<!-- <input type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="budgetDetail?.budgetCategory?.description"/></td> -->
 							</tbody>
 						</table>
 					   </div>
@@ -215,7 +220,7 @@
 										   <!-- <i class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="periodstart"></i> -->
 										   <owl-date-time #periodstart [pickerType]="'calendar'"></owl-date-time>
 								 	</span>
-								 	<input type="text" disabled placeholder="" class="committeeBox" *ngIf="mode=='view'" [value]="period.startDate"/>
+								 	<input type="text" disabled placeholder="" class="committeeBox" *ngIf="mode=='view'" [value]="period.startDate | date:'MM/dd/yyyy'"/>
 								 	<!-- <span *ngIf="mode=='view'">{{period.startDate}}</span> -->
 								</div>
 								<div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-3">
@@ -227,7 +232,7 @@
 										   <!-- <i class="fa fa-calendar fa-large insidePicker hand-cursor" [owlDateTimeTrigger]="periodend"></i> -->
 										   <owl-date-time #periodend [pickerType]="'calendar'"></owl-date-time>
 								 	</span>
-								 	<input type="text" disabled placeholder="" class="committeeBox" *ngIf="mode=='view'" [value]="period.endDate"/>
+								 	<input type="text" disabled placeholder="" class="committeeBox" *ngIf="mode=='view'" [value]="period.endDate | date:'MM/dd/yyyy'"/>
 								</div>
 								<div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-2">
 									<label>Direct Cost:</label>
@@ -292,14 +297,14 @@
 								<input *ngIf="mode =='view'" type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="lineItem?.costElement?.costElementDetail"/></td>
 								<td><input *ngIf="mode!='view'" type="text" class="dateBox committeeBox" [(ngModel)]="lineItem.lineItemDescription" [disabled]="lineItem?.isSystemGeneratedCostElement==true"/>
 								<input *ngIf="mode =='view'" type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="lineItem.lineItemDescription"/></td>
-								<td><input type="number" *ngIf="mode!='view'" class="dateBox committeeBox" [(ngModel)]="lineItem.lineItemCost" [disabled]="lineItem?.isSystemGeneratedCostElement==true && isAutoCalculate"/>
+								<td><input type="number" *ngIf="mode!='view'" class="dateBox committeeBox" [(ngModel)]="lineItem.lineItemCost" (ngModelChange)="calcBudgetPeriodTotalCost(lineItem.budgetPeriod)" [disabled]="lineItem?.isSystemGeneratedCostElement==true && isAutoCalculate"/>
 								<input *ngIf="mode =='view'" type="text" placeholder="" class="dateBox committeeBox" id="lineItemBudget" disabled [value]="lineItem.lineItemCost"/>
 								<td *ngIf="mode!='view'"><i class="fa fa-trash hand-cursor hoverColor" title="Delete line Item" (click)="deleteLineItem(lineItem, period.budgetPeriodId, period.budgetPeriod, j)"></i>
 									<i class="fa fa-eye hand-cursor hoverColor" title="View rate calculation"></i></td>
 							 </ng-container>
 							</tr>
 							<td *ngIf="mode == 'view' && period.budgetDetails.length <= 0" colspan='4'>
-								<span class="noDataExists">No cost elements added for this period</span>
+								<span class="noDataExists regularFont">No cost elements added for this period</span>
 							</td>
 						</tbody>
 					</table>
@@ -310,7 +315,7 @@
 	
 
  <div class="col-12 text-right">
- 	  <span *ngIf="isInvalidLineItem" class="mandatory" style="float: left">* Please fill the mandatory fields.</span>
+ 	  <span *ngIf="isInvalidLineItem && isPeriodSelected" class="mandatory regularFont" style="float: left">* Please fill the mandatory fields.</span>
       <button *ngIf="mode!='view'" type="button" class="btnSkin btnSkinPrimary" (click)="saveProposalBudget()" data-target="#saveBudgetSuccessful" data-toggle="modal">Save</button>
       <button type="button" class="btnSkin btnSkinPrimary" data-target="#showRates" data-toggle="modal" (click)="showRates($event)">Rates</button>
       <button type="button" class="btnSkin btnSkinPrimary" [disabled]="!isAutoCalculate" (click)="applyRates()">Calculate</button>
@@ -368,6 +373,7 @@ aria-labelledby="showRatesTitle" aria-hidden="true">
 			<button type="button" *ngIf="isApplyRates" [disabled]="mode=='view'" class="btnSkin btnSkinPrimary" title="Apply rates" (click)="applyRates()" data-dismiss="modal">Apply Rates</button>
 			<button type="button" class="btnSkin btnSkinPrimary"  [disabled]="mode=='view'" title="Sync Rates" (click)="getSyncBudgetRates()" data-dismiss="modal">Sync Rates</button>
 			<button type="button" class="btnSkin btnSkinPrimary" [disabled]="mode=='view'" title="Reset Rates" (click)="resetBudgetRates()" data-dismiss="modal">Reset</button>
+			<button type="button" class="btnSkin btnSkinPrimary" data-dismiss="modal">Close</button>
 		</div>
 			
 	</div>

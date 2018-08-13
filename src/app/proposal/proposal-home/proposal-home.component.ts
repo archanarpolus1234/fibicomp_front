@@ -724,6 +724,9 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
                 tempObj.leadUnitNumber = this.selectedMember.unit_number;
                 tempObj.leadUnitName = this.selectedMember.unit_name;
             } else {
+                this.selectedMember.first_name = (this.selectedMember.first_name == null)? '':this.selectedMember.first_name;
+                this.selectedMember.middle_name = (this.selectedMember.middle_name == null)?'': this.selectedMember.middle_name;
+                this.selectedMember.last_name = (this.selectedMember.last_name == null)?'':this.selectedMember.last_name;
                 tempObj.rolodexId = this.selectedMember.rolodex_id;
                 tempObj.fullName = this.selectedMember.last_name + ' , ' + this.selectedMember.middle_name + ' ' + this.selectedMember.first_name;
                 tempObj.leadUnitNumber = null;
@@ -1122,6 +1125,10 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
 
     saveProposal(saveType) {
         var type = ( this.result.proposal.proposalId != null ) ? "UPDATE" : "SAVE";
+        if(this.result.proposal.proposalId == null && saveType=='partialSave'){
+            this.showSaveProposalModal = true;
+            this.isMandatory = true;
+        }
         // proposal details validation
         if ( this.result.proposal.title == "" || this.result.proposal.title == null ) {
             this.isMandatory = true;
@@ -1527,7 +1534,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
 
     approveDisapproveProposal() {
         this.sendObject.personId = localStorage.getItem( 'personId' );
-        this.sendObject.proposal = this.result.proposal;
+        this.sendObject.proposalId = this.result.proposal.proposalId;
         this.sendObject.approverStopNumber = this.result.approverStopNumber;
         this.sendObject.approveComment = this.approveComments;
         this.proposalCreateService.approveDisapproveProposal( this.sendObject, this.uploadedFile ).subscribe( data => {
@@ -1644,7 +1651,7 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
     }
 
     completeReview() {
-        this.sendObject.proposal = this.result.proposal;
+        //this.sendObject.proposal = this.result.proposal;
         this.sendObject.proposalId = this.result.proposal.proposalId;
         this.sendObject.userName = this.currentUser;
         this.sendObject.approveComment = this.approveComments;
@@ -1776,10 +1783,13 @@ export class ProposalHomeComponent implements OnInit, AfterViewInit  {
                 this.proposalCreateService.setProposalTab('BUDGET');
             }
           } );
-        //this.changeRef.detectChanges();
-        this.saveProposal('partialSave');
+        if(this.result.proposal.proposalId != null) {
+            this.router.navigate(['/proposal/proposalBudget'], { queryParams: { 'proposalId': this.result.proposal.proposalId }});
+        } else {
+            this.saveProposal('partialSave'); 
+        }
     }
-    
+
     checkProposalDataValidity(data, criteria) {
        if(criteria == 'title' ||criteria == 'submissionDate' || criteria == 'proposedStartDate'|| criteria == 'proposedEndDate'){
            if(data == null || data == undefined || data == '') {
